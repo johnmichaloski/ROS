@@ -1,0 +1,57 @@
+.TH "/usr/local/michalos/github/usnistgov/el-robotics-core/nist_fanuc/include/nist_fanuc/Controller.h" 3 "Fri Apr 15 2016" "CRCL FANUC" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/usr/local/michalos/github/usnistgov/el-robotics-core/nist_fanuc/include/nist_fanuc/Controller.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <boost/shared_ptr\&.hpp>\fP
+.br
+\fC#include <list>\fP
+.br
+\fC#include 'AsioCrclServer\&.h'\fP
+.br
+\fC#include 'RCSThreadTemplate\&.h'\fP
+.br
+\fC#include 'CrclInterface\&.h'\fP
+.br
+\fC#include 'RCSInterpreter\&.h'\fP
+.br
+\fC#include 'ChainRobotModel\&.h'\fP
+.br
+\fC#include 'Trajectory\&.h'\fP
+.br
+\fC#include 'Communication\&.h'\fP
+.br
+\fC#include 'moveit\&.h'\fP
+.br
+\fC#include 'RvizMarker\&.h'\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBRCS::CController\fP"
+.br
+.RI "\fIThe \fBCController\fP provides a collection for all the relevant controller pieces\&. The \fBCController\fP is the main controller class to collect all the references/pointers to instances in the project\&. A global instance of this class, called 'Controller', is created and is used throughout the code to reference various instances of control objects (e\&.g\&., kinematics, joint writer, joint reader, etc\&.) \fP"
+.ti -1c
+.RI "class \fBRCS::RobotStatus\fP"
+.br
+.RI "\fIThe \fBRobotStatus\fP is a thread that reads the status of the robot and updates the world model\&. The \fBRobotStatus\fP is a separate thread that reads the robot status using ROS communication mechanisms and updates the controller world model based on these values\&. Currently, it uses an instance of the class JointReader to read joint values from the controller\&. It uses a Kinematics pointer reference to compute the current robot pose using the forward kinematics (FK) routine\&. It also uses a CrclDelegate pointer reference to update the status reported by CRCL\&. \fP"
+.ti -1c
+.RI "class \fBRCS::RobotProgram\fP"
+.br
+.RI "\fIThe \fBRobotProgram\fP is a thread to handle crcl programs\&. \fBCrcl\fP programs are not in fact legitimate, however, debugging and verification are assisted by programs\&. However, program as in the \fBCrcl\fP XSD specification, so it doesn't hurt to handle\&. They require special handling as only one command should be done at a time\&. Uses codesynthesis to parse \fBCrcl\fP xml into C++ data structures\&. \fP"
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBRCS\fP"
+.br
+.in -1c
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CRCL FANUC from the source code\&.
