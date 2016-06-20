@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+
+<launch>
+  <arg name="gripper_name" default="gripper" />
+
+  <node name="nist_gripper_action_server" pkg="demogripperactionserver" 
+    type="demogripperactionserver">
+    <param name="gripper_name" type="str" value="$(arg gripper_name)" />
+  </node>
+  <node name="nist_gripper_action_client" pkg="demogripperactionclient" 
+    type="demogripperactionclient">
+    <param name="gripper_name" type="str" value="$(arg gripper_name)" />
+  </node>
+
+</launch>
