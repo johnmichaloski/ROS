@@ -5,6 +5,7 @@
 
 This document describes a minimal amount of C++ code to achieve a simple gripper actionlib client/server. This is the software paradigm that numerous ROS implementers have chosen, so we have boiled it down to the basics. This document does not describe the .action setup, but rather uses established gripper messages. Hope it helps.
 
+
 ##Notation
 ROS  Robot Operating System
 
@@ -16,10 +17,17 @@ ROS provides the actionlib stack which is a standardized interface for dealing w
 
 Figure 1. Actionlib Client/Server Architecture 
  
-In order for the client and server to communicate, ROS defines a few messages on which they communicate. This is with an action specification. This defines the Goal, Feedback, and Result messages with which clients and servers communicate:
+In order for the client and server to communicate, ROS defines a standardized actionlib API in which to communicate. This API defines exchange of the Goal, Feedback, and Result messages between clients and servers communicate:
 
 ###Goal
-To accomplish tasks using actions, we introduce the notion of a goal that can be sent to an ActionServer by an ActionClient. In the case of moving the base, the goal would be a PoseStamped message that contains information about where the robot should move to in the world. For controlling the tilting laser scanner, the goal would contain the scan parameters (min angle, max angle, speed, etc).
+Goals are initiated by an ActionClient. Once a goal is received by an ActionServer, the ActionServer creates a state machine to track the status of the goal:  
+Readers are referred to http://wiki.ros.org/actionlib/DetailedDescription for a detailed description of the state machine shown in Figure 2.
+
+![Figure 2 Actionlib Client/Server State Machine](./images/server_states_detailed.png?raw=true)
+
+Figure 2. Actionlib Client/Server State Machine 
+
+In the case of moving, the goal would be a PoseStamped message that contains information about where the robot should move to in the world. For controlling the tilting laser scanner, the goal would contain the scan parameters (min angle, max angle, speed, etc).
 
 The values for the status of a goal are as follows:
 
@@ -36,7 +44,7 @@ The values for the status of a goal are as follows:
 
 	
 ###Feedback
-Feedback provides server implementers a way to tell an ActionClient about the incremental progress of a goal. For moving the base, this might be the robot's current pose along the path. For controlling the tilting laser scanner, this might be the time left until the scan completes.
+Feedback provides the servers a way to tell an ActionClient about the incremental progress of a goal. For moving the base, this might be the robot's current pose along the path. For controlling the tilting laser scanner, this might be the time left until the scan completes.
 
 ###Result
 A result is sent from the ActionServer to the ActionClient upon completion of the goal. This is different than feedback, since it is sent exactly once. This is extremely useful when the purpose of the action is to provide some sort of information. For move base, the result isn't very important, but it might contain the final pose of the robot. For controlling the tilting laser scanner, the result might contain a point cloud generated from the requested scan.
@@ -51,7 +59,7 @@ The demo gripper action client demonstrates  the use of a simple action server. 
 - An explicit preempt goal preempts all goals with timestamps that are less than or equal to the stamp associated with the preempt
 - Accepting a new goal implies successful preemption of any old goal and the status of the old goal will be change automatically to reflect this
 
-Calling acceptNewGoal accepts a new goal when one is available. The status of this goal is set to active upon acceptance, and the status of any previously active goal is set to preempted. Preempts received for the new goal between checking if isNewGoalAvailable or invocation of a goal callback and the acceptNewGoal call will not trigger a preempt callback. This means, isPreemptRequested should be called after accepting the goal even for callback-based implementations to make sure the new goal does not have a pending preempt request.
+Calling `acceptNewGoal` accepts a new goal when one is available. The status of this goal is set to active upon acceptance, and the status of any previously active goal is set to preempted. Preempts received for the new goal between checking if isNewGoalAvailable or invocation of a goal callback and the acceptNewGoal call will not trigger a preempt callback. This means, isPreemptRequested should be called after accepting the goal even for callback-based implementations to make sure the new goal does not have a pending preempt request.
 
 	
 	#include <ros/ros.h>
@@ -93,17 +101,15 @@ Calling acceptNewGoal accepts a new goal when one is available. The status of th
 	
 	int main (int argc, char **argv)
 	{
-	  ros::init(argc, argv, "test_gripper_action_server");
+	  ros::init(argc, argv, "simple_gripper_action_server");
 	
 	  ros::NodeHandle pnh("~");
 	
 	  std::string gripper_name;
 	  pnh.param<std::string>("gripper_name", gripper_name, "gripper");
 	
-	  std::string action_name = "gripper";
-	
 	  // The name of the gripper -> this server communicates over name/inputs and name/outputs
-	    AGripperActionServer gripper (gripper_name);
+	  AGripperActionServer gripper (gripper_name);
 	
 	  ROS_INFO("Sample action-server spinning for gripper: %s", gripper_name.c_str());
 	  ros::spin();
@@ -111,7 +117,7 @@ Calling acceptNewGoal accepts a new goal when one is available. The status of th
 
 
 ##Coding an Action Client in C++
-The demo gripper action client demonstrates the integration of an actionlib, gripper messages. This example leverages existing gripper action messages for goal, result, and feedback.
+The demo gripper action client demonstrates the integration of an actionlib client/server API and predefined ROS gripper messages. This example leverages existing gripper action messages for goal, result, and feedback.
 
 The demo gripper action client takes in goal messages of type control_msgs/GripperCommandAction. From the ROS documentation control_msgs/GripperCommandAction contains a single field, 'command,' of type control _msgs/GripperCommand. The GripperCommand command has two float64 fields, 'position' and 'max_effort'. The 'position' field specifies the desired gripper opening (the size of the space between the two fingertips) in meters: closed is 0.0, and fully open is approximately 0.09. The 'max_effort' field places a limit on the amount of effort (force in N) to apply while moving to that position. If 'max_effort' is negative, it is ignored.
 
@@ -127,11 +133,9 @@ The demo gripper action client takes in goal messages of type control_msgs/Gripp
 	
 	  std::string gripper_name;
 	  pnh.param<std::string>("gripper_name", gripper_name, "gripper");
-	
-	  std::string action_name = "gripper";
-	
+		
 	  // Define the action client (true: we want to spin a thread)
-	  actionlib::SimpleActionClient< control_msgs::GripperCommandAction > ac(action_name , true);
+	  actionlib::SimpleActionClient< control_msgs::GripperCommandAction > ac(gripper_name , true);
 	
 	  // Wait for the action server to come up
 	  while(!ac.waitForServer(ros::Duration(5.0))) {
