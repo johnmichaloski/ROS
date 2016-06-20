@@ -33,7 +33,8 @@ The values for the status of a goal are as follows:
 -	RECALLING The goal has not been processed and a cancel request has been received from the action client, but the action server has not confirmed the goal is canceled
 -	RECALLED The goal was canceled by either another goal, or a cancel request before the action server began processing the goal
 -	LOST The goal was sent by the ActionClient, but disappeared due to some communication error
--	
+
+	
 ###Feedback
 Feedback provides server implementers a way to tell an ActionClient about the incremental progress of a goal. For moving the base, this might be the robot's current pose along the path. For controlling the tilting laser scanner, this might be the time left until the scan completes.
 
