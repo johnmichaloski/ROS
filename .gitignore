@@ -24,6 +24,7 @@ Copy*.*
 *.opensdf
 *.sdf
 ~*.*
+*.*~
 *.ipch
 *.msi
 *.msx
