@@ -156,6 +156,7 @@ The type `actionlib::SimpleActionClient<control_msgs::GripperCommandAction > `  
 
 Gripper ROS Workspace
 First, a ROS catkin workspace was created for the gripper code.
+
       616  cd /usr/local/michalos/
       617  mkdir gripper_ws
       618  cd gripper_ws
@@ -180,6 +181,7 @@ type="demogripperactionserver" output="screen">
   </node>
 
 A snippet of the Client/server output in the roslaunch shell was:
+
 	setting /run_id to 271c897c-34b3-11e6-951c-ecf4bb31ca6d
 	process[rosout-1]: started with pid [7518]
 	started core service [/rosout]
@@ -188,6 +190,9 @@ A snippet of the Client/server output in the roslaunch shell was:
 	process[nist_gripper_action_client-3]: started with pid [7566]
 	[ INFO] [1466185477.143949150]: AGripperActionServer callback for gripper: gripper Position=0.000000
 	[nist_gripper_action_client-3] process has finished cleanly
+
+The CMakefile.txt and package.xml is voodoo, and should have a GUI interface, but doens't. I include/depend on just about everything to be safe, and have a tediously long compilations.
+(Sorry haven't integrated precompiled headers into Gnu yet.)
 
 The roslaunch file was straightforward:
 
