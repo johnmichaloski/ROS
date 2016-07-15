@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>nistcrcl</name>
+  <name>rawcrcl</name>
   <version>0.0.0</version>
   <description>The nist crcl server package. </description>
 
@@ -19,7 +19,7 @@
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
   <!-- <url type="website">http://wiki.ros.org/nist_fanuc</url> -->
-<url type="website">https://github.com/johnmichaloski/ROS/nistcrcl</url>
+<url type="website">https://github.com/johnmichaloski/ROS/rawcrcl</url>
 
    <author email="john.michaloski@nist.gov">John Michaloski</author> 
 
@@ -41,18 +41,14 @@
   <build_depend>cmake_modules</build_depend>
   <build_depend>eigen</build_depend>
   <build_depend>moveit_core</build_depend>
- <build_depend>message_generation</build_depend>
  <build_depend>sensor_msgs</build_depend>
- <build_depend>geometry_msgs</build_depend>
- <build_depend>trajectory_msgs</build_depend>
+ <build_depend>message_generation</build_depend>
 
   <run_depend>message_runtime</run_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>boost</run_depend>
   <run_depend>moveit_core</run_depend>
   <run_depend>sensor_msgs</run_depend>
-  <run_depend>geometry_msgs</run_depend>
-  <run_depend>trajectory_msgs</run_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

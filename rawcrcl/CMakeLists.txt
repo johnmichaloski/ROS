@@ -1,17 +1,13 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(nistcrcl)
+project(rawcrcl)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  moveit_core
   roscpp
   cmake_modules
   std_msgs 
-  sensor_msgs
-  geometry_msgs
-  trajectory_msgs
   message_generation
 )
 
@@ -19,16 +15,12 @@ find_package(Boost REQUIRED system thread chrono regex)
 find_package(Eigen REQUIRED)
 
 ## Declare ROS messages and services
-add_message_files(  DIRECTORY msg FILES   CrclCommandMsg.msg)
+add_message_files(  DIRECTORY msg FILES   CrclRawCommandMsg.msg)
 
 ## Generate added messages and services
 generate_messages(
   DEPENDENCIES
   std_msgs
-  sensor_msgs
-  geometry_msgs
-  trajectory_msgs
-
 )
 
 #The catkin_package function specifies which dependencies your package exports to its dependencies. In particular, #INCLUDE_DIRS specifies which directory in your package contains the header directory that should be on the include #path for any packages that compile against your package.
@@ -36,15 +28,12 @@ generate_messages(
 catkin_package(
   INCLUDE_DIRS
     include
-    include/${PROJECT_NAME}/CrclXsd
   LIBRARIES
     
   CATKIN_DEPENDS
     roscpp
     moveit_core
     sensor_msgs
-   trajectory_msgs
-    geometry_msgs
     message_runtime
   DEPENDS
     Boost
@@ -69,36 +58,21 @@ include_directories(include
     ${Eigen_INCLUDE_DIRS}
     # include breakdown for this project
     include/${PROJECT_NAME}
-    include/${PROJECT_NAME}/CrclXsd
     include/${PROJECT_NAME}/NIST
    /usr/include/eigen3
 )
 # Codesynthesis include
 # FMP
 include_directories(
-  /usr/include/xsd/cxx/xml
-  /usr/local/include/xsd/cxx/xml
   ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
   )
-# Apache xercesc include
-include_directories(/usr/include/xercesc)
 
 
-add_executable(nistcrcl
-
-src/CRCL/CRCLCommandInstance.cxx
-src/CRCL/CRCLCommands.cxx 
-src/CRCL/CRCLProgramInstance.cxx
-src/CRCL/CRCLStatus.cxx
-src/CRCL/DataPrimitives.cxx
-src/RCS.cpp
-src/crcl.cpp
-src/CrclInterface.cpp
+add_executable(rawcrcl
 src/AsioCrclServer.cpp
 src/Globals.cpp
 src/Setup.cpp
-src/Crcl2Ros.cpp
-src/nistcrcl.cpp
+src/rawcrcl.cpp
 )
 
 #Add all files in subdirectories of the project in
@@ -116,14 +90,12 @@ add_custom_target(dummy_${PROJECT_NAME} SOURCES ${extra_files})
 
 link_directories(/usr/lib/x86_64-linux-gnu/)
 
-target_link_libraries(nistcrcl 
-libtinyxml.a  
-libxerces-c.a  
+target_link_libraries(rawcrcl 
 ${catkin_LIBRARIES}
 ${Boost_LIBRARIES}
 )
 
-add_dependencies(nistcrcl ${${PROJECT_NAME}_EXPORTED_TARGETS})
+add_dependencies(rawcrcl ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 #############
 ## Install ##
