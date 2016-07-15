@@ -105,7 +105,7 @@ int CCrcl2RosMsg::Action() {
             // publish ros message if found corresponding crcl command
             if(rosmsg.crclcommand!=noop)
             {
-                ROS_INFO("ROS command: [%s] ", rosmsg.crclcommand);
+                ROS_INFO("ROS command: [%d] ", rosmsg.crclcommand);
                 crcl_pub.publish(rosmsg);
             }
         }

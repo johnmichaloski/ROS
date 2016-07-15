@@ -100,7 +100,7 @@ bool SetupRosEnvironment(std::string pkgpath) {
     // suppose we could just copy all the environment variables
     //std::string user = Globals._appproperties["user"];
     //std::cout << "user=" << user.c_str() << std::endl;
-    std::string cmd = Globals.StrFormat("/bin/bash -i /usr/local/michalos/nistfanuc_ws/devel/lib/nist_fanuc/rossetup.bash  ");
+    std::string cmd = Globals.StrFormat("/bin/bash -i /usr/local/michalos/nistcrcl_ws/devel/lib/nistcrcl/rossetup.bash  ");
     std::cout << "cmd=" << cmd.c_str() << std::endl;
 #else
     //   pkgpath=pkgpath+"/scripts/rossetup.bash"

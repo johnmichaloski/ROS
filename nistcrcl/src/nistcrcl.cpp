@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
         Globals.ExeDirectory = path.substr(0, path.find_last_of('/') + 1);
         Globals._appproperties["ExeDirectory"] = Globals.ExeDirectory;
 
-#if 0
+#if 1
         // This sets up some application name/value pairs: user, hostname
         //SetupRosEnvironment - needs to go before ROS!
         SetupRosEnvironment("");
