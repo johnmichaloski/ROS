@@ -47,7 +47,7 @@ static void trans_func(unsigned int u, EXCEPTION_POINTERS *pExp) {
 #endif
 // --------------------------------------------------------
 std::set<CAsioCrclSession *> CAsioCrclSession::_devices;
-CAsioMessages CAsioCrclSession::_inmsgs; // remove static if you want sessions to save to own queue
+CAsioMessageQueueThread *  CAsioCrclSession::_inmsgs=NULL;  // queue with thread notify
 CAsioMessages CAsioCrclSession::_outmsgs;
 std::map<std::string, CAsioCrclSession*> CAsioCrclSession::connections;
 
@@ -116,7 +116,7 @@ void CAsioCrclSession::AppendBuffer(std::string read) {
 }
 
 void CAsioCrclSession::SaveMessage(std::string xmlmessage) {
-    _inmsgs.AddMsgQueue(boost::make_tuple(xmlmessage, this));
+    _inmsgs->AddMsgQueue(boost::make_tuple(xmlmessage, this));
     if (CAsioCrclServer::_bTrace)
         Globals.AppendFile(Globals.ExeDirectory + "xmltrace.txt", xmlmessage);
 }
@@ -201,12 +201,12 @@ void CAsioCrclSession::Session() {
             boost::this_thread::sleep(boost::posix_time::milliseconds(1000)); // sleeping 1 second!
 
             if (this->_inmsgs.SizeMsgQueue() > 0) {
-                std::string cmd = _inmsgs.PopFrontMsgQueue();
-                Crcl::CanonReturn ret = _inmsgs.Delegate(cmd);
+                std::string cmd = _inmsgs->PopFrontMsgQueue();
+                Crcl::CanonReturn ret = _inmsgs->Delegate(cmd);
                 OutputDebugString(cmd.c_str());
 
                 if (ret == Crcl::CANON_STATUSREPLY) {
-                    Crcl::CStatus status = _inmsgs.Delegate()->wm;
+                    Crcl::CStatus status = _inmsgs->Delegate()->wm;
                     std::string sStatus = Crcl::CrclMsgInterface().GetStatusReply(&status);
                     SyncWrite(sStatus);
                 }
@@ -226,11 +226,13 @@ void CAsioCrclSession::Session() {
 // CAsioCrclServer
 bool CAsioCrclServer::_bTrace = false;
 
-CAsioCrclServer::CAsioCrclServer(boost::asio::io_service & io_service) :
+CAsioCrclServer::CAsioCrclServer(boost::asio::io_service & io_service,
+        CAsioMessageQueueThread * msgqthread) :
 _io_service(io_service) {
     ErrorMessage = &MyErrorMessage;
     _bInited = false;
     _nHeartbeat = 0;
+    CAsioCrclSession::_inmsgs  = msgqthread;
 }
 
 int CAsioCrclServer::Init(std::string domain, long portnumber, std::string devicename) {

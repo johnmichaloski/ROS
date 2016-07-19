@@ -16,6 +16,7 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 
 #pragma once
 #include <boost/thread/mutex.hpp>
+#include <deque>
 
 namespace RCS {
 
@@ -75,7 +76,7 @@ namespace RCS {
          * \brief AddMsgQueue mutex push to back an item onto message queue.
          * \param  T       item to place in back of message queue.
          */
-        void AddMsgQueue(T t) {
+        virtual void AddMsgQueue(T t) {
             boost::mutex::scoped_lock lock(m);
             xml_msgs.push_back(t);
         }

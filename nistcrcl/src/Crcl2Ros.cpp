@@ -3,6 +3,14 @@
 
 #include "Crcl2Ros.h"
 
+/**
+
+ * 
+ > catkin build -DCMAKE_BUILD_TYPE=Deb
+ > roscore
+
+ */
+
 namespace RCS
 {
 CMessageQueue<RCS::CanonCmd> cmds;
@@ -11,7 +19,6 @@ CanonWorldModel wm;
 boost::mutex CCrcl2RosMsg::cncmutex;
 void CCrcl2RosMsg::Init() {
 
-    Name() = "CCrcl2RosMsg";
     // Controller instantiatio of shared objects - NOT dependent on ROS
     crclinterface = boost::shared_ptr<Crcl::CrclDelegateInterface>(
             new Crcl::CrclDelegateInterface());
@@ -44,6 +51,7 @@ int CCrcl2RosMsg::Action() {
         }
         /////////////////////////////////////////////////////////////////////////////////////////////
         // interpret translated CRCL command. Commands in canonical form: standard units (mm, radians)
+        // Note many CRCL commands are NOT translated into corresponding canoncial ROS commands
         if (RCS::cmds.SizeMsgQueue() > 0) {
             RCS::CanonCmd cc = RCS::cmds.PopFrontMsgQueue();
             nistcrcl::CrclCommandMsg rosmsg;

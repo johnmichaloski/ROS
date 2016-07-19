@@ -8,8 +8,11 @@
 
 #include "AsioCrclServer.h"
 #include "RCSThreadTemplate.h"
+#include "RCSMsgQueueThread.h"
+
 #include "CrclInterface.h"
 #include "nistcrcl/CrclCommandMsg.h"
+#include "nistcrcl/CrclStatusMsg.h"
 
 #include "RCS.h"
 #include "crcl.h"
@@ -21,10 +24,10 @@ extern CanonWorldModel wm;
 
 };
 
-class CCrcl2RosMsg : public RCS::Thread
+class CCrcl2RosMsg : public CAsioMessageQueueThread 
 {
 public:
-    CCrcl2RosMsg(ros::NodeHandle &nh , double cycletime=100.0) : _nh(nh), RCS::Thread(cycletime)
+    CCrcl2RosMsg(ros::NodeHandle &nh) : _nh(nh)
     {
 
     }

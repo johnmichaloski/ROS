@@ -58,8 +58,7 @@ port: 47548
 ALogger Logger;
 
 
-// myios declared as static in AsioCrclServer.h
-CAsioCrclServer crclServer(myios);
+
 
 //static void crclstatusCallback(const std_msgs::String::ConstPtr& msg)
 //{
@@ -121,14 +120,17 @@ int main(int argc, char** argv) {
         nh.param<std::string>("crclip", crclip, "127.0.0.1");
         nh.param("crclport", crclport, 64444);
         ROS_INFO("Crcl listen: [%s:%d]", crclip.c_str(), crclport);
+
+        // This reads new Crcl XML message, interprets them, and translates into ROS
+        // Second, it publishes the Crcl into ROS onto nistcrcl/crcl_command topic
+        CCrcl2RosMsg crcl2ros(nh);
+        
+        // myios declared as static in AsioCrclServer.h
+        CAsioCrclServer crclServer(myios,(CAsioMessageQueueThread*)&crcl2ros);
         crclServer.Init(crclip, crclport, "Command GUI");
 
         CAsioCrclServer::_bTrace=true;
         crclServer.Start();
-
-        // This reads new Crcl XML message, interprets them, and translates into ROS
-        // Second, it publishes the Crcl into ROS onto nistcrcl/crcl_command topic
-        CCrcl2RosMsg crcl2ros(nh,10.0);
         crcl2ros.Start();
 
         spinner.stop();

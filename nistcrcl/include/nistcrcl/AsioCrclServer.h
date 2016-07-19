@@ -28,6 +28,7 @@
 #include <boost/enable_shared_from_this.hpp>
 
 #include "RCSMsgQueue.h"
+#include "RCSMsgQueueThread.h"
 #include "Globals.h"
 
 using boost::asio::ip::tcp;
@@ -38,6 +39,8 @@ class CAsioCrclServer;
 
 typedef boost::tuple<std::string, CAsioCrclSession *> CrclMessage;
 typedef RCS::CMessageQueue<CrclMessage> CAsioMessages;
+typedef RCS::CMsgQueueThread<CrclMessage> CAsioMessageQueueThread;
+
 
 // --------------------------------------------------------
 
@@ -190,7 +193,8 @@ public:
      *\brief Keeps track of devices that left and are no longer an asio session.
      */
     static CAsioMessages & InMessages() {
-        return _inmsgs;
+	assert(_inmsgs!=NULL);
+        return *_inmsgs;
     }
     std::string RemoteIP (){ return _remoteip; }
     unsigned short RemotePORT (){ return _remoteport; }
@@ -202,7 +206,7 @@ protected:
     boost::condition_variable cMessage;
     boost::mutex condMutex; /**< mutex to  */
     tcp::socket _socket; /**<  tcp/ip asio socket  */
-    static CAsioMessages _inmsgs; /**<  queue of inbound crcl xml messages from device */
+    static CAsioMessageQueueThread * _inmsgs; /**<  queue of inbound crcl xml messages from device */
     static CAsioMessages _outmsgs; /**<  queue of outbound crcl xml messages to device */
     boost::asio::deadline_timer _timer; /**<  socket reader timer */
     std::string _current; /**<  current string read from socket */
@@ -240,7 +244,8 @@ public:
      * \brief Constructor for asio crcl server that listens on  socket port 64444, and spawns a new session.
      * \param io_service reference tot he asio service providers. only one per program.
      */
-    CAsioCrclServer(boost::asio::io_service & io_service);
+    CAsioCrclServer(boost::asio::io_service & io_service,
+        CAsioMessageQueueThread * msgqthread);
 
     /*! 
      *  brief Creates acceptor for tcp/ip endpoint, and starts async accept.
