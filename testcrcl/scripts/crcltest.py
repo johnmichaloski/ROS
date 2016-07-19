@@ -7,7 +7,7 @@ import geometry_msgs.msg
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
 from nistcrcl.msg import CrclCommandMsg
-
+import time
 
 
 def callback(data):
@@ -30,6 +30,8 @@ def listener():
 
 if __name__ == '__main__':
 	print '============ Starting crcl testing'
+	time.sleep(10) # wait for ros core master to start
+	print '============ Listening crcl...'
 	listener()
 
 

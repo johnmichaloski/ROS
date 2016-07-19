@@ -2,12 +2,13 @@
 # CRCL is expressed in XML.
 # At a primite level, a CRCL message is a framed xml string.
 # So, the ROS message contains a xml string and the originating ip from where the CRCL message came.
-
+# 
 
 std_msgs/Header header
 
 # enumeration of CRCL commands
 uint8 crclcommand
+########################################
 uint8 initCanon=1
 uint8 endCanon=2
 uint8 actuatejoints=3
@@ -20,6 +21,8 @@ uint8 stopMotion=9
 uint8 setEndEffector=10
 uint8 openToolChange=11
 uint8 closeToolChanger=12
+########################################
+uint64 crclcommandnum
 
 # https://github.com/ros/common_msgs 
 geometry_msgs/Pose  finalpose

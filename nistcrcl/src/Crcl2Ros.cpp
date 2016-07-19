@@ -14,9 +14,20 @@
 namespace RCS
 {
 CMessageQueue<RCS::CanonCmd> cmds;
-CanonWorldModel wm;
+CanonWorldModel wm;  // for motion control planning wm
 }
 boost::mutex CCrcl2RosMsg::cncmutex;
+
+void CCrcl2RosMsg::StatusCallback(const nistcrcl::CrclStatusMsg::ConstPtr& statusmsg) {
+ 
+    //crclinterface->crclwm.CommandID() // THis is assigned a # to fit with CRCL XML communication;
+    crclinterface->crclwm.StatusID() = (unsigned long long) statusmsg->crclcommandnum;
+    //    crclinterface->crclwm.CommandStatus() = (Crcl::CommandStateEnum) statusmsg->crclcommandstatus;
+
+    crclinterface->crclwm.Update((JointState&) statusmsg->statusjoints);
+    crclinterface->crclwm.Gripper().Position() = statusmsg->eepercent;
+}
+
 void CCrcl2RosMsg::Init() {
 
     // Controller instantiatio of shared objects - NOT dependent on ROS
@@ -24,7 +35,7 @@ void CCrcl2RosMsg::Init() {
             new Crcl::CrclDelegateInterface());
     crclinterface->SetAngleUnits("DEGREE");
     crcl_pub = _nh.advertise<nistcrcl::CrclCommandMsg>("crcl_command", 10);
-//    crcl_sub = _nh.subscribe("crcl_status", 1000, crclstatusCallback);
+    crcl_sub = _nh.subscribe("crcl_status", 1000, &CCrcl2RosMsg::StatusCallback, this);
 }
 
 int CCrcl2RosMsg::Action() {

@@ -20,7 +20,8 @@
 namespace RCS
 {
 extern  CMessageQueue<RCS::CanonCmd> cmds;
-extern CanonWorldModel wm;
+extern CanonWorldModel wm;  // motion related parameters max vel,acc
+// not sure why this cant be part of crclwm
 
 };
 
@@ -41,7 +42,7 @@ public:
          *\brief Initialization routine for the controller..
          */
     virtual void Init();
-
+    void StatusCallback(const nistcrcl::CrclStatusMsg::ConstPtr& statusmsg);
     ros::NodeHandle &_nh;
     ros::Publisher crcl_pub; /**< ros publisher information used for crcl command updates */
     ros::Subscriber crcl_sub ;

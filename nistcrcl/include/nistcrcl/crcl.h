@@ -154,8 +154,8 @@ namespace Crcl {
      * \brief GripperStatus  dummy class for future gripper information. 
      */
     struct GripperStatus {
-        std::string _name;
-        double _dPosition; // 0..1
+         VAR(Name,  std::string);  // 0..1
+         VAR(Position, double);  // 0..1
     };
     
     /**
@@ -196,6 +196,7 @@ namespace Crcl {
         VAR(StatusID, unsigned long long);
         VAR(CommandStatus, Crcl::CommandStateEnum);
         VAR(Rates, RCS::IRate);
+        VAR(Gripper, GripperStatus);
 
         // //////////////////////////////////////////////////
         Crcl::PoseType _CurrentPose, _GoalPose;
