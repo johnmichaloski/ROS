@@ -85,7 +85,7 @@ int CCrcl2RosMsg::Action() {
 
             };
             rosmsg.crclcommand=noop;
-
+            rosmsg.crclcommandnum = cc.CommandID();
             if (cc.cmd == RCS::CANON_MOVE_JOINT)
             {
                 rosmsg.crclcommand=actuatejoints;
