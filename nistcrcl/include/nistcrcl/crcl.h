@@ -231,5 +231,7 @@ namespace Crcl {
         std::vector<JointReport> _vJointReport;
         std::string sCommandState;
         std::string Alarm;
+	std::vector<std::string> jointnames; /**<  vector of joint names used by command */
+
     };
 };

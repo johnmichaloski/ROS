@@ -344,7 +344,7 @@ namespace RCS {
         CanonCmd echocmd;  /**<  copy of current command */
         JointState currentjoints; /**<  current joint state */
         RCS::Pose currentpose; /**<  current robot pose */
-    };
+   };
         /*!
 	* \brief DumpJoints takes a list of joints and generates a string describing pose. 
 	* Can be used as std::cout << DumpPose(pose); 

@@ -48,6 +48,8 @@ public:
     ros::Subscriber crcl_sub ;
     static boost::mutex cncmutex; /**< mutex for thread safe access to RobotProgram commands  */
     boost::shared_ptr<Crcl::CrclDelegateInterface> crclinterface;
+    std::vector<std::string> jointnames;
+
 };
 
 

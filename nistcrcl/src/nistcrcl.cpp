@@ -45,6 +45,7 @@ port: 47548
 
 #include <ros/ros.h>
 #include <ros/package.h>
+#include <ros/master.h>
 #include "std_msgs/String.h"
 // THis is part of this package
 #include "nistcrcl/CrclCommandMsg.h"
@@ -68,7 +69,9 @@ ALogger Logger;
 
 
 int main(int argc, char** argv) {
-    
+    std::cout << "Sleep 2 seconds\n";
+    ros::init(argc, argv, "nistcrcl");
+    while(!ros::master::check()) Globals.Sleep(10000); // Make sure ROS master has started
 
     try {
         // Initialize xercesc used by code synthesis to parse CRCL XML
@@ -86,7 +89,7 @@ int main(int argc, char** argv) {
 #endif
         
         // Initialize ROS
-        ros::init(argc, argv, "nistcrcl");
+        //ros::init(argc, argv, "nistcrcl");
         ros::NodeHandle nh;
         ros::Rate r(50);  // 50 times a second
 

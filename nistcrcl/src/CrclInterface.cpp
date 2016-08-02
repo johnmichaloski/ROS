@@ -658,6 +658,8 @@ CrclReturn CrclDelegateInterface::ActuateJoints(Crcl::ActuatorJointSequence join
         {
             cc.jointnum.push_back(joints[i].JointNumber() - 1); // adjust back to zero based math
             double pos = joints[i].JointPosition() * crclwm._angleConversion;
+            std::cout << VectorDump<std::string> (crclwm.jointnames);
+            cc.joints.name.push_back(crclwm.jointnames[cc.jointnum.back()]);
             cc.joints.position.push_back(pos);
             cc.joints.velocity.push_back(speed); //  need conversion of velocity?
             cc.joints.effort.push_back(accel); //   need conversion of acc?Format()

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>crcl_testing</name>
+  <name>testcrcl</name>
   <version>0.0.1</version>
   <description>The crcl_testing package</description>
 
