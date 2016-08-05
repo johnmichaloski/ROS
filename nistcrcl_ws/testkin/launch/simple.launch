@@ -1,0 +1,6 @@
+<launch>
+  <param name="robot_description" command="$(find xacro)/xacro.py $(find fanuc_lrmate200id_support)/urdf/lrmate200id.xacro" />
+  <rosparam  command="load" file="$(find fanuc_lrmate200id_support)/config/joint_names_lrmate200id.yaml" />
+   <param name="tip_name" value="link_6" />
+   <param name="root_name" value="base_link" />
+</launch>

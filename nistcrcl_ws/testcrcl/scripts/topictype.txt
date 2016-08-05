@@ -1,0 +1,132 @@
+
+
+# make sure we aren't using floor division
+from __future__ import division, print_function
+
+NAME='testcrclfeedback'
+
+import os
+import sys
+import math
+import socket
+import time
+import traceback
+import yaml
+try:
+    from xmlrpc.client import Fault
+except ImportError:
+    from xmlrpclib import Fault
+
+from operator import itemgetter
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
+
+import genpy
+
+import roslib.message
+import rosgraph
+#TODO: lazy-import rospy or move rospy-dependent routines to separate location
+import rospy
+
+class ROSTopicException(Exception):
+    """
+    Base exception class of rostopic-related errors
+    """
+    pass
+class ROSTopicIOException(ROSTopicException):
+    """
+    rostopic errors related to network I/O failures
+    """
+    pass
+
+
+def _get_topic_type(topic):
+    """
+    subroutine for getting the topic type
+    :returns: topic type, real topic name and fn to evaluate the message instance
+    if the topic points to a field within a topic, e.g. /rosout/msg, ``(str, str, fn)``
+    """
+    try:
+        val = _master_get_topic_types(rosgraph.Master('/rostopic'))
+    except socket.error:
+        raise ROSTopicIOException("Unable to communicate with master!")
+
+    # exact match first, followed by prefix match
+    matches = [(t, t_type) for t, t_type in val if t == topic]
+    if not matches:
+        matches = [(t, t_type) for t, t_type in val if topic.startswith(t+'/')]
+        # choose longest match
+        matches.sort(key=itemgetter(0), reverse=True)
+
+        # try to ignore messages which don't have the field specified as part of the topic name
+        while matches:
+            t, t_type = matches[0]
+            msg_class = roslib.message.get_message_class(t_type)
+            if not msg_class:
+                # if any class is not fetchable skip ignoring any message types
+                break
+            msg = msg_class()
+            nested_attributes = topic[len(t) + 1:].rstrip('/')
+            nested_attributes = nested_attributes.split('[')[0]
+            if nested_attributes == '':
+                break
+            try:
+                _get_nested_attribute(msg, nested_attributes)
+            except AttributeError:
+                # ignore this type since it does not have the requested field
+                matches.pop(0)
+                continue
+            matches = [(t, t_type)]
+            break
+
+    if matches:
+        t, t_type = matches[0]
+        if t_type == rosgraph.names.ANYTYPE:
+            return None, None, None
+        return t_type, t, msgevalgen(topic[len(t):])
+    else:
+        return None, None, None
+
+# NOTE: this is used externally by rxplot
+    
+def get_topic_type(topic, blocking=False):
+    """
+    Get the topic type.
+
+    :param topic: topic name, ``str``
+    :param blocking: (default False) block until topic becomes available, ``bool``
+    
+    :returns: topic type, real topic name and fn to evaluate the message instance
+      if the topic points to a field within a topic, e.g. /rosout/msg. fn is None otherwise. ``(str, str, fn)``
+    :raises: :exc:`ROSTopicException` If master cannot be contacted
+    """
+    topic_type, real_topic, msg_eval = _get_topic_type(topic)
+    if topic_type:
+        return topic_type, real_topic, msg_eval
+    elif blocking:
+        sys.stderr.write("WARNING: topic [%s] does not appear to be published yet\n"%topic)
+        while not rospy.is_shutdown():
+            topic_type, real_topic, msg_eval = _get_topic_type(topic)
+            if topic_type:
+                return topic_type, real_topic, msg_eval
+            else:
+                _sleep(0.1)
+    return None, None, None
+
+def get_topic_class(topic, blocking=False):
+    """
+    Get the topic message class
+    :returns: message class for topic, real topic
+      name, and function for evaluating message objects into the subtopic
+      (or ``None``). ``(Message, str, str)``
+    :raises: :exc:`ROSTopicException` If topic type cannot be determined or loaded
+    """
+    topic_type, real_topic, msg_eval = get_topic_type(topic, blocking=blocking)
+    if topic_type is None:
+        return None, None, None
+    msg_class = roslib.message.get_message_class(topic_type)
+    if not msg_class:
+        raise ROSTopicException("Cannot load message class for [%s]. Are your messages built?" % topic_type)
+    return msg_class, real_topic, msg_eval
