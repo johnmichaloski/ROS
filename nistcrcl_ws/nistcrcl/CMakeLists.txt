@@ -19,7 +19,7 @@ find_package(Boost REQUIRED system thread chrono regex)
 find_package(Eigen REQUIRED)
 
 ## Declare ROS messages and services
-add_message_files(  DIRECTORY msg FILES   CrclCommandMsg.msg CrclStatusMsg.msg)
+add_message_files(  DIRECTORY msg FILES   CrclCommandMsg.msg CrclStatusMsg.msg CrclMaxProfileMsg.msg)
 
 ## Generate added messages and services
 generate_messages(

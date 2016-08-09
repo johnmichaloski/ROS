@@ -45,7 +45,7 @@ class get_fk():
         self.request.fk_link_names = self.links
 
         self.request.robot_state.joint_state = JointState()
-        self.request.robot_state.joint_state.header.frame_id = 'arm_link'
+        self.request.robot_state.joint_state.header.frame_id = 'base_link'
         self.request.robot_state.joint_state.name = self.joints
         self.request.robot_state.joint_state.position = [0] * len(self.joints)
         self.request.robot_state.joint_state.position[0] = 0.0
@@ -55,7 +55,7 @@ class get_fk():
         self.request.robot_state.joint_state.position[4] = 0.0
         self.request.robot_state.joint_state.position[5] = 0.0
 
-        self.request.header.frame_id = "arm_link"
+        self.request.header.frame_id = "base_link"
 
         while not rospy.is_shutdown():
             try:

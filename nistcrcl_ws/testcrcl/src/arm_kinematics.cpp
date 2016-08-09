@@ -33,26 +33,43 @@
 #include <kdl/chainiksolverpos_nr_jl.hpp>
 #include <kdl/chainiksolvervel_pinv.hpp>
 #include <kdl/chainfksolverpos_recursive.hpp>
-// http://wiki.ros.org/kinematics_msgs 
+// http://wiki.ros.org/moveit_msgs 
 // Example client: http://wiki.ros.org/pr2_kinematics/Tutorials/Tutorial%203
-#include <kinematics_msgs/GetPositionFK.h>
-#include <kinematics_msgs/GetPositionIK.h>
-#include <kinematics_msgs/GetKinematicSolverInfo.h>
-#include <kinematics_msgs/KinematicSolverInfo.h>
+
+
+#if 1
+//http://docs.ros.org/jade/api/moveit_msgs/html/index-msg.html
+#include <moveit_msgs/GetPositionFK.h>
+#include <moveit_msgs/GetPositionIK.h>
+#include <moveit_msgs/GetKinematicSolverInfo.h>
+#include <moveit_msgs/KinematicSolverInfo.h>
+#else
+
+#include <moveit_msgs/GetPositionFK.h>
+#include <moveit_msgs/GetPositionIK.h>
+#include <moveit_msgs/GetKinematicSolverInfo.h>
+#include <moveit_msgs/KinematicSolverInfo.h>
+#endif
+#include <urdf/model.h>
+#include "testcrcl/Setup.h"
+#include "testcrcl/Globals.h"
 using std::string;
 
 static const std::string IK_SERVICE = "get_ik";
 static const std::string FK_SERVICE = "get_fk";
 static const std::string IK_INFO_SERVICE = "get_ik_solver_info";
 static const std::string FK_INFO_SERVICE = "get_fk_solver_info";
+ALogger Logger;
 
+
+//http://wiki.ros.org/pr2_mechanism/Tutorials/Coding%20a%20realtime%20Cartesian%20controller%20with%20KDL
 class Kinematics {
     public:
         Kinematics();
         bool init();
 
     private:
-        ros::NodeHandle nh, nh_private;
+        ros::NodeHandle nh; //, nh_private;
         std::string root_name, tip_name;
         KDL::JntArray joint_min, joint_max;
         KDL::Chain chain;
@@ -67,7 +84,7 @@ class Kinematics {
 
         tf::TransformListener tf_listener;
 
-        kinematics_msgs::KinematicSolverInfo info;
+        moveit_msgs::KinematicSolverInfo info;
 
         bool loadModel(const std::string xml);
         bool readJoints(urdf::Model &robot_model);
@@ -79,37 +96,38 @@ class Kinematics {
          * @param A request message. See service definition for GetPositionIK for more information on this message.
          * @param The response message. See service definition for GetPositionIK for more information on this message.
          */
-        bool getPositionIK(kinematics_msgs::GetPositionIK::Request &request,
-                           kinematics_msgs::GetPositionIK::Response &response);
+        bool getPositionIK(moveit_msgs::GetPositionIK::Request &request,
+                           moveit_msgs::GetPositionIK::Response &response);
 
         /**
          * @brief This is the basic kinematics info service that will return information about the kinematics node.
          * @param A request message. See service definition for GetKinematicSolverInfo for more information on this message.
          * @param The response message. See service definition for GetKinematicSolverInfo for more information on this message.
          */
-        bool getIKSolverInfo(kinematics_msgs::GetKinematicSolverInfo::Request &request,
-                             kinematics_msgs::GetKinematicSolverInfo::Response &response);
+        bool getIKSolverInfo(moveit_msgs::GetKinematicSolverInfo::Request &request,
+                             moveit_msgs::GetKinematicSolverInfo::Response &response);
 
         /**
          * @brief This is the basic kinematics info service that will return information about the kinematics node.
          * @param A request message. See service definition for GetKinematicSolverInfo for more information on this message.
          * @param The response message. See service definition for GetKinematicSolverInfo for more information on this message.
          */
-        bool getFKSolverInfo(kinematics_msgs::GetKinematicSolverInfo::Request &request,
-                             kinematics_msgs::GetKinematicSolverInfo::Response &response);
+        bool getFKSolverInfo(moveit_msgs::GetKinematicSolverInfo::Request &request,
+                             moveit_msgs::GetKinematicSolverInfo::Response &response);
 
         /**
          * @brief This is the basic forward kinematics service that will return information about the kinematics node.
          * @param A request message. See service definition for GetPositionFK for more information on this message.
          * @param The response message. See service definition for GetPositionFK for more information on this message.
          */
-        bool getPositionFK(kinematics_msgs::GetPositionFK::Request &request,
-                           kinematics_msgs::GetPositionFK::Response &response);
+        bool getPositionFK(moveit_msgs::GetPositionFK::Request &request,
+                           moveit_msgs::GetPositionFK::Response &response);
 };
 
 
 
-Kinematics::Kinematics(): nh_private ("~") {
+//Kinematics::Kinematics(): nh_private ("~") {
+Kinematics::Kinematics() {
 }
 
 bool Kinematics::init() {
@@ -123,29 +141,35 @@ bool Kinematics::init() {
         ROS_FATAL("Could not load the xml from parameter server: %s", urdf_xml.c_str());
         return false;
     }
-
+#if 0
     // Get Root and Tip From Parameter Service
-    if (!nh_private.getParam("root_name", root_name)) {
+    if (!nh.getParam("root_name", root_name)) {
         ROS_FATAL("GenericIK: No root name found on parameter server");
         return false;
     }
-    if (!nh_private.getParam("tip_name", tip_name)) {
+    if (!nh.getParam("tip_name", tip_name)) {
         ROS_FATAL("GenericIK: No tip name found on parameter server");
         return false;
     }
-
+#endif
+    nh.getParam("root_name", root_name);
+    nh.getParam("tip_name", tip_name);
+     
     // Load and Read Models
     if (!loadModel(result)) {
         ROS_FATAL("Could not load models!");
         return false;
     }
 
-    // Get Solver Parameters
+   // Get Solver Parameters
     int maxIterations;
     double epsilon;
+    
+    nh.param("maxIterations", maxIterations, 1000);
+    nh.param("epsilon", epsilon, 1e-2);
 
-    nh_private.param("maxIterations", maxIterations, 1000);
-    nh_private.param("epsilon", epsilon, 1e-2);
+
+ 
 
     // Build Solvers
     fk_solver = new KDL::ChainFkSolverPos_recursive(chain);
@@ -154,15 +178,17 @@ bool Kinematics::init() {
             *fk_solver, *ik_solver_vel, maxIterations, epsilon);
 
     ROS_INFO("Advertising services");
-    fk_service = nh_private.advertiseService(FK_SERVICE,&Kinematics::getPositionFK,this);
-    ik_service = nh_private.advertiseService(IK_SERVICE,&Kinematics::getPositionIK,this);
-    ik_solver_info_service = nh_private.advertiseService(IK_INFO_SERVICE,&Kinematics::getIKSolverInfo,this);
-    fk_solver_info_service = nh_private.advertiseService(FK_INFO_SERVICE,&Kinematics::getFKSolverInfo,this);
-
+#if 1
+    fk_service = nh.advertiseService(FK_SERVICE,&Kinematics::getPositionFK,this);
+    ik_service = nh.advertiseService(IK_SERVICE,&Kinematics::getPositionIK,this);
+    ik_solver_info_service = nh.advertiseService(IK_INFO_SERVICE,&Kinematics::getIKSolverInfo,this);
+    fk_solver_info_service = nh.advertiseService(FK_INFO_SERVICE,&Kinematics::getFKSolverInfo,this);
+#endif
     return true;
 }
 
 bool Kinematics::loadModel(const std::string xml) {
+    // http://wiki.ros.org/urdf/Tutorials/Parse%20a%20urdf%20file
     urdf::Model robot_model;
     KDL::Tree tree;
 
@@ -267,8 +293,8 @@ int Kinematics::getKDLSegmentIndex(const std::string &name) {
     return -1;
 }
 
-bool Kinematics::getPositionIK(kinematics_msgs::GetPositionIK::Request &request,
-                               kinematics_msgs::GetPositionIK::Response &response) {
+bool Kinematics::getPositionIK(moveit_msgs::GetPositionIK::Request &request,
+                               moveit_msgs::GetPositionIK::Response &response) {
 
     geometry_msgs::PoseStamped pose_msg_in = request.ik_request.pose_stamped;
     tf::Stamped<tf::Pose> transform;
@@ -280,11 +306,11 @@ bool Kinematics::getPositionIK(kinematics_msgs::GetPositionIK::Request &request,
     KDL::JntArray jnt_pos_out;
     jnt_pos_in.resize(num_joints);
     for (unsigned int i=0; i < num_joints; i++) {
-        int tmp_index = getJointIndex(request.ik_request.ik_seed_state.joint_state.name[i]);
+        int tmp_index = getJointIndex(request.ik_request.robot_state.joint_state.name[i]   ) ;//.ik_request.ik_seed_state.joint_state.name[i]);
         if (tmp_index >=0) {
-            jnt_pos_in(tmp_index) = request.ik_request.ik_seed_state.joint_state.position[i];
+            jnt_pos_in(tmp_index) = request.ik_request.robot_state.joint_state.position[i];
         } else {
-            ROS_ERROR("i: %d, No joint index for %s",i,request.ik_request.ik_seed_state.joint_state.name[i].c_str());
+            ROS_ERROR("i: %d, No joint index for %s",i,request.ik_request.robot_state.joint_state.name[i].c_str());
         }
     }
 
@@ -318,67 +344,97 @@ bool Kinematics::getPositionIK(kinematics_msgs::GetPositionIK::Request &request,
     }
 }
 
-bool Kinematics::getIKSolverInfo(kinematics_msgs::GetKinematicSolverInfo::Request &request,
-                                 kinematics_msgs::GetKinematicSolverInfo::Response &response) {
+bool Kinematics::getIKSolverInfo(moveit_msgs::GetKinematicSolverInfo::Request &request,
+                                 moveit_msgs::GetKinematicSolverInfo::Response &response) {
     response.kinematic_solver_info = info;
     return true;
 }
 
-bool Kinematics::getFKSolverInfo(kinematics_msgs::GetKinematicSolverInfo::Request &request,
-                                 kinematics_msgs::GetKinematicSolverInfo::Response &response) {
+bool Kinematics::getFKSolverInfo(moveit_msgs::GetKinematicSolverInfo::Request &request,
+                                 moveit_msgs::GetKinematicSolverInfo::Response &response) {
     response.kinematic_solver_info = info;
     return true;
 }
 
-bool Kinematics::getPositionFK(kinematics_msgs::GetPositionFK::Request &request,
-                               kinematics_msgs::GetPositionFK::Response &response) {
+bool Kinematics::getPositionFK(moveit_msgs::GetPositionFK::Request &request,
+                               moveit_msgs::GetPositionFK::Response &response) {
     KDL::Frame p_out;
     KDL::JntArray jnt_pos_in;
     geometry_msgs::PoseStamped pose;
     tf::Stamped<tf::Pose> tf_pose;
+     bool valid = true;
+   
+    // I see you give a FK for each joint not just at ee !!
 
+    response.pose_stamped.resize(1); //request.fk_link_names.size());
+    response.fk_link_names.resize(1); // request.fk_link_names.size());
+
+    // Create joint array
+    unsigned int nj = request.fk_link_names.size();
+    KDL::JntArray jointpositions = KDL::JntArray(nj);
+    for (unsigned int i=0; i < nj; i++) {
+        jointpositions(i)=(double)request.robot_state.joint_state.position[i];
+    }
+
+    if (fk_solver->JntToCart(jointpositions, p_out) >= 0) {
+        tf_pose.frame_id_ = root_name;
+        tf_pose.stamp_ = ros::Time();
+        tf::PoseKDLToTF(p_out, tf_pose);
+        tf::poseStampedTFToMsg(tf_pose, pose);
+        response.pose_stamped[0] = pose;
+        response.fk_link_names[0] = request.fk_link_names[5];
+        response.error_code.val = response.error_code.SUCCESS;
+    } else {
+        ROS_ERROR("Could not compute FK for %s", request.fk_link_names[0].c_str());
+        response.error_code.val = response.error_code.FAILURE;
+        valid = false;
+    }
+
+    return true;
+#if 0
     jnt_pos_in.resize(num_joints);
-    for (unsigned int i=0; i < num_joints; i++) {
+    for (unsigned int i = 0; i < num_joints; i++) {
         int tmp_index = getJointIndex(request.robot_state.joint_state.name[i]);
-        if (tmp_index >=0)
+        if (tmp_index >= 0)
             jnt_pos_in(tmp_index) = request.robot_state.joint_state.position[i];
     }
 
-    response.pose_stamped.resize(request.fk_link_names.size());
-    response.fk_link_names.resize(request.fk_link_names.size());
 
-    bool valid = true;
-    for (unsigned int i=0; i < request.fk_link_names.size(); i++) {
+    for (unsigned int i = 0; i < request.fk_link_names.size(); i++) {
         int segmentIndex = getKDLSegmentIndex(request.fk_link_names[i]);
-        ROS_DEBUG("End effector index: %d",segmentIndex);
-        ROS_DEBUG("Chain indices: %d",chain.getNrOfSegments());
-        if (fk_solver->JntToCart(jnt_pos_in,p_out,segmentIndex) >=0) {
+        ROS_DEBUG("End effector index: %d", segmentIndex);
+        ROS_DEBUG("Chain indices: %d", chain.getNrOfSegments());
+        if (fk_solver->JntToCart(jnt_pos_in, p_out, segmentIndex) >= 0) {
             tf_pose.frame_id_ = root_name;
             tf_pose.stamp_ = ros::Time();
-            tf::PoseKDLToTF(p_out,tf_pose);
-            try {
-                tf_listener.transformPose(request.header.frame_id,tf_pose,tf_pose);
-            } catch (...) {
-                ROS_ERROR("Could not transform FK pose to frame: %s",request.header.frame_id.c_str());
-                response.error_code.val = response.error_code.FRAME_TRANSFORM_FAILURE;
-                return false;
-            }
-            tf::poseStampedTFToMsg(tf_pose,pose);
+            tf::PoseKDLToTF(p_out, tf_pose);
+            // http://docs.ros.org/diamondback/api/tf/html/c++/classtf_1_1TransformListener.html#ae5e3a12c3cd66f250f1d717c017ce524
+            // not sure what frame_id does?
+            //            try {
+            //                tf_listener.transformPose(request.header.frame_id,tf_pose,tf_pose);
+            //            } catch (...) {
+            //                ROS_ERROR("Could not transform FK pose to frame: %s",request.header.frame_id.c_str());
+            //                response.error_code.val = response.error_code.FRAME_TRANSFORM_FAILURE;
+            //                return false;
+            //            }
+            tf::poseStampedTFToMsg(tf_pose, pose);
             response.pose_stamped[i] = pose;
             response.fk_link_names[i] = request.fk_link_names[i];
             response.error_code.val = response.error_code.SUCCESS;
         } else {
-            ROS_ERROR("Could not compute FK for %s",request.fk_link_names[i].c_str());
-            response.error_code.val = response.error_code.NO_FK_SOLUTION;
+            ROS_ERROR("Could not compute FK for %s", request.fk_link_names[i].c_str());
+            response.error_code.val = response.error_code.FAILURE;
             valid = false;
         }
     }
     return true;
+#endif
 }
 
 int main(int argc, char **argv) {
+   SetupRosEnvironment("");
     ros::init(argc, argv, "arm_kinematics");
-    Kinematics k;
+     Kinematics k;
     if (k.init()<0) {
         ROS_ERROR("Could not initialize kinematics node");
         return -1;

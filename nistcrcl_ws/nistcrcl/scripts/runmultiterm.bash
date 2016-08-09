@@ -4,7 +4,7 @@
 
 source /opt/ros/indigo/setup.bash
 source /usr/local/michalos/nistcrcl_ws/devel/setup.bash
-#crcl="run"
+crcl="run"
 
 cmd=( gnome-terminal )
 # This roslaunch will load a robot description so there are actual joint names. Otherwise no joint names!
@@ -28,6 +28,6 @@ cmd+=( --tab-with-profile=Default --title="python canned test"  -e 'python /usr/
 #cmd+=( --tab-with-profile=Default --title="python canned test"  -e 'python /usr/local/michalos/nistcrcl_ws/src/testcrcl/scripts/crcltest.py' )
 
 # This python program will read ROS crcl command and echo status
-#cmd+=( --tab-with-profile=Default --title="python feedback test"  -e 'python /usr/local/michalos/nistcrcl_ws/src/testcrcl/scripts/crclfeedbacktest.py' )
+cmd+=( --tab-with-profile=Default --title="python feedback test"  -e 'python /usr/local/michalos/nistcrcl_ws/src/testcrcl/nodes/crclfeedbacktest.py' )
 
 "${cmd[@]}"

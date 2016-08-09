@@ -34,4 +34,7 @@ float64   dwell_seconds
 string opmessage
 bool bCoordinated
 float64 eepercent
+CrclMaxProfileMsg[] profile # maximum profile 
+
+
 
