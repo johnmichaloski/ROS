@@ -22,8 +22,7 @@ CRCL models a status message from a low-level robot controller. Status includes 
  *whether joint velocity should be reported
 During a CRCL session, until a ConfigureJointReports command has been executed that sets the reporting status for a joint, default joint status is reported for that joint. The ConfigureJointReports command may be used more than once during a session to change joint status reporting.
 ##Nistcrcl package Architecture
-##
-/
+##![Figure1](./images/image1.jpg?raw=true)
 nistcrcl Package – ROS C++ class to handle all socket communication with the CRCL clients. Relies on Boost Asio for low level IO handling. Within the Boost Asio framework, the class CAsioServer handles the intracies of socket connections and disconnections, while the class class CAsioSession handles initiating, reading, buffering and queing messages. CRCL XML commands are posted as complete strings on a message queue. The class CCrcl2Ros handles the translation of Crcl messages into ROS topic commands. The class CCrcl2Ros also handles status from ROS and updates Crcl world model for status replies.
 Boost.Asio – Boost.Asio is a cross-platform C++ library that was used for network I/O programming because it abstracts the low level socket handling functionality (Schäling, n.d.). Boost Asio is used for communication over sockets to the CRCL controller. Boost Asio is very robust with examples and issue solutions pervasively found on the Internet. 
 Crcl2ROS relies on CodeSynthesis and the Xerces XML DOM parser. Xerces was used to parse the CRCL XML. CodeSynthesis provided support for translating CRCL XML into a C++ representation. Given the C++, it was then simple matter to translate the intent of CRCL status message into a corresponding ROS intent. Code Synthesis "XSD" tool was used to generate the corresponding C++ classes from the CRCL XSD.
@@ -129,23 +128,20 @@ Finally, if a ROS message was generated it is published on the topic (nistcrcl/ 
 
 ##CRCL Socket Communication
 As discussed, there is also no terminating character (such as zero) in a CRCL message. Also, CRCL messages can also be of different buffer sizes. So framing the message requires buffering each message, such that the end of a status message is detected with a closing XML tag, and this message may be divided with some of the buffer belonging to the previous or next message. Unfortuneately,  the last write of the CRCL XML message need not satisfy an asynchronous condition - such as buffer full or matching character. Since there is no CRCL message termination condition, a deadline timer was used to stop asynchronous reading and cancel the read. Likewise, often two CRCL will be combined into one aynchronous read operation, so that these two message must be separated by the CRCL streaming reader. 
-The CRCL client establishes a connection using an assigned socket and port number with the CRCL server once.   The method to send CRCL command from a client is shown in the (b) portion of Figure 1. Upon receipt of a Crcl command that requires a status reply, then the nistcrcl package responds with the CRCL XML status message as shown in the (c) portion of Figure 1. 
-/
+The CRCL client establishes a connection using an assigned socket and port number with the CRCL server once.   The method to send CRCL command from a client is shown in the (b) portion of Figure 1. Upon receipt of a Crcl command that requires a status reply, then the nistcrcl package responds with the CRCL XML status message as shown in the (c) portion of Figure 1. ![Figure2](./images/image2.jpg?raw=true)
 _Figure 1 CRCL Communication to nistcrcl ROS package_
-We will assume that the CRCL Client has connected to the nistcrcl package socket. Figure 2 shows the components involved in communication.The CRCL Client  class initiates communication to first send a command to the nistcrcl package. Using Boost Asio, the nistcrcl package  has the class CAsioSession which asynchronously reads the command from the CRCL client. When the CAsioSession has read a complete message it queues this message onto the message queue. Since the message queue is a shared resource, and multiple threads share this resource, a mutex is used to lock the contents for one thread at a time access. The latest CRCL command message is retrieved and then the CRCL data expressed in XML can be reinterpreted before storing into the ROS crcl_command topic. The translation uses CodeSynthesis to parse the CRCL XML message and translate into C++. Once in C++, it is translated into an equivalent ROS representation. 
-/
+We will assume that the CRCL Client has connected to the nistcrcl package socket. Figure 2 shows the components involved in communication.The CRCL Client  class initiates communication to first send a command to the nistcrcl package. Using Boost Asio, the nistcrcl package  has the class CAsioSession which asynchronously reads the command from the CRCL client. When the CAsioSession has read a complete message it queues this message onto the message queue. Since the message queue is a shared resource, and multiple threads share this resource, a mutex is used to lock the contents for one thread at a time access. The latest CRCL command message is retrieved and then the CRCL data expressed in XML can be reinterpreted before storing into the ROS crcl_command topic. The translation uses CodeSynthesis to parse the CRCL XML message and translate into C++. Once in C++, it is translated into an equivalent ROS representation. ![Figure3](./images/image3.jpg?raw=true)
 _Figure 2 Communication Sequence with ROS crcl_command topic_
 A major portion of the CAsioSession was the handling of the socket stream interface to CRCL client. The Boost Asio library was used. Boost Asio uses the Proactor design pattern for event handling in which long running activities are running in an asynchronous part (Pyarali, Harrison, Schmidt, & Jordan, 1997). The major complaint with Boost Asio is that it is more difficult to due to the separation in time and space between operation initiation and completion. Applications may also be harder to debug due to the inverted flow of control and difficulty in understanding when a problem occurred. In the Proactor model, a completion handler is called after the asynchronous event has triggered. In this software pattern, the connect asynchronous event is registered in Boost Asio, and when the connect event happens a "callback" handler method is invoked. Within this connection "callback" handler, the asynchronous read event is setup. This asynchronous read event setup function is used to specify how a stream will be asynchronously read a certain number of bytes of data from a stream. The asynchronous setup itself returns immediately. But, the asynchronous event detection will continue until one of the following conditions is true:
  *The supplied buffer is full. That is, the bytes transferred are equal to the sum of the buffer size.
  *An error occurred. Errors include socket disconnection, or asynchronous read cancelation by the deadline timer.  Socket disconnects cause a discontinuation of reading and the asynchronous connection trigger is then restarted.
 Then the asynchronous read event handler will be called. Within the asynchronous read event handler, the asynchronous read event setup must be done again, or no more bytes will be read from the stream. Of note, often the condition of completely filling the buffer is impossible as receiving the exact amount of buffer size is impractical. Because of this, deadline timers are incorporated into Boost Asio to terminate asynchronous reads even if the triggering event (full buffer) has not occurred. So a deadline timer is used to cancel a socket asynchronous read when it expires.
 Boost Asio provides io_service, which is a singleton class for servicing I/O. Every program based on Boost.Asio uses an object of type io_service. There is one Asio "io_service" per application program and from our effort it helps if all the asynchronous operations are run in the same thread as this io_service object. Each asynchronous call in Boost Asio is enabled by the io_service methods run, run_one or poll. After all the asynchronous operations were placed in the same thread, the io_service communication responded better. However, Boost Asio was too efficient so an io_service run_one method was combined with a sleep and yield to allow other threads to run and to slow down the Boost Asio operation. 
-Figure 3 shows the call sequence involved with the CRCL status reading. Of note, are the synchronous write to send the "Init" during the connection handling and the "GetStatus" command messages sent at the start of every new read of the CRCL simulator status. These are the only Boost Asio operations that were synchronous. Overall, the Boost Asio asynchronous connect operation could wait indefinitely upon startup of the CRCL simulator listener. This is as intended. It is unclear how often Boost Asio tests the socket for the CRCL listener. Upon connection of the socket, the handler for the async connect event is called and it calls the async read and async periodic timer (2 seconds). Either 1) the socket stream is read and the periodic timer is canceled, or 2) the periodic timer expires and the socket async read is canceled, which calls the read handler to see if it has read any bytes or is just waiting for a termination condition. If bytes have been read, there are buffered. In either case, the asynchronous read is called again.![Figure1](./images/image1.jpg?raw=true)
+Figure 3 shows the call sequence involved with the CRCL status reading. Of note, are the synchronous write to send the "Init" during the connection handling and the "GetStatus" command messages sent at the start of every new read of the CRCL simulator status. These are the only Boost Asio operations that were synchronous. Overall, the Boost Asio asynchronous connect operation could wait indefinitely upon startup of the CRCL simulator listener. This is as intended. It is unclear how often Boost Asio tests the socket for the CRCL listener. Upon connection of the socket, the handler for the async connect event is called and it calls the async read and async periodic timer (2 seconds). Either 1) the socket stream is read and the periodic timer is canceled, or 2) the periodic timer expires and the socket async read is canceled, which calls the read handler to see if it has read any bytes or is just waiting for a termination condition. If bytes have been read, there are buffered. In either case, the asynchronous read is called again.![Figure4](./images/image4.jpg?raw=true)
 _Figure 3 Asio Communication Sequence_
 ##CRCL Communication Code Review
 The nistcrcl package uses a two thread model 1) one thread to handle communication with CRCL client(s) and 2) the other thread to handle the ROS interface. Figure 4 shows the main thread spawns thread 2, which handles the ROS message streaming. It was found that if all the Boost Asio operation were not in the same thread, unpredictable results occurred. Unfortunately, it is very difficult to debug problems in Boost Asio, as most of the operation is hidden in a thread, and when no events occur, there is nothing to debug.
-Figure 4 shows the code that run in the two threads. Thread 1 spawns Boost Asio event callbacks, and then loop running Boost Asio io_service to handle all the asynchronous communication events, as well as frame and queue any CRCL XML messages. Thread 2 handles the ROS communication over topics. This framework forms the basis of the nistcrcl code, which will be described herein.
-/
+Figure 4 shows the code that run in the two threads. Thread 1 spawns Boost Asio event callbacks, and then loop running Boost Asio io_service to handle all the asynchronous communication events, as well as frame and queue any CRCL XML messages. Thread 2 handles the ROS communication over topics. This framework forms the basis of the nistcrcl code, which will be described herein.![Figure5](./images/image5.jpg?raw=true)
 _Figure 4 Threads – Boost Asio and Crcl2ROS_
 The Boost Asio thread is responsible for handling the asynchronous reads of CRCL status messages. The first step, is setting up the asynchronous connect event. This is done by calling the CAsioSession::Connect() routine. The connect routine uses a previously stored Internet Protocol (IP) address and socket number, for which it now uses as an endpoint in which to connect. The IP can be a name or a physical address.
 	void CAsioSession::Connect() {
@@ -316,7 +312,7 @@ The roslaunch utility starts roscore which starts up:
  *ROS Master
  *ROS Parameter Server
  *rosout logging node
-The roscore can run indefinitely.  At the same time a crcl_client Python program was started that generated CRCL XML commands to the nistcrcl package to receive and interpret.  The nistcrcl package communicates with another Python test program to read and write "robot" status/commands.![Figure2](./images/image2.jpg?raw=true)
+The roscore can run indefinitely.  At the same time a crcl_client Python program was started that generated CRCL XML commands to the nistcrcl package to receive and interpret.  The nistcrcl package communicates with another Python test program to read and write "robot" status/commands.![Figure6](./images/image6.jpg?raw=true)
 The crcl_client Python program contains code to prevent it from proceeding until a socket connection with the CRCL server has been established.
 ##Coordinated Testing of nistcrcl package Bash Script
 A bash script was developed to test the CRCL command communication through nistcrcl executable that is then read as a ROS crcl_command in a ROS python package. The location of the script is:
@@ -462,12 +458,17 @@ The Python code below creates a CrclClientSocket class which does the connection
 
 ###Python CRCL Test Program - crclfeedbacktest.py
 The feedback ros client reads the translated CRCL commands and simulates status by publishing to the crcl_status topic.
-Could not make this work within spyder. Ran fine when invoked from command line – probably due to environment variables, could not find custom messages, even though source devel/setup.bash was invoked before starting spyder.
+	
 	import sys
 	import copy
 	import rospy
+	import moveit_commander
 	import geometry_msgs.msg
 	from sensor_msgs.msg import JointState
+	from moveit_msgs.msg import KinematicSolverInfo, PositionIKRequest
+	from moveit_msgs.srv import GetKinematicSolverInfo, GetKinematicSolverInfoResponse, GetPositionFK, GetKinematicSolverInfo, GetPositionFKRequest, GetPositionFKResponse
+	from geometry_msgs.msg import Pose
+	
 	from std_msgs.msg import Header
 	
 	from nistcrcl.msg import CrclCommandMsg
@@ -479,20 +480,96 @@ Could not make this work within spyder. Ran fine when invoked from command line 
 	import time
 	import subprocess
 	
+	
+	########################################
+	# This uses the Kinematic services which are now hidden in moveit
+	class Robot():
+	    def __init__(self):
+	        self.joint_state = JointState()
+	        self.linknames=[]
+	
+	        rospy.wait_for_service('get_fk')
+	        #rospy.wait_for_service('testkin/GetKinematicSolverInfo')
+	
+	        self.get_fk_proxy = rospy.ServiceProxy('get_fk', GetPositionFK, persistent=True)
+	        self.get_fk_solver_info_proxy = rospy.ServiceProxy('get_fk_solver_info', GetKinematicSolverInfo)
+	
+	        solver_info = self.get_fk_solver_info_proxy()
+	        rospy.loginfo(solver_info)
+	
+	        for name in solver_info.kinematic_solver_info.joint_names:
+	            self.joint_state.name.append(name)
+	            rospy.loginfo("Adding joint " + str(name))
+	            
+	        for name in solver_info.kinematic_solver_info.link_names:
+	            self.linknames.append(name)
+	            rospy.loginfo("Adding link " + str(name))
+	            
+	        #self.joint_state.position = [0] * len(self.joint_state.name)    
+	        for  name in self.joint_state.name:
+	            self.joint_state.position.append(0.0)
+	            
+	    def JointIndex(self, jointname):
+	        return  self.joint_state.name.index(jointname)
+	        
+	    def Update(self, jointvals)    :
+	        for i  in range(0,len(jointvals.name)):
+	            self.joint_state.position[self.JointIndex(jointvals.name[i])]=jointvals.position[i]
+	            
+	    def FK(self,jointvals):
+	
+	        self.request = GetPositionFKRequest()
+	        self.request.fk_link_names = self.linknames
+	
+	        self.request.robot_state.joint_state = self.joint_state # JointState()
+	        self.request.robot_state.joint_state.header.frame_id = 'base_link'
+	#        self.request.robot_state.joint_state.name = self.joints
+	#        self.request.robot_state.joint_state.position = [0] * len(self.joints)
+	#        self.request.robot_state.joint_state.position[0] = jointvals.position[0]
+	#        self.request.robot_state.joint_state.position[1] = jointvals.position[1]
+	#        self.request.robot_state.joint_state.position[2] = jointvals.position[2]
+	#        self.request.robot_state.joint_state.position[3] = jointvals.position[3]
+	#        self.request.robot_state.joint_state.position[4] = jointvals.position[4]
+	#        self.request.robot_state.joint_state.position[5] = jointvals.position[5]
+	
+	        self.request.header.frame_id = "base_link"
+	        try:
+	            response = self.get_fk_proxy(self.request)
+	            #rospy.loginfo(response) 
+	            return response
+	        except rospy.ServiceException, e:
+	                print "Service call failed: %s" % e
+	                self.FK(jointvals)
+	
+	# This handles accepting a crcl command via subscribe to set goal joints and pose
 	class CrclCmd:
 	    def __init__(self):
 	        self.crclcommand=0
 	        self.joints=JointState()
 	        self.crclcommandnum=0
+	        self.pose=Pose()
+	        self.robot=Robot()
+	        
+	    def pplist(self,list):
+	        return ' '.join(['%5.3f'%x for x in list])
 	
 	    def callback(self, data):
 	        self.joints=data.joints
-	        print["{0}={1:0.4f}".format(joints.name[i], joints.position[i]) for i  in range(0,len(joints.name))]
+	        print["{0}={1:0.4f}".format(self.joints.name[i], self.joints.position[i]) for i  in range(0,len(self.joints.name))]
 	        self.crclcommand=data.crclcommand
+	        self.robot.Update(data.joints)
+	        response=self.robot.FK(self.joints.position)
+	        self.pose.position=response.pose_stamped[0].pose.position
+	        self.pose.orientation=response.pose_stamped[0].pose.orientation
+	        p= response.pose_stamped[0].pose.position 
+	        print "Service success!!! Pose Position=" + self.pplist([p.x,p.y,p.z])
 	
-	
+	 
+	########################################
+	 # This runs as a separate thread and simulates the update of the robot status
 	def updateStatusThread(pub, crcl):
 	    status = CrclStatusMsg()
+	
 	    status.statuspose.position.x = 0.465
 	    status.statuspose.position.y = 0.0
 	    status.statuspose.position.z =  0.695
@@ -503,9 +580,11 @@ Could not make this work within spyder. Ran fine when invoked from command line 
 	    status.eepercent=1.0
 	    while not rospy.is_shutdown():
 	        status.statusjoints=crcl.joints
+	        status.statuspose=crcl.pose
 	        status.crclcommandnum=crcl.crclcommandnum
 	        pub.publish(status)    
 	        time.sleep(1)
+	
 	def runProcess(exe):    
 	    p = subprocess.Popen(exe, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 	    while(True):
@@ -516,27 +595,42 @@ Could not make this work within spyder. Ran fine when invoked from command line 
 	        break
 	    
 	if __name__ == '__main__':
-	    #time.sleep(10) # wait for ros core master to start
+	    print '============ Start ROS feedback of crcl topics...'
+	    rospy.init_node('crclfeedback', anonymous=True,log_level=rospy.DEBUG)
 	
-	    print '============ Start crcl feedback proram...'
-	
-	    # In ROS, nodes are uniquely named. If two nodes with the same
-	    # node are launched, the previous one is kicked off. The
-	    # anonymous=True flag means that rospy will choose a unique
-	    # name for our 'listener' node so that multiple listeners can
-	    # run simultaneously.
-	    rospy.init_node('crclfeedback', anonymous=True)
 	    crcl=CrclCmd()
 	    for line in runProcess('rostopic list'.split()):
 	        print line
 	    
 	    rospy.Subscriber("crcl_command", CrclCommandMsg, crcl.callback)
 	    pub = rospy.Publisher('crcl_status', CrclStatusMsg, queue_size=10)
-	    thread.start_new_thread(updateStatusThread(pub, crcl))
+	    updateStatusThread(pub, crcl)
+	    updateStatusThread(pub, crcl)
+	    #thread.start_new_thread(updateStatusThread(pub, crcl))
 	    
 	    # spin() simply keeps python from exiting until this node is stopped
 	    rospy.spin()
 FIXME: Echoing a true forward kinematics of the joint positions would be nice, and a ROS service has been developed to perform this task. Like many ROS version issues, the GetPositionFK service was built on "Deprecated" ROS technology – arm_manipulation, so it requires moveit to be used. This was done, but it might be easier to use moveit commander in Python.
+
+Using a the Spyder Python IDE in ROS was not successful. Python programs run fine when invoked from command line –due to environment variables, but without ROS environment setup could not find custom messages, even though source devel/setup.bash was invoked before starting Spyder.
+import os
+import subprocess
+
+def PipedCmd(cmd):
+task = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE )
+data = task.stdout.read()
+#        data1 = task.stderr.read()
+return data
+        
+dict = {}
+cmd = '/bin/bash -i /usr/local/michalos/nistcrcl_ws/src/nistcrcl/scripts/setup.bash'
+envs = ExecuteShellCommand(cmd);
+lines = envs. splitlines ()
+for line in lines:
+key, val = line.strip().split('=')
+dict[key.strip()] = val.strip()
+for key in dict:	
+os.environ[key]=dict[key]
 
 ****
 #Appendix I  nistcrcl  Package Version Dependencies
@@ -733,6 +827,478 @@ FIXME: Echoing a true forward kinematics of the joint positions would be nice, a
 <TR>
 <TD>xmlrpcpp<BR></TD>
 <TD>1.11.16<BR></TD>
+</TR>
+</TABLE>
+
+#Appendix II  nistcrcl  ROS Message Definitions
+
+##nistcrcl/CrclCommandMsg
+<TABLE>
+<TR>
+<TD>Type<BR></TD>
+<TD>Name<BR></TD>
+<TD>Comment<BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>initCanon=1<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>endCanon=2<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>actuatejoints=3<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>moveto=4<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>dwell=5<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>message=6<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>moveThroughTo=7<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>setCoordinatedMotion=8<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>stopMotion=9<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>setEndEffector=10<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>openToolChange=11<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>closeToolChanger=12<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>std_msgs/Header<BR></TD>
+<TD>header<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint32<BR></TD>
+<TD>seq<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>time<BR></TD>
+<TD>stamp<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>string<BR></TD>
+<TD>frame_id<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>crclcommand<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint64<BR></TD>
+<TD>crclcommandnum<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>geometry_msgs/Pose<BR></TD>
+<TD>finalpose<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>geometry_msgs/Point<BR></TD>
+<TD>position<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>x<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>y<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>z<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>geometry_msgs/Quaternion<BR></TD>
+<TD>orientation<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>x<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>y<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>z<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>w<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>geometry_msgs/Pose[]<BR></TD>
+<TD>waypoints<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>geometry_msgs/Point<BR></TD>
+<TD>position<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>x<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>y<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>z<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>geometry_msgs/Quaternion<BR></TD>
+<TD>orientation<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>x<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>y<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>z<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>w<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>sensor_msgs/JointState<BR></TD>
+<TD>joints<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>std_msgs/Header<BR></TD>
+<TD>header<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint32<BR></TD>
+<TD>seq<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>time<BR></TD>
+<TD>stamp<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>string<BR></TD>
+<TD>frame_id<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>string[]<BR></TD>
+<TD>name<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64[]<BR></TD>
+<TD>position<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64[]<BR></TD>
+<TD>velocity<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64[]<BR></TD>
+<TD>effort<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>bool<BR></TD>
+<TD>bStraight<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>dwell_seconds<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>string<BR></TD>
+<TD>opmessage<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>bool<BR></TD>
+<TD>bCoordinated<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>eepercent<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>nistcrcl/CrclMaxProfileMsg[]<BR></TD>
+<TD>profile<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>maxvel<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>maxacc<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>maxjerk<BR></TD>
+<TD><BR></TD>
+</TR>
+</TABLE>
+##nistcrcl/CrclMaxProfileMsg
+<TABLE>
+<TR>
+<TD>Type<BR></TD>
+<TD>Name<BR></TD>
+<TD>Comment<BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>maxvel<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>maxacc<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>maxjerk<BR></TD>
+<TD><BR></TD>
+</TR>
+</TABLE>
+##nistcrcl/CrclStatusMsg
+<TABLE>
+<TR>
+<TD>Type<BR></TD>
+<TD>Name<BR></TD>
+<TD>Comment<BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>done=0<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>error=1<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>working=2<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>std_msgs/Header<BR></TD>
+<TD>header<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint32<BR></TD>
+<TD>seq<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>time<BR></TD>
+<TD>stamp<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>string<BR></TD>
+<TD>frame_id<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>crclcommandnum<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>crclstatusnum<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint8<BR></TD>
+<TD>crclcommandstatus<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>geometry_msgs/Pose<BR></TD>
+<TD>statuspose<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>geometry_msgs/Point<BR></TD>
+<TD>position<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>x<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>y<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>z<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>geometry_msgs/Quaternion<BR></TD>
+<TD>orientation<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>x<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>y<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>z<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>w<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>sensor_msgs/JointState<BR></TD>
+<TD>statusjoints<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>std_msgs/Header<BR></TD>
+<TD>header<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>uint32<BR></TD>
+<TD>seq<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>time<BR></TD>
+<TD>stamp<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>string<BR></TD>
+<TD>frame_id<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>string[]<BR></TD>
+<TD>name<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64[]<BR></TD>
+<TD>position<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64[]<BR></TD>
+<TD>velocity<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64[]<BR></TD>
+<TD>effort<BR></TD>
+<TD><BR></TD>
+</TR>
+<TR>
+<TD>float64<BR></TD>
+<TD>eepercent<BR></TD>
+<TD><BR></TD>
 </TR>
 </TABLE>
 
