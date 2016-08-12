@@ -13,8 +13,7 @@
 #include "CrclConfig.h"
 #include "RCS.h"
 #include "Globals.h"
-#include "Controller.h"
-//#include "crcl.h"
+#include "crcl.h"
 namespace RCS {
 
     std::string DumpPose(RCS::Pose & pose) {
@@ -25,7 +24,7 @@ namespace RCS {
         getRPY(pose, roll, pitch, yaw);
         s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw) << std::endl;
         s << "Quaternion = " << pose.getRotation().x() << ":" << pose.getRotation().y() << ":" << pose.getRotation().z() << ":" << pose.getRotation().w() << std::endl;
-        //s << Crcl::DumpRotationAsCrcl(pose)<< std::endl;
+        s << Crcl::DumpRotationAsCrcl(pose)<< std::endl;
         return s.str();
     }
        
@@ -45,12 +44,13 @@ namespace RCS {
         maxRotVel = DEFAULT_CART_MAX_VEL;
         maxJointAccel = DEFAULT_JOINT_MAX_ACCEL;
         maxJointVel = DEFAULT_JOINT_MAX_VEL;
-
+#if 0
         //for (size_t i = 0; i < RCS::Controller.robot_model.GetMovingJoints(); i++) {
         for (size_t i = 0; i < RCS::Controller._NumJoints; i++) {
             currentjoints.position.push_back(0.0);
             currentjoints.velocity.push_back(0.0);
         }
+#endif
     }
     // -----------------------------------------------------------------
 

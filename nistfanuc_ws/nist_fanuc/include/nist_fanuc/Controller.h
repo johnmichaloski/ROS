@@ -15,15 +15,17 @@
 #include <boost/shared_ptr.hpp>
 #include <list>
 
-#include "AsioCrclServer.h"
+//#include "AsioCrclServer.h"
 #include "RCSThreadTemplate.h"
-#include "CrclInterface.h"
+//#include "CrclInterface.h"
 #include "RCSInterpreter.h"
 #include "ChainRobotModel.h"
 #include "Trajectory.h"
 #include "Communication.h"
 #include "moveit.h"
 #include "RvizMarker.h"
+#include "NIST/RCSMsgQueue.h"
+
 namespace RCS {
 
     extern boost::mutex cncmutex;
@@ -80,7 +82,7 @@ namespace RCS {
          */
         std::string DumpHeader(std::string separator = ",");
 
-        NVAR(CrclDelegate, boost::shared_ptr<Crcl::CrclDelegateInterface>, crclinterface);
+//        NVAR(CrclDelegate, boost::shared_ptr<Crcl::CrclDelegateInterface>, crclinterface);
         VAR(Kinematics, boost::shared_ptr<IKinematics>);
         VAR(TrajectoryModel, boost::shared_ptr<CTrajectory>);
         VAR(JointWriter, boost::shared_ptr<CJointWriter>);
@@ -163,7 +165,7 @@ namespace RCS {
          */
         RobotStatus(double cycletime = DEFAULT_LOOP_CYCLE);
 
-        NVAR(CrclDelegate, boost::shared_ptr<Crcl::CrclDelegateInterface>, _crclinterface);
+ //       NVAR(CrclDelegate, boost::shared_ptr<Crcl::CrclDelegateInterface>, _crclinterface);
         VAR(JointReader, boost::shared_ptr<CJointReader>);
         VAR(Kinematics, boost::shared_ptr<IKinematics>);
 
@@ -180,12 +182,12 @@ namespace RCS {
          * \return boolean to signify whether component is valid.
          */
         bool Verify() {
-            assert(CrclDelegate() != NULL);
+            //assert(CrclDelegate() != NULL);
             assert(JointReader() != NULL);
             assert(Kinematics() != NULL);
         }
     };
-
+#if 0
     /**
      * \brief  The RobotProgram is a thread to handle crcl programs.
      * Crcl programs are not in fact legitimate, however, debugging and verification are assisted by programs.
@@ -226,10 +228,11 @@ namespace RCS {
         //////////////////////////////////////
         static boost::mutex _progmutex; /**< mutex for thread safe access to RobotProgram commands  */
         std::string _programname; /**< saved RobotProgram program file path  */
-        Crcl::CrclDelegateInterface _delegate; /**< crcl delegate used to interpret Crcl XML command  */
+        //Crcl::CrclDelegateInterface _delegate; /**< crcl delegate used to interpret Crcl XML command  */
         std::istringstream istr; /**< input stream interface for codesynthesis parsing */
         //int cmdnum; /**< index of Crcl XML command to execute */
         //int lastcmdnum; /**< last index of Crcl XML command to execute */
-        ::CRCLProgramType::MiddleCommand_sequence& cmds; /**< reference to crcl program XML commands (from codesynthesis parsing)  */
+        //::CRCLProgramType::MiddleCommand_sequence& cmds; /**< reference to crcl program XML commands (from codesynthesis parsing)  */
     };
+#endif
 }

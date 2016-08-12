@@ -28,16 +28,15 @@
 
 // crcl
 #include "CrclInterface.h"
-//#include "Kinematics.h"
+
 #include "Globals.h"
-#include "Controller.h"
+#include "RCSMsgQueue.h"
+#include "Crcl2Ros.h"
 
 
 using namespace xsd;
 using namespace xml_schema;
 using namespace Crcl;
-
-
 
 CrclStatus CrclDelegateInterface::crclwm;
 unsigned long long CrclClientCmdInterface::_commandnum = 0;
@@ -62,13 +61,13 @@ std::string CrclDelegateInterface::FindLeadingElement(std::string xml) {
 }
 void CrclDelegateInterface::CrclRunProgram(::CRCLProgramType::MiddleCommand_sequence cmds)
 {
-    for(size_t i=0; i< cmds.size(); i++){
+    for(size_t i=0; i< RCS::cmds.SizeMsgQueue(); i++){
                    
         ::CRCLCommandType & crclCommand(cmds[i]);
         DelegateCRCLCmd(crclCommand);
         //::MiddleCommandType  crclCommand( crclInstanceCommand->CRCLCommand());
     }
-    
+    RCS::cmds.ClearMsgQueue();
 }
 CrclReturn CrclDelegateInterface::DelegateCRCLCmd(std::string str) {
     std::istringstream istr(str);
@@ -230,14 +229,14 @@ CrclReturn CrclDelegateInterface::DelegateCRCLCmd(::CRCLCommandType &crclCommand
         return SetRotAccel(accel);
     } else if (RotAccelRelativeType * relrotaccel = dynamic_cast<RotAccelRelativeType *> (&(crclCommand))) {
         double percent = relrotaccel->Fraction();
-        double accel = RCS::Controller.wm.maxRotAccel * percent;
+        double accel = RCS::wm.maxRotAccel * percent;
         return SetRotAccel(accel);
     } else if (RotSpeedAbsoluteType * rotspeed = dynamic_cast<RotSpeedAbsoluteType *> (&(crclCommand))) {
         double speed = rotspeed->Setting();
         return SetRotSpeed(speed);
     } else if (RotSpeedRelativeType * rotspeed = dynamic_cast<RotSpeedRelativeType *> (&(crclCommand))) {
         long percent = rotspeed->Fraction();
-        double speed = RCS::Controller.wm.maxRotVel * percent;
+        double speed = RCS::wm.maxRotVel * percent;
         return SetRotSpeed(speed);
     } else if (SetTorqueUnitsType * torqueUnits = dynamic_cast<SetTorqueUnitsType *> (&(crclCommand))) {
         //   newtonMeter,    footPound
@@ -257,7 +256,7 @@ CrclReturn CrclDelegateInterface::DelegateCRCLCmd(::CRCLCommandType &crclCommand
             accel = absAccltype->Setting();
         } else if (TransAccelRelativeType * relAccltype = dynamic_cast<TransAccelRelativeType *> (&(accltype->TransAccel()))) {
             double percentage = relAccltype->Fraction();
-            accel = RCS::Controller.wm.maxTransVel * percentage;
+            accel = RCS::wm.maxTransVel * percentage;
         }
         return SetTransAccel(accel);
     } else if (SetTransSpeedType * speedtype = dynamic_cast<SetTransSpeedType *> (&(crclCommand))) {
@@ -267,7 +266,7 @@ CrclReturn CrclDelegateInterface::DelegateCRCLCmd(::CRCLCommandType &crclCommand
             speed = absSpeedtype->Setting();
         } else if (TransSpeedRelativeType * relSpeedtype = dynamic_cast<TransSpeedRelativeType *> (&(speedtype->TransSpeed()))) {
             double percentage = relSpeedtype->Fraction();
-            speed = RCS::Controller.wm.maxTransVel * percentage;
+            speed = RCS::wm.maxTransVel * percentage;
         }
         return SetTransSpeed(speed);
     }
@@ -659,6 +658,8 @@ CrclReturn CrclDelegateInterface::ActuateJoints(Crcl::ActuatorJointSequence join
         {
             cc.jointnum.push_back(joints[i].JointNumber() - 1); // adjust back to zero based math
             double pos = joints[i].JointPosition() * crclwm._angleConversion;
+            std::cout << VectorDump<std::string> (crclwm.jointnames);
+            cc.joints.name.push_back(crclwm.jointnames[cc.jointnum.back()]);
             cc.joints.position.push_back(pos);
             cc.joints.velocity.push_back(speed); //  need conversion of velocity?
             cc.joints.effort.push_back(accel); //   need conversion of acc?Format()
@@ -668,7 +669,7 @@ CrclReturn CrclDelegateInterface::ActuateJoints(Crcl::ActuatorJointSequence join
     LogFile.LogFormatMessage("ActuateJoints In=%s\n", strcmd.c_str());
     LogFile.LogFormatMessage("ActuateJoints Rcs=%s\n", RCS::DumpJoints(cc.joints).c_str());
 
-    RCS::Controller.cmds.AddMsgQueue(cc);
+    RCS::cmds.AddMsgQueue(cc);
 
     return CANON_MOTION;
 }
@@ -679,7 +680,7 @@ CrclReturn CrclDelegateInterface::CloseToolChanger() {
     cc.cmd = RCS::CANON_SET_GRIPPER;
 	cc.ParentCommandID() =  crclwm.CommandID();
     cc.gripperPos = 0.0;
-    RCS::Controller.cmds.AddMsgQueue(cc);
+    RCS::cmds.AddMsgQueue(cc);
     return CANON_MOTION;
 }
 
@@ -702,7 +703,7 @@ CrclReturn CrclDelegateInterface::Dwell(double seconds) {
     cc.cmd = RCS::CANON_DWELL;
     cc.ParentCommandID() = crclwm.CommandID();
     cc.dwell = seconds;
-    RCS::Controller.cmds.AddMsgQueue(cc);
+    RCS::cmds.AddMsgQueue(cc);
     return CANON_MOTION;
 }
 
@@ -759,7 +760,7 @@ CrclReturn CrclDelegateInterface::MoveTo(Crcl::PoseType endpose, bool bStraight)
             
     std::cout << "GotoCRCL Pose " << Crcl::DumpPose(endpose, ",").c_str() << std::endl;
     std::cout << "Goto urdf Pose " << RCS::DumpPose(cc.pose).c_str();
-    RCS::Controller.cmds.AddMsgQueue(cc);
+    RCS::cmds.AddMsgQueue(cc);
     return CANON_MOTION;
 }
 
@@ -782,7 +783,7 @@ CrclReturn CrclDelegateInterface::MoveThroughTo(std::vector<Crcl::PoseType> & po
     }
 
     // FIXME: add tolerance to each waypoint - blending distance?
-    RCS::Controller.cmds.AddMsgQueue(cc);
+    RCS::cmds.AddMsgQueue(cc);
     return CANON_MOTION;
 }
 
@@ -791,7 +792,7 @@ CrclReturn CrclDelegateInterface::OpenToolChanger() {
     RCS::CanonCmd cc;
     cc.cmd = RCS::CANON_SET_GRIPPER;
     cc.gripperPos = 1.0;
-    RCS::Controller.cmds.AddMsgQueue(cc);
+    RCS::cmds.AddMsgQueue(cc);
     return CANON_MOTION;
 }
 
@@ -838,7 +839,7 @@ CrclReturn CrclDelegateInterface::SetAxialSpeeds(std::vector<double> speeds) {
     cc.speed.clear();
     cc.ParentCommandID() = crclwm.CommandID();
     copy(speeds.begin(), speeds.end(), std::back_inserter(cc.speed));
-    RCS::Controller.cmds.AddMsgQueue(cc);
+    RCS::cmds.AddMsgQueue(cc);
     return CANON_MOTION;
 }
 
@@ -918,7 +919,7 @@ CrclReturn CrclDelegateInterface::SetEndEffector(double percent) {
     cc.cmd = RCS::CANON_SET_GRIPPER;
 	cc.ParentCommandID() =  crclwm.CommandID();
     cc.gripperPos = percent / 100.0;
-    RCS::Controller.cmds.AddMsgQueue(cc);
+    RCS::cmds.AddMsgQueue(cc);
     return CANON_MOTION;
 }
 
@@ -933,7 +934,7 @@ CrclReturn CrclDelegateInterface::StopMotion(int condition) {
     RCS::CanonCmd cc;
     cc.cmd = RCS::CANON_STOP_MOTION;
     cc.stoptype = (RCS::CanonStopMotionType) condition;
-    RCS::Controller.cmds.AddMsgQueue(cc);
+    RCS::cmds.AddMsgQueue(cc);
     return CANON_MOTION;
 }
 

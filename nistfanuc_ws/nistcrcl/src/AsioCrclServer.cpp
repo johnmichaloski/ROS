@@ -22,13 +22,11 @@
 
 
 
-#include "CrclConfig.h"
 #include "AsioCrclServer.h"
 #include <boost/exception/all.hpp>
 #include <boost/regex.hpp>
 #include "Globals.h"
-#include "Controller.h"
-
+#
 boost::asio::io_service myios;
 bool CAsioCrclServer::bRunning = true;
 int CAsioCrclServer::nCount = 0;
@@ -49,8 +47,9 @@ static void trans_func(unsigned int u, EXCEPTION_POINTERS *pExp) {
 #endif
 // --------------------------------------------------------
 std::set<CAsioCrclSession *> CAsioCrclSession::_devices;
-CAsioMessages CAsioCrclSession::_inmsgs; // remove static if you want sessions to save to own queue
+CAsioMessageQueueThread *  CAsioCrclSession::_inmsgs=NULL;  // queue with thread notify
 CAsioMessages CAsioCrclSession::_outmsgs;
+std::map<std::string, CAsioCrclSession*> CAsioCrclSession::connections;
 
 CAsioCrclSession::CAsioCrclSession(boost::asio::io_service & io_service) : _socket(io_service), _timer(io_service) {
     ErrorMessage = &MyErrorMessage;
@@ -117,7 +116,7 @@ void CAsioCrclSession::AppendBuffer(std::string read) {
 }
 
 void CAsioCrclSession::SaveMessage(std::string xmlmessage) {
-    _inmsgs.AddMsgQueue(boost::make_tuple(xmlmessage, this));
+    _inmsgs->AddMsgQueue(boost::make_tuple(xmlmessage, this));
     if (CAsioCrclServer::_bTrace)
         Globals.AppendFile(Globals.ExeDirectory + "xmltrace.txt", xmlmessage);
 }
@@ -202,12 +201,12 @@ void CAsioCrclSession::Session() {
             boost::this_thread::sleep(boost::posix_time::milliseconds(1000)); // sleeping 1 second!
 
             if (this->_inmsgs.SizeMsgQueue() > 0) {
-                std::string cmd = _inmsgs.PopFrontMsgQueue();
-                Crcl::CanonReturn ret = _inmsgs.Delegate(cmd);
+                std::string cmd = _inmsgs->PopFrontMsgQueue();
+                Crcl::CanonReturn ret = _inmsgs->Delegate(cmd);
                 OutputDebugString(cmd.c_str());
 
                 if (ret == Crcl::CANON_STATUSREPLY) {
-                    Crcl::CStatus status = _inmsgs.Delegate()->wm;
+                    Crcl::CStatus status = _inmsgs->Delegate()->wm;
                     std::string sStatus = Crcl::CrclMsgInterface().GetStatusReply(&status);
                     SyncWrite(sStatus);
                 }
@@ -227,11 +226,13 @@ void CAsioCrclSession::Session() {
 // CAsioCrclServer
 bool CAsioCrclServer::_bTrace = false;
 
-CAsioCrclServer::CAsioCrclServer(boost::asio::io_service & io_service) :
+CAsioCrclServer::CAsioCrclServer(boost::asio::io_service & io_service,
+        CAsioMessageQueueThread * msgqthread) :
 _io_service(io_service) {
     ErrorMessage = &MyErrorMessage;
     _bInited = false;
     _nHeartbeat = 0;
+    CAsioCrclSession::_inmsgs  = msgqthread;
 }
 
 int CAsioCrclServer::Init(std::string domain, long portnumber, std::string devicename) {
@@ -275,6 +276,13 @@ void CAsioCrclServer::HandleAsyncAccept(session_ptr pSession, const boost::syste
 {
     if (CAsioCrclServer::bRunning) {
         //	pSession->_inmsgs.Delegate()->AssignSession(pSession.get());
+
+	std::string sClientIp = pSession->Socket().remote_endpoint().address().to_string();
+	unsigned short uiClientPort = pSession->Socket().remote_endpoint().port();
+	std::cout<< "Accept " << sClientIp.c_str()<< ":" << uiClientPort << std::endl;
+	pSession->_remoteip=sClientIp;
+	pSession->_remoteport=uiClientPort;
+
         boost::thread t(boost::bind(&CAsioCrclSession::Session, pSession));
 
         if (CAsioCrclServer::bRunning) {

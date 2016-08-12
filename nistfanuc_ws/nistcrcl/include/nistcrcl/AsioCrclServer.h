@@ -16,6 +16,7 @@
 #include <string>
 #include <deque>
 #include <set>
+#include <map>
 
 #include <boost/bind.hpp>
 #include <boost/smart_ptr.hpp>
@@ -26,8 +27,9 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
-#include "CrclInterface.h"
 #include "RCSMsgQueue.h"
+#include "RCSMsgQueueThread.h"
+#include "Globals.h"
 
 using boost::asio::ip::tcp;
 typedef boost::system::error_code error_code;
@@ -37,6 +39,8 @@ class CAsioCrclServer;
 
 typedef boost::tuple<std::string, CAsioCrclSession *> CrclMessage;
 typedef RCS::CMessageQueue<CrclMessage> CAsioMessages;
+typedef RCS::CMsgQueueThread<CrclMessage> CAsioMessageQueueThread;
+
 
 // --------------------------------------------------------
 
@@ -169,6 +173,8 @@ public:
      * \brief Keeps track of devices that created an asio session.
      */
     static void Join(CAsioCrclSession *device) {
+        std::string name = Globals.StrFormat("%s:%d", device->RemoteIP().c_str(),  device->RemotePORT());
+   	CAsioCrclSession::connections[name]= device;
         _devices.insert(device);
     }
 
@@ -176,22 +182,31 @@ public:
      * \brief Keeps track of devices that left and are no longer an asio session.
      */
     static void Leave(CAsioCrclSession *device) {
-        _devices.erase(device);
+         std::string name = Globals.StrFormat("%s:%d",  device->RemoteIP().c_str(),  device->RemotePORT());
+	std::map<std::string,CAsioCrclSession *>::iterator it=connections.find(name);
+	if(it != CAsioCrclSession::connections.end())
+ 	    CAsioCrclSession::connections.erase(it);
+       _devices.erase(device);
     }
 
     /*!
      *\brief Keeps track of devices that left and are no longer an asio session.
      */
     static CAsioMessages & InMessages() {
-        return _inmsgs;
+	assert(_inmsgs!=NULL);
+        return *_inmsgs;
     }
-
+    std::string RemoteIP (){ return _remoteip; }
+    unsigned short RemotePORT (){ return _remoteport; }
+    static     std::map<std::string, CAsioCrclSession *> connections;
 protected:
+    std::string _remoteip;
+    unsigned short _remoteport;
     static std::set<CAsioCrclSession *> _devices; /**< list of devices being listened to */
     boost::condition_variable cMessage;
     boost::mutex condMutex; /**< mutex to  */
     tcp::socket _socket; /**<  tcp/ip asio socket  */
-    static CAsioMessages _inmsgs; /**<  queue of inbound crcl xml messages from device */
+    static CAsioMessageQueueThread * _inmsgs; /**<  queue of inbound crcl xml messages from device */
     static CAsioMessages _outmsgs; /**<  queue of outbound crcl xml messages to device */
     boost::asio::deadline_timer _timer; /**<  socket reader timer */
     std::string _current; /**<  current string read from socket */
@@ -229,7 +244,8 @@ public:
      * \brief Constructor for asio crcl server that listens on  socket port 64444, and spawns a new session.
      * \param io_service reference tot he asio service providers. only one per program.
      */
-    CAsioCrclServer(boost::asio::io_service & io_service);
+    CAsioCrclServer(boost::asio::io_service & io_service,
+        CAsioMessageQueueThread * msgqthread);
 
     /*! 
      *  brief Creates acceptor for tcp/ip endpoint, and starts async accept.
@@ -287,6 +303,7 @@ public:
     static bool bRunning; /**<  boolean that all sessions monitor for termination */
     static int nCount; /**<  count of active sessions */
     static bool _bTrace; /**<  trace input messages */
+
 };
 
 extern boost::asio::io_service myios;

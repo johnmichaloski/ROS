@@ -7,15 +7,10 @@
 #include <iostream>
 #include <sstream>
 
-#include <xercesc/dom/DOM.hpp>
-#include <xercesc/util/PlatformUtils.hpp>
-#include <xercesc/framework/XMLGrammarPoolImpl.hpp>
 
 #include "MotionControl.h"
-#include "AsioCrclServer.h"
 #include "Globals.h"
 #include "Controller.h"
-#include "CrclInterface.h"
 #include "Kinematics.h"
 #include "Communication.h"
 #include "Setup.h"
@@ -32,7 +27,7 @@ int main(int argc, char** argv) {
         
         try {
         // Initialize xercesc used by code synthesis to parse CRCL XML
-        xercesc::XMLPlatformUtils::Initialize();
+   //     xercesc::XMLPlatformUtils::Initialize();
         
         // Find path of executable
         std::string path(argv[0]);
@@ -47,13 +42,13 @@ int main(int argc, char** argv) {
         boost::shared_ptr<CJointWriter>jointWriter;
         boost::shared_ptr<IKinematics> kin;
         boost::shared_ptr<MoveitPlanning> moveitPlanner;
-        boost::shared_ptr<RCS::RobotProgram> crclProgramInterpreter;
+//        boost::shared_ptr<RCS::RobotProgram> crclProgramInterpreter;
         boost::shared_ptr<CRvizMarker> pRvizMarker;
         boost::shared_ptr<CLinkReader> pLinkReader;
 
 
-        // Controller shared objects NOT dependent on ROS 
-        boost::shared_ptr<Crcl::CrclDelegateInterface> crcl;
+//        // Controller shared objects NOT dependent on ROS 
+//        boost::shared_ptr<Crcl::CrclDelegateInterface> crcl;
         
         //SetupRosEnvironment - needs to go before ROS!
         SetupRosEnvironment("");
@@ -92,8 +87,8 @@ int main(int argc, char** argv) {
         pLinkReader = boost::shared_ptr<CLinkReader>(new CLinkReader(nh));
 
         // Controller instantiatio of shared objects - NOT dependent on ROS
-        crcl = boost::shared_ptr<Crcl::CrclDelegateInterface>(
-                new Crcl::CrclDelegateInterface());
+//        crcl = boost::shared_ptr<Crcl::CrclDelegateInterface>(
+ //               new Crcl::CrclDelegateInterface());
 
         boost::shared_ptr<CTrajectory> traj = boost::shared_ptr<CTrajectory> (new CTrajectory());
         // Descarte trajectory writer - uses action lib
@@ -103,11 +98,11 @@ int main(int argc, char** argv) {
         kin->Init(std::string("manipulator"), std::string("tool0"));
 
         // CRCl Communication handler - bundles xml into messages
-        CAsioCrclServer crclServer(myios);
-        CAsioCrclServer::_bTrace = false;
+//        CAsioCrclServer crclServer(myios);
+ //       CAsioCrclServer::_bTrace = false;
         
         // This initializes the asio crcl socket listener, in theory N clients can connect. Only 1 tested.
-        crclServer.Init("127.0.0.1", 64444, "Command GUI");
+ //       crclServer.Init("127.0.0.1", 64444, "Command GUI");
         
         // Logger
         LogFile.Open(Globals.ExeDirectory + "logfile.log");
@@ -129,8 +124,8 @@ int main(int argc, char** argv) {
         // of the rcs interpreter, which creates a list of fine trajectory motions.
         // Who handles the list of fine trajectory motions.
         // The actual "Controller" handles the fine motion trajectories.
-        RCS::Controller.CrclDelegate() = crcl;
-        RCS::Controller.CrclDelegate()->SetAngleUnits("DEGREE"); // NOT PRE SPEC
+ //       RCS::Controller.CrclDelegate() = crcl;
+ //       RCS::Controller.CrclDelegate()->SetAngleUnits("DEGREE"); // NOT PRE SPEC
         RCS::Controller.CycleTime() = DEFAULT_LOOP_CYCLE;
         
 
@@ -170,8 +165,8 @@ int main(int argc, char** argv) {
         std::cout << "Current=" << VectorDump<double> (RCS::Controller.status.currentjoints.position).c_str();
         RCS::Controller.status.currentpose = kin->FK(RCS::Controller.status.currentjoints.position);
         std::cout << DumpPose(RCS::Controller.status.currentpose).c_str();
-        RCS::Controller.CrclDelegate()->crclwm.Update(RCS::Controller.status.currentpose);
-        RCS::Controller.CrclDelegate()->crclwm.Update(RCS::Controller.status.currentjoints);
+//        RCS::Controller.CrclDelegate()->crclwm.Update(RCS::Controller.status.currentpose);
+//        RCS::Controller.CrclDelegate()->crclwm.Update(RCS::Controller.status.currentjoints);
 
         LogFile.LogFormatMessage ("Starting current joints=%s", DumpJoints(cjoints).c_str()); 
         LogFile.LogFormatMessage ("Starting current pose=%s", DumpPose(RCS::Controller.status.currentpose).c_str()); 
@@ -196,7 +191,7 @@ int main(int argc, char** argv) {
 #define ROBOTSTATUS
 #ifdef ROBOTSTATUS
         RCS::RobotStatus robotstatus;
-        robotstatus.CrclDelegate() = crcl;
+ //       robotstatus.CrclDelegate() = crcl;
         robotstatus.Kinematics() = kin;
         robotstatus.JointReader() = jointReader;
         robotstatus.CycleTime() = DEFAULT_LOOP_CYCLE;
@@ -210,18 +205,16 @@ int main(int argc, char** argv) {
 
         RCS::Controller.Start(); // start the Controller Session thread
         
-#define BOOSTASIO
+//#define BOOSTASIO
 #ifdef BOOSTASIO
-        CAsioCrclServer::_bTrace=true;
-        crclServer.Start();
-        // start the asio ioserver in a separate thread - kill using stop())
-        //boost::thread bt(boost::bind(&boost::asio::io_service::run, &myios));
-#endif
+ //       CAsioCrclServer::_bTrace=true;
+ //       crclServer.Start();
+ #endif
         
         // Prime the pump with some CRCL XML
-        std::string contents;
-        std::string testprog = Globals._appproperties["nist_fanuc"] + "/doc/fanuclrmateprogram.xml";
-        crclProgramInterpreter = boost::shared_ptr<RCS::RobotProgram>(new RCS::RobotProgram(1));
+  //      std::string contents;
+   //     std::string testprog = Globals._appproperties["nist_fanuc"] + "/doc/fanuclrmateprogram.xml";
+  //      crclProgramInterpreter = boost::shared_ptr<RCS::RobotProgram>(new RCS::RobotProgram(1));
         //crclProgramInterpreter->ExecuteProgramFromFile(testprog);
         //crclProgramInterpreter->Start(); 
         //Globals.ReadFile(testprog, contents);
@@ -230,9 +223,9 @@ int main(int argc, char** argv) {
         spinner.stop();
         ros::spinOnce();
         do {
-            myios.run_one();
-            ros::spinOnce();
-            myios.run_one();
+//            myios.run_one();
+//            ros::spinOnce();
+//            myios.run_one();
             r.sleep();
         } while(ros::ok());
         
@@ -264,7 +257,7 @@ int main(int argc, char** argv) {
     } catch (...) {
         Logger.Fatal("Abnormal exception end to  CRCL2Robot\n");
     }
-    xercesc::XMLPlatformUtils::Terminate();
+    //xercesc::XMLPlatformUtils::Terminate();
     ros::shutdown();
     return 0;
 }

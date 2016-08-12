@@ -26,7 +26,7 @@
 #include <iostream>
 
 #include "urdf_model/rosmath.h"
-#include "CrclInterface.h"
+//#include "CrclInterface.h"
 #include "RvizMarker.h"
 
 // No namespace declarations
@@ -84,7 +84,7 @@ namespace RCS {
     }
 
     bool CController::Verify() {
-        assert(crclinterface != NULL);
+ //       assert(crclinterface != NULL);
         assert(Kinematics() != NULL);
         assert(TrajectoryModel() != NULL);
 
@@ -136,8 +136,8 @@ namespace RCS {
     int CController::Action() {
         try {
             boost::mutex::scoped_lock lock(cncmutex);
-            CAsioCrclSession *_pSession;
-
+ #if 0
+           CAsioCrclSession *_pSession;
             /////////////////////////////////////////////////////////////////////////////////////////////
             // See if new CRCL commanded motion - if so, interpret as RCS command in session
             if (CAsioCrclSession::InMessages().SizeMsgQueue() > 0) {
@@ -171,6 +171,7 @@ namespace RCS {
                     _pSession->SyncWrite(sStatus);
                 }
             }
+ #endif
             /////////////////////////////////////////////////////////////////////////////////////////////
             // interpret translated CRCL command. Commands in canonical form: standard units (mm, radians)
             if (Controller.cmds.SizeMsgQueue() > 0) {
@@ -181,11 +182,11 @@ namespace RCS {
 
             // Motion commands to robot - only joint at this point
             if (Controller.robotcmds.SizeMsgQueue() == 0) {
-                crclinterface->crclwm.Update(Crcl::CommandStateEnum("CRCL_Done"));
+                //crclinterface->crclwm.Update(Crcl::CommandStateEnum("CRCL_Done"));
                 _lastcc = _newcc;
                 _lastcc.status = CANON_DONE;
             } else {
-                crclinterface->crclwm.Update(Crcl::CommandStateEnum("CRCL_Working"));
+                //crclinterface->crclwm.Update(Crcl::CommandStateEnum("CRCL_Working"));
                 _lastcc = _newcc;
                 _newcc = Controller.robotcmds.PopFrontMsgQueue();
                 _newcc.status = CANON_WORKING;
@@ -259,23 +260,26 @@ namespace RCS {
         str.precision(4);
 
         // str << Globals.GetTimeStamp(CGlobals::GMT_UV_SEC)   << separator.c_str();
-        str << crclinterface->crclwm.CommandID() << separator.c_str();
-        str << crclinterface->crclwm.StatusID() << separator.c_str();
+ //       str << crclinterface->crclwm.CommandID() << separator.c_str();
+ //       str << crclinterface->crclwm.StatusID() << separator.c_str();
         //str << sStateEnums[crclinterface->crclwm.CommandStatus()] << separator.c_str();
-        str << crclinterface->crclwm.CommandStatus() << separator.c_str();
-        RCS::Pose pose = Crcl::Convert(crclinterface->crclwm._CurrentPose);
-        str << pose.getOrigin().x() << separator.c_str();
-        str << pose.getOrigin().y() << separator.c_str();
-        str << pose.getOrigin().z() << separator.c_str();
+ //       str << crclinterface->crclwm.CommandStatus() << separator.c_str();
+        //RCS::Pose pose = Crcl::Convert(crclinterface->crclwm._CurrentPose);
+ //       str << pose.getOrigin().x() << separator.c_str();
+ //       str << pose.getOrigin().y() << separator.c_str();
+ //       str << pose.getOrigin().z() << separator.c_str();
 
         if (_debugtype == CRCL) {
+#if 0
             str << crclinterface->crclwm._CurrentPose.XAxis().I() << separator.c_str();
             str << crclinterface->crclwm._CurrentPose.XAxis().J() << separator.c_str();
             str << crclinterface->crclwm._CurrentPose.XAxis().K() << separator.c_str();
             str << crclinterface->crclwm._CurrentPose.ZAxis().I() << separator.c_str();
             str << crclinterface->crclwm._CurrentPose.ZAxis().J() << separator.c_str();
             str << crclinterface->crclwm._CurrentPose.ZAxis().K();
+#endif
         } else if (_debugtype == RPY) {
+#if 0
             double roll, pitch, yaw;
             getRPY(pose, roll, pitch, yaw);
             //tf::Matrix3x3 rot = pose.getBasis();
@@ -284,11 +288,12 @@ namespace RCS {
             str << roll << separator.c_str();
             str << pitch << separator.c_str();
             str << yaw;
+#endif
         }
-        sensor_msgs::JointState joints = Crcl::Convert(crclinterface->crclwm._CurrentJoints);
-        for (size_t i = 0; i < joints.position.size(); i++) {
-            str << separator.c_str() << joints.position[i];
-        }
+//        sensor_msgs::JointState joints = Crcl::Convert(crclinterface->crclwm._CurrentJoints);
+//        for (size_t i = 0; i < joints.position.size(); i++) {
+//            str << separator.c_str() << joints.position[i];
+//        }
         return str.str();
     }
 
@@ -327,22 +332,23 @@ namespace RCS {
                 }
 #endif
                 // Now update the CRCL world model which contains latest readings
-                _crclinterface->crclwm.Update(RCS::Controller.status.currentpose);
-                _crclinterface->crclwm.Update(cjoints);
+ //      //         _crclinterface->crclwm.Update(RCS::Controller.status.currentpose);
+ //      //         _crclinterface->crclwm.Update(cjoints);
             }
         } catch (...) {
             std::cout << "Exception in RobotStatus::Action()\n";
         }
         return 1;
     }
+#if 0
     //-------------------------------------------------------
     boost::mutex RobotProgram::_progmutex;
-
+#if 0
     ::CRCLProgramType::MiddleCommand_sequence & DummyInit() {
         static const ::CRCLProgramType::MiddleCommand_sequence &a = ::CRCLProgramType::MiddleCommand_sequence();
         return const_cast< ::CRCLProgramType::MiddleCommand_sequence &> (a);
     }
-
+#endif
     RobotProgram::RobotProgram(double cycletime) : RCS::Thread(cycletime),
     cmds(DummyInit()) {
     }
@@ -425,4 +431,6 @@ namespace RCS {
         }
         return 1;
     }
+#endif
 }
+
