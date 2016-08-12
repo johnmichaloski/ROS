@@ -1,0 +1,8 @@
+<launch>
+  <param name="robot_description" command="$(find xacro)/xacro.py $(find fanuc_lrmate200id_support)/urdf/lrmate200id.xacro" />
+  <rosparam  command="load" file="$(find fanuc_lrmate200id_support)/config/joint_names_lrmate200id.yaml" />
+  <node pkg="testkin" type="testkin" name="left_arm_kinematics" output="screen">
+   <param name="tip_name" value="joint_6" />
+   <param name="root_name" value="joint_1" />
+  </node>
+</launch>
