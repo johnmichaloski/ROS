@@ -18,14 +18,14 @@
 //#include "AsioCrclServer.h"
 #include "RCSThreadTemplate.h"
 //#include "CrclInterface.h"
-#include "RCSInterpreter.h"
+#include "nist_fanuc/RCSInterpreter.h"
 #include "ChainRobotModel.h"
-#include "Trajectory.h"
+#include "nist_fanuc/Trajectory.h"
 #include "Communication.h"
 #include "moveit.h"
 #include "RvizMarker.h"
 #include "NIST/RCSMsgQueue.h"
-
+#include "nist_fanuc/Gripper.h"
 namespace RCS {
 
     extern boost::mutex cncmutex;
@@ -89,6 +89,7 @@ namespace RCS {
         VAR(MoveitPlanner, boost::shared_ptr<MoveitPlanning>);
         VAR(RvizMarker, boost::shared_ptr<CRvizMarker> )
         VAR(EEPoseReader, boost::shared_ptr<CLinkReader> )
+        VAR(Gripper, boost::shared_ptr<GripperInterface>)
 
         /*!
          *\brief Routine to set the kinematics reference pointer. Uses the interface class IKinematics, but can have any implementation instance. 

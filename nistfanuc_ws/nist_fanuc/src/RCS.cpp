@@ -10,7 +10,6 @@
  *
  * See NIST Administration Manual 4.09.07 b and Appendix I.
  */
-#include "CrclConfig.h"
 #include "RCS.h"
 #include "Globals.h"
 #include "Controller.h"
