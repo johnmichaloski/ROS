@@ -113,7 +113,7 @@ bool SetupRosEnvironment(std::string pkgpath) {
     // suppose we could just copy all the environment variables
     //std::string user = Globals._appproperties["user"];
     //std::cout << "user=" << user.c_str() << std::endl;
-    std::string cmd = Globals.StrFormat("/bin/bash -i /usr/local/michalos/nistfanuc_ws/devel/lib/nist_fanuc/rossetup.bash  ");
+    std::string cmd = Globals.StrFormat("/bin/bash -i /usr/local/michalos/nistfanuc_ws/src/nist_fanuc/scripts/rossetup.bash  ");
     std::cout << "cmd=" << cmd.c_str() << std::endl;
 #else
     //   pkgpath=pkgpath+"/scripts/rossetup.bash"
@@ -186,10 +186,15 @@ std::string ReadRosParam(ros::NodeHandle &nh, std::string paramkey) {
 
 std::string ReadRosParams(ros::NodeHandle &nh) {
     std::stringstream  result;
-    std::string cmd = "/opt/ros/indigo/bin/rosparam list  ";
+    std::string pPath;
+    std::string cmd;
+    pPath = getenv("ROS_DISTRO");
+    if (!pPath.empty())
+        cmd = "/opt/ros/" + pPath + "/bin/rosparam list  ";
+    else
+        cmd = "/opt/ros/indigo/bin/rosparam list  ";
+
     std::string params = ExecuteShellCommand(cmd);
-   // std::string rvizid = RvizId(params, Globals._appproperties["hostname"]);
-   // Globals._appproperties["rvizid"]= rvizid;
 
     std::vector<std::string> lines = Split(params, '\n');
     for (size_t i = 0; i < lines.size(); i++) {

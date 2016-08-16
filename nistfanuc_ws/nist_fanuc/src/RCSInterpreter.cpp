@@ -17,12 +17,27 @@
 #include <algorithm>  // max
 #include "Conversions.h"
 #include "trajectoryMaker.h"
-
+#include <tf/transform_datatypes.h>
 using namespace RCS;
 using namespace descartes_core;
 using namespace descartes_trajectory;
 using namespace sensor_msgs;
 
+/**
+    uint8 crclcommand
+
+    # https://github.com/ros/common_msgs 
+    geometry_msgs/Pose  finalpose
+    geometry_msgs/Pose[] waypoints
+    # Below joint info could be  trajectory_msgs/JointTrajectoryPoint
+    sensor_msgs/JointState joints
+    bool bStraight
+    float64   dwell_seconds
+    string opmessage
+    bool bCoordinated
+    float64 eepercent
+    CrclMaxProfileMsg[] profile # maximum profile 
+ */
 RCSInterpreter::RCSInterpreter(IKinematicsSharedPtr pKinematics) {
     _kinematics = pKinematics; // hopefully can be null
     //    _kinematics = IKinematicsSharedPtr(new DummyKinematics());
@@ -36,8 +51,8 @@ RCSInterpreter::~RCSInterpreter(void) {
 void RCSInterpreter::AddJointCommands(std::vector<JointState > gotojoints) {
     for (size_t i = 0; i < gotojoints.size(); i++) {
         RCS::CanonCmd newcc;
-        newcc.cmd = RCS::CANON_MOVE_JOINT;
-        newcc.status = RCS::CANON_WAITING;
+        newcc.crclcommand = CanonCmdType::CANON_MOVE_JOINT;
+        newcc.status = CanonStatusType::CANON_WAITING;
         newcc.joints.position = gotojoints[i].position;
 #ifdef DEBUG
         std::cout << "New Joint Position " << VectorDump<double>(newcc.joints.position).c_str();
@@ -69,7 +84,7 @@ std::vector<JointState> RCSInterpreter::PlanCartesianMotion(std::vector<RCS::Pos
     }
 #endif
     if (RCS::Controller.eCartesianMotionPlanner == RCS::CController::MOVEIT) {
-#if 1
+#ifdef MOVEITPLANNER
         if (RCS::Controller.MoveitPlanner()->Plan(poses)) {
             gotojoints = RCS::Controller.MoveitPlanner()->GetJtsPlan();
             return gotojoints;
@@ -94,11 +109,11 @@ std::vector<JointState> RCSInterpreter::PlanCartesianMotion(std::vector<RCS::Pos
 
     } else // if (RCS::Controller.eCartesianMotionPlanner == RCS::CController::WAYPOINT) {
     {
+#ifdef MOVEITKIN
         std::vector<double> oldjoints = RCS::Controller.status.currentjoints.position;
         for (size_t i = 0; i < poses.size(); i++) {
 
             //RCS::Controller.Kinematics()->SetJointValues(oldjoints);
-
             std::vector<double> joints = RCS::Controller.Kinematics()-> IK(poses[i], oldjoints);
 #ifdef DEBUG
             std::cout << "GotoPose " << DumpPose(poses[i]).c_str();
@@ -108,7 +123,8 @@ std::vector<JointState> RCSInterpreter::PlanCartesianMotion(std::vector<RCS::Pos
             gotojoints.back().position = joints;
             oldjoints = joints;
         }
-        return gotojoints;
+ #endif
+       return gotojoints;
     }
 }
 
@@ -129,7 +145,7 @@ int RCSInterpreter::ParseCommand(RCS::CanonCmd cc) {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // MOVE JOINTS
-    if (cc.cmd == RCS::CANON_MOVE_JOINT) {
+    if (cc.crclcommand == CanonCmdType::CANON_MOVE_JOINT) {
         rates = IRate(DEFAULT_JOINT_MAX_VEL, DEFAULT_JOINT_MAX_ACCEL, DEFAULT_LOOP_CYCLE);
 
         JointState joints;
@@ -169,11 +185,15 @@ int RCSInterpreter::ParseCommand(RCS::CanonCmd cc) {
             maker.setRates(rates);
             maker.makeJointPositionTrajectory(rates, currentjoints.position, joints.position);
             gotojoints = maker.GetJtsPlan();
-        } else if (RCS::Controller.eJointMotionPlanner == RCS::CController::MOVEIT) {
+        } 
+#ifdef MOVEITPLANNER
+        else if (RCS::Controller.eJointMotionPlanner == RCS::CController::MOVEIT) {
             if (!RCS::Controller.MoveitPlanner()->Plan(joints))
                 return -1;
             gotojoints = RCS::Controller.MoveitPlanner()->GetJtsPlan();
-        } else {
+        } 
+#endif
+        else {
             gotojoints = motioncontrol.computeCoorindatedWaypoints(currentjoints.position, joints.position, 0.001, true);
         }
         if(cc.bCoordinated)
@@ -200,7 +220,7 @@ int RCSInterpreter::ParseCommand(RCS::CanonCmd cc) {
         }
     }////////////////////////////////////////////////////////////////////////////////////////////////
         // STOP MOTION
-    else if (cc.cmd == RCS::CANON_STOP_MOTION) {
+    else if (cc.crclcommand == CanonCmdType::CANON_STOP_MOTION) {
         std::vector<std::vector<double> > displacements(Controller.status.currentjoints.velocity.size(), std::vector<double>());
         cc.jointnum.clear();
 
@@ -208,13 +228,16 @@ int RCSInterpreter::ParseCommand(RCS::CanonCmd cc) {
         Controller.robotcmds.ClearMsgQueue();
     }////////////////////////////////////////////////////////////////////////////////////////////////
         // MOVE CARTESIAN
-    else if (cc.cmd == RCS::CANON_MOVE_TO) {
+    else if (cc.crclcommand == CanonCmdType::CANON_MOVE_TO) {
 
         rates = cc.Rates(); // IRate(DEFAULT_CART_MAX_VEL, DEFAULT_CART_MAX_ACCEL, DEFAULT_LOOP_CYCLE);
-        RCS::Pose goalpose = cc.pose;
+        RCS::Pose goalpose ;
+        tf::poseMsgToTF (cc.finalpose, goalpose);
+#ifdef MOVEITKIN
         if (RCS::Controller.Kinematics()->IsSingular(goalpose, 0.0001)) {
             std::cout << "Is singular pose: " << DumpPose(goalpose).c_str();
         }
+#endif
         std::vector<JointState> gotojoints;
         std::cout << "Current Pose " << DumpPose(currentpose).c_str();
         std::vector<RCS::Pose> poses = motioncontrol.computeWaypoints(currentpose, goalpose, 
@@ -225,21 +248,22 @@ int RCSInterpreter::ParseCommand(RCS::CanonCmd cc) {
 
         gotojoints = PlanCartesianMotion(poses);
         AddJointCommands(gotojoints);
-    } else if (cc.cmd == RCS::CANON_MOVE_THRU) {
+    } else if (cc.crclcommand == CanonCmdType::CANON_MOVE_THRU) {
         rates = IRate(DEFAULT_CART_MAX_VEL, DEFAULT_CART_MAX_ACCEL, DEFAULT_LOOP_CYCLE);
         std::vector<JointState> gotojoints;
-        std::vector<RCS::Pose> poses = cc.waypoints;
+        // FIXME: waypoints must have a point!
+        std::vector<RCS::Pose> poses ( sizeof(cc.waypoints)/sizeof(cc.waypoints[0]));
         poses.insert(poses.begin(), currentpose); // add beginning pose -again?
         // and in case interrupted
         gotojoints = PlanCartesianMotion(poses);
         AddJointCommands(gotojoints);
-    } else if (cc.cmd == RCS::CANON_DWELL) {
+    } else if (cc.crclcommand == CanonCmdType::CANON_DWELL) {
         // wait here or at robot command thread?
         // Could just copy over command to robot
         RCS::CanonCmd newcc;
-        newcc.cmd = RCS::CANON_DWELL;
-        newcc.status = RCS::CANON_WAITING;
-        newcc.dwell = cc.dwell;
+        newcc.crclcommand = CanonCmdType::CANON_DWELL;
+        newcc.status = CanonStatusType::CANON_WAITING;
+        newcc.dwell_seconds = cc.dwell_seconds;
         Controller.robotcmds.AddMsgQueue(newcc);
     }
     return 0;

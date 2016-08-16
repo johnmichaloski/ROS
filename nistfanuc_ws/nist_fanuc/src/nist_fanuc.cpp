@@ -1,12 +1,12 @@
 
-#include <boost/format.hpp>
 #include "nist_fanuc.h"
+
+#include <boost/format.hpp>
 #include <string>
-#include "sys/stat.h"
-#include "fcntl.h"
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <iostream>
 #include <sstream>
-
 
 #include "MotionControl.h"
 #include "Globals.h"
@@ -26,14 +26,33 @@ int main(int argc, char** argv) {
         sensor_msgs::JointState cjoints;
         
         try {
-        // Initialize xercesc used by code synthesis to parse CRCL XML
-   //     xercesc::XMLPlatformUtils::Initialize();
-        
+        std::cout << ExecuteShellCommand("env|sort\n");
         // Find path of executable
         std::string path(argv[0]);
         Globals.ExeDirectory = path.substr(0, path.find_last_of('/') + 1);
         Globals._appproperties["ExeDirectory"] = Globals.ExeDirectory;
-        
+        setenv("ROS_ROOT", "/opt/ros/indigo/share/ros", true);
+        setenv("ROS_PACKAGE_PATH", "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes:"
+        "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes_core:"
+        "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes_trajectory:"
+        "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes_moveit:"
+        "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes_planner:"
+        "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes_utilities:"
+        "/usr/local/michalos/nistfanuc_ws/src/fanuc_lrmate200id_support:"
+        "/usr/local/michalos/nistfanuc_ws/src/nist_fanuc:"
+        "/usr/local/michalos/nistfanuc_ws/src/nistcrcl:"
+        "/opt/ros/indigo/share:/opt/ros/indigo/stacks", true);
+        setenv("ROS_MASTER_URI", "http://localhost:11311", true);
+        setenv("ROS_DISTRO", "indigo", true);
+        setenv("ROS_ETC_DIR", "/opt/ros/indigo/etc/ros", true);
+        setenv("PYTHONPATH", "/usr/local/michalos/nistfanuc_ws/devel/lib/python2.7/dist-packages:"
+                "/usr/local/michalos/nistcrcl_ws/devel/lib/python2.7/dist-packages:"
+                "/opt/ros/indigo/lib/python2.7/dist-packages:"
+                "/home/isd/michalos/el-robotics-core/nist_kitting/src", true);
+
+        setenv("PKG_CONFIG_PATH", "/usr/local/michalos/nistfanuc_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/opt/ros/indigo/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistfanuc_ws/devel/lib/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/pkgconfig:/opt/ros/indigo/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig", true);
+        setenv("PATH", "/usr/local/michalos/nistfanuc_ws/devel/bin:/usr/local/michalos/nistcrcl_ws/devel/bin:/opt/ros/indigo/bin:/usr/local/jdk1.8.0_60/bin:/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:/usr/X11R6/bin:/usr/local/ulapi/bin:/usr/local/gomotion/bin:/home/isd/michalos/bin", true);
+
         // This sets up some application name/value pairs: user, hostname
         SetupAppEnvironment();
         
@@ -42,16 +61,11 @@ int main(int argc, char** argv) {
         boost::shared_ptr<CJointWriter>jointWriter;
         boost::shared_ptr<IKinematics> kin;
         boost::shared_ptr<MoveitPlanning> moveitPlanner;
-//        boost::shared_ptr<RCS::RobotProgram> crclProgramInterpreter;
         boost::shared_ptr<CRvizMarker> pRvizMarker;
         boost::shared_ptr<CLinkReader> pLinkReader;
 
-
-//        // Controller shared objects NOT dependent on ROS 
-//        boost::shared_ptr<Crcl::CrclDelegateInterface> crcl;
-        
         //SetupRosEnvironment - needs to go before ROS!
-        SetupRosEnvironment("");
+        //SetupRosEnvironment("");
         
         // Initialize ROS
         ros::init(argc, argv, "nist_fanuc");
@@ -73,37 +87,29 @@ int main(int argc, char** argv) {
         Globals.WriteFile(Globals.ExeDirectory + "rosconfig.txt", params);
         path = ros::package::getPath("nist_fanuc");
         Globals._appproperties["nist_fanuc"] = path;
-#if 1
+#if 0
         // This sets up the `env` so that ROS can run - has too many hardwired dependencies
         SetupRosEnvironment(path);
 #endif
         // Controller instantiatio of shared objects  - dependent on ROS
         jointReader = boost::shared_ptr<CJointReader>(new CJointReader(nh));
         jointWriter = boost::shared_ptr<CJointWriter>(new CJointWriter(nh));
-        kin = boost::shared_ptr<IKinematics>(new MoveitKinematics(nh));
-        pRvizMarker= boost::shared_ptr<CRvizMarker>(new CRvizMarker(nh));
+        pRvizMarker = boost::shared_ptr<CRvizMarker>(new CRvizMarker(nh));
         pRvizMarker->Init();
-        moveitPlanner = boost::shared_ptr<MoveitPlanning>(new MoveitPlanning(nh));
         pLinkReader = boost::shared_ptr<CLinkReader>(new CLinkReader(nh));
 
-        // Controller instantiatio of shared objects - NOT dependent on ROS
-//        crcl = boost::shared_ptr<Crcl::CrclDelegateInterface>(
- //               new Crcl::CrclDelegateInterface());
-
-        boost::shared_ptr<CTrajectory> traj = boost::shared_ptr<CTrajectory> (new CTrajectory());
-        // Descarte trajectory writer - uses action lib
-        //boost::shared_ptr<CTrajectoryWriter> trajWriter = boost::shared_ptr<CTrajectoryWriter>(new CTrajectoryWriter(traj));
-  
+//#define MOVEITKIN      
+#ifdef MOVEITKIN
+        kin = boost::shared_ptr<IKinematics>(new MoveitKinematics(nh));
         // Initializatin of Controller instantiatio of shared objects  
         kin->Init(std::string("manipulator"), std::string("tool0"));
-
-        // CRCl Communication handler - bundles xml into messages
-//        CAsioCrclServer crclServer(myios);
- //       CAsioCrclServer::_bTrace = false;
-        
-        // This initializes the asio crcl socket listener, in theory N clients can connect. Only 1 tested.
- //       crclServer.Init("127.0.0.1", 64444, "Command GUI");
-        
+        RCS::Controller.Kinematics() = kin;
+#endif
+#ifdef MOVEITPLANNER
+        moveitPlanner = boost::shared_ptr<MoveitPlanning>(new MoveitPlanning(nh));
+        RCS::Controller.MoveitPlanner() = moveitPlanner;
+#endif
+       
         // Logger
         LogFile.Open(Globals.ExeDirectory + "logfile.log");
         LogFile.DebugLevel() = 5;
@@ -114,7 +120,8 @@ int main(int argc, char** argv) {
         RCS::CController::_debugtype = (unsigned long) RCS::CController::CRCL;
 
         // Initialize Controller...
-        RCS::Controller._NumJoints = 6; // hard code even thought chainrobotmodel will work
+        RCS::Controller.Setup(nh);
+        //RCS::Controller._NumJoints = 6; // hard code even thought chainrobotmodel will work
         RCS::Controller.status.Init();
 
         // The crcl thread waits for and handles new XML messages received from  crcl asio socket.
@@ -129,7 +136,6 @@ int main(int argc, char** argv) {
         RCS::Controller.CycleTime() = DEFAULT_LOOP_CYCLE;
         
 
-        RCS::Controller.Kinematics() = kin;
         //        RCS::Controller.TrajectoryWriter() = trajWriter;
         RCS::Controller.JointWriter() = jointWriter;
         RCS::Controller.RvizMarker()= pRvizMarker;
@@ -139,13 +145,11 @@ int main(int argc, char** argv) {
         RCS::Controller.links.push_back("/base_link");
         RCS::Controller.links.push_back("/tool0");
 
-        RCS::Controller.MoveitPlanner() = moveitPlanner;
         RCS::Controller.eCartesianMotionPlanner = RCS::CController::BASIC;
         RCS::Controller.eJointMotionPlanner = RCS::CController::BASIC;
         // RCS::CController::MOVEIT;  NOPLANNER=0, MOVEIT, DESCARTES, BASIC, WAYPOINT, GOMOTION         
-        RCS::CController::bGenerateProgram = true;
-       
-#define INITJOINTCONTROLLER
+        
+//#define INITJOINTCONTROLLER
 #ifdef INITJOINTCONTROLLER
         // Read latest values, dont start until they are read
         jointReader->Start();
@@ -171,18 +175,21 @@ int main(int argc, char** argv) {
         LogFile.LogFormatMessage ("Starting current joints=%s", DumpJoints(cjoints).c_str()); 
         LogFile.LogFormatMessage ("Starting current pose=%s", DumpPose(RCS::Controller.status.currentpose).c_str()); 
 
-        // Removed chained robot model from exe - overkill
-        //RCS::Controller.robot_model.RdfFromXmlFile(Globals.ExeDirectory + "lrmate200id.urdf");
 #endif
         
 #if DESCARTES
-        // INitialize this if you are using Descartes
+         boost::shared_ptr<CTrajectory> traj = boost::shared_ptr<CTrajectory> (new CTrajectory());
+        // Descarte trajectory writer - uses action lib
+        //boost::shared_ptr<CTrajectoryWriter> trajWriter = boost::shared_ptr<CTrajectoryWriter>(new CTrajectoryWriter(traj));
+
+         // INitialize this if you are using Descartes
         // Create a robot model and initialize trajectory with it
         const std::string robot_description = "robot_description";
         const std::string group_name = "manipulator"; // name of the kinematic group
         const std::string world_frame = "/base_link"; // Name of frame in which you are expressing poses.
         const std::string tcp_frame = "tool0"; // tool center point frame
         std::vector<std::string> names;
+        // This assumes the yaml file containgin ros param controller_joint_names is loaded
         nh.getParam("controller_joint_names", names);
         RCS::Controller.TrajectoryModel() = traj;
         RCS::Controller.TrajectoryModel()->Init(robot_description, group_name, world_frame, tcp_frame, names);
@@ -192,73 +199,41 @@ int main(int argc, char** argv) {
 #ifdef ROBOTSTATUS
         RCS::RobotStatus robotstatus;
  //       robotstatus.CrclDelegate() = crcl;
+#ifdef MOVEITKIN
         robotstatus.Kinematics() = kin;
+#endif
         robotstatus.JointReader() = jointReader;
         robotstatus.CycleTime() = DEFAULT_LOOP_CYCLE;
 #endif
-         //#ifdef WIN32
-        //		if (!SetConsoleCtrlHandler(consoleHandler, TRUE)) throw std::exception("Could not set console ctrl handler");
-        //#endif
 
-        jointWriter->Start();
-        robotstatus.Start(); // start the controller status thread
-
+ //       jointWriter->Start();
+        
+//        robotstatus.Start(); // start the controller status thread
+        
         RCS::Controller.Start(); // start the Controller Session thread
         
-//#define BOOSTASIO
-#ifdef BOOSTASIO
- //       CAsioCrclServer::_bTrace=true;
- //       crclServer.Start();
- #endif
-        
-        // Prime the pump with some CRCL XML
-  //      std::string contents;
-   //     std::string testprog = Globals._appproperties["nist_fanuc"] + "/doc/fanuclrmateprogram.xml";
-  //      crclProgramInterpreter = boost::shared_ptr<RCS::RobotProgram>(new RCS::RobotProgram(1));
-        //crclProgramInterpreter->ExecuteProgramFromFile(testprog);
-        //crclProgramInterpreter->Start(); 
-        //Globals.ReadFile(testprog, contents);
-        //RCS::Controller.CrclDelegate()->DelegateCRCLCmd(contents);
-
         spinner.stop();
-        ros::spinOnce();
-        do {
-//            myios.run_one();
+        ros::spin();
+//        do {
 //            ros::spinOnce();
-//            myios.run_one();
-            r.sleep();
-        } while(ros::ok());
-        
-#if 0
-        while (ros::ok()) { //ros::ok()) {
-            // This allows asio to run in background - Never ends
-            std::cout << "." << std::flush;
-            boost::this_thread::yield();
-            Globals.Sleep(1000);
-            //myios.run_one();
-        }
-#endif
+//            r.sleep();
+//        } while(ros::ok());
+//        
         std::cout << "Cntrl C pressed \n"<< std::flush;
         
-#ifdef BOOSTASIO
-        crclServer.Stop();
-#endif
         // ^C pressed - stop all threads or will hang
         if(jointReader) 
             jointReader->Stop(); // unsubscribe
          if(jointWriter) 
             jointWriter->Stop(); // unpusblish
        RCS::Thread::StopAll(); // includes thread for Controller, robotstatus
-#ifdef BOOSTASIO
-        myios.stop();
-#endif
+
     } catch (std::exception e) {
         Logger.Fatal(Logger.StrFormat("%s%s\n", "Abnormal exception end to  CRCL2Robot", e.what()));
     } catch (...) {
         Logger.Fatal("Abnormal exception end to  CRCL2Robot\n");
     }
-    //xercesc::XMLPlatformUtils::Terminate();
-    ros::shutdown();
+     ros::shutdown();
     return 0;
 }
 

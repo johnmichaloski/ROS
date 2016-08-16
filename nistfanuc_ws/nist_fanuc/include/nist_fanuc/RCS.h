@@ -1,5 +1,5 @@
 // RCS.h
- 
+
 /*
  * DISCLAIMER:
  * This software was produced by the National Institute of Standards
@@ -13,35 +13,20 @@
 
 #pragma once
 
-
 #define _USE_MATH_DEFINES
 #include <math.h>       /* isnan, sqrt */
-
-#if 0
-#ifdef STANDALONEURDF
-#include "urdf_model/RobotModel.h"
-#ifndef JointState
-#define JointState urdf::JointState
-#endif
-#else
-#include <moveit/robot_model_loader/robot_model_loader.h>
-#include <moveit/robot_model/robot_model.h>
-#include "/usr/include/urdf_model/model.h"
-#include "/usr/include/urdf_model/joint.h"
-#include "/usr/include/urdf_model/link.h"
-#endif
+#include <stdarg.h>
 
 
-//#include "urdf_model/rosmath.h"
-
-#endif
-
+#include <ros/ros.h>
 #include <moveit/robot_model_loader/robot_model_loader.h>
 #include <moveit/robot_model/robot_model.h>
 #include <tf/transform_datatypes.h>
-//#include "urdf_model/tfmath.h"
-#include "/opt/ros/indigo/include/sensor_msgs/JointState.h"
-#include <stdarg.h>
+#include <sensor_msgs/JointState.h>
+#include <nistcrcl/CrclCommandMsg.h>
+#include <nistcrcl/CrclStatusMsg.h>
+#include <nistcrcl/CrclMaxProfileMsg.h>
+
 #include "Globals.h"
 
 //typedef boost::shared_ptr<urdf::Joint> JointSharedPtr;
@@ -82,7 +67,7 @@ inline void sincos(double x, double *sx, double *cx) {
 
 
 namespace RCS {
-    
+
     //typedef tf::Transform Pose;
     typedef tf::Pose Pose;
     typedef tf::Vector3 Position;
@@ -94,134 +79,163 @@ namespace RCS {
     typedef std::vector<double> robotAxes;
     void getRPY(const RCS::Pose pose, double &roll, double &pitch, double &yaw);
 
-    struct PoseTolerance : public std::vector<double>
-    {
-        enum Type { POSITION=0, ORIENTATION=1, JOINT=2};
-        PoseTolerance(){ this->resize(3,0.0); } // position, orientation
+    struct PoseTolerance : public std::vector<double> {
+
+        enum Type {
+            POSITION = 0, ORIENTATION = 1, JOINT = 2
+        };
+
+        PoseTolerance() {
+            this->resize(3, 0.0);
+        } // position, orientation
     };
 
     /*!
-	* \brief enumeration of  length units. Conversion into ROS compatible meters.
-	*/
-    enum CanonLengthUnit {
-        METER = 0,
-        MM,
-        INCH
+     * \brief enumeration of  length units. Conversion into ROS compatible meters.
+     */
+    struct CanonLengthUnit {
+        static const int METER = 0;
+        static const int MM = 1;
+        static const int INCH = 2;
     };
 
-	/*!
-	* \brief enumeration of trajector pose points.
-	*/
-    enum TrajPointType {
-        WAYPOINT = 1,
-        GOAL
+    /*!
+     * \brief enumeration of trajectory pose points.
+     */
+    struct TrajPointType {
+        static const int WAYPOINT = 1;
+        static const int GOAL = 2;
     };
 
-	/*!
-	* \brief enumeration of  angle units. Conversion into ROS compatible radians.
-	*/
-    enum CanonAngleUnit {
-        RADIAN = 0,
-        DEGREE
+    /*!
+     * \brief enumeration of  angle units. Conversion into ROS compatible radians.
+     */
+    struct CanonAngleUnit {
+        static const int RADIAN = 0;
+        static const int DEGREE = 1;
     };
 
-	/*!
-	* \brief enumeration of  force units. 
-	*/
-    enum CanonForceUnit {
-        NEWTON = 0,
-        POUND,
-        OUNCE
+    /*!
+     * \brief enumeration of  force units. 
+     */
+    struct CanonForceUnit {
+        static const int NEWTON = 0;
+        static const int POUND = 1;
+        static const int OUNCE = 2;
     };
 
-	/*!
-	* \brief enumeration of  torque units. 
-	*/
-    enum CanonTorqueUnit {
-        NEWTONMETER = 0,
-        FOOTPOUND
+    /*!
+     * \brief enumeration of  torque units. 
+     */
+    struct CanonTorqueUnit {
+        static const int NEWTONMETER = 0;
+        static const int FOOTPOUND = 2;
     };
 
-	/*!
-	* \brief enumeration of  return type from Crcl intepretation. If statusreply, requires status
-	* sent to Crcl client.
-	*/
-    enum CanonReturn {
-        CANON_REJECT = -2,
-        CANON_FAILURE = -1,
-        CANON_SUCCESS = 0,
-        CANON_STATUSREPLY = 1,
-        CANON_MOTION = 2,
-        CANON_RUNNING
+    /*!
+     * \brief enumeration of  return type from Crcl intepretation. If statusreply, requires status
+     * sent to Crcl client.
+     */
+    struct CanonReturn {
+        static const int CANON_REJECT = -2;
+        static const int CANON_FAILURE = -1;
+        static const int CANON_SUCCESS = 0;
+        static const int CANON_STATUSREPLY = 1;
+        static const int CANON_MOTION = 2;
+        static const int CANON_RUNNING = 3;
     };
 
-	/*!
-	* \brief enumeration of   Crcl commands. Many Crcl commands are wm parameter setting
-	* and require no motion component.
-	*/
-    enum CanonCmdType {
-        CANON_NOOP = 0,
-        CANON_DWELL,
-        CANON_END_CANON,
-        CANON_INIT_CANON,
-        CANON_MOVE_JOINT,
-        CANON_MOVE_TO,
-        CANON_MOVE_THRU,
-        CANON_SET_MAX_CART_ACC,
-        CANON_SET_MAX_CART_SPEED,
-        CANON_SET_MAX_JOINT_ACC,
-        CANON_SET_MAX_JOINT_SPEED,
-        CANON_SET_GRIPPER,
-        CANON_SET_TOLERANCE,
-        CANON_STOP_MOTION,
-        CANON_DO_MOTION,
-        CANON_OTHER,
-        CANON_UNKNOWN
+    /*!
+     * \brief enumeration of   Crcl commands. Many Crcl commands are wm parameter setting
+     * and require no motion component.
+     */
+    struct CanonCmdType {
+        /**
+         *  uint8 initCanon=1
+            uint8 endCanon=2
+            uint8 actuatejoints=3
+            uint8 moveto=4crclcommand
+            uint8 dwell=5
+            uint8 message=6
+            uint8 moveThroughTo=7
+            uint8 setCoordinatedMotion=8
+            uint8 stopMotion=9
+            uint8 setEndEffector=10
+            uint8 openToolChange=11
+            uint8 closeToolChanger=12
+         */
+        static const int CANON_NOOP = 0;
+        static const int CANON_INIT_CANON = 1;
+        static const int CANON_END_CANON = 2;
+        static const int CANON_MOVE_JOINT = 3;
+        static const int CANON_MOVE_TO = 4;
+        static const int CANON_DWELL = 5;
+        static const int CANON_MESSAGE = 6;
+        static const int CANON_MOVE_THRU = 7;
+        static const int CANON_SET_COORDINATED_MOTION = 8;
+        static const int CANON_STOP_MOTION = 9;
+        static const int CANON_SET_GRIPPER = 10;
+        static const int CANON_OPEN_GRIPPER = 11;
+        static const int CANON_CLOSE_GRIPPER = 12;
+        static const int CANON_SET_TOLERANCE = 0;
+        static const int CANON_UNKNOWN = -1;
+#if 0
+        static const int CANON_SET_MAX_CART_ACC = 0;
+        static const int CANON_SET_MAX_CART_SPEED = 0;
+        static const int CANON_SET_MAX_JOINT_ACC = 0;
+        static const int CANON_SET_MAX_JOINT_SPEED = 0;
+
+#endif
     };
 
-	/*!
-	* \brief enumeration of  stopping motion, e.g., estop equivalent to immediate.
-	*/
-	enum CanonStopMotionType {
-        UNSET = -1,
-        IMMEDIATE = 0,
-        FAST,
-        NORMAL
+    /*!
+     * \brief enumeration of  stopping motion, e.g., estop equivalent to immediate.
+     */
+    struct CanonStopMotionType {
+        static const int UNSET = -1;
+        static const int IMMEDIATE = 0;
+        static const int FAST = 1;
+        static const int NORMAL = 2;
     };
 
-	/*!
-	* \brief enumeration of  trajectory acceleration profile.
-	*/
-    enum CanonAccProfile {
-        MS_IS_UNSET = 0,
-        MS_IS_DONE = 1,
-        MS_IS_ACCEL = 2,
-        MS_IS_CONST = 3,
-        MS_IS_DECEL = 4,
-        MS_IS_ESTOPPING = 5,
-        MS_IS_PAUSED = 6,
+    /*!
+     * \brief enumeration of  trajectory acceleration profile.
+     */
+    struct CanonAccProfile {
+        static const int MS_IS_UNSET = 0;
+        static const int MS_IS_DONE = 1;
+        static const int MS_IS_ACCEL = 2;
+        static const int MS_IS_CONST = 3;
+        static const int MS_IS_DECEL = 4;
+        static const int MS_IS_ESTOPPING = 5;
+        static const int MS_IS_PAUSED = 6;
     };
 
-	/*!
-	* \brief enumeration of  trajectory motion type, joint or cartesian.
-	*/
-    enum MovementType {
-        MOVE_DEFAULT = 0,
-        MOVE_CARTESIAN,
-        MOVE_JOINT
+    /*!
+     * \brief enumeration of  trajectory motion type, joint or cartesian.
+     */
+    struct MovementType {
+        static const int MOVE_DEFAULT = 0;
+        static const int MOVE_CARTESIAN = 1;
+        static const int MOVE_JOINT = 2;
     };
 
-	/*!
-	* \brief enumeration of controller status types for individual commands. 
-	* Note, even though command types are listed, not all used or supported.
-	*/
-    enum CanonStatusType {
-        CANON_DONE = 0,
-        CANON_WORKING,
-        CANON_PAUSED,
-        CANON_ERROR,
-        CANON_ABORT,
-        CANON_WAITING,
+    /*!
+     * \brief enumeration of controller status types for individual commands. 
+     * Note, even though command types are listed, not all used or supported.
+     */
+    struct CanonStatusType {
+        /**
+        uint8 done=0
+        uint8 error=1
+        uint8 working=2
+         */
+        static const int CANON_DONE = 0;
+        static const int CANON_ERROR = 2;
+        static const int CANON_WORKING = 3;
+        static const int CANON_PAUSED = 2;
+        static const int CANON_ABORT = 4;
+        static const int CANON_WAITING = 5;
     };
 
     /**
@@ -252,7 +266,7 @@ namespace RCS {
         NVAR(CurrentVelocity, double, _current_velocity);
         NVAR(MaximumVelocity, double, _maximum_velocity);
         NVAR(MaximumAccel, double, _maximum_accel);
-        
+
         VAR(MaxJoinVelocity, double);
         VAR(MaxJointAccel, double);
         VAR(JointMaxLimit, std::vector<double>);
@@ -262,29 +276,52 @@ namespace RCS {
 
         NVAR(CycleTime, double, _cycleTime);
         NVAR(CurrentAccel, double, _current_accel);
-        NVAR(MsFlag, RCS::CanonAccProfile, _msflag);
+        NVAR(MsFlag, int, _msflag);
     private:
 
         void Clear() {
-            FinalVelocity() =  CurrentVelocity() = CurrentAccel() = 0.0;
-            MaximumVelocity()=CurrentFeedrate() = DEFAULT_CART_MAX_VEL;
-            MaximumAccel()= DEFAULT_CART_MAX_ACCEL;
+            FinalVelocity() = CurrentVelocity() = CurrentAccel() = 0.0;
+            MaximumVelocity() = CurrentFeedrate() = DEFAULT_CART_MAX_VEL;
+            MaximumAccel() = DEFAULT_CART_MAX_ACCEL;
             MaxJoinVelocity() = DEFAULT_JOINT_MAX_VEL;
-            MsFlag() = RCS::MS_IS_UNSET;
+            MsFlag() = CanonAccProfile::MS_IS_UNSET;
         }
     };
 
-	/*!
-	* \brief CanonCmd is the controller command structure. 
-	*/
-	struct CanonCmd {
+    /*!
+     * \brief CanonCmd is the controller command structure. 
+     * 
+     * int64 crclcommand
 
-		/*!
-		* \brief CanonCmd constructor. 
-		*/
-        CanonCmd() {
-            Init();
-			CommandID()=_cmdid++;
+        # https://github.com/ros/common_msgs 
+        geometry_msgs/Pose  finalpose
+        geometry_msgs/Pose[] waypoints
+        # Below joint info could be  trajectory_msgs/JointTrajectoryPoint
+        sensor_msgs/JointState joints
+        bool bStraight
+        float64   dwell_seconds
+        string opmessage
+        bool bCoordinated
+        float64 eepercent
+        CrclMaxProfileMsg[] profile # maximum profile 
+     */
+    struct CanonCmd : public nistcrcl::CrclCommandMsg {
+
+        /*!
+         * \brief CanonCmd constructor. 
+         */
+        CanonCmd()
+//        cmd(nistcrcl::CrclCommandMsg::crclcommand),       
+//        gripperPos(nistcrcl::CrclCommandMsg::eepercent),
+//        pose(nistcrcl::CrclCommandMsg::finalpose)
+        {
+ //           Init();
+            CommandID() = _cmdid++;
+        }
+        void Set(nistcrcl::CrclCommandMsg &msg)
+        {
+            static_cast<nistcrcl::CrclCommandMsg>(*this)  = msg;
+        
         }
         void Init();
 
@@ -292,47 +329,52 @@ namespace RCS {
         VAR(ParentCommandID, unsigned long long);
         VAR(StatusID, unsigned long long);
         VAR(Rates, IRate);
-      
+
         static unsigned long long _cmdid;
-        
+
         bool IsMotionCmd();
-        CanonCmdType cmd; /**<  command  type */
-        CanonStatusType status; /**<  status type */
-        TrajPointType type; /**<  trajectory points  type */
-        CanonStopMotionType stoptype; /**<  stop trajectory choice */
+        
+//        int &cmd; /**<  command  type */
+        int status; /**<  status type */
+        int type; /**<  trajectory points  type */
+        int stoptype; /**<  stop trajectory choice */
+        int accprofile; /**<  current trajectory acceleration profile */
+#if 0
         bool bCoordinated; /**<  coordinated joint trajectory motion boolean */
         bool bStraight; /**<  straigth cartesian trajectory motion boolean */
+        double dwell; /**<  time for dwelling in seconds */
+        //JointState joints; /**<  commanded joint state */
+       std::vector<RCS::Pose> waypoints; /**< commanded cartesian waypoints in trajectory */
+ #endif
+ //      double &gripperPos; /**<  gripper position 0 to 1 */
+ //       RCS::Pose &pose; /**<  commanded pose state */
+      
         double absTransAcc; /**<  cartesian translational acceleration */
         double absTransSpeed; /**<  cartesian translational velocity */
         double absRotAcc; /**<  cartesian rotation acceleration */
         double absRotSpeed; /**<  cartesian rotation velocity */
         double absJointAcc; /**<  joint max acceleration */
         double absJointSpeed; /**<  joint max velocity */
-        double dwell; /**<  time for dwelling in seconds */
-        double gripperPos; /**<  gripper position 0 to 1 */ 
-        CanonAccProfile accprofile; /**<  current trajectory acceleration profile */ 
-        std::vector<double> speed; /**<  vector of joint velocities */ 
+        
+        std::vector<double> speed; /**<  vector of joint velocities */
         std::vector<int> jointnum; /**<  vector of joint numbers used by command */
 
-        JointState joints; /**<  commanded joint state */
         JointState seed; /**<  near pose joint state */
-        RCS::Pose pose;  /**<  commanded pose state */
-        RCS::PoseTolerance endPoseTol;  /**<  commanded tolerance */
-        std::vector<RCS::Pose> waypoints; /**< commanded cartesian waypoints in trajectory */
-       // std::vector<RCS::Pose> waypointtolerances; /**< commanded cartesian waypoints in trajectory */
+        RCS::PoseTolerance endPoseTol; /**<  commanded tolerance */
+        // std::vector<RCS::Pose> waypointtolerances; /**< commanded cartesian waypoints in trajectory */
         RCS::PoseTolerance intermediatePtTol; /**< commanded cartesian waypoints in trajectory */
         RCS::PoseTolerance gripperTol; /**< gripper trajectory */
     };
 
-	/*!
-	* \brief CanonWorldModel describes the controller state. Includes reference to robot model.
-	*/
+    /*!
+     * \brief CanonWorldModel describes the controller state. Includes reference to robot model.
+     */
     struct CanonWorldModel {
 
-		/*!
-		* \brief CanonWorldModel constructor that initializes parameterization.
-		*/
-		CanonWorldModel() {
+        /*!
+         * \brief CanonWorldModel constructor that initializes parameterization.
+         */
+        CanonWorldModel() {
             Init();
         }
         void Init();
@@ -340,10 +382,10 @@ namespace RCS {
         CanonCmdType echo_cmd; /**<  copy of current command type */
         CanonStatusType echo_status; /**<  copy of current status type */
 
-		/*!
-		* \brief Cycletime of the world model. 
-		* /fixme what is this
-		*/
+        /*!
+         * \brief Cycletime of the world model. 
+         * /fixme what is this
+         */
         double getCycleTime() {
             return _cycleTime; // milliseconds
         }
@@ -359,15 +401,16 @@ namespace RCS {
         double maxRotVel; /**<  max rotational velocity */
         double maxJointAccel; /**<  max joint acceleration */
         double maxJointVel; /**<  max joint velocity */
-        double _cycleTime;  /**<  cycle time */
-        CanonCmd echocmd;  /**<  copy of current command */
+        double _cycleTime; /**<  cycle time */
+        CanonCmd echocmd; /**<  copy of current command */
         JointState currentjoints; /**<  current joint state */
         RCS::Pose currentpose; /**<  current robot pose */
     };
-        /*!
-	* \brief DumpJoints takes a list of joints and generates a string describing pose. 
-	* Can be used as std::cout << DumpPose(pose); 
-	*/
+
+    /*!
+     * \brief DumpJoints takes a list of joints and generates a string describing pose. 
+     * Can be used as std::cout << DumpPose(pose); 
+     */
 
     inline std::string DumpJoints(JointState joints) {
         std::stringstream s;
@@ -375,22 +418,22 @@ namespace RCS {
         return s.str();
     }
     /*!
-	* \brief DumpPose takes a urdf pose  and generates a string describing pose. 
-	* Can be used as std::cout << DumpPose(pose); 
-	*/
+     * \brief DumpPose takes a urdf pose  and generates a string describing pose. 
+     * Can be used as std::cout << DumpPose(pose); 
+     */
     extern std::string DumpPose(RCS::Pose & pose);
-    
+
     /*!
-	* \brief DumpPose takes a urdf pose  and generates a string describing pose. 
-	* Can be used as std::cout << DumpPose(pose); 
-	*/
+     * \brief DumpPose takes a urdf pose  and generates a string describing pose. 
+     * Can be used as std::cout << DumpPose(pose); 
+     */
     inline std::ostream & operator<<(std::ostream & os, RCS::Pose & pose) {
         std::stringstream s;
         s << "Translation = " << 1000.0 * pose.getOrigin().x() << ":" << 1000.0 * pose.getOrigin().y() << ":" << 1000.0 * pose.getOrigin().z() << std::endl;
         double roll, pitch, yaw;
         getRPY(pose, roll, pitch, yaw);
-         s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw) << std::endl;
-         s << "Quaterion = " << pose.getRotation().x() << ":" << pose.getRotation().y() << ":" << pose.getRotation().z() << ":" << pose.getRotation().w() << std::endl;
+        s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw) << std::endl;
+        s << "Quaterion = " << pose.getRotation().x() << ":" << pose.getRotation().y() << ":" << pose.getRotation().z() << ":" << pose.getRotation().w() << std::endl;
         os << s.str();
     }
 
@@ -411,7 +454,7 @@ namespace RCS {
 };
 
 inline std::ostream & operator<<(std::ostream & os, const RCS::CanonCmd & cc) {
-    os << "Cmd = " << cc.cmd << " Status = " << cc.status << std::endl << "Joints = ";
+    os << "Cmd = " << cc.crclcommand << " Status = " << cc.status << std::endl << "Joints = ";
 
     for (size_t i = 0; i < cc.joints.position.size(); i++) {
         os << i << "=" << Rad2Deg(cc.joints.position[i]) << ":";

@@ -14,18 +14,23 @@
 #pragma once
 #include <boost/shared_ptr.hpp>
 #include <list>
+#include <ros/ros.h>
+#include <ros/package.h>
+#include <nist_fanuc/arm_kinematics.h>
 
-//#include "AsioCrclServer.h"
-#include "RCSThreadTemplate.h"
-//#include "CrclInterface.h"
 #include "nist_fanuc/RCSInterpreter.h"
-#include "ChainRobotModel.h"
 #include "nist_fanuc/Trajectory.h"
 #include "Communication.h"
 #include "moveit.h"
 #include "RvizMarker.h"
+#include "NIST/RCSThreadTemplate.h"
 #include "NIST/RCSMsgQueue.h"
 #include "nist_fanuc/Gripper.h"
+
+
+
+#include "nistcrcl/CrclCommandMsg.h"
+#include "nistcrcl/CrclStatusMsg.h"
 namespace RCS {
 
     extern boost::mutex cncmutex;
@@ -51,11 +56,14 @@ namespace RCS {
         static RCS::CanonWorldModel wm; /**< the world model of the controller */
         static RCS::CanonWorldModel status; /**< current status of controller */
         static RCS::CanonWorldModel laststatus; /**< last status of controller */
-        static RCS::CMessageQueue<RCS::CanonCmd> cmds; /**< queue of commands interpreted from Crcl messages */
+//        static RCS::CMessageQueue<RCS::CanonCmd> cmds; /**< queue of commands interpreted from Crcl messages */
+        static RCS::CMessageQueue<nistcrcl::CrclCommandMsg > crclcmds; /**< queue of commands interpreted from Crcl messages */
         static xml_message_list donecmds; /**< list of commands interpreted from Crcl messages that have completed*/
         static RCS::CMessageQueue<RCS::CanonCmd> robotcmds; /**< list of commands to be sent to robot */
         static size_t _NumJoints; /**< number of joints in controller robot - assuming serial link manipulator */
-        static bool bGenerateProgram; /**< global flag to create program from Crcl XML */
+        static std::vector<std::string> joint_names;
+        static std::vector<std::string> link_names;
+        
         /*!
          *\brief Verifies that all the pointer references in the controller have been instantiated (i.e., not null).
          */
@@ -68,9 +76,9 @@ namespace RCS {
         virtual int Action();
 
         /*!
-         *\brief Initialization routine for the controller..
+         *\brief Setup routine for the controller..
          */
-        virtual void Init();
+        void Setup(ros::NodeHandle &nh);
 
         /*!
          *\brief Creates a comma separated string of current state of robot. (Can use other separator). 
@@ -82,15 +90,19 @@ namespace RCS {
          */
         std::string DumpHeader(std::string separator = ",");
 
-//        NVAR(CrclDelegate, boost::shared_ptr<Crcl::CrclDelegateInterface>, crclinterface);
+        //        NVAR(CrclDelegate, boost::shared_ptr<Crcl::CrclDelegateInterface>, crclinterface);
         VAR(Kinematics, boost::shared_ptr<IKinematics>);
         VAR(TrajectoryModel, boost::shared_ptr<CTrajectory>);
         VAR(JointWriter, boost::shared_ptr<CJointWriter>);
         VAR(MoveitPlanner, boost::shared_ptr<MoveitPlanning>);
-        VAR(RvizMarker, boost::shared_ptr<CRvizMarker> )
-        VAR(EEPoseReader, boost::shared_ptr<CLinkReader> )
+        VAR(RvizMarker, boost::shared_ptr<CRvizMarker>)
+        VAR(EEPoseReader, boost::shared_ptr<CLinkReader>)
         VAR(Gripper, boost::shared_ptr<GripperInterface>)
-
+        ros::Publisher crcl_status; /**< ros publisher information used for crcl status updates */
+        ros::Subscriber crcl_cmd; /**< ros subscriber information used for crcl command updates */
+        void CmdCallback(const nistcrcl::CrclCommandMsg::ConstPtr& cmdmsg);
+        ros::NodeHandle *_nh;
+        boost::shared_ptr<::Kinematics> armkin;
         /*!
          *\brief Routine to set the kinematics reference pointer. Uses the interface class IKinematics, but can have any implementation instance. 
          */
@@ -166,7 +178,7 @@ namespace RCS {
          */
         RobotStatus(double cycletime = DEFAULT_LOOP_CYCLE);
 
- //       NVAR(CrclDelegate, boost::shared_ptr<Crcl::CrclDelegateInterface>, _crclinterface);
+        //       NVAR(CrclDelegate, boost::shared_ptr<Crcl::CrclDelegateInterface>, _crclinterface);
         VAR(JointReader, boost::shared_ptr<CJointReader>);
         VAR(Kinematics, boost::shared_ptr<IKinematics>);
 
@@ -188,52 +200,4 @@ namespace RCS {
             assert(Kinematics() != NULL);
         }
     };
-#if 0
-    /**
-     * \brief  The RobotProgram is a thread to handle crcl programs.
-     * Crcl programs are not in fact legitimate, however, debugging and verification are assisted by programs.
-     * However, program as in the Crcl XSD specification, so it doesn't hurt to handle.
-     * They require special handling as only one command should be done at a time.
-     * Uses codesynthesis to parse Crcl xml into C++ data structures.
-     */
-    class RobotProgram : public RCS::Thread {
-    public:
-
-        /*!
-         * \brief RobotProgram constructor that requires a cycle time for RCS thread timing.
-         * \param cycletime  in seconds.
-         */
-        RobotProgram(double cycletime = DEFAULT_LOOP_CYCLE);
-
-        /*!
-         * \brief ExecuteProgramFromFile reads a file path for CRCL XML program. 
-         * It will set up interpreting the program. It is thread safe.
-         * \param programpath  path of file containing crcl xml program.
-         */
-        virtual void ExecuteProgramFromFile(std::string programpath);
-        
-        /*!
-         * \brief ExecuteProgram reads and interprets a CRCL XML program string. 
-         * It will set up interpreting the program. It is thread safe.
-         * \param programpath  str containing crcl xml program.
-         */        
-        virtual void ExecuteProgram(std::string programstr);
-
-        /*!
-         * \brief  Action is the main loop in the RobotProgram RCS thread.
-         * 
-         * Executes one program command at a time. \fixme needs to wait until current
-         * command is done before moving on to next command.
-         */
-        virtual int Action();
-        //////////////////////////////////////
-        static boost::mutex _progmutex; /**< mutex for thread safe access to RobotProgram commands  */
-        std::string _programname; /**< saved RobotProgram program file path  */
-        //Crcl::CrclDelegateInterface _delegate; /**< crcl delegate used to interpret Crcl XML command  */
-        std::istringstream istr; /**< input stream interface for codesynthesis parsing */
-        //int cmdnum; /**< index of Crcl XML command to execute */
-        //int lastcmdnum; /**< last index of Crcl XML command to execute */
-        //::CRCLProgramType::MiddleCommand_sequence& cmds; /**< reference to crcl program XML commands (from codesynthesis parsing)  */
-    };
-#endif
 }

@@ -27,7 +27,7 @@ namespace RCS {
         //s << Crcl::DumpRotationAsCrcl(pose)<< std::endl;
         return s.str();
     }
-       
+
     void getRPY(const RCS::Pose pose, double &roll, double &pitch, double &yaw) {
         tf::Matrix3x3 rot = pose.getBasis();
         rot.getRPY(roll, pitch, yaw);
@@ -54,11 +54,11 @@ namespace RCS {
     // -----------------------------------------------------------------
 
     void CanonCmd::Init() {
-        cmd = CANON_NOOP;
-        status = CANON_WAITING;
-        accprofile = MS_IS_UNSET;
-        type = GOAL;
-        stoptype = UNSET;
+        crclcommand = CanonCmdType::CANON_NOOP;
+        status = CanonStatusType::CANON_WAITING;
+        accprofile = CanonAccProfile::MS_IS_UNSET;
+        type = TrajPointType::GOAL;
+        stoptype = CanonStopMotionType::UNSET;
         bCoordinated = false;
         bStraight = false;
 
@@ -70,15 +70,16 @@ namespace RCS {
         absJointAcc = DEFAULT_JOINT_MAX_ACCEL;
         absJointSpeed = DEFAULT_JOINT_MAX_VEL;
     }
-	bool CanonCmd::IsMotionCmd() {
-		static CanonCmdType motions[] = {CANON_MOVE_JOINT,
-			CANON_MOVE_TO,
-			CANON_MOVE_THRU,
-			CANON_SET_GRIPPER,
-			CANON_STOP_MOTION};
-		CanonCmdType * it = std::find (motions, motions+5, cmd);
-		if(it!=motions+5)
-			return true;
-		return false;
-	}
+
+    bool CanonCmd::IsMotionCmd() {
+        static int motions[] = {CanonCmdType::CANON_MOVE_JOINT,
+            CanonCmdType::CANON_MOVE_TO,
+            CanonCmdType::CANON_MOVE_THRU,
+            CanonCmdType::CANON_SET_GRIPPER,
+            CanonCmdType::CANON_STOP_MOTION};
+        int * it = std::find(motions, motions +sizeof(motions)/sizeof(int), crclcommand);
+        if (it != motions + 5)
+            return true;
+        return false;
+    }
 };

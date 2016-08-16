@@ -13,8 +13,11 @@ find_package(catkin REQUIRED COMPONENTS
   descartes_trajectory
   descartes_planner
   trajectory_msgs
+  geometry_msgs
   sensor_msgs
-    moveit_ros_planning_interface
+  tf
+tf_conversions
+   moveit_ros_planning_interface
     moveit_ros_move_group
     moveit_ros_planning
     moveit_ros_manipulation
@@ -39,11 +42,15 @@ catkin_package(
     descartes_trajectory
     descartes_planner
     sensor_msgs
+    trajectory_msgs
+    geometry_msgs
     moveit_ros_planning_interface
     moveit_ros_move_group
     moveit_ros_planning
     moveit_ros_manipulation
     nistcrcl
+    tf
+tf_conversions
   DEPENDS
     Boost
     Eigen
@@ -104,7 +111,7 @@ add_executable(nist_fanuc
 src/Controller.cpp
 src/RCS.cpp
 src/RCSInterpreter.cpp
-src/urdf_parse_model.cpp
+#src/urdf_parse_model.cpp
 src/Globals.cpp
 src/Kinematics.cpp
 src/Trajectory.cpp
@@ -116,6 +123,7 @@ src/moveit.cpp
 src/trajectoryMaker.cpp
 src/Conversions.cpp
 src/RvizMarker.cpp
+src/arm_kinematics.cpp
 )
 
 #Add all files in subdirectories of the project in
@@ -140,7 +148,7 @@ ${catkin_LIBRARIES}
 ${Boost_LIBRARIES}
 )
 
-catkin_add_gtest(crclmathunittest test/crclmathtest.cpp)
+#catkin_add_gtest(crclmathunittest test/crclmathtest.cpp)
 
 #############
 ## Install ##

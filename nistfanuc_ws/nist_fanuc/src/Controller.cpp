@@ -60,11 +60,14 @@ namespace RCS {
     RCS::CanonWorldModel CController::wm;
     RCS::CanonWorldModel CController::status;
     RCS::CanonWorldModel CController::laststatus;
-    RCS::CMessageQueue<RCS::CanonCmd> CController::cmds;
+    // RCS::CMessageQueue<RCS::CanonCmd> CController::cmds;
     RCS::CMessageQueue<RCS::CanonCmd> CController::robotcmds;
     RCS::CController::xml_message_list CController::donecmds;
-    bool RCS::CController::bGenerateProgram = false;
     bool RCS::CController::bSimulation = true;
+    std::vector<std::string> CController::joint_names;
+    std::vector<std::string> CController::link_names;
+
+    RCS::CMessageQueue<nistcrcl::CrclCommandMsg> CController::crclcmds; /**< queue of commands interpreted from Crcl messages */
     //Trajectory CController::trajectory_model;
 
     size_t RCS::CController::_NumJoints;
@@ -74,31 +77,51 @@ namespace RCS {
     unsigned long CController::_csvlogFlag = 0;
     ALogger CController::CsvLogging;
 
-    CController::CController(double cycletime) : RCS::Thread(cycletime) {
+    CController::CController(double cycletime) :  RCS::Thread(cycletime) {
         eJointMotionPlanner = NOPLANNER;
         eCartesianMotionPlanner = NOPLANNER;
-
+ 
     }
 
     CController::~CController(void) {
     }
 
     bool CController::Verify() {
- //       assert(crclinterface != NULL);
+#ifdef  MOVEITKIN
         assert(Kinematics() != NULL);
+#endif
         assert(TrajectoryModel() != NULL);
+    }
+ 
+    void CController::CmdCallback(const nistcrcl::CrclCommandMsg::ConstPtr& cmdmsg) {
+        // "Deep copy" - not sure necessary, but works.
+        nistcrcl::CrclCommandMsg cmd(*cmdmsg);
+        ROS_INFO("CController::CmdCallback");
+        crclcmds.AddMsgQueue(cmd);
 
     }
-
-    void CController::Init() {
-#ifdef WIN32
-        _set_se_translator(trans_func); // correct thread?
-#endif
+    void CController::Setup(ros::NodeHandle &nh) {
         Name() = "Controller";
         // CSV Logging setup
         std::string sStatus = DumpHeader(",") + "\n";
         CsvLogging.Timestamping() = false;
         CsvLogging.LogMessage("Timestamp," + sStatus);
+        _nh=&nh;
+        crcl_status = _nh->advertise<nistcrcl::CrclStatusMsg>("crcl_status", 10);
+        crcl_cmd = _nh->subscribe("/crcl_command", 10, &CController::CmdCallback, this);
+        armkin=boost::shared_ptr<::Kinematics>( new ::Kinematics());
+        armkin->init(nh);
+        moveit_msgs::GetKinematicSolverInfo::Request request;
+        moveit_msgs::GetKinematicSolverInfo::Response response;
+        armkin->getFKSolverInfo(request, response) ;
+        joint_names.clear(); link_names.clear();
+        _NumJoints=response.kinematic_solver_info.joint_names.size();
+        for(unsigned int i=0; i< response.kinematic_solver_info.joint_names.size(); i++){
+             joint_names.push_back(response.kinematic_solver_info.joint_names[i]);
+        }
+        for(unsigned int i=0; i< response.kinematic_solver_info.link_names.size(); i++){
+             link_names.push_back(response.kinematic_solver_info.link_names[i]);
+        }
     }
 
     RCS::CanonCmd CController::GetLastRobotCommand() {
@@ -136,67 +159,38 @@ namespace RCS {
     int CController::Action() {
         try {
             boost::mutex::scoped_lock lock(cncmutex);
- #if 0
-           CAsioCrclSession *_pSession;
-            /////////////////////////////////////////////////////////////////////////////////////////////
-            // See if new CRCL commanded motion - if so, interpret as RCS command in session
-            if (CAsioCrclSession::InMessages().SizeMsgQueue() > 0) {
-                CrclMessage msg = CAsioCrclSession::InMessages().PopFrontMsgQueue();
-                std::string crclcmd = boost::get<0>(msg);
-                _pSession = boost::get<1>(msg);
-
-                if (_debuglevel > INFORM) {
-                    std::cerr << crclcmd.c_str();
-                }
-
-                Crcl::CrclReturn ret = crclinterface->DelegateCRCLCmd(crclcmd);
-
-                if (ret == Crcl::CANON_STATUSREPLY) {
-#ifdef DUMPCANON_STATUSREPLYCRCLJOINTS
-                    std::cout <<  Crcl::DumpCrclJoints(crclinterface->crclwm._CurrentJoints).c_str();
-#endif
-                    // Dump status to log file if different than last time.
-                    std::string s = DumpStatusReply(&crclinterface->crclwm);
-                    std::string uniqueid = LOGNAME( __FILE__,__LINE__);
-                    if(LogFile.properties[uniqueid]!=s)
-                    {
-                         LogFile.LogFormatMessage(s.c_str());
-                    }
-                    LogFile.properties[uniqueid] = s;
-                   
-                    
-                        
-                    std::string sStatus = Crcl::CrclClientCmdInterface().GetStatusReply(&crclinterface->crclwm);
-                    // Should create zip and save reply to folder, with commands
-                    _pSession->SyncWrite(sStatus);
-                }
+            if(crclcmds.SizeMsgQueue() > 0){
+                // Translate into Controller.cmds 
+                // FIXME: this is an upcast
+                 RCS::CanonCmd cc;
+                 nistcrcl::CrclCommandMsg msg = crclcmds.PopFrontMsgQueue();
+                 cc.Set(msg);
+                _interpreter.ParseCommand(cc);
             }
- #endif
+#if 0
             /////////////////////////////////////////////////////////////////////////////////////////////
             // interpret translated CRCL command. Commands in canonical form: standard units (mm, radians)
             if (Controller.cmds.SizeMsgQueue() > 0) {
                 RCS::CanonCmd cc = Controller.cmds.PopFrontMsgQueue();
                 _interpreter.ParseCommand(cc);
             }
-
+#endif
 
             // Motion commands to robot - only joint at this point
             if (Controller.robotcmds.SizeMsgQueue() == 0) {
-                //crclinterface->crclwm.Update(Crcl::CommandStateEnum("CRCL_Done"));
-                _lastcc = _newcc;
-                _lastcc.status = CANON_DONE;
+                 _lastcc = _newcc;
+                _lastcc.status = CanonStatusType::CANON_DONE;
             } else {
-                //crclinterface->crclwm.Update(Crcl::CommandStateEnum("CRCL_Working"));
                 _lastcc = _newcc;
                 _newcc = Controller.robotcmds.PopFrontMsgQueue();
-                _newcc.status = CANON_WORKING;
+                _newcc.status = CanonStatusType::CANON_WORKING;
                 RCS::Controller.status.echocmd = _newcc;
 
-                if (_newcc.cmd == RCS::CANON_DWELL) {
+                if (_newcc.crclcommand == CanonCmdType::CANON_DWELL) {
                     // This isn't very exact, as there will some time wasted until we are here
                     // Thread cycle time already adjusted to seconds
-                    _newcc.dwell -= ((double) CycleTime());
-                    if (_newcc.dwell > 0.0) {
+                    _newcc.dwell_seconds -= ((double) CycleTime());
+                    if (_newcc.dwell_seconds > 0.0) {
                         Controller.robotcmds.InsertFrontMsgQueue(_newcc);
                     }
                 } else {
@@ -204,7 +198,6 @@ namespace RCS {
                     Controller.JointWriter()->JointTrajectoryPositionWrite(_newcc.joints);
 #define MARKERS
 #ifdef MARKERS
-                    //RCS::Pose goalpose = Kinematics()->FK(_newcc.joints.position);
                     RCS::Pose goalpose = EEPoseReader()->GetLinkValue(RCS::Controller.links.back());
                     std::cout << "Marker Pose " << DumpPose(goalpose).c_str();
                     RvizMarker()->Send(goalpose);
@@ -299,6 +292,15 @@ namespace RCS {
 
 
     // ----------------------------------------------------
+    /**
+     *  moveit_msgs::GetPositionIK::Request request;
+     *  moveit_msgs::GetPositionIK::Response response;
+        request.fk_link_names = linknames;
+        request.robot_state.joint_state = joint_state;// # JointState()
+        request.robot_state.joint_state.header.frame_id = "base_link";
+        request.header.frame_id = "base_link";
+     
+     */
 
     RobotStatus::RobotStatus(double cycletime) : RCS::Thread(cycletime) {
         Name() = "RobotStatus";
@@ -340,97 +342,5 @@ namespace RCS {
         }
         return 1;
     }
-#if 0
-    //-------------------------------------------------------
-    boost::mutex RobotProgram::_progmutex;
-#if 0
-    ::CRCLProgramType::MiddleCommand_sequence & DummyInit() {
-        static const ::CRCLProgramType::MiddleCommand_sequence &a = ::CRCLProgramType::MiddleCommand_sequence();
-        return const_cast< ::CRCLProgramType::MiddleCommand_sequence &> (a);
-    }
-#endif
-    RobotProgram::RobotProgram(double cycletime) : RCS::Thread(cycletime),
-    cmds(DummyInit()) {
-    }
-    void RobotProgram::ExecuteProgramFromFile(std::string programpath) {
-        _programname = programpath;
-        std::string str;
-        Globals.ReadFile(programpath, str);
-        return ExecuteProgram( str);
-    }
-
-    void RobotProgram::ExecuteProgram(std::string str) {
-        // Fixme: what if not done with last commands?
-        boost::mutex::scoped_lock lock(_progmutex);
-
-        istr.str(str);
-        try {
-
-             if (_delegate.FindLeadingElement(str) == "</CRCLProgram>") {
-
-                // codesynthesis parse of xml into C++ data structures
-                boost::shared_ptr<::CRCLProgramType> crclProgram(
-                        CRCLProgram(istr, xml_schema::flags::dont_initialize | xml_schema::flags::dont_validate | xml_schema::flags::keep_dom));
-                // This is an array of crcl program commands
-                cmds.insert(cmds.end(), crclProgram->MiddleCommand().begin(),crclProgram->MiddleCommand().end()) ;
-                //cmdnum = 0;
-                //lastcmdnum = -1;
-
-            }            
-        } catch (const xml_schema::exception& e) {
-            // Most likely here due to illegal XML in Crcl program. Note, is not validated against XSD.
-            std::cout << "Parse Exception RobotProgram::ExecuteProgram:" << e << std::endl;
-        } catch (...) {
-            // Most likely here due to illegal XML in Crcl program. Note, is not validated against XSD.
-            std::cout << "Unhandled exception RobotProgram::ExecuteProgram" ;
-        }
-    }
-
-
-    int RobotProgram::Action() {
-        try {
-            boost::mutex::scoped_lock lock(_progmutex); //? correct mutex?
-
-            if (Controller.robotcmds.SizeMsgQueue() == 0) {
-                // fixme poor mans wait til done 
-                // No more quit?
-                return 0;
-            }
-            if (CAsioCrclSession::InMessages().SizeMsgQueue() > 0)
-                return 1;
-            // wait until last Crcl XML message has finished being interpreted
-#ifdef HEAVYDEBUG
-            std::cout<< "Command num" << cmdnum << "Commands size=" << cmds.size() << std::endl;
-#endif
-            if (cmds.size()>0) {
-                // Got new Crcl XML message
- 
-                Crcl::CrclReturn eRetMotion;
-                // could we miss a cmd in a crcl xml -> cnc cmd -> robot motion cmd?
-                do {
-                    //cmdnum++;
-                    ::CRCLCommandType & crclCommand(cmds.front()); // cmds[cmdnum - 1]);
-                    cmds.erase(cmds.begin());
-                    std::cout << Crcl::DumpCrclCommand(crclCommand) << std::endl;
-                    // does this update my own crcl wm? or all?
-                    eRetMotion = _delegate.DelegateCRCLCmd(crclCommand);
-                }// if not motion command, nothing added to controller queue
-                while (eRetMotion != Crcl::CANON_MOTION);
-               
-                // \fixme wait to do next command until last command is done
-                // if( RCS::Controller.status.echocmd.ParentCommandID() 
-                // Look for "Done" then allow new command - or rather almost done?
-                // test lame first
-                //if( RCS::Controller.LastCC().status == CANON_DONE)
-
-
-            }
-
-        } catch (...) {
-            std::cout << "Unhandled exception in RobotProgram::Action()\n";
-        }
-        return 1;
-    }
-#endif
 }
 

@@ -460,7 +460,7 @@ std::vector<RCS::Pose> TrajectoryMaker::makeCartesianTrajectory(IRate rates,
         RCS::Pose _curPos,
         RCS::Pose _goalPos) {
     std::vector<RCS::Pose> poses;
-    rates.MsFlag() = RCS::MS_IS_UNSET;
+    rates.MsFlag() = CanonAccProfile::MS_IS_UNSET;
     double final_velocity = rates.FinalVelocity();
     double current_feedrate = rates.CurrentFeedrate();
     double current_velocity = rates.CurrentVelocity();
@@ -472,14 +472,14 @@ std::vector<RCS::Pose> TrajectoryMaker::makeCartesianTrajectory(IRate rates,
     RCS::Pose pose;
     double totalIncrements = 0.0;
 
-    while (rates.MsFlag() != RCS::MS_IS_DONE) {
+    while (rates.MsFlag() != CanonAccProfile::MS_IS_DONE) {
       //  double dIncrement = runTrapezoidalCycle(rates, _dist3(goal, current));
         RCS::Vector3 diff =  goal- current;
         double dIncrement = runTrapezoidalCycle(rates, sqrt(diff.dot(diff)));
        Globals.DebugMessage(Logger.StrFormat("dIncrement=%6.4f\n", dIncrement));
 
         if (dIncrement < EPSILON) {
-            rates.MsFlag() = RCS::MS_IS_DONE;
+            rates.MsFlag() = CanonAccProfile::MS_IS_DONE;
             continue;
         }
         totalIncrements += dIncrement;
@@ -577,7 +577,7 @@ double TrajectoryMaker::runTrapezoidalCycle(IRate & rates, double distance_to_go
     double vpgNewVel;
     double vpgTicks_to_stop;
 
-    RCS::CanonAccProfile & msflag(rates.MsFlag());
+    int & msflag(rates.MsFlag());
     double & final_velocity(rates.FinalVelocity());
     double & current_feedrate(rates.CurrentFeedrate());
     double & current_velocity(rates.CurrentVelocity());
@@ -587,7 +587,7 @@ double TrajectoryMaker::runTrapezoidalCycle(IRate & rates, double distance_to_go
     double dIncrement = 0;
 
     if (distance_to_go < EPSILON) {
-        msflag = RCS::MS_IS_DONE;
+        msflag = CanonAccProfile::MS_IS_DONE;
         return 0.0;
     }
 
@@ -606,7 +606,7 @@ double TrajectoryMaker::runTrapezoidalCycle(IRate & rates, double distance_to_go
         // Test for end
         // if( distance_to_go <  (current_velocity + final_velocity) * .5 * cycle_time)
         if (distance_to_go < (final_velocity + maximum_accel) * .5 * cycle_time) {
-            msflag = RCS::MS_IS_DONE;
+            msflag = CanonAccProfile::MS_IS_DONE;
             rates.CurrentAccel()=0.0;
             vpgNewVel = final_velocity;
             dIncrement = distance_to_go;
@@ -614,7 +614,7 @@ double TrajectoryMaker::runTrapezoidalCycle(IRate & rates, double distance_to_go
             // Start declerating when we are within range
             if (distance_to_go < (decl_distance_to_final_velocity + /* fudge */ (maximum_accel * cycle_time * 0.5))) {
                 // FIXME: or if trans->current_velocity  > current_velocity - changed
-                msflag = RCS::MS_IS_DECEL;
+                msflag = CanonAccProfile::MS_IS_DECEL;
 
                 // This should be a smoother function
                 vpgNewVel = current_velocity - maximum_accel;
@@ -638,11 +638,11 @@ double TrajectoryMaker::runTrapezoidalCycle(IRate & rates, double distance_to_go
                 // This should be a smoother function
                 vpgNewVel = current_velocity + maximum_accel;
 
-                msflag = RCS::MS_IS_ACCEL;
+                msflag = CanonAccProfile::MS_IS_ACCEL;
 
                 if (vpgNewVel > current_feedrate) {
                     vpgNewVel = current_feedrate;
-                    msflag = RCS::MS_IS_CONST;
+                    msflag = CanonAccProfile::MS_IS_CONST;
                 }
 
                 dIncrement = fabs(vpgNewVel + current_velocity) * 0.5 * cycle_time;
