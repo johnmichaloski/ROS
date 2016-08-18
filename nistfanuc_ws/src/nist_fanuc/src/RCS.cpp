@@ -46,7 +46,7 @@ namespace RCS {
         maxJointVel = DEFAULT_JOINT_MAX_VEL;
 
         //for (size_t i = 0; i < RCS::Controller.robot_model.GetMovingJoints(); i++) {
-        for (size_t i = 0; i < RCS::Controller._NumJoints; i++) {
+        for (size_t i = 0; i < RCS::Controller.Kinematics()->NumJoints(); i++) {
             currentjoints.position.push_back(0.0);
             currentjoints.velocity.push_back(0.0);
         }

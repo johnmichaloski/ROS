@@ -22,8 +22,8 @@
 #include <stdarg.h>
 #include <sstream>
 #include <time.h>
-#include "Logging.h"
-extern ALogger LogFile;
+///#include "Logging.h"
+//extern ALogger LogFile;
 
 // #ifdef DUMPCANON_STATUSREPLYCRCLJOINTS
 // #ifdef HEAVYDEBUG
@@ -88,9 +88,9 @@ public:
 	* there is no easy mechanism in C++ to extend classes (e.g., string) like in C#.
 	*/
 	CGlobals( )
-		: Debug(Logger.DebugLevel( ) ) // ,        DbgConsole(GLogger.OutputConsole())
+		//: Debug(Logger.DebugLevel( ) ) // ,        DbgConsole(GLogger.OutputConsole())
 	{
-		Debug       = 0;		
+		//Debug       = 0;		
 		SocketPort  = "64444";
 	}
 
@@ -113,24 +113,6 @@ public:
 		}
 		va_end(argptr);
 		return tmp.substr(0, m);
-	}
-
-	bool IsDebug ( )
-	{
-		return Debug > 3;
-	}
-	/*!
-	* \brief dumps to std out global parameters set at runtime parameters.
-	*/
-	void Dump ( )
-	{
-		std::stringstream sstr;
-
-		sstr << "Globals SocketPort " << SocketPort << std::endl;
-		sstr << "Globals Debug " << Debug << std::endl;
-		sstr << "Globals Inifile " << inifile << std::endl;
-		sstr << "Globals ExeDirectory " << ExeDirectory << std::endl;
-		Logger.Fatal(sstr.str( ).c_str( ) );
 	}
 
 	/*!
@@ -171,6 +153,7 @@ public:
 	* \return a new trimmed string 
 	*/
 	std::string   Trim (std::string  s);
+#if 0
 
 	/*!
 	* \brief Prints an diagnostic message to the debug reporting mechanism. (cout or OutputDebugString)
@@ -178,20 +161,19 @@ public:
 	* \return a error result integer. (e.g., E_FAIL or -1). 
 	*/
 	unsigned int  DebugMessage (std::string errmsg);
-
 	/*!
 	* \brief Prints an error message to the error reporting mechanism. 
 	* \param str errmsg is the error message that is posted to the error reporting mechanism.
 	* \return a error result integer. (e.g., E_FAIL or -1). 
 	*/
 	unsigned int  ErrorMessage (std::string errmsg);
-
+#endif
 	/*!
 	* \brief Prints a format string and arguments as a diagnostic message to the debug reporting mechanism. (cout or OutputDebugString)
 	* \param  fmt is the error format statement that uses parameters that follow and is posted to the debug reporting mechanism.
 	* \return a error result integer. (e.g., E_FAIL or -1). 
 	*/
-	unsigned int  DebugStrFormat (const char *fmt, ...);
+	//unsigned int  DebugStrFormat (const char *fmt, ...);
 
 	/*!
 	* \brief GetTimeStamp returns a timestamp string depending on the input format.
@@ -202,7 +184,7 @@ public:
 
 	// -----------------------------------------
 	std::map< std::string, std::string> _appproperties; /**<map of application properties, e.g., ["prop"]="value" */
-	int &       Debug;
+	//int &       Debug;
 	std::string ExeDirectory; /**< the path to directory where exe is located  */
 	std::string inifile; /**< inifile path name  */
 	std::string SocketPort; /**< socket port to listen for Crcl clients  */

@@ -16,21 +16,22 @@
 #include <list>
 #include <ros/ros.h>
 #include <ros/package.h>
-#include <nist_fanuc/arm_kinematics.h>
 
-#include "nist_fanuc/RCSInterpreter.h"
-#include "nist_fanuc/Trajectory.h"
-#include "Communication.h"
-#include "moveit.h"
-#include "RvizMarker.h"
+
 #include "NIST/RCSThreadTemplate.h"
 #include "NIST/RCSMsgQueue.h"
+#include "NIST/BLogging.h"
 #include "nist_fanuc/Gripper.h"
-
-
+#include "nist_fanuc/RCSInterpreter.h"
+#include "nist_fanuc/Trajectory.h"
+#include "nist_fanuc/Communication.h"
+#include "nist_fanuc/moveit.h"
+#include "nist_fanuc/RvizMarker.h"
+#include "nist_fanuc/arm_kinematics.h"
 
 #include "nistcrcl/CrclCommandMsg.h"
 #include "nistcrcl/CrclStatusMsg.h"
+
 namespace RCS {
 
     extern boost::mutex cncmutex;
@@ -60,9 +61,10 @@ namespace RCS {
         static RCS::CMessageQueue<nistcrcl::CrclCommandMsg > crclcmds; /**< queue of commands interpreted from Crcl messages */
         static xml_message_list donecmds; /**< list of commands interpreted from Crcl messages that have completed*/
         static RCS::CMessageQueue<RCS::CanonCmd> robotcmds; /**< list of commands to be sent to robot */
-        static size_t _NumJoints; /**< number of joints in controller robot - assuming serial link manipulator */
-        static std::vector<std::string> joint_names;
-        static std::vector<std::string> link_names;
+ 
+//		static size_t _NumJoints; /**< number of joints in controller robot - assuming serial link manipulator */
+//        static std::vector<std::string> joint_names;
+//        static std::vector<std::string> link_names;
         
         /*!
          *\brief Verifies that all the pointer references in the controller have been instantiated (i.e., not null).
@@ -102,7 +104,8 @@ namespace RCS {
         ros::Subscriber crcl_cmd; /**< ros subscriber information used for crcl command updates */
         void CmdCallback(const nistcrcl::CrclCommandMsg::ConstPtr& cmdmsg);
         ros::NodeHandle *_nh;
-        boost::shared_ptr<::Kinematics> armkin;
+		void MotionLogging();
+        //boost::shared_ptr<::Kinematics> armkin;
         /*!
          *\brief Routine to set the kinematics reference pointer. Uses the interface class IKinematics, but can have any implementation instance. 
          */
@@ -148,7 +151,7 @@ namespace RCS {
         static unsigned long _debugtype; /**<  output crcl xz rotation or roll,pitch, yaw */
         static unsigned long _debuglevel; /**<  level of debugging, 0 least, 5 most */
         static unsigned long _csvlogFlag;
-        static ALogger CsvLogging; /**< controller status csv logging instance */
+        //static ALogger CsvLogging; /**< controller status csv logging instance */
 
         enum MotionPlannerEnum {
             NOPLANNER = 0, MOVEIT, DESCARTES, BASIC, WAYPOINT, GOMOTION

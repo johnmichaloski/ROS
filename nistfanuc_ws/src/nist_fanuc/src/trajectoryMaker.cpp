@@ -25,6 +25,7 @@
 #include <functional> // std::minus
 #include "Globals.h"
 #include <algorithm>
+#include "NIST/BLogging.h"
 
 using namespace RCS;
 
@@ -476,7 +477,7 @@ std::vector<RCS::Pose> TrajectoryMaker::makeCartesianTrajectory(IRate rates,
       //  double dIncrement = runTrapezoidalCycle(rates, _dist3(goal, current));
         RCS::Vector3 diff =  goal- current;
         double dIncrement = runTrapezoidalCycle(rates, sqrt(diff.dot(diff)));
-       Globals.DebugMessage(Logger.StrFormat("dIncrement=%6.4f\n", dIncrement));
+      LOG_DEBUG << Globals.StrFormat("dIncrement=%6.4f\n", dIncrement);
 
         if (dIncrement < EPSILON) {
             rates.MsFlag() = CanonAccProfile::MS_IS_DONE;
@@ -486,7 +487,7 @@ std::vector<RCS::Pose> TrajectoryMaker::makeCartesianTrajectory(IRate rates,
         RCS::Pose pose = computeTranslation(_curPos, _goalPos, totalIncrements);
         poses.push_back(pose);
         current = RCS::Vector3(pose.getOrigin().x(), pose.getOrigin().y(), pose.getOrigin().z());
-        Globals.DebugMessage(Logger.StrFormat("Current=%6.4f:%6.4f:%6.4f\n", pose.getOrigin().x(), pose.getOrigin().y(), pose.getOrigin().z()));
+        LOG_DEBUG << Globals.StrFormat("Current=%6.4f:%6.4f:%6.4f\n", pose.getOrigin().x(), pose.getOrigin().y(), pose.getOrigin().z());
     }
 
     rates.CurrentAccel()=0.0;

@@ -89,6 +89,26 @@ namespace RCS {
             this->resize(3, 0.0);
         } // position, orientation
     };
+    inline geometry_msgs::Pose& ConvertTfPose2GeometryPose(RCS::Pose & m, geometry_msgs::Pose & p)
+    {
+	    p.position.x = m.getOrigin().x();
+	    p.position.y = m.getOrigin().y();
+	    p.position.z = m.getOrigin().z();
+	    p.orientation.x = m.getRotation().x();
+	    p.orientation.y = m.getRotation().y();
+	    p.orientation.z = m.getRotation().z();
+	    p.orientation.w = m.getRotation().w();
+	    return p;
+	}
+
+	inline RCS::Pose & ConvertGeometryPose2TfPose(const geometry_msgs::Pose & m,RCS::Pose & p)
+	{
+	    RCS::Vector3 trans(m.position.x,m.position.y,m.position.z);
+	    p.setOrigin(trans);
+	    RCS::Rotation q(m.orientation.x,m.orientation.y,m.orientation.z,m.orientation.w);
+	    p.setRotation(q);
+		return p;
+	}
 
     /*!
      * \brief enumeration of  length units. Conversion into ROS compatible meters.
@@ -292,7 +312,7 @@ namespace RCS {
      * \brief CanonCmd is the controller command structure. 
      * 
      * int64 crclcommand
-
+	   crclcommandnum
         # https://github.com/ros/common_msgs 
         geometry_msgs/Pose  finalpose
         geometry_msgs/Pose[] waypoints

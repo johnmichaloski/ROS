@@ -129,7 +129,7 @@ std::vector<JointState> RCSInterpreter::PlanCartesianMotion(std::vector<RCS::Pos
 }
 
 int RCSInterpreter::ParseCommand(RCS::CanonCmd cc) {
-    IfDebug(Globals.ErrorMessage("RCSInterpreter::ParseCommand\n"));
+ //   IfDebug(Globals.ErrorMessage("RCSInterpreter::ParseCommand\n"));
 
     // This approach should debounce multiple commands to same position - e.g., 0->30, 0->30
     JointState currentjoints;

@@ -29,7 +29,7 @@
 // ROS
 #include <ros/ros.h>
 #include <urdf/model.h>
-
+#include <sensor_msgs/JointState.h>
 /***
     // Couple code attempts at reading from robot joints names - see above
     crclinterface->crclwm.jointnames.clear();

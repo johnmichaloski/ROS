@@ -23,7 +23,7 @@ tf_conversions
     moveit_ros_manipulation
 )
 
-find_package(Boost REQUIRED system thread chrono regex)
+find_package(Boost REQUIRED system thread chrono regex log_setup log)
 find_package(Eigen REQUIRED)
 
 #The catkin_package function specifies which dependencies your package exports to its dependencies. In particular, #INCLUDE_DIRS specifies which directory in your package contains the header directory that should be on the include #path for any packages that compile against your package.
@@ -68,6 +68,7 @@ tf_conversions
 set(CMAKE_CXX_FLAGS "-w ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "-DDEBUG ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-DBOOST_LOG_DYN_LINK ${CMAKE_CXX_FLAGS}")
 
 message("DEBUG variable catkin_INCLUDEDIR: ${catkin_INCLUDEDIR}")
 message("DEBUG variable Eigen_INCLUDE_DIRS:  ${Eigen_INCLUDE_DIRS}")
@@ -124,6 +125,7 @@ src/trajectoryMaker.cpp
 src/Conversions.cpp
 src/RvizMarker.cpp
 src/arm_kinematics.cpp
+src/BLogging.cpp
 )
 
 #Add all files in subdirectories of the project in

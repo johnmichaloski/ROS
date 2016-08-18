@@ -14,7 +14,7 @@
 #include <map>
 #include <iostream>
 CGlobals Globals;
-ALogger LogFile;
+//ALogger LogFile;
 void DebugBreak() {
     assert(0);
 }
@@ -78,6 +78,7 @@ void CGlobals::AppendFile (std::string filename, std::string  contents)
 #include "security.h"
 #pragma comment(lib, "Secur32.lib")
 
+#if 0
 unsigned int CGlobals::ErrorMessage (std::string errmsg)
 {
     OutputDebugString(errmsg.c_str( ) );
@@ -89,8 +90,16 @@ unsigned int CGlobals::DebugMessage (std::string errmsg)
     OutputDebugString(errmsg.c_str( ) );
     return E_FAIL;
 }
+#endif
 // std::string CGlobals::ExeDirectory()
-// {
+// { unsigned int CGlobals::DebugStrFormat(const char *fmt, ...) {
+    va_list argptr;
+
+    va_start(argptr, fmt);
+    std::string str = FormatString(fmt, argptr);
+    va_end(argptr);
+    return -1; // FIXME: return DebugMessage( str);
+}
 //	TCHAR buf[1000];
 //	GetModuleFileName(NULL, buf, 1000);
 //	std::string path(buf);
@@ -123,7 +132,14 @@ std::string CGlobals::GetUserDomain ( )
 }
 #endif
 std::string CGlobals::GetTimeStamp (TimeFormat format)
-{
+{ unsigned int CGlobals::DebugStrFormat(const char *fmt, ...) {
+    va_list argptr;
+
+    va_start(argptr, fmt);
+    std::string str = FormatString(fmt, argptr);
+    va_end(argptr);
+    return -1; // FIXME: return DebugMessage( str);
+}
     SYSTEMTIME st;
     char       timestamp[64];
 
@@ -143,6 +159,7 @@ std::string CGlobals::GetTimeStamp (TimeFormat format)
     return timestamp;
 }
 #else
+#if 0
 unsigned int CGlobals::ErrorMessage (std::string errmsg)
 {
     std::cout << errmsg;
@@ -153,7 +170,7 @@ unsigned int CGlobals::DebugMessage (std::string errmsg)
     std::cout << errmsg;
     return -1;
 }
-
+#endif
 static inline std::string FormatString(const char *fmt, va_list ap) {
     int m, n = (int) strlen(fmt) + 1028;
     std::string tmp(n, '0');
@@ -166,14 +183,6 @@ static inline std::string FormatString(const char *fmt, va_list ap) {
     return tmp.substr(0, m);
 }
 
- unsigned int CGlobals::DebugStrFormat(const char *fmt, ...) {
-    va_list argptr;
-
-    va_start(argptr, fmt);
-    std::string str = FormatString(fmt, argptr);
-    va_end(argptr);
-    return DebugMessage( str);
-}
 
 std::string CGlobals::GetTimeStamp (TimeFormat format)
 {

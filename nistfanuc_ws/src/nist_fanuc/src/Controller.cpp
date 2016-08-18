@@ -31,30 +31,16 @@
 
 // No namespace declarations
 //////////////////////////////////
-ALogger Logger;
+//ALogger Logger;
 
-
+#include "BLogging.h"
 
 // RCS namespace declarations
 //////////////////////////////////
 namespace RCS {
     boost::mutex cncmutex;
-    static const char *sStateEnums[] = {
-        "CRCL_Done", "CRCL_Error", "CRCL_Working", "CRCL_Ready"
-    };
-#ifdef WIN32
 
-    static void trans_func(unsigned int u, EXCEPTION_POINTERS *pExp) {
-        std::stringstream str;
 
-        str << "CController trans_func - Code = " << pExp->ExceptionRecord->ExceptionCode << std::endl;
-
-        OutputDebugString(str.str().c_str());
-        throw std::exception();
-    }
-#else
-
-#endif
     RCS::CController Controller(DEFAULT_LOOP_CYCLE);
     std::vector<std::string>  RCS::CController::links;
     RCS::CanonWorldModel CController::wm;
@@ -64,18 +50,10 @@ namespace RCS {
     RCS::CMessageQueue<RCS::CanonCmd> CController::robotcmds;
     RCS::CController::xml_message_list CController::donecmds;
     bool RCS::CController::bSimulation = true;
-    std::vector<std::string> CController::joint_names;
-    std::vector<std::string> CController::link_names;
 
     RCS::CMessageQueue<nistcrcl::CrclCommandMsg> CController::crclcmds; /**< queue of commands interpreted from Crcl messages */
     //Trajectory CController::trajectory_model;
 
-    size_t RCS::CController::_NumJoints;
-
-    unsigned long CController::_debuglevel = 0;
-    unsigned long CController::_debugtype = (unsigned long) RPY;
-    unsigned long CController::_csvlogFlag = 0;
-    ALogger CController::CsvLogging;
 
     CController::CController(double cycletime) :  RCS::Thread(cycletime) {
         eJointMotionPlanner = NOPLANNER;
@@ -102,13 +80,17 @@ namespace RCS {
     }
     void CController::Setup(ros::NodeHandle &nh) {
         Name() = "Controller";
+#if 0
         // CSV Logging setup
         std::string sStatus = DumpHeader(",") + "\n";
         CsvLogging.Timestamping() = false;
         CsvLogging.LogMessage("Timestamp," + sStatus);
+#endif
         _nh=&nh;
         crcl_status = _nh->advertise<nistcrcl::CrclStatusMsg>("crcl_status", 10);
-        crcl_cmd = _nh->subscribe("/crcl_command", 10, &CController::CmdCallback, this);
+        crcl_cmd = _nh->subscribe("crcl_command", 10, &CController::CmdCallback, this);
+        CController::status.currentjoints = Controller.Kinematics()->ZeroJointState();
+#if 0
         armkin=boost::shared_ptr<::Kinematics>( new ::Kinematics());
         armkin->init(nh);
         moveit_msgs::GetKinematicSolverInfo::Request request;
@@ -122,6 +104,7 @@ namespace RCS {
         for(unsigned int i=0; i< response.kinematic_solver_info.link_names.size(); i++){
              link_names.push_back(response.kinematic_solver_info.link_names[i]);
         }
+#endif
     }
 
     RCS::CanonCmd CController::GetLastRobotCommand() {
@@ -143,7 +126,7 @@ namespace RCS {
                 throw std::runtime_error("Zero joint positions\n");
             return cc.joints;
         } catch(std::exception err){
-            std::cout << "CController::GetLastJointState exception" << err.what(); 
+            LOG_DEBUG << "CController::GetLastJointState exception" << err.what(); 
         } catch (...) {
             // exception if nothing in queue
         }
@@ -156,25 +139,52 @@ namespace RCS {
         return EEPoseReader()->GetLinkValue(RCS::Controller.links.back());
         //return RCS::Controller.Kinematics()->FK(lastjoints.position);
     }
+	/**
+	std_msgs/Header header
+
+	uint8 crclcommandnum
+	uint8 crclstatusnum
+	uint8 crclcommandstatus
+	################
+	uint8 done=0
+	uint8 error=1
+	uint8 working=2
+	################
+
+	geometry_msgs/Pose  statuspose
+	sensor_msgs/JointState statusjoints
+	float64 eepercent
+
+	*/
     int CController::Action() {
         try {
             boost::mutex::scoped_lock lock(cncmutex);
             if(crclcmds.SizeMsgQueue() > 0){
                 // Translate into Controller.cmds 
                 // FIXME: this is an upcast
-                 RCS::CanonCmd cc;
-                 nistcrcl::CrclCommandMsg msg = crclcmds.PopFrontMsgQueue();
-                 cc.Set(msg);
-                _interpreter.ParseCommand(cc);
-            }
-#if 0
-            /////////////////////////////////////////////////////////////////////////////////////////////
-            // interpret translated CRCL command. Commands in canonical form: standard units (mm, radians)
-            if (Controller.cmds.SizeMsgQueue() > 0) {
-                RCS::CanonCmd cc = Controller.cmds.PopFrontMsgQueue();
-                _interpreter.ParseCommand(cc);
-            }
+				RCS::CanonCmd cc;
+				nistcrcl::CrclCommandMsg msg = crclcmds.PopFrontMsgQueue();
+				cc.Set(msg);
+#define FEEDBACKTEST
+#ifdef FEEDBACKTEST
+				Controller.status.echocmd=cc; /**<  copy of current command */
+				Controller.status.currentjoints=Controller.Kinematics()->UpdateJointState(cc.jointnum, Controller.status.currentjoints, cc.joints); 
+				Controller.status.currentpose=Controller.Kinematics()->FK(cc.joints.position); /**<  current robot pose */
+                                
+				nistcrcl::CrclStatusMsg statusmsg;
+				statusmsg.header.stamp = ros::Time::now();
+				statusmsg.crclcommandstatus=0; // done
+				statusmsg.crclcommandnum=cc.crclcommandnum;
+				statusmsg.crclstatusnum = cc.crclcommandnum;
+				ConvertTfPose2GeometryPose(Controller.status.currentpose, statusmsg.statuspose );
+				statusmsg.statusjoints = Controller.status.currentjoints;
+				statusmsg.eepercent = cc.eepercent;
+				crcl_status.publish(statusmsg);
+
+#else                
+				_interpreter.ParseCommand(cc);
 #endif
+            }
 
             // Motion commands to robot - only joint at this point
             if (Controller.robotcmds.SizeMsgQueue() == 0) {
@@ -199,22 +209,14 @@ namespace RCS {
 #define MARKERS
 #ifdef MARKERS
                     RCS::Pose goalpose = EEPoseReader()->GetLinkValue(RCS::Controller.links.back());
-                    std::cout << "Marker Pose " << DumpPose(goalpose).c_str();
+                    LOG_DEBUG << "Marker Pose " << DumpPose(goalpose).c_str();
                     RvizMarker()->Send(goalpose);
 #endif
                 }
             }
 
-            /////////////////////////////////////////////////////////////////////////////////////////////
-            // Save status to csv logging file?
-            if (CsvLogging.DebugLevel() > INFORM) {
-                std::string sStatus = Dump(",") + "\n";
+			// MotionLogging();
 
-                if (lastlogstatus != sStatus) {
-                    CsvLogging.LogMessage(Logger.Timestamp() + "," + sStatus);
-                }
-                lastlogstatus = sStatus;
-            }
         } catch (std::exception & e) {
             std::cerr << "Exception in  CController::Action() thread: " << e.what() << "\n";
         } catch (...) {
@@ -223,73 +225,7 @@ namespace RCS {
         return 1;
     }
 
-    std::string CController::DumpHeader(std::string separator) {
-        std::stringstream str;
-        const char * fields[] = {
-            "CommandID", "StatusID", "State", "Pose-X", "Pose-Y", "Pose-Z",
-            "Xrot-I", "Xrot-J", "Xrot-K", "Zrot-I", "Zrot-J", "Zrot-K"
-        };
-        const char *rpyfields[] = {"CommandID", "StatusID", "State", "Pose-X", "Pose-Y", "Pose-Z", "Roll", "Pitch", "Yaw"};
-
-        if (_debugtype == CRCL) {
-            for (size_t i = 0; i < sizeof ( fields) / sizeof ( fields[0]); i++) {
-                str << fields[i] << separator.c_str();
-            }
-        } else {
-            for (size_t i = 0; i < sizeof ( rpyfields) / sizeof ( rpyfields[0]); i++) {
-                str << rpyfields[i] << separator.c_str();
-            }
-        }
-
-        for (size_t i = 0; i < 6; i++) {
-            str << ((i > 0) ? separator.c_str() : "") << "Joint" << i;
-        }
-        return str.str();
-    }
-
-    std::string CController::Dump(std::string separator) {
-        std::stringstream str;
-
-        str.precision(4);
-
-        // str << Globals.GetTimeStamp(CGlobals::GMT_UV_SEC)   << separator.c_str();
- //       str << crclinterface->crclwm.CommandID() << separator.c_str();
- //       str << crclinterface->crclwm.StatusID() << separator.c_str();
-        //str << sStateEnums[crclinterface->crclwm.CommandStatus()] << separator.c_str();
- //       str << crclinterface->crclwm.CommandStatus() << separator.c_str();
-        //RCS::Pose pose = Crcl::Convert(crclinterface->crclwm._CurrentPose);
- //       str << pose.getOrigin().x() << separator.c_str();
- //       str << pose.getOrigin().y() << separator.c_str();
- //       str << pose.getOrigin().z() << separator.c_str();
-
-        if (_debugtype == CRCL) {
-#if 0
-            str << crclinterface->crclwm._CurrentPose.XAxis().I() << separator.c_str();
-            str << crclinterface->crclwm._CurrentPose.XAxis().J() << separator.c_str();
-            str << crclinterface->crclwm._CurrentPose.XAxis().K() << separator.c_str();
-            str << crclinterface->crclwm._CurrentPose.ZAxis().I() << separator.c_str();
-            str << crclinterface->crclwm._CurrentPose.ZAxis().J() << separator.c_str();
-            str << crclinterface->crclwm._CurrentPose.ZAxis().K();
-#endif
-        } else if (_debugtype == RPY) {
-#if 0
-            double roll, pitch, yaw;
-            getRPY(pose, roll, pitch, yaw);
-            //tf::Matrix3x3 rot = pose.getBasis();
-            //rot.getRPY(roll, pitch, yaw);
-            //pose.rotation.getRPY(roll, pitch, yaw);
-            str << roll << separator.c_str();
-            str << pitch << separator.c_str();
-            str << yaw;
-#endif
-        }
-//        sensor_msgs::JointState joints = Crcl::Convert(crclinterface->crclwm._CurrentJoints);
-//        for (size_t i = 0; i < joints.position.size(); i++) {
-//            str << separator.c_str() << joints.position[i];
-//        }
-        return str.str();
-    }
-
+ 
 
     // ----------------------------------------------------
     /**
@@ -323,13 +259,13 @@ namespace RCS {
                 RCS::Controller.status.currentpose = RCS::Controller.EEPoseReader()->GetLinkValue(RCS::Controller.links.back());
 #ifdef DEBUGCONTROLLERTOOL0POSE
                 std::string str= RCS::DumpPose(RCS::Controller.status.currentpose);
-                std::cout << str.c_str();
+               LOG_DEBUGt << str.c_str();
 #endif
 #if 0
                 if (--i < 0) {
-                    std::cout << "Current Joints " << VectorDump<double>(cjoints.position).c_str();
-                    std::cout << "Canon pose " << DumpPose(RCS::Controller.status.currentpose);
-                    std::cout << "Crcl Pose " << Crcl::DumpPose(Crcl::Convert(RCS::Controller.status.currentpose), ",");
+                    LOG_DEBUG << "Current Joints " << VectorDump<double>(cjoints.position).c_str();
+                    LOG_DEBUG << "Canon pose " << DumpPose(RCS::Controller.status.currentpose);
+                    LOG_DEBUG << "Crcl Pose " << Crcl::DumpPose(Crcl::Convert(RCS::Controller.status.currentpose), ",");
                     i = 20;
                 }
 #endif
@@ -338,7 +274,7 @@ namespace RCS {
  //      //         _crclinterface->crclwm.Update(cjoints);
             }
         } catch (...) {
-            std::cout << "Exception in RobotStatus::Action()\n";
+            LOG_DEBUG << "Exception in RobotStatus::Action()\n";
         }
         return 1;
     }

@@ -17,6 +17,9 @@
 
 #include <ros/package.h>
 #include "RvizMarker.h"
+
+#include "NIST/BLogging.h"
+
 // /opt/ros/indigo/include/moveit/robot_state/robot_state.h
 // /opt/ros/indigo/include/moveit/move_group_interface/move_group.h
 
@@ -26,7 +29,7 @@ int main(int argc, char** argv) {
         sensor_msgs::JointState cjoints;
         
         try {
-        std::cout << ExecuteShellCommand("env|sort\n");
+        LOG_DEBUG << ExecuteShellCommand("env|sort\n");
         // Find path of executable
         std::string path(argv[0]);
         Globals.ExeDirectory = path.substr(0, path.find_last_of('/') + 1);
@@ -98,6 +101,15 @@ int main(int argc, char** argv) {
         pRvizMarker->Init();
         pLinkReader = boost::shared_ptr<CLinkReader>(new CLinkReader(nh));
 
+#define ARMKIN
+#ifdef ARMKIN
+        kin = boost::shared_ptr<IKinematics>(new ArmKinematics());
+        // Initializatin of Controller instantiatio of shared objects  
+        kin->Init(std::string("manipulator"), std::string("tool0"));
+        kin->Init(nh);
+        RCS::Controller.Kinematics() = kin;
+#endif
+
 //#define MOVEITKIN      
 #ifdef MOVEITKIN
         kin = boost::shared_ptr<IKinematics>(new MoveitKinematics(nh));
@@ -110,29 +122,10 @@ int main(int argc, char** argv) {
         RCS::Controller.MoveitPlanner() = moveitPlanner;
 #endif
        
-        // Logger
-        LogFile.Open(Globals.ExeDirectory + "logfile.log");
-        LogFile.DebugLevel() = 5;
-        LogFile.Timestamping() = true;
-        
-        RCS::CController::CsvLogging.Open(Globals.ExeDirectory + "logfile.csv");
-        RCS::CController::CsvLogging.DebugLevel() = 5;
-        RCS::CController::_debugtype = (unsigned long) RCS::CController::CRCL;
-
         // Initialize Controller...
         RCS::Controller.Setup(nh);
         //RCS::Controller._NumJoints = 6; // hard code even thought chainrobotmodel will work
         RCS::Controller.status.Init();
-
-        // The crcl thread waits for and handles new XML messages received from  crcl asio socket.
-        // It decodes the CRCL gross motion messages and creates gross robot motion commands
-        // to be put on motion Q to be interpreted by RCSInterpreter.
-        // The gross motion commands are then put through a trajectory generate inside
-        // of the rcs interpreter, which creates a list of fine trajectory motions.
-        // Who handles the list of fine trajectory motions.
-        // The actual "Controller" handles the fine motion trajectories.
- //       RCS::Controller.CrclDelegate() = crcl;
- //       RCS::Controller.CrclDelegate()->SetAngleUnits("DEGREE"); // NOT PRE SPEC
         RCS::Controller.CycleTime() = DEFAULT_LOOP_CYCLE;
         
 
@@ -161,19 +154,19 @@ int main(int argc, char** argv) {
             //r.sleep();
             std::cout << "." << std::flush;
         }
-        std::cout << "\nCurrent joints=" << VectorDump<double> (cjoints.position).c_str();
+        LOG_DEBUG << "\nCurrent joints=" << VectorDump<double> (cjoints.position).c_str();
         
         // Store current joint values
         //RosKinematics kin;
         RCS::Controller.status.currentjoints = cjoints;
-        std::cout << "Current=" << VectorDump<double> (RCS::Controller.status.currentjoints.position).c_str();
+        LOG_DEBUG << "Current=" << VectorDump<double> (RCS::Controller.status.currentjoints.position).c_str();
         RCS::Controller.status.currentpose = kin->FK(RCS::Controller.status.currentjoints.position);
-        std::cout << DumpPose(RCS::Controller.status.currentpose).c_str();
+        LOG_DEBUG << DumpPose(RCS::Controller.status.currentpose).c_str();
 //        RCS::Controller.CrclDelegate()->crclwm.Update(RCS::Controller.status.currentpose);
 //        RCS::Controller.CrclDelegate()->crclwm.Update(RCS::Controller.status.currentjoints);
 
-        LogFile.LogFormatMessage ("Starting current joints=%s", DumpJoints(cjoints).c_str()); 
-        LogFile.LogFormatMessage ("Starting current pose=%s", DumpPose(RCS::Controller.status.currentpose).c_str()); 
+        LOG_DEBUG << "Starting current joints=" << DumpJoints(cjoints).c_str(); 
+        LOG_DEBUG << "Starting current pose=" << DumpPose(RCS::Controller.status.currentpose).c_str(); 
 
 #endif
         
@@ -219,7 +212,7 @@ int main(int argc, char** argv) {
 //            r.sleep();
 //        } while(ros::ok());
 //        
-        std::cout << "Cntrl C pressed \n"<< std::flush;
+        LOG_DEBUG << "Cntrl C pressed \n"<< std::flush;
         
         // ^C pressed - stop all threads or will hang
         if(jointReader) 
@@ -229,9 +222,9 @@ int main(int argc, char** argv) {
        RCS::Thread::StopAll(); // includes thread for Controller, robotstatus
 
     } catch (std::exception e) {
-        Logger.Fatal(Logger.StrFormat("%s%s\n", "Abnormal exception end to  CRCL2Robot", e.what()));
+        LOG_FATAL << Globals.StrFormat("%s%s", "Abnormal exception end to  CRCL2Robot", e.what());
     } catch (...) {
-        Logger.Fatal("Abnormal exception end to  CRCL2Robot\n");
+        LOG_FATAL << "Abnormal exception end to  CRCL2Robot";
     }
      ros::shutdown();
     return 0;
