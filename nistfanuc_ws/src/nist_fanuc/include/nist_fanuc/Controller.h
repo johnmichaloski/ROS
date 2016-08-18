@@ -54,7 +54,7 @@ namespace RCS {
 
         ~CController(void);
         static bool bSimulation; /**< simulation flag - not connected to robot */
-        static RCS::CanonWorldModel wm; /**< the world model of the controller */
+//        static RCS::CanonWorldModel wm; /**< the world model of the controller */
         static RCS::CanonWorldModel status; /**< current status of controller */
         static RCS::CanonWorldModel laststatus; /**< last status of controller */
 //        static RCS::CMessageQueue<RCS::CanonCmd> cmds; /**< queue of commands interpreted from Crcl messages */

@@ -43,7 +43,7 @@ namespace RCS {
 
     RCS::CController Controller(DEFAULT_LOOP_CYCLE);
     std::vector<std::string>  RCS::CController::links;
-    RCS::CanonWorldModel CController::wm;
+    //RCS::CanonWorldModel CController::wm;
     RCS::CanonWorldModel CController::status;
     RCS::CanonWorldModel CController::laststatus;
     // RCS::CMessageQueue<RCS::CanonCmd> CController::cmds;
@@ -86,6 +86,7 @@ namespace RCS {
         CsvLogging.Timestamping() = false;
         CsvLogging.LogMessage("Timestamp," + sStatus);
 #endif
+        CController::status.Init();
         _nh=&nh;
         crcl_status = _nh->advertise<nistcrcl::CrclStatusMsg>("crcl_status", 10);
         crcl_cmd = _nh->subscribe("crcl_command", 10, &CController::CmdCallback, this);
@@ -265,14 +266,10 @@ namespace RCS {
                 if (--i < 0) {
                     LOG_DEBUG << "Current Joints " << VectorDump<double>(cjoints.position).c_str();
                     LOG_DEBUG << "Canon pose " << DumpPose(RCS::Controller.status.currentpose);
-                    LOG_DEBUG << "Crcl Pose " << Crcl::DumpPose(Crcl::Convert(RCS::Controller.status.currentpose), ",");
                     i = 20;
                 }
 #endif
-                // Now update the CRCL world model which contains latest readings
- //      //         _crclinterface->crclwm.Update(RCS::Controller.status.currentpose);
- //      //         _crclinterface->crclwm.Update(cjoints);
-            }
+             }
         } catch (...) {
             LOG_DEBUG << "Exception in RobotStatus::Action()\n";
         }

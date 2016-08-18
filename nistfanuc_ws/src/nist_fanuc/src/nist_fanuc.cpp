@@ -29,6 +29,9 @@ int main(int argc, char** argv) {
         sensor_msgs::JointState cjoints;
         
         try {
+        boostlogfile="/home/isd/michalos/Documents/example.log";
+        boostloglevel=boost::log::trivial::severity_level::debug;          
+            
         LOG_DEBUG << ExecuteShellCommand("env|sort\n");
         // Find path of executable
         std::string path(argv[0]);

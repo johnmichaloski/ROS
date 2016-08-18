@@ -395,8 +395,7 @@ namespace RCS {
          * \brief CanonWorldModel constructor that initializes parameterization.
          */
         CanonWorldModel() {
-            Init();
-        }
+         }
         void Init();
 
         CanonCmdType echo_cmd; /**<  copy of current command type */

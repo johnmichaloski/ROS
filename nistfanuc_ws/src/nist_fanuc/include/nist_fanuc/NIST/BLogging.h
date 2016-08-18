@@ -12,10 +12,9 @@
 #define LOG_WARN  BOOST_LOG_SEV(my_logger::get(), boost::log::trivial::warning)
 #define LOG_ERROR BOOST_LOG_SEV(my_logger::get(), boost::log::trivial::error)
 #define LOG_FATAL BOOST_LOG_SEV(my_logger::get(), boost::log::trivial::fatal)
-                                  
-#ifndef SYS_LOGFILE
-#define SYS_LOGFILE             "/var/log/example.log"
-#endif
+
+extern std::string boostlogfile ;                       
+extern boost::log::trivial::severity_level boostloglevel;
 
 //Narrow-char thread-safe logger.
 typedef boost::log::sources::severity_logger_mt<boost::log::trivial::severity_level> logger_t;
