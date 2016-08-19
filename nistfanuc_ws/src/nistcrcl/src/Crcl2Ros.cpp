@@ -101,22 +101,13 @@ void CCrcl2RosMsg::Init() {
             new Crcl::CrclDelegateInterface());
     crclinterface->SetAngleUnits("DEGREE");
     crcl_pub = _nh.advertise<nistcrcl::CrclCommandMsg>("crcl_command", 10);
-    crcl_sub = _nh.subscribe("crcl_status", 1000, &CCrcl2RosMsg::StatusCallback, this);
+    crcl_sub = _nh.subscribe("crcl_status", 10, &CCrcl2RosMsg::StatusCallback, this);
 
     // Couple code attempts at reading from robot_description parameter - see above
     crclinterface->crclwm.jointnames.clear();
 
     _nh.getParam("controller_joint_names", crclinterface->crclwm.jointnames);
     std::cout << VectorDump<std::string> (crclinterface->crclwm.jointnames);
-#if 0
-    jointnames.push_back("joint_1")
-    jointnames.push_back("joint_2")
-    jointnames.push_back("joint_3")
-    jointnames.push_back("joint_4")
-    jointnames.push_back("joint_5")
-    jointnames.push_back("joint_6")
-    jointnames.push_back("joint_6-tool0")
-#endif
 }
 
 int CCrcl2RosMsg::Action() {
@@ -170,6 +161,7 @@ int CCrcl2RosMsg::Action() {
             if (cc.cmd == RCS::CANON_MOVE_JOINT) {
                 rosmsg.crclcommand = actuatejoints;
                 rosmsg.joints = cc.joints;
+                rosmsg.jointnum=cc.jointnum; // could be joint name instead...
                 rosmsg.bCoordinated = cc.bCoordinated;
             } else if (cc.cmd == RCS::CANON_MOVE_TO) {
                 rosmsg.crclcommand = moveto;

@@ -293,7 +293,7 @@ namespace RCS {
         double gripperPos; /**<  gripper position 0 to 1 */ 
         CanonAccProfile accprofile; /**<  current trajectory acceleration profile */ 
         std::vector<double> speed; /**<  vector of joint velocities */ 
-        std::vector<int> jointnum; /**<  vector of joint numbers used by command */
+        std::vector<uint64_t> jointnum; /**<  vector of joint numbers used by command */
 
         JointState joints; /**<  commanded joint state */
         JointState seed; /**<  near pose joint state */

@@ -16,6 +16,8 @@
 #include "Setup.h"
 
 #include <ros/package.h>
+#include <ros/console.h>
+
 #include "RvizMarker.h"
 
 #include "NIST/BLogging.h"
@@ -29,11 +31,7 @@ int main(int argc, char** argv) {
         sensor_msgs::JointState cjoints;
         
         try {
-        boostlogfile="/home/isd/michalos/Documents/example.log";
-        boostloglevel=boost::log::trivial::severity_level::debug;          
-            
-        LOG_DEBUG << ExecuteShellCommand("env|sort\n");
-        // Find path of executable
+         // Find path of executable
         std::string path(argv[0]);
         Globals.ExeDirectory = path.substr(0, path.find_last_of('/') + 1);
         Globals._appproperties["ExeDirectory"] = Globals.ExeDirectory;
@@ -62,6 +60,29 @@ int main(int argc, char** argv) {
         // This sets up some application name/value pairs: user, hostname
         SetupAppEnvironment();
         
+        //SetupRosEnvironment - needs to go before ROS!
+        //SetupRosEnvironment(""); // FAILS hard coded env above
+        
+       // Initialize ROS
+        ros::init(argc, argv, "nist_fanuc");
+        ros::NodeHandle nh;
+        ros::Rate r(50);  // 10 times a second - 10Hz
+        
+        // Accessing Private Parameters
+        // ros::param::get("~private_name", param); 
+        boostlogfile = nh.param<std::string>("logfile", "/home/isd/michalos/Documents/example.log");
+        boostloglevel = (boost::log::v2_mt_posix::trivial::severity_level) nh.param<int>("loglevel", 0); // 0 = debug
+// THIS DOESN'T WORK
+#if 0
+        int rosloglevel =  nh.param<int>("~rosloglevel", 0); // 0 = debug
+       
+        if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, (ros::console::levels::Level) rosloglevel)) {
+            ros::console::notifyLoggerLevelsChanged();
+        }
+#endif  
+        LOG_DEBUG << ExecuteShellCommand("env|sort\n");
+
+        
         // Controller shared objects dependent on ROS - many with abstract interface definition
         boost::shared_ptr<CJointReader>jointReader;
         boost::shared_ptr<CJointWriter>jointWriter;
@@ -70,13 +91,8 @@ int main(int argc, char** argv) {
         boost::shared_ptr<CRvizMarker> pRvizMarker;
         boost::shared_ptr<CLinkReader> pLinkReader;
 
-        //SetupRosEnvironment - needs to go before ROS!
-        //SetupRosEnvironment("");
+
         
-        // Initialize ROS
-        ros::init(argc, argv, "nist_fanuc");
-        ros::NodeHandle nh;
-        ros::Rate r(50);  // 10 times a second - 10Hz
 
         //  Required for multithreaded ROS communication  NOT TRUE: if not ros::spinOnce
         ros::AsyncSpinner spinner(1);
@@ -136,10 +152,6 @@ int main(int argc, char** argv) {
         RCS::Controller.JointWriter() = jointWriter;
         RCS::Controller.RvizMarker()= pRvizMarker;
         RCS::Controller.EEPoseReader()= pLinkReader;
-
-        // fix me: read actual robot model and use.
-        RCS::Controller.links.push_back("/base_link");
-        RCS::Controller.links.push_back("/tool0");
 
         RCS::Controller.eCartesianMotionPlanner = RCS::CController::BASIC;
         RCS::Controller.eJointMotionPlanner = RCS::CController::BASIC;

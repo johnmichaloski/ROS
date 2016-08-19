@@ -63,14 +63,6 @@ void RCSInterpreter::AddJointCommands(std::vector<JointState > gotojoints) {
     }
 }
 
-static JointState EmptyJointState(size_t n) {
-    JointState js;
-    js.position.resize(n, 0.0);
-    js.velocity.resize(n, 0.0);
-    js.effort.resize(n, 0.0);
-    return js;
-}
-
 std::vector<JointState> RCSInterpreter::PlanCartesianMotion(std::vector<RCS::Pose> poses) {
     std::vector<JointState> gotojoints;
     if (poses.size() == 0)
@@ -142,10 +134,18 @@ int RCSInterpreter::ParseCommand(RCS::CanonCmd cc) {
     std::cout << "Current Joints " << VectorDump<double>(currentjoints.position).c_str();
     std::cout << "Current Pose " << DumpPose(currentpose).c_str();
 #endif
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // SET GRIPPERTS
+        if (cc.crclcommand == CanonCmdType::CANON_SET_GRIPPER) {
+        RCS::CanonCmd newcc=cc;
+        //newcc.crclcommand = CanonCmdType::CANON_SET_GRIPPER;
+        //newcc.eepercent=cc.eepercent;
+        newcc.status = CanonStatusType::CANON_WAITING;
+         Controller.robotcmds.AddMsgQueue(newcc);            
+        }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // MOVE JOINTS
-    if (cc.crclcommand == CanonCmdType::CANON_MOVE_JOINT) {
+    else if (cc.crclcommand == CanonCmdType::CANON_MOVE_JOINT) {
         rates = IRate(DEFAULT_JOINT_MAX_VEL, DEFAULT_JOINT_MAX_ACCEL, DEFAULT_LOOP_CYCLE);
 
         JointState joints;

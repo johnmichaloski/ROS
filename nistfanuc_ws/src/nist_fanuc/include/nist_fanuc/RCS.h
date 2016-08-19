@@ -89,26 +89,33 @@ namespace RCS {
             this->resize(3, 0.0);
         } // position, orientation
     };
-    inline geometry_msgs::Pose& ConvertTfPose2GeometryPose(RCS::Pose & m, geometry_msgs::Pose & p)
-    {
-	    p.position.x = m.getOrigin().x();
-	    p.position.y = m.getOrigin().y();
-	    p.position.z = m.getOrigin().z();
-	    p.orientation.x = m.getRotation().x();
-	    p.orientation.y = m.getRotation().y();
-	    p.orientation.z = m.getRotation().z();
-	    p.orientation.w = m.getRotation().w();
-	    return p;
-	}
 
-	inline RCS::Pose & ConvertGeometryPose2TfPose(const geometry_msgs::Pose & m,RCS::Pose & p)
-	{
-	    RCS::Vector3 trans(m.position.x,m.position.y,m.position.z);
-	    p.setOrigin(trans);
-	    RCS::Rotation q(m.orientation.x,m.orientation.y,m.orientation.z,m.orientation.w);
-	    p.setRotation(q);
-		return p;
-	}
+    inline JointState EmptyJointState(size_t n) {
+        JointState js;
+        js.position.resize(n, 0.0);
+        js.velocity.resize(n, 0.0);
+        js.effort.resize(n, 0.0);
+        return js;
+    }
+
+    inline geometry_msgs::Pose& ConvertTfPose2GeometryPose(RCS::Pose & m, geometry_msgs::Pose & p) {
+        p.position.x = m.getOrigin().x();
+        p.position.y = m.getOrigin().y();
+        p.position.z = m.getOrigin().z();
+        p.orientation.x = m.getRotation().x();
+        p.orientation.y = m.getRotation().y();
+        p.orientation.z = m.getRotation().z();
+        p.orientation.w = m.getRotation().w();
+        return p;
+    }
+
+    inline RCS::Pose & ConvertGeometryPose2TfPose(const geometry_msgs::Pose & m, RCS::Pose & p) {
+        RCS::Vector3 trans(m.position.x, m.position.y, m.position.z);
+        p.setOrigin(trans);
+        RCS::Rotation q(m.orientation.x, m.orientation.y, m.orientation.z, m.orientation.w);
+        p.setRotation(q);
+        return p;
+    }
 
     /*!
      * \brief enumeration of  length units. Conversion into ROS compatible meters.
@@ -312,7 +319,7 @@ namespace RCS {
      * \brief CanonCmd is the controller command structure. 
      * 
      * int64 crclcommand
-	   crclcommandnum
+           crclcommandnum
         # https://github.com/ros/common_msgs 
         geometry_msgs/Pose  finalpose
         geometry_msgs/Pose[] waypoints
@@ -330,18 +337,29 @@ namespace RCS {
         /*!
          * \brief CanonCmd constructor. 
          */
-        CanonCmd()
-//        cmd(nistcrcl::CrclCommandMsg::crclcommand),       
-//        gripperPos(nistcrcl::CrclCommandMsg::eepercent),
-//        pose(nistcrcl::CrclCommandMsg::finalpose)
-        {
- //           Init();
+        CanonCmd() {
+            //           Init();
             CommandID() = _cmdid++;
         }
-        void Set(nistcrcl::CrclCommandMsg &msg)
-        {
-            static_cast<nistcrcl::CrclCommandMsg>(*this)  = msg;
-        
+
+        void Set(nistcrcl::CrclCommandMsg &msg) {
+            this->crclcommand = msg.crclcommand;
+            this->crclcommandnum = msg.crclcommandnum;
+            this->finalpose = msg.finalpose;
+            this->waypoints = msg.waypoints;
+
+            this->joints = msg.joints;
+            this->jointnum = msg.jointnum;
+            this->bStraight = msg.bStraight;
+
+            this->dwell_seconds = msg.dwell_seconds;
+            this->opmessage = msg.opmessage;
+            this->bCoordinated = msg.bCoordinated;
+
+            this->eepercent = msg.eepercent;
+
+            //    static_cast<nistcrcl::CrclCommandMsg>(*this)  = msg;
+
         }
         void Init();
 
@@ -353,8 +371,8 @@ namespace RCS {
         static unsigned long long _cmdid;
 
         bool IsMotionCmd();
-        
-//        int &cmd; /**<  command  type */
+
+        //        int &cmd; /**<  command  type */
         int status; /**<  status type */
         int type; /**<  trajectory points  type */
         int stoptype; /**<  stop trajectory choice */
@@ -364,26 +382,27 @@ namespace RCS {
         bool bStraight; /**<  straigth cartesian trajectory motion boolean */
         double dwell; /**<  time for dwelling in seconds */
         //JointState joints; /**<  commanded joint state */
-       std::vector<RCS::Pose> waypoints; /**< commanded cartesian waypoints in trajectory */
- #endif
- //      double &gripperPos; /**<  gripper position 0 to 1 */
- //       RCS::Pose &pose; /**<  commanded pose state */
-      
+        std::vector<RCS::Pose> waypoints; /**< commanded cartesian waypoints in trajectory */
+#endif
+        //      double &gripperPos; /**<  gripper position 0 to 1 */
+        //       RCS::Pose &pose; /**<  commanded pose state */
+
         double absTransAcc; /**<  cartesian translational acceleration */
         double absTransSpeed; /**<  cartesian translational velocity */
         double absRotAcc; /**<  cartesian rotation acceleration */
         double absRotSpeed; /**<  cartesian rotation velocity */
         double absJointAcc; /**<  joint max acceleration */
         double absJointSpeed; /**<  joint max velocity */
-        
-        std::vector<double> speed; /**<  vector of joint velocities */
-        std::vector<int> jointnum; /**<  vector of joint numbers used by command */
 
-        JointState seed; /**<  near pose joint state */
+        std::vector<double> speed; /**<  vector of joint velocities */
+        // std::vector<int> jointnum; /**<  vector of joint numbers used by command */
+
+        //JointState seed; /**<  near pose joint state */
         RCS::PoseTolerance endPoseTol; /**<  commanded tolerance */
         // std::vector<RCS::Pose> waypointtolerances; /**< commanded cartesian waypoints in trajectory */
         RCS::PoseTolerance intermediatePtTol; /**< commanded cartesian waypoints in trajectory */
         RCS::PoseTolerance gripperTol; /**< gripper trajectory */
+
     };
 
     /*!
@@ -395,10 +414,12 @@ namespace RCS {
          * \brief CanonWorldModel constructor that initializes parameterization.
          */
         CanonWorldModel() {
-         }
+        }
         void Init();
 
+        CanonCmd echocmd; /**<  copy of current command */
         CanonCmdType echo_cmd; /**<  copy of current command type */
+        int crclcommandstatus;
         CanonStatusType echo_status; /**<  copy of current status type */
 
         /*!
@@ -421,9 +442,11 @@ namespace RCS {
         double maxJointAccel; /**<  max joint acceleration */
         double maxJointVel; /**<  max joint velocity */
         double _cycleTime; /**<  cycle time */
-        CanonCmd echocmd; /**<  copy of current command */
         JointState currentjoints; /**<  current joint state */
         RCS::Pose currentpose; /**<  current robot pose */
+        bool bStraight;
+        bool bCoordinated;
+        double eepercent;
     };
 
     /*!

@@ -30,7 +30,7 @@
 //#ifdef DEBUGJOINTSTATUSCRCLUPDATE
 
 
-// #define DEBUG
+
 #if defined DEBUG
 #define IfDebug(arg)    arg
 #else

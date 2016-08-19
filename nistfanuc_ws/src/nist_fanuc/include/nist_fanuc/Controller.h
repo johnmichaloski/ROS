@@ -12,6 +12,7 @@
  */
 
 #pragma once
+#include "RCS.h"
 #include <boost/shared_ptr.hpp>
 #include <list>
 #include <ros/ros.h>
@@ -28,6 +29,7 @@
 #include "nist_fanuc/moveit.h"
 #include "nist_fanuc/RvizMarker.h"
 #include "nist_fanuc/arm_kinematics.h"
+#include "nist_fanuc/Gripper.h"
 
 #include "nistcrcl/CrclCommandMsg.h"
 #include "nistcrcl/CrclStatusMsg.h"
@@ -54,18 +56,12 @@ namespace RCS {
 
         ~CController(void);
         static bool bSimulation; /**< simulation flag - not connected to robot */
-//        static RCS::CanonWorldModel wm; /**< the world model of the controller */
         static RCS::CanonWorldModel status; /**< current status of controller */
         static RCS::CanonWorldModel laststatus; /**< last status of controller */
-//        static RCS::CMessageQueue<RCS::CanonCmd> cmds; /**< queue of commands interpreted from Crcl messages */
         static RCS::CMessageQueue<nistcrcl::CrclCommandMsg > crclcmds; /**< queue of commands interpreted from Crcl messages */
-        static xml_message_list donecmds; /**< list of commands interpreted from Crcl messages that have completed*/
+        static std::list<RCS::CanonCmd> donecmds; /**< list of commands interpreted from Crcl messages that have completed*/
         static RCS::CMessageQueue<RCS::CanonCmd> robotcmds; /**< list of commands to be sent to robot */
  
-//		static size_t _NumJoints; /**< number of joints in controller robot - assuming serial link manipulator */
-//        static std::vector<std::string> joint_names;
-//        static std::vector<std::string> link_names;
-        
         /*!
          *\brief Verifies that all the pointer references in the controller have been instantiated (i.e., not null).
          */
@@ -92,7 +88,6 @@ namespace RCS {
          */
         std::string DumpHeader(std::string separator = ",");
 
-        //        NVAR(CrclDelegate, boost::shared_ptr<Crcl::CrclDelegateInterface>, crclinterface);
         VAR(Kinematics, boost::shared_ptr<IKinematics>);
         VAR(TrajectoryModel, boost::shared_ptr<CTrajectory>);
         VAR(JointWriter, boost::shared_ptr<CJointWriter>);
@@ -102,10 +97,13 @@ namespace RCS {
         VAR(Gripper, boost::shared_ptr<GripperInterface>)
         ros::Publisher crcl_status; /**< ros publisher information used for crcl status updates */
         ros::Subscriber crcl_cmd; /**< ros subscriber information used for crcl command updates */
+        ros::Publisher  rviz_jntcmd; /**< ros publisher information for joint_publisher */
         void CmdCallback(const nistcrcl::CrclCommandMsg::ConstPtr& cmdmsg);
         ros::NodeHandle *_nh;
-		void MotionLogging();
-        //boost::shared_ptr<::Kinematics> armkin;
+        GripperInterface gripper;
+        void MotionLogging();
+        void PublishCrclStatus();
+
         /*!
          *\brief Routine to set the kinematics reference pointer. Uses the interface class IKinematics, but can have any implementation instance. 
          */
@@ -122,8 +120,6 @@ namespace RCS {
         /**<  last canon command interpreted */
         NVAR(LastCC, RCS::CanonCmd, _lastcc);
 
-        //RCS::CanonCmd _newcc; /**<  current new canon command to interpret*/
-        //RCS::CanonCmd _lastcc; /**<  last canon command interpreted */
         RCS::CanonCmd GetLastRobotCommand();
 
         /*!
@@ -138,21 +134,8 @@ namespace RCS {
         RCS::Pose GetLastCommandedPose();
 
 
-        std::string lastlogstatus;
-        static std::vector<std::string> links;
-
-        enum DebugLevel {
-            FATAL = 0, WARNING = 2, INFORM = 4, FULL = 5
-        }; // ERROR, DEBUG #defines
-
-        enum DebugType {
-            CRCL = 0, RPY
-        };
-        static unsigned long _debugtype; /**<  output crcl xz rotation or roll,pitch, yaw */
-        static unsigned long _debuglevel; /**<  level of debugging, 0 least, 5 most */
-        static unsigned long _csvlogFlag;
-        //static ALogger CsvLogging; /**< controller status csv logging instance */
-
+//         static unsigned long _csvlogFlag;
+ 
         enum MotionPlannerEnum {
             NOPLANNER = 0, MOVEIT, DESCARTES, BASIC, WAYPOINT, GOMOTION
         };
@@ -181,7 +164,6 @@ namespace RCS {
          */
         RobotStatus(double cycletime = DEFAULT_LOOP_CYCLE);
 
-        //       NVAR(CrclDelegate, boost::shared_ptr<Crcl::CrclDelegateInterface>, _crclinterface);
         VAR(JointReader, boost::shared_ptr<CJointReader>);
         VAR(Kinematics, boost::shared_ptr<IKinematics>);
 

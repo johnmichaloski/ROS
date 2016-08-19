@@ -103,7 +103,7 @@ public:
         return JointState();
     }
 
-    virtual JointState UpdateJointState(std::vector<int> jointnums, JointState oldjoints, JointState njoints) {
+    virtual JointState UpdateJointState(std::vector<uint64_t> jointnums, JointState oldjoints, JointState njoints) {
         return JointState();
     }
 
@@ -389,7 +389,7 @@ public:
         return joints;
     }
 
-    virtual JointState UpdateJointState(std::vector<int> jointnums,
+    virtual JointState UpdateJointState(std::vector<uint64_t> jointnums,
             JointState oldjoints,
             JointState njoints) {
         JointState joints = oldjoints;

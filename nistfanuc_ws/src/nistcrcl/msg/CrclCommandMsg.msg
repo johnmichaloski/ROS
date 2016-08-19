@@ -29,6 +29,7 @@ geometry_msgs/Pose  finalpose
 geometry_msgs/Pose[] waypoints
 # Below joint info could be  trajectory_msgs/JointTrajectoryPoint
 sensor_msgs/JointState joints
+uint64[] jointnum
 bool bStraight
 float64   dwell_seconds
 string opmessage

@@ -30,6 +30,7 @@
 #include <ros/ros.h>
 #include <urdf/model.h>
 #include <sensor_msgs/JointState.h>
+
 /***
     // Couple code attempts at reading from robot joints names - see above
     crclinterface->crclwm.jointnames.clear();
@@ -48,67 +49,69 @@ The ros parameter name is given by the yaml: controller_joint_names
 
 class GripperInterface {
 public:
-    ros::NodeHandle &_nh;
     ros::Publisher joint_pub;
     std::vector<std::string> joint_names;
     const double degree = M_PI / 180;
     sensor_msgs::JointState joint_state;
 
-    GripperInterface(ros::NodeHandle &nh) :
-    _nh(nh) {
-        _nh.getParam("controller_joint_names", joint_names);
-        if (joint_names.size() == 0) {
-            joint_state.name.resize(6);
-            joint_state.position.resize(6);
-            joint_state.name[0] = "robotiq_85_left_knuckle_joint"; // 0 to 90o
-            joint_state.name[1] = "robotiq_85_right_knuckle_joint"; // 0 to 90o
-            joint_state.name[2] = "robotiq_85_left_inner_knuckle_joint"; // 0 to 90o
-            joint_state.name[3] = "robotiq_85_right_inner_knuckle_joint"; // 0 to 90o
-            joint_state.name[4] = "robotiq_85_left_finger_tip_joint"; // 0 to 90o
-            joint_state.name[5] = "robotiq_85_right_finger_tip_joint"; // 0 to 90o
-        } else {
-
-            joint_state.position.resize(joint_names.size());
-        }
-
+    GripperInterface() {
     }
 
-    void init() {
+    void init(ros::NodeHandle &nh, bool bPublish=false) {
         ROS_INFO("GripperHwInterface init");
-        try {
-            //urdf =  getUrdf(_nh, "robot_description");
-            joint_pub = _nh.advertise<sensor_msgs::JointState>("nist_controller/robot/joint_states", 10);
+         try {
+            //_nh.getParam("controller_joint_names", joint_names);
+            if (joint_names.size() == 0) {
+                joint_state.name.resize(6);
+                joint_state.position.resize(6);
+                joint_state.name[0] = "robotiq_85_left_knuckle_joint"; // 0 to 90o
+                joint_state.name[1] = "robotiq_85_right_knuckle_joint"; // 0 to 90o
+                joint_state.name[2] = "robotiq_85_left_inner_knuckle_joint"; // 0 to 90o
+                joint_state.name[3] = "robotiq_85_right_inner_knuckle_joint"; // 0 to 90o
+                joint_state.name[4] = "robotiq_85_left_finger_tip_joint"; // 0 to 90o
+                joint_state.name[5] = "robotiq_85_right_finger_tip_joint"; // 0 to 90o
+            } else {
 
-
-
-        } catch (...) {
+                joint_state.position.resize(joint_names.size());
+            }
+            if(bPublish) 
+                joint_pub = nh.advertise<sensor_msgs::JointState>("nist_controller/robot/joint_states", 10);
+       } catch (...) {
             ROS_ERROR("GripperInterface Failed to init");
 
         }
     }
+    std::vector<std::string> JointNames() {
+        return joint_state.name;
+    }
 
-    void close() {
+    sensor_msgs::JointState closeSetup() {
         ROS_INFO("GripperInterface close");
-
+        joint_state.header.stamp = ros::Time(0); // Start immediately
         joint_state.position[0] = 0.500;
         joint_state.position[1] = 0.500;
         joint_state.position[2] = 0.500;
         joint_state.position[3] = 0.500;
         joint_state.position[4] = -0.500;
         joint_state.position[5] = -0.500;
+        return joint_state;
+    }
+
+    void close() {
+        ROS_INFO("GripperInterface close");
         publish_jointstate();
     }
 
     void publish_jointstate() {
-        joint_state.header.stamp = ros::Time(0); // Start immediately
-        joint_pub.publish(joint_state);
+         joint_pub.publish(joint_state);
         joint_pub.publish(joint_state);
         joint_pub.publish(joint_state);
         joint_pub.publish(joint_state);
     }
 
-    void open() {
+    sensor_msgs::JointState openSetup() {
         ROS_INFO("GripperInterface open");
+        joint_state.header.stamp = ros::Time(0); // Start immediately
 
         joint_state.position[0] = 0.0;
         joint_state.position[1] = 0.0;
@@ -116,6 +119,11 @@ public:
         joint_state.position[3] = 0.0;
         joint_state.position[4] = 0.0;
         joint_state.position[5] = 0.0;
+        return joint_state;
+    }
+
+    void open() {
+        ROS_INFO("GripperInterface open");
         publish_jointstate();
     }
 
@@ -146,7 +154,7 @@ public:
                         nh.getNamespace() << ").");
                 return boost::shared_ptr<urdf::Model>();
             }
-        }            // Check for robot_description in root
+        }// Check for robot_description in root
         else if (!urdf->initParam("robot_description")) {
             ROS_ERROR_STREAM("Failed to parse URDF contained in '" << param_name << "' parameter");
             return boost::shared_ptr<urdf::Model>();
