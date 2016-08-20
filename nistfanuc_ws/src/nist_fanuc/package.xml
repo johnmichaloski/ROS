@@ -43,10 +43,6 @@
   <build_depend>cmake_modules</build_depend>
   <build_depend>eigen</build_depend>
   <build_depend>moveit_core</build_depend>
-  <build_depend>descartes_moveit</build_depend>
-  <build_depend>descartes_core</build_depend>
- <build_depend>descartes_trajectory</build_depend>trajectory
-<build_depend>descartes_planner</build_depend>
 <build_depend>sensor_msgs</build_depend>
 <build_depend>geometry_msgs</build_depend>
 <build_depend>trajectory_msgs</build_depend>
@@ -61,10 +57,6 @@
   <run_depend>roscpp</run_depend>
   <run_depend>boost</run_depend>
   <run_depend>moveit_core</run_depend>
-  <run_depend>descartes_moveit</run_depend>
-  <run_depend>descartes_core</run_depend>
- <run_depend>descartes_trajectory</run_depend>
-<run_depend>descartes_planner</run_depend>
 <run_depend>sensor_msgs</run_depend>
 <run_depend>trajectory_msgs</run_depend>
 <run_depend>geometry_msgs</run_depend>

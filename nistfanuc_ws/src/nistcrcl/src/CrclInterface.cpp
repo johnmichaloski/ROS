@@ -70,6 +70,7 @@ void CrclDelegateInterface::CrclRunProgram(::CRCLProgramType::MiddleCommand_sequ
     RCS::cmds.ClearMsgQueue();
 }
 CrclReturn CrclDelegateInterface::DelegateCRCLCmd(std::string str) {
+    str=Globals.Trim(str); // leading \n causes big problems
     std::istringstream istr(str);
 
     if (FindLeadingElement(str) == "</CRCLProgram>") {
@@ -82,9 +83,9 @@ CrclReturn CrclDelegateInterface::DelegateCRCLCmd(std::string str) {
 
         } catch (const xml_schema::exception& e) {
             // Most likely here due to illegal XML in Crcl program. Note, is not validated against XSD.
-            std::cout << "Parse Exception RobotProgram::ExecuteProgram:" << e << std::endl;
+            std::cout << "Parse Exception RobotProgram::DelegateCRCLCmd:" << e << std::endl;
         } catch (...) {
-            std::cout << "Unhandled exception\n";
+            std::cout << "Unhandled exception in DelegateCRCLCmd\n";
         }
         
     }
@@ -106,7 +107,7 @@ CrclReturn CrclDelegateInterface::DelegateCRCLCmd(std::string str) {
             return DelegateCRCLCmd(crclCommand);
         } catch (const xml_schema::exception& e) {
             // Most likely here due to illegal XML in Crcl program. Note, is not validated against XSD.
-            std::cout << "Parse Exception RobotProgram::ExecuteProgram:" << e << std::endl;
+            std::cout << "Parse Exception RobotProgram::DelegateCRCLCmd:" << e << std::endl;
         } 
     }
     else if (FindLeadingElement(str) == "</CRCLStatus>") {

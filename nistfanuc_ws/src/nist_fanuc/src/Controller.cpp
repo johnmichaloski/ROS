@@ -68,8 +68,8 @@ namespace RCS {
         IfDebug(LOG_DEBUG << "CController::Verify");
 #ifdef  MOVEITKIN
         assert(Kinematics() != NULL);
-#endif
         assert(TrajectoryModel() != NULL);
+#endif
     }
  
     void CController::CmdCallback(const nistcrcl::CrclCommandMsg::ConstPtr& cmdmsg) {

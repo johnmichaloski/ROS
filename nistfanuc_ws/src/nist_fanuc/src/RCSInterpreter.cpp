@@ -19,10 +19,11 @@
 #include "trajectoryMaker.h"
 #include <tf/transform_datatypes.h>
 using namespace RCS;
+using namespace sensor_msgs;
+#ifdef DESCARTES
 using namespace descartes_core;
 using namespace descartes_trajectory;
-using namespace sensor_msgs;
-
+#endif
 /**
     uint8 crclcommand
 

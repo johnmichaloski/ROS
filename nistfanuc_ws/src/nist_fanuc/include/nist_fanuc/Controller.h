@@ -24,7 +24,7 @@
 #include "NIST/BLogging.h"
 #include "nist_fanuc/Gripper.h"
 #include "nist_fanuc/RCSInterpreter.h"
-#include "nist_fanuc/Trajectory.h"
+//#include "nist_fanuc/Trajectory.h"
 #include "nist_fanuc/Communication.h"
 #include "nist_fanuc/moveit.h"
 #include "nist_fanuc/RvizMarker.h"
@@ -89,7 +89,7 @@ namespace RCS {
         std::string DumpHeader(std::string separator = ",");
 
         VAR(Kinematics, boost::shared_ptr<IKinematics>);
-        VAR(TrajectoryModel, boost::shared_ptr<CTrajectory>);
+//        VAR(TrajectoryModel, boost::shared_ptr<CTrajectory>);
         VAR(JointWriter, boost::shared_ptr<CJointWriter>);
         VAR(MoveitPlanner, boost::shared_ptr<MoveitPlanning>);
         VAR(RvizMarker, boost::shared_ptr<CRvizMarker>)

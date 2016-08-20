@@ -25,7 +25,7 @@
 
 
 
-
+<!---->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find nist_fanuc)/visualize.rviz" required="true" />
 
 <!--

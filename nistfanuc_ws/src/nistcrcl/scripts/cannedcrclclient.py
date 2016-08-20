@@ -103,8 +103,7 @@ def CrclMoveTo(cmd, x,y,z,xi,xj,xk,zi,zj,zk):
 </CRCLCommandInstance>'''.format(cmd, x,y,z, xi, xj, xk, zi, zj, zk)
  
 def CrclGetStatusCmd(cmd):
-    return '''
-    <?xml version="1.0" encoding="UTF-8"?>
+    return '''<?xml version="1.0" encoding="UTF-8"?>
 <CRCLCommandInstance
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="../xmlSchemas/CRCLCommandInstance.xsd">
@@ -115,8 +114,7 @@ def CrclGetStatusCmd(cmd):
 '''.format(cmd)
 
 def CrclDwellCmd(cmd,dwell):
-    return '''
- <?xml version="1.0" encoding="UTF-8"?>
+    return '''<?xml version="1.0" encoding="UTF-8"?>
 <CRCLCommandInstance
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="../xmlSchemas/CRCLCommandInstance.xsd">
@@ -128,8 +126,7 @@ def CrclDwellCmd(cmd,dwell):
 '''.format(cmd, dwell)
 
 def CrclCloseToolCmd(cmd):
-    return '''
- <?xml version="1.0" encoding="UTF-8"?>
+    return '''<?xml version="1.0" encoding="UTF-8"?>
 <CRCLCommandInstance
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="../xmlSchemas/CRCLCommandInstance.xsd">
@@ -140,8 +137,7 @@ def CrclCloseToolCmd(cmd):
 '''.format(cmd)
 
 def CrclOpenToolCmd(cmd):
-    return '''
- <?xml version="1.0" encoding="UTF-8"?>
+    return '''<?xml version="1.0" encoding="UTF-8"?>
 <CRCLCommandInstance
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="../xmlSchemas/CRCLCommandInstance.xsd">
@@ -247,10 +243,10 @@ def parseline(line):
         s=CrclActuateJoints(str(cmd), tokens[1], tokens[2], 4.0, 1.0)
         mysocket.syncsend(s)
     elif tokens[0] == 'o' :
-        s=CrclOpenCmd(str(cmd))
+        s=CrclOpenToolCmd(str(cmd))
         mysocket.syncsend(s)
     elif tokens[0] == 'c' :
-        s=CrclCloseCmd(str(cmd))
+        s=CrclCloseToolCmd(str(cmd))
         mysocket.syncsend(s)
     elif line[0:0] == 'd' :
         print "d n - dwell in seconds"
@@ -271,20 +267,21 @@ def parseline(line):
 cmd=1
 
 time.sleep(10)
-
+mywait=1
 mysocket = CrclClientSocket("localhost", 64444)
 print 'Socket Created'
 mysocket.connect()
 print 'Socket connected'
 while not rospy.is_shutdown():
 	parseline("j 1 90 0 0")
-	time.sleep(6)
+	time.sleep(mywait+2)
 	parseline("c");
-	time.sleep(6)
-	parseline("j 1 0 0 0")
-	time.sleep(6)
+#	parseline("d 5")
+	time.sleep(mywait+2)
+	parseline("j 1 0.0 0 0")
+	time.sleep(mywait)
 	parseline("j 1 -90 0 0")
-	time.sleep(6)
-	parseline("o");
-	time.sleep(6)
+	time.sleep(mywait+2)
+ 	parseline("o");
+ 	time.sleep(mywait+2)
 mysocket.disconnect()

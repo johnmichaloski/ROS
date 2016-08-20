@@ -18,7 +18,7 @@
 #include "RCS.h"
 #include <vector>
 #include "Kinematics.h"
-#include "Trajectory.h"
+//#include "Trajectory.h"
 #include "trajectoryMaker.h"
 #include "MotionControl.h"
 
@@ -58,7 +58,9 @@ protected:
     //////////////////////////////////////////////////
 public:
     IKinematicsSharedPtr _kinematics; /**<  kinematics pointer */
+#ifdef DESCARTES
     TrajectoryVec results; /**< descartes motion planner results */
+#endif
     std::vector<double> times;  /**< descartes times for  trajectory results */
     IRate rates; /**< rates structure for simple motion planner  */
     MotionControl motioncontrol; /**< instance of simple motion control object  */

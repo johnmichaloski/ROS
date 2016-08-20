@@ -8,10 +8,6 @@ find_package(catkin REQUIRED COMPONENTS
   moveit_core
   roscpp
   cmake_modules
-  descartes_core
-  descartes_moveit
-  descartes_trajectory
-  descartes_planner
   trajectory_msgs
   geometry_msgs
   sensor_msgs
@@ -37,10 +33,6 @@ catkin_package(
   CATKIN_DEPENDS
     roscpp
     moveit_core
-    descartes_moveit
-    descartes_core
-    descartes_trajectory
-    descartes_planner
     sensor_msgs
     trajectory_msgs
     geometry_msgs
@@ -81,11 +73,6 @@ include_directories(include
     include/${PROJECT_NAME}
  #   include/${PROJECT_NAME}/CrclXsd
     include/${PROJECT_NAME}/NIST
-
-   ${descartes_moveit_INCLUDE_DIRS}
-   ${descartes_trajectory_INCLUDE_DIRS}
-   ${descartes_planner_INCLUDE_DIRS}
-   ${descartes_core_INCLUDE_DIRS}
    /usr/include/eigen3
 )
 # Codesynthesis include
@@ -115,7 +102,7 @@ src/RCSInterpreter.cpp
 #src/urdf_parse_model.cpp
 src/Globals.cpp
 src/Kinematics.cpp
-src/Trajectory.cpp
+#src/Trajectory.cpp
 src/MotionControl.cpp
 src/nist_fanuc.cpp
 src/Communication.cpp
