@@ -98,25 +98,6 @@ namespace RCS {
         return js;
     }
 
-    inline geometry_msgs::Pose& ConvertTfPose2GeometryPose(RCS::Pose & m, geometry_msgs::Pose & p) {
-        p.position.x = m.getOrigin().x();
-        p.position.y = m.getOrigin().y();
-        p.position.z = m.getOrigin().z();
-        p.orientation.x = m.getRotation().x();
-        p.orientation.y = m.getRotation().y();
-        p.orientation.z = m.getRotation().z();
-        p.orientation.w = m.getRotation().w();
-        return p;
-    }
-
-    inline RCS::Pose & ConvertGeometryPose2TfPose(const geometry_msgs::Pose & m, RCS::Pose & p) {
-        RCS::Vector3 trans(m.position.x, m.position.y, m.position.z);
-        p.setOrigin(trans);
-        RCS::Rotation q(m.orientation.x, m.orientation.y, m.orientation.z, m.orientation.w);
-        p.setRotation(q);
-        return p;
-    }
-
     /*!
      * \brief enumeration of  length units. Conversion into ROS compatible meters.
      */

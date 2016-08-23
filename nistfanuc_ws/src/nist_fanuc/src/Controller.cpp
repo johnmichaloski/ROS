@@ -42,7 +42,7 @@ namespace RCS {
 
     // ----------------------------------------------------
     // Static definitions
-    RCS::CController Controller(DEFAULT_LOOP_CYCLE);
+    RCS::CController Cnc(DEFAULT_LOOP_CYCLE);
     RCS::CanonWorldModel CController::status;
     RCS::CanonWorldModel CController::laststatus;
     RCS::CMessageQueue<RCS::CanonCmd> CController::robotcmds;
@@ -54,11 +54,12 @@ namespace RCS {
 
     // ----------------------------------------------------
     // CController 
-    CController::CController(double cycletime) :  RCS::Thread(cycletime) {
+
+    CController::CController(double cycletime) : RCS::Thread(cycletime) {
         //IfDebug(LOG_DEBUG << "CController::CController"); // not initialized until after main :()
         eJointMotionPlanner = NOPLANNER;
         eCartesianMotionPlanner = NOPLANNER;
- 
+
     }
 
     CController::~CController(void) {
@@ -66,145 +67,147 @@ namespace RCS {
 
     bool CController::Verify() {
         IfDebug(LOG_DEBUG << "CController::Verify");
-#ifdef  MOVEITKIN
         assert(Kinematics() != NULL);
+#ifdef  MOVEITKIN
         assert(TrajectoryModel() != NULL);
 #endif
     }
- 
+
     void CController::CmdCallback(const nistcrcl::CrclCommandMsg::ConstPtr& cmdmsg) {
-        // "Deep copy" - not sure necessary, but works.
+        // "Deep copy" 
         nistcrcl::CrclCommandMsg cmd(*cmdmsg);
         ROS_INFO("CController::CmdCallback");
         crclcmds.AddMsgQueue(cmd);
 
     }
+
     void CController::Setup(ros::NodeHandle &nh) {
         IfDebug(LOG_DEBUG << "CController::Setup");
         Name() = "Controller";
 
         CController::status.Init();
-        _nh=&nh;
+        _nh = &nh;
         crcl_status = _nh->advertise<nistcrcl::CrclStatusMsg>("crcl_status", 10);
         crcl_cmd = _nh->subscribe("crcl_command", 10, &CController::CmdCallback, this);
-        rviz_jntcmd = _nh->advertise<sensor_msgs::JointState>("nist_controller/robot/joint_states", 10); 
-        CController::status.currentjoints = Controller.Kinematics()->ZeroJointState();
-        CController::status.currentjoints.name = Controller.Kinematics()->JointNames();
-        Controller.gripper.init(nh);
+        rviz_jntcmd = _nh->advertise<sensor_msgs::JointState>("nist_controller/robot/joint_states", 10);
+        Cnc.status.currentjoints = Cnc.Kinematics()->ZeroJointState();
+        Cnc.status.currentjoints.name = Cnc.Kinematics()->JointNames();
+        Cnc.gripper.init(nh);
         // fixme: read gripper status
     }
 
     RCS::CanonCmd CController::GetLastRobotCommand() {
-       IfDebug(LOG_DEBUG << "CController::GetLastRobotCommand");
-         try {
-            RCS::CanonCmd cc = Controller.robotcmds.BackMsgQueue();
+        IfDebug(LOG_DEBUG << "CController::GetLastRobotCommand");
+        try {
+            RCS::CanonCmd cc = Cnc.robotcmds.BackMsgQueue();
             return cc;
         } catch (...) {
             // exception if nothing in queue
         }
-        return RCS::Controller.LastCC();
+        return RCS::Cnc.LastCC();
     }
 
     JointState CController::GetLastJointState() {
-      IfDebug(LOG_DEBUG << "CController::GetLastJointState");
-         // This assumes queue of motion commands, with last being last in queue.
+        IfDebug(LOG_DEBUG << "CController::GetLastJointState");
+        // This assumes queue of motion commands, with last being last in queue.
         try {
-            RCS::CanonCmd cc = Controller.robotcmds.BackMsgQueue();
+            RCS::CanonCmd cc = Cnc.robotcmds.BackMsgQueue();
             // could be dwell so no actual joint positions in cmd at this point??
-            if(cc.joints.position.size()==0)
+            if (cc.joints.position.size() == 0)
                 throw std::runtime_error("Zero joint positions\n");
             return cc.joints;
-        } catch(std::exception err){
-            LOG_DEBUG << "CController::GetLastJointState exception" << err.what(); 
+        } catch (std::exception err) {
+            LOG_DEBUG << "CController::GetLastJointState exception" << err.what();
         } catch (...) {
             // exception if nothing in queue
         }
         // use actual readings of joints
-        return RCS::Controller.status.currentjoints;
+        return RCS::Cnc.status.currentjoints;
     }
 
     RCS::Pose CController::GetLastCommandedPose() {
-       IfDebug(LOG_DEBUG << "CController::GetLastCommandedPose");
-       JointState lastjoints = GetLastJointState();
-	return Controller.Kinematics()->FK(lastjoints.position); /**<  current robot pose */
-        //return EEPoseReader()->GetLinkValue(RCS::Controller.links.back());
-        //return RCS::Controller.Kinematics()->FK(lastjoints.position);
+        IfDebug(LOG_DEBUG << "CController::GetLastCommandedPose");
+        JointState lastjoints = GetLastJointState();
+        return Cnc.Kinematics()->FK(lastjoints.position);
+        //return EEPoseReader()->GetLinkValue(RCS::Cnc.links.back());
+        //return RCS::Cnc.Kinematics()->FK(lastjoints.position);
     }
 
     void CController::PublishCrclStatus() {
         nistcrcl::CrclStatusMsg statusmsg;
         statusmsg.header.stamp = ros::Time::now();
-        statusmsg.crclcommandstatus = Controller.status.crclcommandstatus; // done
-        statusmsg.crclcommandnum = Controller.status.echocmd.crclcommandnum;
-        statusmsg.crclstatusnum = Controller.status.echocmd.crclcommandnum;
- 	Controller.status.currentpose=Controller.Kinematics()->FK(Controller.status.currentjoints.position); /**<  current robot pose */
-        ConvertTfPose2GeometryPose(Controller.status.currentpose, statusmsg.statuspose);
-        statusmsg.statusjoints = Controller.status.currentjoints;
-        statusmsg.eepercent = Controller.status.eepercent;
+        statusmsg.crclcommandstatus = Cnc.status.crclcommandstatus; // done
+        statusmsg.crclcommandnum = Cnc.status.echocmd.crclcommandnum;
+        statusmsg.crclstatusnum = Cnc.status.echocmd.crclcommandnum;
+        Cnc.status.currentpose = Cnc.Kinematics()->FK(Cnc.status.currentjoints.position); /**<  current robot pose */
+        Conversion::TfPose2GeometryPose(Cnc.status.currentpose, statusmsg.statuspose);
+        statusmsg.statusjoints = Cnc.status.currentjoints;
+        statusmsg.eepercent = Cnc.status.eepercent;
         crcl_status.publish(statusmsg);
     }
-	/**
-	std_msgs/Header header
-	uint8 crclcommandnum
-	uint8 crclstatusnum
-	uint8 crclcommandstatus
-	################
-	uint8 done=0
-	uint8 error=1
-	uint8 working=2
-	################
-	geometry_msgs/Pose  statuspose
-	sensor_msgs/JointState statusjoints
-	float64 eepercent
 
-	*/
+    /**
+    std_msgs/Header header
+    uint8 crclcommandnum
+    uint8 crclstatusnum
+    uint8 crclcommandstatus
+    ################
+    uint8 done=0
+    uint8 error=1
+    uint8 working=2
+    ################
+    geometry_msgs/Pose  statuspose
+    sensor_msgs/JointState statusjoints
+    float64 eepercent
+
+     */
     int CController::Action() {
- //     IfDebug(LOG_DEBUG << "CController::Action");
+        //     IfDebug(LOG_DEBUG << "CController::Action");
         try {
             boost::mutex::scoped_lock lock(cncmutex);
-            if(crclcmds.SizeMsgQueue() > 0){
-                // Translate into Controller.cmds 
+            // Now, we only do one command at a time
+            if (crclcmds.SizeMsgQueue() > 0 && robotcmds.SizeMsgQueue() == 0) {
+                // Translate into Cnc.cmds 
                 // FIXME: this is an upcast
-				RCS::CanonCmd cc;
-				nistcrcl::CrclCommandMsg msg = crclcmds.PopFrontMsgQueue();
-                                LOG_DEBUG << "Msg Joints " << VectorDump<double>(msg.joints.position).c_str();
-				cc.Set(msg);
-                                LOG_DEBUG << "CC Joints " << VectorDump<double>(cc.joints.position).c_str();
+                RCS::CanonCmd cc;
+                nistcrcl::CrclCommandMsg msg = crclcmds.PopFrontMsgQueue();
+                LOG_DEBUG << "Msg Joints " << VectorDump<double>(msg.joints.position).c_str();
+                cc.Set(msg);
+                LOG_DEBUG << "CC Joints " << VectorDump<double>(cc.joints.position).c_str();
 #define FEEDBACKTEST2
 #ifdef FEEDBACKTEST
-				Controller.status.echocmd=cc; /**<  copy of current command */
-				Controller.status.currentjoints=Controller.Kinematics()->UpdateJointState(cc.jointnum, Controller.status.currentjoints, cc.joints); 
-				Controller.status.currentpose=Controller.Kinematics()->FK(Controller.status.currentjoints.position); /**<  current robot pose */
-                                Controller.status.currentjoints.header.stamp = ros::Time(0);
-                                LOG_DEBUG << "Current Joints " << VectorDump<double>(Controller.status.currentjoints.position).c_str();
-                                rviz_jntcmd.publish(Controller.status.currentjoints);
+                Cnc.status.echocmd = cc; /**<  copy of current command */
+                Cnc.status.currentjoints = Cnc.Kinematics()->UpdateJointState(cc.jointnum, Controller.status.currentjoints, cc.joints);
+                Cnc.status.currentpose = Cnc.Kinematics()->FK(Cnc.status.currentjoints.position); /**<  current robot pose */
+                Cnc.status.currentjoints.header.stamp = ros::Time(0);
+                LOG_DEBUG << "Current Joints " << VectorDump<double>(Cnc.status.currentjoints.position).c_str();
+                rviz_jntcmd.publish(Cnc.status.currentjoints);
 #elif defined FEEDBACKTEST2
-                                Controller.robotcmds.AddMsgQueue(cc);  // ok if not pose
-                                //Controller.robotcmds.BackMsgQueue().status = CanonStatusType::CANON_WAITING;
+                Cnc.robotcmds.AddMsgQueue(cc); // ok if not pose
 #else                          
-				_interpreter.ParseCommand(cc);
+                _interpreter.ParseCommand(cc);
 #endif
             }
 
             // Motion commands to robot - only joint at this point
-            if (Controller.robotcmds.SizeMsgQueue() == 0) {
-                 _lastcc = _newcc;
+            if (Cnc.robotcmds.SizeMsgQueue() == 0) {
+                _lastcc = _newcc;
                 _lastcc.status = CanonStatusType::CANON_DONE;
-                Controller.status.crclcommandstatus= CanonStatusType::CANON_DONE;
+                Cnc.status.crclcommandstatus = CanonStatusType::CANON_DONE;
             } else {
                 _lastcc = _newcc;
-                _newcc = Controller.robotcmds.PopFrontMsgQueue();
+                _newcc = Cnc.robotcmds.PopFrontMsgQueue();
                 _newcc.status = CanonStatusType::CANON_WORKING;
                 // update status
-                RCS::Controller.status.echocmd = _newcc;
-                Controller.status.crclcommandstatus= CanonStatusType::CANON_WORKING;
+                Cnc.status.echocmd = _newcc;
+                Cnc.status.crclcommandstatus = CanonStatusType::CANON_WORKING;
 
                 if (_newcc.crclcommand == CanonCmdType::CANON_DWELL) {
                     // This isn't very exact, as there will some time wasted until we are here
                     // Thread cycle time already adjusted to seconds
                     _newcc.dwell_seconds -= ((double) CycleTime());
                     if (_newcc.dwell_seconds > 0.0) {
-                        Controller.robotcmds.InsertFrontMsgQueue(_newcc);
+                        Cnc.robotcmds.InsertFrontMsgQueue(_newcc);
                     }
                 } else if (_newcc.crclcommand == CanonCmdType::CANON_SET_GRIPPER) {
                     sensor_msgs::JointState gripperjoints;
@@ -212,26 +215,26 @@ namespace RCS {
                         gripperjoints = gripper.closeSetup();
                     else
                         gripperjoints = gripper.openSetup();
-                    Controller.status.eepercent =_newcc.eepercent;
+                    Cnc.status.eepercent = _newcc.eepercent;
                     rviz_jntcmd.publish(gripperjoints);
                     // No speed control for now.
-                    
+
                 } else {
 #ifdef FEEDBACKTEST2
-                    Controller.status.currentjoints = Controller.Kinematics()->UpdateJointState(_newcc.jointnum, Controller.status.currentjoints, _newcc.joints);
+                    Cnc.status.currentjoints = Cnc.Kinematics()->UpdateJointState(_newcc.jointnum, Cnc.status.currentjoints, _newcc.joints);
 #else
                     // Should have been updated by interpreter - and many more of them
-                    Controller.status.currentjoints = _newcc.joints;
+                    Cnc.status.currentjoints = _newcc.joints;
 #endif
-                    Controller.status.currentpose = Controller.Kinematics()->FK(Controller.status.currentjoints.position); /**<  current robot pose */
-                    Controller.status.currentjoints.header.stamp = ros::Time(0);
-                    LOG_DEBUG << "Current Joints " << VectorDump<double>(Controller.status.currentjoints.position).c_str();
-                    rviz_jntcmd.publish(Controller.status.currentjoints);
-                  
+                    Cnc.status.currentpose = Cnc.Kinematics()->FK(Cnc.status.currentjoints.position); /**<  current robot pose */
+                    Cnc.status.currentjoints.header.stamp = ros::Time(0);
+                    LOG_DEBUG << "Current Joints " << VectorDump<double>(Cnc.status.currentjoints.position).c_str();
+                    rviz_jntcmd.publish(Cnc.status.currentjoints);
+
                     //#define MARKERS
 #ifdef MARKERS
-                    RCS::Pose goalpose=Controller.Kinematics()->FK(_newcc.joint.position);
-                    //RCS::Pose goalpose = EEPoseReader()->GetLinkValue(RCS::Controller.links.back());
+                    RCS::Pose goalpose = Cnc.Kinematics()->FK(_newcc.joint.position);
+                    //RCS::Pose goalpose = EEPoseReader()->GetLinkValue(RCS::Cnc.links.back());
                     LOG_DEBUG << "Marker Pose " << DumpPose(goalpose).c_str();
                     RvizMarker()->Send(goalpose);
 #endif
@@ -248,8 +251,8 @@ namespace RCS {
         return 1;
     }
 
- 
-
+    
+#ifdef ROBOTSTATUS
     // ----------------------------------------------------
     // RobotStatus 
 
@@ -268,24 +271,25 @@ namespace RCS {
                 if (curjoints.position.size() == 0)
                     return 1;
                 assert(curjoints.position.size() != 0);
-                RCS::Controller.status.currentjoints = curjoints;
+                RCS::Cnc.status.currentjoints = curjoints;
                 // Use forward kinematics to get current pose
-                Controller.status.currentpose=Controller.Kinematics()->FK(curjoints.position);
-                //RCS::Controller.status.currentpose = Kinematics()->FK(cjoints.position);
-                //RCS::Controller.status.currentpose = RCS::Controller.EEPoseReader()->GetLinkValue(RCS::Controller.links.back());
-               LOG_DEBUG << RCS::DumpPose(RCS::Controller.status.currentpose);
+                Cnc.status.currentpose = Cnc.Kinematics()->FK(curjoints.position);
+                //RCS::Cnc.status.currentpose = Kinematics()->FK(cjoints.position);
+                //RCS::Cnc.status.currentpose = RCS::Cnc.EEPoseReader()->GetLinkValue(RCS::Controller.links.back());
+                LOG_DEBUG << RCS::DumpPose(RCS::Cnc.status.currentpose);
 #if 0
                 if (--i < 0) {
                     LOG_DEBUG << "Current Joints " << VectorDump<double>(cjoints.position).c_str();
-                    LOG_DEBUG << "Canon pose " << DumpPose(RCS::Controller.status.currentpose);
+                    LOG_DEBUG << "Canon pose " << DumpPose(RCS::Cnc.status.currentpose);
                     i = 20;
                 }
 #endif
-             }
+            }
         } catch (...) {
             LOG_DEBUG << "Exception in RobotStatus::Action()\n";
         }
         return 1;
     }
+#endif
 }
 

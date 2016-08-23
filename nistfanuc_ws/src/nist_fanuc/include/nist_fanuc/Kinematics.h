@@ -179,7 +179,7 @@ public:
 #include <sensor_msgs/JointState.h>
 #include <shape_msgs/SolidPrimitive.h>
 #include <std_msgs/Header.h>
-
+#include "Conversions.h"
 
 typedef moveit::planning_interface::MoveItErrorCode RosErrorCode;
 
@@ -310,7 +310,7 @@ public:
         request.header.frame_id = "base_link";
         armkin->getPositionFK(request, response);
         RCS::Pose  pose;
-        RCS::ConvertGeometryPose2TfPose(response.pose_stamped[0].pose, pose);
+        Conversion::GeometryPose2TfPose(response.pose_stamped[0].pose, pose);
         return pose;
     }
     // http://docs.ros.org/jade/api/moveit_msgs/html/msg/PositionIKRequest.html
@@ -322,7 +322,7 @@ public:
         request.ik_request.pose_stamped.header.stamp = ros::Time::now();
         request.ik_request.ik_link_name = _eelinkname;
         request.ik_request.group_name = "manipulator";
-        RCS::ConvertTfPose2GeometryPose(pose, request.ik_request.pose_stamped.pose);
+        Conversion::TfPose2GeometryPose(pose, request.ik_request.pose_stamped.pose);
 
         //request.pose_stamped.pose = pose;
         request.ik_request.attempts = 1;

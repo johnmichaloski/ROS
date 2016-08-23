@@ -23,8 +23,6 @@
 	    <rosparam param="/source_list">[nist_controller/robot/joint_states]</rosparam>
 	</node>
 
-
-
 <!---->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find nist_fanuc)/visualize.rviz" required="true" />
 

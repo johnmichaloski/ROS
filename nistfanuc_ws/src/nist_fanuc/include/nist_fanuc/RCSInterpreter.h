@@ -21,25 +21,36 @@
 //#include "Trajectory.h"
 #include "trajectoryMaker.h"
 #include "MotionControl.h"
-
 /*!
 * \brief RCSInterpreter parses a RCS command and generates robot motion commands.
 */
 class RCSInterpreter
+{
+public:   
+    virtual int ParseCommand(RCS::CanonCmd cmd)=0;
+    IKinematicsSharedPtr _kinematics; /**<  kinematics pointer */
+};
+class BangBangInterpreter: public RCSInterpreter
+{
+public:
+    virtual int ParseCommand(RCS::CanonCmd cmd);
+};
+
+class SimpleMotionInterpreter: public RCSInterpreter
 {
 public:
 	/*!
 	* \brief RCSInterpreter constructor that optionally accepts pointer to kinematic instance.
 	\param k is the kinematics pointer
 	*/
-    RCSInterpreter(IKinematicsSharedPtr k = NULL);
-    ~RCSInterpreter(void);
+    SimpleMotionInterpreter(IKinematicsSharedPtr k = NULL);
+    ~SimpleMotionInterpreter(void);
 
 	/*!
 	* \brief ParseCommand parses a RCS command and queues robot motion commands.
 	\param cmd is the command to interpret
 	*/
-    int ParseCommand(RCS::CanonCmd cmd);
+    virtual int ParseCommand(RCS::CanonCmd cmd);
 protected:
 	/*!
 	* \brief AddJointCommands  accepts vector of joint trajectories and adds to robot motion queue.
@@ -57,7 +68,6 @@ protected:
 
     //////////////////////////////////////////////////
 public:
-    IKinematicsSharedPtr _kinematics; /**<  kinematics pointer */
 #ifdef DESCARTES
     TrajectoryVec results; /**< descartes motion planner results */
 #endif

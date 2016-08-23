@@ -24,6 +24,7 @@ using namespace sensor_msgs;
 using namespace descartes_core;
 using namespace descartes_trajectory;
 #endif
+
 /**
     uint8 crclcommand
 
@@ -39,17 +40,21 @@ using namespace descartes_trajectory;
     float64 eepercent
     CrclMaxProfileMsg[] profile # maximum profile 
  */
-RCSInterpreter::RCSInterpreter(IKinematicsSharedPtr pKinematics) {
+
+int BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd) {
+    RCS::Cnc.robotcmds.AddMsgQueue(cmd);
+    return 0;
+}
+SimpleMotionInterpreter::SimpleMotionInterpreter(IKinematicsSharedPtr pKinematics) {
     _kinematics = pKinematics; // hopefully can be null
     //    _kinematics = IKinematicsSharedPtr(new DummyKinematics());
     rates = IRate(DEFAULT_CART_MAX_VEL, DEFAULT_CART_MAX_ACCEL, DEFAULT_LOOP_CYCLE);
-
 }
 
-RCSInterpreter::~RCSInterpreter(void) {
+SimpleMotionInterpreter::~SimpleMotionInterpreter(void) {
 }
 
-void RCSInterpreter::AddJointCommands(std::vector<JointState > gotojoints) {
+void SimpleMotionInterpreter::AddJointCommands(std::vector<JointState > gotojoints) {
     for (size_t i = 0; i < gotojoints.size(); i++) {
         RCS::CanonCmd newcc;
         newcc.crclcommand = CanonCmdType::CANON_MOVE_JOINT;
@@ -60,11 +65,11 @@ void RCSInterpreter::AddJointCommands(std::vector<JointState > gotojoints) {
 #endif
         newcc.joints.velocity = gotojoints[i].velocity;
         newcc.joints.effort = gotojoints[i].effort;
-        Controller.robotcmds.AddMsgQueue(newcc);
+        Cnc.robotcmds.AddMsgQueue(newcc);
     }
 }
 
-std::vector<JointState> RCSInterpreter::PlanCartesianMotion(std::vector<RCS::Pose> poses) {
+std::vector<JointState> SimpleMotionInterpreter::PlanCartesianMotion(std::vector<RCS::Pose> poses) {
     std::vector<JointState> gotojoints;
     if (poses.size() == 0)
         return gotojoints;
@@ -76,18 +81,18 @@ std::vector<JointState> RCSInterpreter::PlanCartesianMotion(std::vector<RCS::Pos
         std::cout << "CartesianMotion  Poses " << DumpPose(poses[i]).c_str();
     }
 #endif
-    if (RCS::Controller.eCartesianMotionPlanner == RCS::CController::MOVEIT) {
+    if (RCS::Cnc.eCartesianMotionPlanner == RCS::CController::MOVEIT) {
 #ifdef MOVEITPLANNER
-        if (RCS::Controller.MoveitPlanner()->Plan(poses)) {
-            gotojoints = RCS::Controller.MoveitPlanner()->GetJtsPlan();
+        if (RCS::Cnc.MoveitPlanner()->Plan(poses)) {
+            gotojoints = RCS::Cnc.MoveitPlanner()->GetJtsPlan();
             return gotojoints;
         }
 #else
         // assume first one is where were are already
         for(size_t j=1; j< poses.size(); j++) {
-            if (RCS::Controller.MoveitPlanner()->Plan(poses[j-1], poses[j])) {
+            if (RCS::Cnc.MoveitPlanner()->Plan(poses[j-1], poses[j])) {
                 std::vector<JointState> intermedjoints;
-                intermedjoints = RCS::Controller.MoveitPlanner()->GetJtsPlan();
+                intermedjoints = RCS::Cnc.MoveitPlanner()->GetJtsPlan();
                 gotojoints.insert(gotojoints.end(), intermedjoints.begin(), intermedjoints.end());
             }
         }
@@ -100,14 +105,14 @@ std::vector<JointState> RCSInterpreter::PlanCartesianMotion(std::vector<RCS::Pos
 #endif
         return gotojoints;
 
-    } else // if (RCS::Controller.eCartesianMotionPlanner == RCS::CController::WAYPOINT) {
+    } else // if (RCS::Cnc.eCartesianMotionPlanner == RCS::CController::WAYPOINT) {
     {
 #ifdef MOVEITKIN
         std::vector<double> oldjoints = RCS::Controller.status.currentjoints.position;
         for (size_t i = 0; i < poses.size(); i++) {
 
-            //RCS::Controller.Kinematics()->SetJointValues(oldjoints);
-            std::vector<double> joints = RCS::Controller.Kinematics()-> IK(poses[i], oldjoints);
+            //RCS::Cnc.Kinematics()->SetJointValues(oldjoints);
+            std::vector<double> joints = RCS::Cnc.Kinematics()-> IK(poses[i], oldjoints);
 #ifdef DEBUG
             std::cout << "GotoPose " << DumpPose(poses[i]).c_str();
             std::cout << "New Joints " << VectorDump<double>(joints).c_str();
@@ -121,16 +126,16 @@ std::vector<JointState> RCSInterpreter::PlanCartesianMotion(std::vector<RCS::Pos
     }
 }
 
-int RCSInterpreter::ParseCommand(RCS::CanonCmd cc) {
- //   IfDebug(Globals.ErrorMessage("RCSInterpreter::ParseCommand\n"));
+int SimpleMotionInterpreter::ParseCommand(RCS::CanonCmd cc) {
+ //   IfDebug(Globals.ErrorMessage("SimpleMotionInterpreter::ParseCommand\n"));
 
     // This approach should debounce multiple commands to same position - e.g., 0->30, 0->30
     JointState currentjoints;
     RCS::Pose currentpose; // = RCS::Controller.status.currentpose;
 
-    //RCS::CanonCmd lastrobotcmd = Controller.GetLastRobotCommand();
-    currentjoints = RCS::Controller.GetLastJointState(); //  open loop - "not actual"
-    currentpose = RCS::Controller.Kinematics()->FK(currentjoints.position);
+    //RCS::CanonCmd lastrobotcmd = Cnc.GetLastRobotCommand();
+    currentjoints = RCS::Cnc.GetLastJointState(); //  open loop - "not actual"
+    currentpose = RCS::Cnc.Kinematics()->FK(currentjoints.position);
 #ifdef HEAVYDEBUG
     std::cout << "Current Joints " << VectorDump<double>(currentjoints.position).c_str();
     std::cout << "Current Pose " << DumpPose(currentpose).c_str();
@@ -142,7 +147,7 @@ int RCSInterpreter::ParseCommand(RCS::CanonCmd cc) {
         //newcc.crclcommand = CanonCmdType::CANON_SET_GRIPPER;
         //newcc.eepercent=cc.eepercent;
         newcc.status = CanonStatusType::CANON_WAITING;
-         Controller.robotcmds.AddMsgQueue(newcc);            
+         Cnc.robotcmds.AddMsgQueue(newcc);            
         }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // MOVE JOINTS
@@ -177,9 +182,9 @@ int RCSInterpreter::ParseCommand(RCS::CanonCmd cc) {
 #endif
         std::vector<JointState > gotojoints;
 
-        if (RCS::Controller.eJointMotionPlanner == RCS::CController::WAYPOINT) {
+        if (RCS::Cnc.eJointMotionPlanner == RCS::CController::WAYPOINT) {
             gotojoints = motioncontrol.computeCoorindatedWaypoints(currentjoints.position, joints.position, 0.001, true);
-        } else if (RCS::Controller.eJointMotionPlanner == RCS::CController::BASIC) {
+        } else if (RCS::Cnc.eJointMotionPlanner == RCS::CController::BASIC) {
             TrajectoryMaker maker;
             maker.Rates().CurrentFeedrate() = jointsmaxvel;
             maker.Rates().MaximumAccel() = jointsmaxacc;
@@ -188,10 +193,10 @@ int RCSInterpreter::ParseCommand(RCS::CanonCmd cc) {
             gotojoints = maker.GetJtsPlan();
         } 
 #ifdef MOVEITPLANNER
-        else if (RCS::Controller.eJointMotionPlanner == RCS::CController::MOVEIT) {
-            if (!RCS::Controller.MoveitPlanner()->Plan(joints))
+        else if (RCS::Cnc.eJointMotionPlanner == RCS::CController::MOVEIT) {
+            if (!RCS::Cnc.MoveitPlanner()->Plan(joints))
                 return -1;
-            gotojoints = RCS::Controller.MoveitPlanner()->GetJtsPlan();
+            gotojoints = RCS::Cnc.MoveitPlanner()->GetJtsPlan();
         } 
 #endif
         else {
@@ -222,11 +227,11 @@ int RCSInterpreter::ParseCommand(RCS::CanonCmd cc) {
     }////////////////////////////////////////////////////////////////////////////////////////////////
         // STOP MOTION
     else if (cc.crclcommand == CanonCmdType::CANON_STOP_MOTION) {
-        std::vector<std::vector<double> > displacements(Controller.status.currentjoints.velocity.size(), std::vector<double>());
+        std::vector<std::vector<double> > displacements(Cnc.status.currentjoints.velocity.size(), std::vector<double>());
         cc.jointnum.clear();
 
         // clear motion queue   - we are stopping asap!
-        Controller.robotcmds.ClearMsgQueue();
+        Cnc.robotcmds.ClearMsgQueue();
     }////////////////////////////////////////////////////////////////////////////////////////////////
         // MOVE CARTESIAN
     else if (cc.crclcommand == CanonCmdType::CANON_MOVE_TO) {
@@ -235,7 +240,7 @@ int RCSInterpreter::ParseCommand(RCS::CanonCmd cc) {
         RCS::Pose goalpose ;
         tf::poseMsgToTF (cc.finalpose, goalpose);
 #ifdef MOVEITKIN
-        if (RCS::Controller.Kinematics()->IsSingular(goalpose, 0.0001)) {
+        if (RCS::Cnc.Kinematics()->IsSingular(goalpose, 0.0001)) {
             std::cout << "Is singular pose: " << DumpPose(goalpose).c_str();
         }
 #endif
@@ -265,7 +270,7 @@ int RCSInterpreter::ParseCommand(RCS::CanonCmd cc) {
         newcc.crclcommand = CanonCmdType::CANON_DWELL;
         newcc.status = CanonStatusType::CANON_WAITING;
         newcc.dwell_seconds = cc.dwell_seconds;
-        Controller.robotcmds.AddMsgQueue(newcc);
+        Cnc.robotcmds.AddMsgQueue(newcc);
     }
     return 0;
 }

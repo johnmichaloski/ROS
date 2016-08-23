@@ -109,10 +109,10 @@ namespace RCS {
          */
         void SetKinematics(boost::shared_ptr<IKinematics> k) {
             Kinematics() = k;
-            _interpreter._kinematics = k;
+            _interpreter->_kinematics = k;
         }
 
-        RCSInterpreter _interpreter; /**<  interprets canon commands into robot commands */
+        boost::shared_ptr<RCSInterpreter> _interpreter; /**<  interprets canon commands into robot commands */
 
         /**<  current new canon command to interpret*/
         NVAR(NewCC, RCS::CanonCmd, _newcc);
@@ -142,10 +142,10 @@ namespace RCS {
         MotionPlannerEnum eCartesianMotionPlanner; /**< type of cartesian motion to use */
         MotionPlannerEnum eJointMotionPlanner; /**< type of joint motion to use */
     };
-    extern CController Controller; /**< global declaration of ONE controller */
+    extern CController Cnc; /**< global declaration of ONE controller */
 
     //* The RobotCommands is currently a dummy class. The CController thread 
-
+#ifdef ROBOTSTATUS
     /**
      * \brief  The RobotStatus is a thread that reads the status of the robot and updates the world model. 
      * The RobotStatus is a separate thread that reads the robot status using ROS communication mechanisms
@@ -185,4 +185,5 @@ namespace RCS {
             assert(Kinematics() != NULL);
         }
     };
+#endif
 }

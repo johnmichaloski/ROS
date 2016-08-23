@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   tf
 tf_conversions
+rviz_visual_tools
    moveit_ros_planning_interface
     moveit_ros_move_group
     moveit_ros_planning
@@ -43,6 +44,7 @@ catkin_package(
     nistcrcl
     tf
 tf_conversions
+rviz_visual_tools
   DEPENDS
     Boost
     Eigen
@@ -88,31 +90,24 @@ include_directories(include
 
 add_executable(nist_fanuc 
 
-#src/CRCL/CRCLCommandInstance.cxx
-#src/CRCL/CRCLCommands.cxx 
-#src/CRCL/CRCLProgramInstance.cxx
-#src/CRCL/CRCLStatus.cxx
-#src/CRCL/DataPrimitives.cxx
-#src/AsioCrclServer.cpp
-#src/crcl.cpp
-#src/CrclInterface.cpp
+
+src/BLogging.cpp
+src/Communication.cpp
 src/Controller.cpp
-src/RCS.cpp
-src/RCSInterpreter.cpp
-#src/urdf_parse_model.cpp
+src/Conversions.cpp
 src/Globals.cpp
 src/Kinematics.cpp
-#src/Trajectory.cpp
 src/MotionControl.cpp
-src/nist_fanuc.cpp
-src/Communication.cpp
-src/Setup.cpp
-src/moveit.cpp
-src/trajectoryMaker.cpp
-src/Conversions.cpp
+src/RCS.cpp
+src/RCSInterpreter.cpp
 src/RvizMarker.cpp
+src/Scene.cpp
+src/Setup.cpp
 src/arm_kinematics.cpp
-src/BLogging.cpp
+src/moveit.cpp
+src/nist_fanuc.cpp
+src/trajectoryMaker.cpp
+
 )
 
 #Add all files in subdirectories of the project in
