@@ -76,7 +76,7 @@ RCS::Pose RosKinematics::FK(std::vector<double> jv) {
             ks->getGlobalLinkTransform(_eelinkname));
 //   std::cout << "end_effector_state=" << end_effector_state.translation() << std::endl;
     RCS::Pose pose;
-    pose = Conversion::Affine3d2UrdfPose(end_effector_state);
+    pose = Conversion::Affine3d2RcsPose(end_effector_state);
     return pose;
 }
 
@@ -87,7 +87,7 @@ std::vector<double> RosKinematics::IK(RCS::Pose & pose, std::vector<double> oldj
     const Eigen::Affine3d &end_effector_state1 =
             kinematic_state->getGlobalLinkTransform("joint_6_link");
 #endif
-    Eigen::Affine3d end_effector_state = Conversion::UrdfPose2Affine3d(pose);
+    Eigen::Affine3d end_effector_state = Conversion::RcsPose2Affine3d(pose);
     //      end_effector_state.translation()=pose.translation;
     //      end_effector_state.rotation()=pose.rotation ;
 
@@ -162,7 +162,7 @@ RCS::Pose MoveitKinematics::FK(std::vector<double> jv) {
     SetJointValues(jv);
     Eigen::Affine3d end_effector_state = Eigen::Affine3d(
             kinematic_state->getGlobalLinkTransform(group->getEndEffectorLink().c_str()));
-    return Conversion::Affine3d2UrdfPose(end_effector_state);
+    return Conversion::Affine3d2RcsPose(end_effector_state);
 }
 // http://docs.ros.org/jade/api/moveit_core/html/classmoveit_1_1core_1_1RobotState.html
 std::vector<double> MoveitKinematics::IK(RCS::Pose & pose, std::vector<double> oldjoints) {
@@ -171,9 +171,9 @@ std::vector<double> MoveitKinematics::IK(RCS::Pose & pose, std::vector<double> o
 
     //    const Eigen::Affine3d &end_effector_state1 =
     //            kinematic_state->getGlobalLinkTransform(_eelinkname.c_str());
-    Eigen::Affine3d end_effector_state = Conversion::UrdfPose2Affine3d(pose);
+    Eigen::Affine3d end_effector_state = Conversion::RcsPose2Affine3d(pose);
 
-    //geometry_msgs::Pose end_effector_state=  UrdfPose2PoseMsg(pose);
+    //geometry_msgs::Pose end_effector_state=  RcsPose2PoseMsg(pose);
     bool found_ik = kinematic_state->setFromIK(joint_model_group, end_effector_state, 10, 0.1);
     if (found_ik) {
         kinematic_state->copyJointGroupPositions(joint_model_group, joints);
@@ -191,7 +191,7 @@ bool MoveitKinematics::IsSingular(RCS::Pose & pose,
     //The reference point position (with respect to the link specified in link_name) - Base?
     Eigen::Vector3d reference_point_position(0.0, 0.0, 0.0); // or with z offset?
     Eigen::MatrixXd jacobian;
-    Eigen::Affine3d end_effector_state = Conversion::UrdfPose2Affine3d(pose);
+    Eigen::Affine3d end_effector_state = Conversion::RcsPose2Affine3d(pose);
     bool found_ik = kinematic_state->setFromIK(joint_model_group, 
             end_effector_state, 
             1/*attempts*/, 

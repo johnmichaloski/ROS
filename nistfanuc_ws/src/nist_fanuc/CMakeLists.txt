@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   tf
 tf_conversions
+eigen_conversions
 rviz_visual_tools
    moveit_ros_planning_interface
     moveit_ros_move_group
@@ -44,6 +45,7 @@ catkin_package(
     nistcrcl
     tf
 tf_conversions
+eigen_conversions
 rviz_visual_tools
   DEPENDS
     Boost
@@ -95,6 +97,7 @@ src/BLogging.cpp
 src/Communication.cpp
 src/Controller.cpp
 src/Conversions.cpp
+src/CsvLogging.cpp
 src/Globals.cpp
 src/Kinematics.cpp
 src/MotionControl.cpp

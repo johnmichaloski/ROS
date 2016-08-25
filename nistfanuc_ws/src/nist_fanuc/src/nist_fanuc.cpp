@@ -73,6 +73,9 @@ int main(int argc, char** argv) {
         // ros::param::get("~private_name", param); 
         boostlogfile = nh.param<std::string>("logfile", "/home/isd/michalos/Documents/example.log");
         boostloglevel = (boost::log::v2_mt_posix::trivial::severity_level) nh.param<int>("loglevel", 0); // 0 = debug
+        Cnc.bCvsPoseLogging() = nh.param<int>("csvlogging", 0);
+        Cnc.CvsPoseLoggingFile() = nh.param<std::string>("csvlogfile", "/home/isd/michalos/Documents/nistcrcl.csv");
+
         // THIS DOESN'T WORK
 #if 0
         int rosloglevel = nh.param<int>("~rosloglevel", 0); // 0 = debug

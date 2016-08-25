@@ -79,7 +79,22 @@ namespace RCS {
             boost::mutex::scoped_lock lock(m);
             xml_msgs.push_back(t);
         }
-
+        /*!
+         * \brief AddMsgQueue mutex push to back an item onto message queue.
+         * \param  T       item to place in back of message queue.
+         */
+        void AddBackMsgQueue(T t) {
+            boost::mutex::scoped_lock lock(m);
+            xml_msgs.push_back(t);
+        }
+        /*!
+         * \brief AddMsgQueue mutex push to front an item onto message queue.
+         * \param  T       item to place in front of message queue.
+         */
+        void AddFrontMsgQueue(T t) {
+            boost::mutex::scoped_lock lock(m);
+            xml_msgs.insert(xml_msgs.begin(), t);
+        }
 		/*!
 		* \brief InsertFrontMsgQueue mutex push to front an item onto message queue.
 		* \param  T       item to place in front of message queue.

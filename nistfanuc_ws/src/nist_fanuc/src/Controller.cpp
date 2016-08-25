@@ -39,17 +39,18 @@
 namespace RCS {
     boost::mutex cncmutex;
 
-
     // ----------------------------------------------------
-    // Static definitions
+    // Extern definitions
     RCS::CController Cnc(DEFAULT_LOOP_CYCLE);
+
+    // Static definitions
+#if 0
     RCS::CanonWorldModel CController::status;
     RCS::CanonWorldModel CController::laststatus;
-    RCS::CMessageQueue<RCS::CanonCmd> CController::robotcmds;
+    RCS::CMessageQueue<RCS::CanonCmd> CController::robotcmds; /**< queue of commands interpreted into robot motion */
+    RCS::CMessageQueue<nistcrcl::CrclCommandMsg> CController::crclcmds; /**< queue of commands from Crcl messages */
     std::list<RCS::CanonCmd> CController::donecmds;
-    bool RCS::CController::bSimulation = true;
-
-    RCS::CMessageQueue<nistcrcl::CrclCommandMsg> CController::crclcmds; /**< queue of commands interpreted from Crcl messages */
+#endif
     //Trajectory CController::trajectory_model;
 
     // ----------------------------------------------------
@@ -59,7 +60,9 @@ namespace RCS {
         //IfDebug(LOG_DEBUG << "CController::CController"); // not initialized until after main :()
         eJointMotionPlanner = NOPLANNER;
         eCartesianMotionPlanner = NOPLANNER;
-
+        bCvsPoseLogging() = false;
+        bMarker() = false;
+        bSimulation() = true;
     }
 
     CController::~CController(void) {
@@ -85,7 +88,7 @@ namespace RCS {
         IfDebug(LOG_DEBUG << "CController::Setup");
         Name() = "Controller";
 
-        CController::status.Init();
+        status.Init();
         _nh = &nh;
         crcl_status = _nh->advertise<nistcrcl::CrclStatusMsg>("crcl_status", 10);
         crcl_cmd = _nh->subscribe("crcl_command", 10, &CController::CmdCallback, this);
@@ -93,7 +96,12 @@ namespace RCS {
         Cnc.status.currentjoints = Cnc.Kinematics()->ZeroJointState();
         Cnc.status.currentjoints.name = Cnc.Kinematics()->JointNames();
         Cnc.gripper.init(nh);
-        // fixme: read gripper status
+        // fixme: read arm and gripper joint positions
+        if (bCvsPoseLogging()) {
+            if (CvsPoseLoggingFile().empty())
+                LOG_DEBUG << "Empty CController::Setup CvsPoseLoggingFile";
+            PoseLogging().Open(CvsPoseLoggingFile());
+        }
     }
 
     RCS::CanonCmd CController::GetLastRobotCommand() {
@@ -231,17 +239,17 @@ namespace RCS {
                     LOG_DEBUG << "Current Joints " << VectorDump<double>(Cnc.status.currentjoints.position).c_str();
                     rviz_jntcmd.publish(Cnc.status.currentjoints);
 
-                    //#define MARKERS
-#ifdef MARKERS
-                    RCS::Pose goalpose = Cnc.Kinematics()->FK(_newcc.joint.position);
-                    //RCS::Pose goalpose = EEPoseReader()->GetLinkValue(RCS::Cnc.links.back());
-                    LOG_DEBUG << "Marker Pose " << DumpPose(goalpose).c_str();
-                    RvizMarker()->Send(goalpose);
-#endif
+                    if (bMarker()) {
+                        RCS::Pose goalpose = Cnc.Kinematics()->FK(_newcc.joints.position);
+                        //RCS::Pose goalpose = EEPoseReader()->GetLinkValue(RCS::Cnc.links.back());
+                        LOG_DEBUG << "Marker Pose " << DumpPose(goalpose).c_str();
+                        RvizMarker()->Send(goalpose);
+                    }
                 }
             }
             PublishCrclStatus();
-            // MotionLogging();
+            if (bCvsPoseLogging())
+                MotionLogging();
 
         } catch (std::exception & e) {
             std::cerr << "Exception in  CController::Action() thread: " << e.what() << "\n";
@@ -251,7 +259,11 @@ namespace RCS {
         return 1;
     }
 
-    
+    void CController::MotionLogging(){
+        if(bCvsPoseLogging())
+            PoseLogging().MotionLogging(status);
+    }
+
 #ifdef ROBOTSTATUS
     // ----------------------------------------------------
     // RobotStatus 
@@ -292,4 +304,3 @@ namespace RCS {
     }
 #endif
 }
-

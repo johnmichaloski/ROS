@@ -30,6 +30,7 @@
 #include "nist_fanuc/RvizMarker.h"
 #include "nist_fanuc/arm_kinematics.h"
 #include "nist_fanuc/Gripper.h"
+#include "nist_fanuc/CsvLogging.h"
 
 #include "nistcrcl/CrclCommandMsg.h"
 #include "nistcrcl/CrclStatusMsg.h"
@@ -47,7 +48,6 @@ namespace RCS {
      */
     struct CController : public RCS::Thread {
         typedef std::list<RCS::CanonCmd> xml_message_list;
-
         /*!
          * \brief CController constructor that requires a cycle time for RCS thread timing.
          * \param cycletime  in seconds.
@@ -55,12 +55,11 @@ namespace RCS {
         CController(double cycletime);
 
         ~CController(void);
-        static bool bSimulation; /**< simulation flag - not connected to robot */
-        static RCS::CanonWorldModel status; /**< current status of controller */
-        static RCS::CanonWorldModel laststatus; /**< last status of controller */
-        static RCS::CMessageQueue<nistcrcl::CrclCommandMsg > crclcmds; /**< queue of commands interpreted from Crcl messages */
-        static std::list<RCS::CanonCmd> donecmds; /**< list of commands interpreted from Crcl messages that have completed*/
-        static RCS::CMessageQueue<RCS::CanonCmd> robotcmds; /**< list of commands to be sent to robot */
+        RCS::CanonWorldModel status; /**< current status of controller */
+        RCS::CanonWorldModel laststatus; /**< last status of controller */
+        RCS::CMessageQueue<nistcrcl::CrclCommandMsg > crclcmds; /**< queue of commands interpreted from Crcl messages */
+        std::list<RCS::CanonCmd> donecmds; /**< list of commands interpreted from Crcl messages that have completed*/
+        RCS::CMessageQueue<RCS::CanonCmd> robotcmds; /**< list of commands to be sent to robot */
  
         /*!
          *\brief Verifies that all the pointer references in the controller have been instantiated (i.e., not null).
@@ -95,6 +94,11 @@ namespace RCS {
         VAR(RvizMarker, boost::shared_ptr<CRvizMarker>)
         VAR(EEPoseReader, boost::shared_ptr<CLinkReader>)
         VAR(Gripper, boost::shared_ptr<GripperInterface>)
+        VAR(bSimulation, bool) /**< simulation flag - not connected to robot */
+        VAR(bMarker, bool)
+        VAR(bCvsPoseLogging, bool)
+        VAR(CvsPoseLoggingFile, std::string)
+        VAR(PoseLogging, CsvLogging )
         ros::Publisher crcl_status; /**< ros publisher information used for crcl status updates */
         ros::Subscriber crcl_cmd; /**< ros subscriber information used for crcl command updates */
         ros::Publisher  rviz_jntcmd; /**< ros publisher information for joint_publisher */

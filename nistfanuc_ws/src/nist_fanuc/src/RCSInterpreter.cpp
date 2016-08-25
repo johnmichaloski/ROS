@@ -18,6 +18,7 @@
 #include "Conversions.h"
 #include "trajectoryMaker.h"
 #include <tf/transform_datatypes.h>
+#include "Conversions.h"
 using namespace RCS;
 using namespace sensor_msgs;
 #ifdef DESCARTES
@@ -42,7 +43,21 @@ using namespace descartes_trajectory;
  */
 
 int BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd) {
+
+	if (cmd.crclcommand == CanonCmdType::CANON_MOVE_JOINT) {
+		// Move immediately to joint value - Fill in other joints with current values
+		cmd.joints = Cnc.Kinematics()->UpdateJointState(cmd.jointnum, Cnc.status.currentjoints, cmd.joints);
+	}
+	else if(cmd.crclcommand == CanonCmdType::CANON_MOVE_TO)
+	{
+		// FIXME: need to subtract off tool offset from tcp
+                RCS::Pose goalpose = Conversion::GeomMsgPose2RcsPose(cmd.finalpose);
+		cmd.joints.position = Cnc.Kinematics()->IK(goalpose, Cnc.status.currentjoints.position);
+		cmd.crclcommand = CanonCmdType::CANON_MOVE_JOINT;
+	}
+
     RCS::Cnc.robotcmds.AddMsgQueue(cmd);
+
     return 0;
 }
 SimpleMotionInterpreter::SimpleMotionInterpreter(IKinematicsSharedPtr pKinematics) {

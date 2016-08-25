@@ -43,7 +43,7 @@ std::vector<JointState> MoveitPlanning::GetJtsPlan() {
 RCS::Pose MoveitPlanning::ForwardKinematics() {
     Eigen::Affine3d end_effector_state = Eigen::Affine3d(
             kinematic_state->getGlobalLinkTransform(group->getEndEffectorLink().c_str()));
-    return Conversion::Affine3d2UrdfPose(end_effector_state);
+    return Conversion::Affine3d2RcsPose(end_effector_state);
 }
 
 std::vector<double> MoveitPlanning::GetJointValues() {
@@ -100,7 +100,7 @@ RCS::Pose MoveitPlanning::GetCurrentPose() {
 
     geometry_msgs::PoseStamped current_pose =
             group->getCurrentPose();
-    return Conversion::GeomMsgPose2UrdfPose(current_pose.pose);
+    return Conversion::GeomMsgPose2RcsPose(current_pose.pose);
 }
 bool MoveitPlanning::Plan(geometry_msgs::Pose& pose) {
     group->allowReplanning(false);
@@ -129,7 +129,7 @@ bool MoveitPlanning::Plan(Eigen::Affine3d& pose) {
      return true;
 }
 bool MoveitPlanning::Plan(RCS::Pose& pose) {
-     Eigen::Affine3d affpose = Conversion::UrdfPose2Affine3d(pose);
+     Eigen::Affine3d affpose = Conversion::RcsPose2Affine3d(pose);
     geometry_msgs::Pose target_pose1 = Conversion::PoseAffineToGeomMsg(affpose);
  
     
@@ -150,7 +150,7 @@ bool MoveitPlanning::Plan(RCS::Pose& pose) {
 bool MoveitPlanning::Plan(RCS::Pose & curpose,RCS::Pose & goalpose)
 {
 	robot_state::RobotState robotstate(kinematic_model);
-	robotstate.setFromIK(joint_model_group, Conversion::UrdfPose2GeomMsgPose(curpose)) ; 
+	robotstate.setFromIK(joint_model_group, Conversion::RcsPose2GeomMsgPose(curpose)) ; 
 	group->setStartState (robotstate);
 	return Plan(goalpose);
 }
@@ -177,7 +177,7 @@ bool MoveitPlanning::Plan(std::vector<RCS::Pose>& pwaypoints) {
     std::vector<geometry_msgs::Pose> waypoints;
     for(size_t i=0; i< pwaypoints.size(); i++)
     {    
-        waypoints.push_back(Conversion::UrdfPose2GeomMsgPose(pwaypoints[i]));
+        waypoints.push_back(Conversion::RcsPose2GeomMsgPose(pwaypoints[i]));
     }
 
     group->allowReplanning(false);
@@ -204,7 +204,7 @@ bool MoveitPlanning::Plan(JointState curjoints, std::vector<RCS::Pose>& inwaypoi
         kinematic_state->setJointPositions(joint_names[i], &curjoints.position[i]);
     
     for (size_t i = 0; i < inwaypoints.size(); i++)
-        waypoints.push_back(Conversion::UrdfPose2Affine3d(inwaypoints[i]));
+        waypoints.push_back(Conversion::RcsPose2Affine3d(inwaypoints[i]));
 
     moveit::core::JointModelGroup * jmg = (moveit::core::JointModelGroup *)joint_model_group;
 

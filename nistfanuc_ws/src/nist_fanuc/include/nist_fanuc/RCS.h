@@ -399,9 +399,9 @@ namespace RCS {
         void Init();
 
         CanonCmd echocmd; /**<  copy of current command */
-        CanonCmdType echo_cmd; /**<  copy of current command type */
+        int echo_cmd; /**<  copy of current command type */
         int crclcommandstatus;
-        CanonStatusType echo_status; /**<  copy of current status type */
+        int echo_status; /**<  copy of current status type */
 
         /*!
          * \brief Cycletime of the world model. 

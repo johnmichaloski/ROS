@@ -7,6 +7,11 @@
 
 #include "geometry_msgs/PoseStamped.h"
 #include "RCS.h"
+
+// Conversions
+#include <tf_conversions/tf_eigen.h>
+#include <eigen_conversions/eigen_msg.h>
+
 namespace Conversion {
 
     inline geometry_msgs::Pose& TfPose2GeometryPose(RCS::Pose & m, geometry_msgs::Pose & p) {
@@ -28,15 +33,22 @@ namespace Conversion {
         return p;
     }
 
-    RCS::Pose GeomMsgPose2UrdfPose(const geometry_msgs::Pose &m);
-    geometry_msgs::Pose UrdfPose2GeomMsgPose(const RCS::Pose &m);
+     inline RCS::Pose GeomMsgPose2RcsPose(const geometry_msgs::Pose &m) {
+        RCS::Pose p;
+        RCS::Vector3 trans(m.position.x, m.position.y, m.position.z);
+        p.setOrigin(trans);
+        RCS::Rotation q(m.orientation.x, m.orientation.y, m.orientation.z, m.orientation.w);
+        p.setRotation(q);
+        return p;
+    }
+    geometry_msgs::Pose RcsPose2GeomMsgPose(const RCS::Pose &m);
     Eigen::Affine3d GeomMsgPose2Affine3d(const geometry_msgs::Pose &m);
     geometry_msgs::Pose PoseAffineToGeomMsg(const Eigen::Affine3d &e);
-    RCS::Pose Affine3d2UrdfPose(const Eigen::Affine3d &pose);
-    Eigen::Affine3d UrdfPose2Affine3d(const RCS::Pose &pose);
+    RCS::Pose Affine3d2RcsPose(const Eigen::Affine3d &pose);
+    Eigen::Affine3d RcsPose2Affine3d(const RCS::Pose &pose);
 
-    std::vector<geometry_msgs::Pose> UrdfPoses2PoseMsgs(const std::vector<RCS::Pose> &src);
-    std::vector<RCS::Pose> PoseMsgs2UrdfPoses(const std::vector<geometry_msgs::Pose> &src);
+    std::vector<geometry_msgs::Pose> RcsPoses2PoseMsgs(const std::vector<RCS::Pose> &src);
+    std::vector<RCS::Pose> PoseMsgs2RcsPoses(const std::vector<geometry_msgs::Pose> &src);
     std::vector<Eigen::Affine3d> PoseMsgs2AffEigenPoses(const std::vector<geometry_msgs::Pose> &src);
     std::vector<geometry_msgs::Pose> AffEigenPoses2PoseMsgs(const std::vector<Eigen::Affine3d> &src);
     //JointState     Vector2JointState(const  std::vector<double>  &src);

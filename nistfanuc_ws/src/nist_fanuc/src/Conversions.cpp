@@ -6,16 +6,7 @@
 
 namespace Conversion {
 
-    RCS::Pose GeomMsgPose2UrdfPose(const geometry_msgs::Pose &m) {
-        RCS::Pose p;
-        RCS::Vector3 trans(m.position.x, m.position.y, m.position.z);
-        p.setOrigin(trans);
-        RCS::Rotation q(m.orientation.x, m.orientation.y, m.orientation.z, m.orientation.w);
-        p.setRotation(q);
-        return p;
-    }
-
-    geometry_msgs::Pose UrdfPose2GeomMsgPose(const RCS::Pose &m) {
+    geometry_msgs::Pose RcsPose2GeomMsgPose(const RCS::Pose &m) {
         geometry_msgs::Pose p;
         p.position.x = m.getOrigin().x();
         p.position.y = m.getOrigin().y();
@@ -69,18 +60,18 @@ namespace Conversion {
      * \param pose is the urdf pose with position and rotation.
      * \return   eigen Affine3d pose 
      */
-    Eigen::Affine3d UrdfPose2Affine3d(const RCS::Pose &pose) {
+    Eigen::Affine3d RcsPose2Affine3d(const RCS::Pose &pose) {
         Eigen::Quaterniond q(pose.getRotation().w(), pose.getRotation().x(), pose.getRotation().y(), pose.getRotation().z());
         Eigen::Affine3d af(Eigen::Translation3d(pose.getOrigin().x(), pose.getOrigin().y(), pose.getOrigin().z()) * q.toRotationMatrix());
         return af;
     }
 
     /*!
-     * \brief affine3d2UrdfPose converts an  Eigen affine 4x4 matrix  o represent the pose into a urdf pose 
+     * \brief affine3d2RcsPose converts an  Eigen affine 4x4 matrix  o represent the pose into a urdf pose 
      * vparam pose   eigen Affine3d pose 
      * \return   urdf pose with position and rotation.
      */
-    RCS::Pose Affine3d2UrdfPose(const Eigen::Affine3d &pose) {
+    RCS::Pose Affine3d2RcsPose(const Eigen::Affine3d &pose) {
         RCS::Pose p;
         p.getOrigin().setX(pose.translation().x());
         p.getOrigin().setY(pose.translation().y());
@@ -88,10 +79,10 @@ namespace Conversion {
 
         Eigen::Quaterniond q(pose.rotation());
         tf::Quaternion qtf(q.x(), q.y(), q.z(), q.w());
-        //std::cout <<  "Affine3d2UrdfPose Quaterion = \n" << q.x() << ":" << q.y() << ":" << q.z() << ":" << q.w() << std::endl;
+        //std::cout <<  "Affine3d2RcsPose Quaterion = \n" << q.x() << ":" << q.y() << ":" << q.z() << ":" << q.w() << std::endl;
 
         p.setRotation(qtf);
-        //std::cout <<  "After Affine3d2UrdfPose Quaterion = \n" << p.getRotation().x() << ":" << p.getRotation().y() << ":" << p.getRotation().z() << ":" << p.getRotation().w() << std::endl;
+        //std::cout <<  "After Affine3d2RcsPose Quaterion = \n" << p.getRotation().x() << ":" << p.getRotation().y() << ":" << p.getRotation().z() << ":" << p.getRotation().w() << std::endl;
 
 #if 0
         MatrixEXd m = pose.rotation();
@@ -109,16 +100,16 @@ namespace Conversion {
     //------------------------------------------------
     // vector conversions
 
-    std::vector<geometry_msgs::Pose> UrdfPoses2PoseMsgs(const std::vector<RCS::Pose> &src) {
+    std::vector<geometry_msgs::Pose> RcsPoses2PoseMsgs(const std::vector<RCS::Pose> &src) {
         std::vector<geometry_msgs::Pose> dest;
         dest.resize(src.size());
-        std::transform(src.begin(), src.end(), dest.begin(), Conversion::UrdfPose2GeomMsgPose);
+        std::transform(src.begin(), src.end(), dest.begin(), Conversion::RcsPose2GeomMsgPose);
     }
 
-    std::vector<RCS::Pose> PoseMsgs2UrdfPoses(const std::vector<geometry_msgs::Pose> &src) {
+    std::vector<RCS::Pose> PoseMsgs2RcsPoses(const std::vector<geometry_msgs::Pose> &src) {
         std::vector<RCS::Pose> dest;
         dest.resize(src.size());
-        std::transform(src.begin(), src.end(), dest.begin(), Conversion::GeomMsgPose2UrdfPose);
+        std::transform(src.begin(), src.end(), dest.begin(), Conversion::GeomMsgPose2RcsPose);
     }
 
     std::vector<Eigen::Affine3d> PoseMsgs2AffEigenPoses(const std::vector<geometry_msgs::Pose> &src) {
