@@ -18,6 +18,8 @@
 #include <string>
 #include <fstream>
 #include <boost/thread.hpp>
+#include <boost/preprocessor.hpp>
+
 #include <ctime>
 #include <stdarg.h>
 #include <sstream>
@@ -68,6 +70,29 @@ public: Y & X( ) { return Z; }
 #ifndef FOREACH
 #define FOREACH(it, v) for(typeof((v).begin()) it = (v).begin(); it != (v).end(); it++)
 #endif
+
+
+#define X_DEFINE_ENUM_WITH_STRING_CONVERSIONS_TOSTRING_CASE(r, data, elem)    \
+    case elem : return BOOST_PP_STRINGIZE(elem);
+
+#define DEFINE_ENUM_WITH_STRING_CONVERSIONS(name, enumerators)                \
+    enum name {                                                               \
+        BOOST_PP_SEQ_ENUM(enumerators)                                        \
+    };                                                                        \
+                                                                              \
+    inline const char* ToString(name v)                                       \
+    {                                                                         \
+        switch (v)                                                            \
+        {                                                                     \
+            BOOST_PP_SEQ_FOR_EACH(                                            \
+                X_DEFINE_ENUM_WITH_STRING_CONVERSIONS_TOSTRING_CASE,          \
+                name,                                                         \
+                enumerators                                                   \
+            )                                                                 \
+            default: return "[Unknown " BOOST_PP_STRINGIZE(name) "]";         \
+        }                                                                     \
+    }
+
 /**
 * \brief CGlobals is a catch-all data structure for collecting global functions, extensions, parameters, etc.
 *  Functions here usually vary between windows and linux, or

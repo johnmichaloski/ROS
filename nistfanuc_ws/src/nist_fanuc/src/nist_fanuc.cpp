@@ -188,8 +188,9 @@ int main(int argc, char** argv) {
                 );
         //chain.SetPoseCallback(KinematicChain::MotionEquation::GOAL, boost::bind(&KinematicChain::MotionEquation::GetPose, &chain, _1));
         chain.SetPose( KinematicChain::MotionEquation::GOAL, GoalPose);
-        chain.SetPoseCallback(KinematicChain::MotionEquation::GOAL, boost::bind(&KinematicChain::MotionEquation::GetPose, &chain, _1));
+        //chain.SetPoseCallback(KinematicChain::MotionEquation::GOAL, boost::bind(&KinematicChain::MotionEquation::GetPose, &chain, _1));
         chain.SetPose( KinematicChain::MotionEquation::TOOL, Gripper);
+        std::cout << chain.DumpEquation();
        std::vector<double> joints = chain. Solve();
 #endif
        

@@ -37,7 +37,15 @@ namespace RCS
         //s << Crcl::DumpRotationAsCrcl(pose)<< std::endl;
         return s.str();
     }
+    inline     std::string DumpPoseSimple(RCS::Pose & pose) {
+        std::stringstream s;
 
+        s << "Translation = " << 1000.0 * pose.getOrigin().x() << ":" << 1000.0 * pose.getOrigin().y() << ":" << 1000.0 * pose.getOrigin().z() ;
+        double roll, pitch, yaw;
+        getRPY(pose, roll, pitch, yaw);
+        s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw) << std::endl;
+         return s.str();
+    }
     /*!
      * \brief DumpJoints takes a list of joints and generates a string describing pose. 
      * Can be used as std::cout << DumpPose(pose); 

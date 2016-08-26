@@ -2,12 +2,14 @@
 
 #pragma once
 #include <stdexcept>
-#include "RCS.h"
-#include "Controller.h"
 #include <stdarg.h>   
 #include <boost/shared_ptr.hpp>
 #include "boost/bind.hpp" 
 #include "boost/function.hpp" 
+
+#include "RCS.h"
+#include "Controller.h"
+#include "Globals.h"
 using namespace tf;
 
 namespace KinematicChain {
@@ -15,18 +17,15 @@ namespace KinematicChain {
     class MotionEquation {
     public:
         typedef boost::function<RCS::Pose(size_t) > ChainFunc;
-
-        enum EqTypes { DONE = 0, EQUALS, ROBOT, TOOL, BASE, SENSOR, GOAL, WORLD, TABLE};
+DEFINE_ENUM_WITH_STRING_CONVERSIONS( EqTypes,(DONE)(EQUALS)( ROBOT)(TOOL)(BASE)(SENSOR)( GOAL)( WORLD)(TABLE))
+//enum EqTypes { DONE = 0, EQUALS, ROBOT, TOOL, BASE, SENSOR, GOAL, WORLD, TABLE};
 
         MotionEquation() {
 
         }
 
-        static RCS::Pose Placeholder(size_t) {
-            return RCS::Pose(tf::Quaternion(0, 0, 0, 1), Vector3(0, 0, 0));
-        }
-
-        int make_equation(std::string name, boost::shared_ptr<IKinematics> kin,
+        int make_equation(std::string name,
+                boost::shared_ptr<IKinematics> kin,
                 int m1, ...) {
             int type;
             bool bFlag = true;
@@ -49,6 +48,7 @@ namespace KinematicChain {
             }
             va_end(ap);
 
+            // Perform some basic position kinematic equation checking
             std::vector<int>::iterator it;
             if ((it = std::find(EQUATION.begin(), EQUATION.end(), MotionEquation::EQUALS)) == EQUATION.end())
                 return -1;
@@ -61,15 +61,35 @@ namespace KinematicChain {
             if (EQUATION.size() < 3)
                 return -1;
 
-
+            // How far in is the EQUALS enum in the equation
             int pos = std::distance( EQUATION.begin(), it);
             if (pos < 1)
                 return -1;
 
-            CHAIN.resize(EQUATION.size(), boost::bind(&MotionEquation::Placeholder, _1));
+            CHAIN.resize(EQUATION.size(), boost::bind(&MotionEquation::GetPose, this, _1));
             Poses.resize(EQUATION.size(), RCS::Pose(Quaternion(0, 0, 0, 1), Vector3(0, 0, 0)));
         }
 
+        std::string DumpMatrices(std::vector<RCS::Pose> ms) {
+
+            for (int i = 0; i < ms.size(); i++) {
+                for (size_t j = 0; j < 4; j++) {
+                    for (int k = 0; k < 5; k++)
+                    {
+                        printf("%5d ", ms[i][j][k]);
+                    }
+                    printf("\n");
+                }
+            }
+
+        }
+        std::string DumpEquation() {
+            std::stringstream ss;
+            for (size_t i = 0; i < Poses.size(); i++)
+                ss << i << "["<< ToString((MotionEquation::EqTypes) EQUATION[i])<< "]"<<  "=" << RCS::DumpPoseSimple(Poses[i]) ;
+            return ss.str();
+        }
+        
         virtual RCS::Pose FindGoal() {
             // For now assume Robot on LHS
             int eqpos = std::distance( EQUATION.begin(), std::find(EQUATION.begin(), EQUATION.end(), EQUALS));
@@ -112,7 +132,7 @@ namespace KinematicChain {
             return pos;
         }
 
-        virtual void SetPoseCallback(EqTypes i, ChainFunc pose = boost::bind(&MotionEquation::Placeholder, _1)) {
+        virtual void SetPoseCallback(EqTypes i, ChainFunc pose ) {
             int n = FindIndex(i);
             CHAIN[n] = pose;
         }
