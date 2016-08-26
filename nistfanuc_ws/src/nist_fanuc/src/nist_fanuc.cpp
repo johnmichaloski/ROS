@@ -128,9 +128,17 @@ int main(int argc, char** argv) {
         pRvizMarker->Init();
         pLinkReader = boost::shared_ptr<CLinkReader>(new CLinkReader(nh));
 
-#define ARMKIN
+//#define ARMKIN
 #ifdef ARMKIN
         kin = boost::shared_ptr<IKinematics>(new ArmKinematics());
+        // Initializatin of Controller instantiatio of shared objects  
+        kin->Init(std::string("manipulator"), std::string("tool0"));
+        kin->Init(nh);
+        RCS::Cnc.Kinematics() = kin;
+#endif
+#define FASTKIN    
+#ifdef FASTKIN
+        kin = boost::shared_ptr<IKinematics>(new FastKinematics());
         // Initializatin of Controller instantiatio of shared objects  
         kin->Init(std::string("manipulator"), std::string("tool0"));
         kin->Init(nh);
@@ -162,11 +170,11 @@ int main(int argc, char** argv) {
         RCS::Pose Robot(Quaternion(0, 0, 0, 1), Vector3(0, 0, 0));
         RCS::Pose Gripper(Quaternion(0, 0, 0, 1), Vector3(.120, 0, 0));
         RCS::Pose Table(Quaternion(0, 0, 0, 1), Vector3(0, 0, 0));
- //       RCS::Pose GoalPose(Quaternion ( Vector3(0, 1, 0), 1.57), Vector3(0.25, -.45, 0.35));
+        RCS::Pose GoalPose(Quaternion ( Vector3(0, 1, 0), 1.57), Vector3(0.25, -.45, 0.35));
         // Works
         // RCS::Pose GoalPose(Quaternion (0, 0, 0, 1), Vector3(0.465, 0, 0.695));
        // RCS::Pose GoalPose(Quaternion ( Vector3(0, 1, 0), 1.57), Vector3(0.465, 0, 0.695));
-        RCS::Pose GoalPose(Quaternion (0, 0, 0, 1), Vector3(0.465, 0, .335));
+        //RCS::Pose GoalPose(Quaternion (0, 0, 0, 1), Vector3(0.465, 0, .335));
 
         KinematicChain::MotionEquation chain;
         chain.make_equation("Test", kin,

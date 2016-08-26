@@ -111,7 +111,7 @@ src/arm_kinematics.cpp
 src/moveit.cpp
 src/nist_fanuc.cpp
 src/trajectoryMaker.cpp
-
+src/fanuc_lrmate200id_manipulator_ikfast_solver.cpp
 )
 
 #Add all files in subdirectories of the project in
