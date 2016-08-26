@@ -106,6 +106,7 @@ src/RCSInterpreter.cpp
 src/RvizMarker.cpp
 src/Scene.cpp
 src/Setup.cpp
+src/TrajModel.cpp
 src/arm_kinematics.cpp
 src/moveit.cpp
 src/nist_fanuc.cpp

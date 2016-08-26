@@ -19,6 +19,7 @@
 #include "trajectoryMaker.h"
 #include <tf/transform_datatypes.h>
 #include "Conversions.h"
+#include "Debug.h"
 using namespace RCS;
 using namespace sensor_msgs;
 #ifdef DESCARTES

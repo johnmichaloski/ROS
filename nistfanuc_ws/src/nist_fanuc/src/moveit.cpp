@@ -5,7 +5,7 @@
 #include "moveit.h"
 #include "Globals.h"
 #include "Conversions.h"
-
+#include "Debug.h"
 MoveitPlanning::MoveitPlanning(ros::NodeHandle &nh) {
 
     NumPlanningAttempts() = 1;

@@ -8,21 +8,12 @@
 #include <sstream>
 
 #include <boost/algorithm/string.hpp>
-
 #include <ros/ros.h>
 
 #include "Globals.h"
+#include "Debug.h"
 
-template<typename T>
-static std::string MapDump(std::map<std::string, T> m) {
-    std::stringstream s;
 
-    for (typename std::map<std::string, T>::iterator it = m.begin(); it != m.end(); it++) {
-        s << (*it).first << "=" << (*it).second << std::endl;
-    }
-    s << std::endl;
-    return s.str();
-}
 
 static void SetupRosEnv(std::string envname, std::string envval, int overwrite = 1) {
     if (0 != setenv(envname.c_str(), envval.c_str(), overwrite))

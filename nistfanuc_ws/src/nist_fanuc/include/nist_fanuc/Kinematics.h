@@ -6,7 +6,7 @@
 #include "Globals.h"
 #include <boost/shared_ptr.hpp>
 #include <boost/thread/mutex.hpp>
-
+#include "Debug.h"
 /**
  * \brief The IKinematics provides is an abstract class with pure virtual functions that are
  * overriden by actual kinematic implementations.
@@ -322,11 +322,15 @@ public:
         request.ik_request.pose_stamped.header.stamp = ros::Time::now();
         request.ik_request.ik_link_name = _eelinkname;
         request.ik_request.group_name = "manipulator";
+        request.ik_request.robot_state.joint_state.name = joint_names;
+        request.ik_request.ik_link_names= link_names;
+        request.ik_request.robot_state.joint_state.position=oldjoints;
         Conversion::TfPose2GeometryPose(pose, request.ik_request.pose_stamped.pose);
 
         //request.pose_stamped.pose = pose;
         request.ik_request.attempts = 1;
         armkin->getPositionIK(request, response);
+        //response.error_code.val == response.error_code.SUCCES
         return response.solution.joint_state.position;
     }
 

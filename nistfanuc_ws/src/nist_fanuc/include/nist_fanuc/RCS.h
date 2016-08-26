@@ -430,59 +430,7 @@ namespace RCS {
         double eepercent;
     };
 
-    /*!
-     * \brief DumpJoints takes a list of joints and generates a string describing pose. 
-     * Can be used as std::cout << DumpPose(pose); 
-     */
-
-    inline std::string DumpJoints(JointState joints) {
-        std::stringstream s;
-        s << VectorDump<double> (joints.position);
-        return s.str();
-    }
-    /*!
-     * \brief DumpPose takes a urdf pose  and generates a string describing pose. 
-     * Can be used as std::cout << DumpPose(pose); 
-     */
-    extern std::string DumpPose(RCS::Pose & pose);
-
-    /*!
-     * \brief DumpPose takes a urdf pose  and generates a string describing pose. 
-     * Can be used as std::cout << DumpPose(pose); 
-     */
-    inline std::ostream & operator<<(std::ostream & os, RCS::Pose & pose) {
-        std::stringstream s;
-        s << "Translation = " << 1000.0 * pose.getOrigin().x() << ":" << 1000.0 * pose.getOrigin().y() << ":" << 1000.0 * pose.getOrigin().z() << std::endl;
-        double roll, pitch, yaw;
-        getRPY(pose, roll, pitch, yaw);
-        s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw) << std::endl;
-        s << "Quaterion = " << pose.getRotation().x() << ":" << pose.getRotation().y() << ":" << pose.getRotation().z() << ":" << pose.getRotation().w() << std::endl;
-        os << s.str();
-    }
-
-    /*!
-     * \brief DumpQuaterion takes a urdf quaterion  and generates a string describing x,y,z,w coordinates. 
-     * Can be used as std::cout << DumpQuaterion(urdf::rotation); 
-     */
-    inline std::string DumpQuaterion(std::ostream & os, const RCS::Rotation & rot) {
-        std::stringstream s;
-        s << "Quaterion = ";
-        s << boost::format("X=%8.4f") % rot.x() << ":";
-        s << boost::format("Y=%8.4f") % rot.y() << ":";
-        s << boost::format("Z=%8.4f") % rot.z() << ":";
-        s << boost::format("W=%8.4f") % rot.w() << ":";
-        s << std::endl;
-        return s.str();
-    }
 };
 
-inline std::ostream & operator<<(std::ostream & os, const RCS::CanonCmd & cc) {
-    os << "Cmd = " << cc.crclcommand << " Status = " << cc.status << std::endl << "Joints = ";
 
-    for (size_t i = 0; i < cc.joints.position.size(); i++) {
-        os << i << "=" << Rad2Deg(cc.joints.position[i]) << ":";
-    }
-    os << std::endl;
-    return os;
-}
 

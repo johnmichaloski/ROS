@@ -1,6 +1,7 @@
 
 
 #include "Communication.h"
+#include "Debug.h"
 using namespace std;
 boost::mutex CJointReader::_reader_mutex;
 

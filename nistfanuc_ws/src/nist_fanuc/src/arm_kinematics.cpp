@@ -197,7 +197,7 @@ bool Kinematics::getPositionIK(moveit_msgs::GetPositionIK::Request &request,
             ROS_ERROR("i: %d, No joint index for %s",i,request.ik_request.robot_state.joint_state.name[i].c_str());
         }
     }
-
+#if 0
     //Convert F to our root_frame
     try {
         tf_listener.transformPose(root_name, transform, transform_root);
@@ -206,9 +206,10 @@ bool Kinematics::getPositionIK(moveit_msgs::GetPositionIK::Request &request,
         response.error_code.val = response.error_code.FRAME_TRANSFORM_FAILURE;
        return false;
     }
-
+#endif
     KDL::Frame F_dest;
-    tf::TransformTFToKDL(transform_root, F_dest);
+    tf::TransformTFToKDL(transform, F_dest);
+//    tf::TransformTFToKDL(transform_root, F_dest);
 
     int ik_valid = ik_solver_pos->CartToJnt(jnt_pos_in, F_dest, jnt_pos_out);
 

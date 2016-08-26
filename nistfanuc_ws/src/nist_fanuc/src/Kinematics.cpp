@@ -6,6 +6,7 @@
 #include <iostream>
 #include "Conversions.h"
 #include "Globals.h"
+#include "Debug.h"
 // DISCLAIMER:
 // This software was developed by U.S. Government employees as part of
 // their official duties and is not subject to copyright. No warranty implied 

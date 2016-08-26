@@ -13,12 +13,6 @@
 
 #define BOOST_ALL_NO_LIB
 
-#ifdef WIN32
-#define _WIN32_WINNT_WIN7    0x0601
-#define _WIN32_WINNT         _WIN32_WINNT_WIN7
-#define _WIN32_WINDOWS       _WIN32_WINNT_WIN7
-#endif
-
 #include "Controller.h"
 #include <boost/exception/all.hpp>
 #include <boost/thread.hpp>
@@ -27,6 +21,7 @@
 
 #include "urdf_model/rosmath.h"
 #include "RvizMarker.h"
+#include "Debug.h"
 
 // No namespace declarations
 //////////////////////////////////

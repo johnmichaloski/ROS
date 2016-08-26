@@ -38,7 +38,7 @@ namespace Conversion {
 #if 0
         MatrixEXd em = e.rotation();
 
-        Eigen::Quaterniond q = EMatrix2Quaterion(em);
+        Eigen::Quaterniond q = EMatrix2Quaternion(em);
 #endif
         Eigen::Quaterniond q(e.rotation());
         m.orientation.x = q.x();

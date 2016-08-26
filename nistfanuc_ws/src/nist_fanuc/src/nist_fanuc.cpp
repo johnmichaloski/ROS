@@ -19,13 +19,16 @@
 #include <ros/console.h>
 
 #include "RvizMarker.h"
-
+#include "NIST/TrajModel.h"
 #include "NIST/BLogging.h"
+#include "Debug.h"
+using namespace KinematicChain;
 
 // /opt/ros/indigo/include/moveit/robot_state/robot_state.h
 // /opt/ros/indigo/include/moveit/move_group_interface/move_group.h
 extern void SetupSceneObject();
 extern void InitSceneObject();
+
 int main(int argc, char** argv) {
 
     // Current robot joints declaration
@@ -68,6 +71,7 @@ int main(int argc, char** argv) {
         ros::init(argc, argv, "nist_fanuc");
         ros::NodeHandle nh;
         ros::Rate r(50); // 10 times a second - 10Hz
+
 
         // Accessing Private Parameters
         // ros::param::get("~private_name", param); 
@@ -133,7 +137,7 @@ int main(int argc, char** argv) {
         RCS::Cnc.Kinematics() = kin;
 #endif
 
-        //#define MOVEITKIN      
+//#define MOVEITKIN      
 #ifdef MOVEITKIN
         kin = boost::shared_ptr<IKinematics>(new MoveitKinematics(nh));
         // Initializatin of Controller instantiatio of shared objects  
@@ -151,6 +155,36 @@ int main(int argc, char** argv) {
         RCS::Cnc.status.Init();
         RCS::Cnc.CycleTime() = DEFAULT_LOOP_CYCLE;
 
+        #if 1
+        //http://www.radmangames.com/programming/how-to-use-boost-bind
+        RCS::Pose Base(Quaternion(0, 0, 0, 1), Vector3(0, 0, 0));
+
+        RCS::Pose Robot(Quaternion(0, 0, 0, 1), Vector3(0, 0, 0));
+        RCS::Pose Gripper(Quaternion(0, 0, 0, 1), Vector3(.120, 0, 0));
+        RCS::Pose Table(Quaternion(0, 0, 0, 1), Vector3(0, 0, 0));
+ //       RCS::Pose GoalPose(Quaternion ( Vector3(0, 1, 0), 1.57), Vector3(0.25, -.45, 0.35));
+        // Works
+        // RCS::Pose GoalPose(Quaternion (0, 0, 0, 1), Vector3(0.465, 0, 0.695));
+       // RCS::Pose GoalPose(Quaternion ( Vector3(0, 1, 0), 1.57), Vector3(0.465, 0, 0.695));
+        RCS::Pose GoalPose(Quaternion (0, 0, 0, 1), Vector3(0.465, 0, .335));
+
+        KinematicChain::MotionEquation chain;
+        chain.make_equation("Test", kin,
+                KinematicChain::MotionEquation::BASE, 
+                KinematicChain::MotionEquation::ROBOT, 
+                KinematicChain::MotionEquation::TOOL, 
+                KinematicChain::MotionEquation::EQUALS,
+                KinematicChain::MotionEquation::TABLE, 
+                KinematicChain::MotionEquation::GOAL,
+                KinematicChain::MotionEquation::DONE
+                );
+        //chain.SetPoseCallback(KinematicChain::MotionEquation::GOAL, boost::bind(&KinematicChain::MotionEquation::GetPose, &chain, _1));
+        chain.SetPose( KinematicChain::MotionEquation::GOAL, GoalPose);
+        chain.SetPoseCallback(KinematicChain::MotionEquation::GOAL, boost::bind(&KinematicChain::MotionEquation::GetPose, &chain, _1));
+        chain.SetPose( KinematicChain::MotionEquation::TOOL, Gripper);
+       std::vector<double> joints = chain. Solve();
+#endif
+       
 
         //        RCS::Controller.TrajectoryWriter() = trajWriter;
         RCS::Cnc.JointWriter() = jointWriter;
@@ -221,7 +255,7 @@ int main(int argc, char** argv) {
         InitSceneObject();
         SetupSceneObject();
         //       jointWriter->Start();
-        RCS::Cnc._interpreter=  boost::shared_ptr<RCSInterpreter>(new BangBangInterpreter());
+        RCS::Cnc._interpreter = boost::shared_ptr<RCSInterpreter>(new BangBangInterpreter());
         RCS::Cnc.Start(); // start the Controller Session thread
 
         spinner.stop();

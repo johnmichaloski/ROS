@@ -192,32 +192,4 @@ public:
 extern  CGlobals Globals; /**< global definition of globals  */
 extern   void          DebugBreak( ); /**< global definition of windows DebugBreak equivalent.  */
 
-template<typename T>
-inline std::string VectorDump (std::vector<T> v)
-{
-	std::stringstream s;
 
-	for ( size_t i = 0; i < v.size( ); i++ )
-	{
-		s << v[i] << ":";
-	}
-	s << std::endl;
-	return s.str();
-}
-
-template<typename T>
-inline std::vector<T> ToVector (int n,  ...)
-{
-	std::vector<T> ds;
-	va_list        args; // define argument list variable
-	va_start(args, n);   // init list; point to last
-	//   defined argument
-
-	for ( int i = 0; i < n; i++ )
-	{
-		double d = va_arg(args, T); // get next argument
-		ds.push_back(d);
-	}
-	va_end(args);   // clean up the system stack
-	return ds;
-}
