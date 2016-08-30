@@ -17,7 +17,7 @@ namespace KinematicChain {
     class MotionEquation {
     public:
         typedef boost::function<RCS::Pose(size_t) > ChainFunc;
-DEFINE_ENUM_WITH_STRING_CONVERSIONS( EqTypes,(DONE)(EQUALS)( ROBOT)(TOOL)(BASE)(SENSOR)( GOAL)( WORLD)(TABLE))
+DEFINE_ENUM_WITH_STRING_CONVERSIONS( EqTypes,(DONE)(EQUALS)( ROBOT)(TOOL)(BASE)(SENSOR)( GOAL)( WORLD)(TABLE)(ROBOT2))
 //enum EqTypes { DONE = 0, EQUALS, ROBOT, TOOL, BASE, SENSOR, GOAL, WORLD, TABLE};
 
         MotionEquation() {
@@ -25,13 +25,13 @@ DEFINE_ENUM_WITH_STRING_CONVERSIONS( EqTypes,(DONE)(EQUALS)( ROBOT)(TOOL)(BASE)(
         }
 
         int make_equation(std::string name,
-                boost::shared_ptr<IKinematics> kin,
+     //           boost::shared_ptr<IKinematics> kin,
                 int m1, ...) {
             int type;
             bool bFlag = true;
             ChainFunc pose;
             Name() = name;
-            Kin() = kin;
+     //       Kin() = kin;
 
             EQUATION.clear();
             EQUATION.push_back(m1);
@@ -70,24 +70,33 @@ DEFINE_ENUM_WITH_STRING_CONVERSIONS( EqTypes,(DONE)(EQUALS)( ROBOT)(TOOL)(BASE)(
             Poses.resize(EQUATION.size(), RCS::Pose(Quaternion(0, 0, 0, 1), Vector3(0, 0, 0)));
         }
 
-        std::string DumpMatrices(std::vector<RCS::Pose> ms) {
-
-            for (int i = 0; i < ms.size(); i++) {
-                for (size_t j = 0; j < 4; j++) {
-                    for (int k = 0; k < 5; k++)
+        std::string DumpMatrices(const std::vector<RCS::Pose> &ms) {
+            std::stringstream ss;
+            int eqpos = std::distance(EQUATION.begin(), std::find(EQUATION.begin(), EQUATION.end(), EQUALS));
+            for (size_t j = 0; j < 4; j++) {
+                for (int i = 0; i < ms.size(); i++) {
+                    if(i==eqpos)
                     {
-                        printf("%5d ", ms[i][j][k]);
+                        ss << "=";
+                        continue;
                     }
-                    printf("\n");
+                    RCS::Pose pose=ms[i];
+                    ss << "|";
+                    for (int k = 0; k < 4; k++) {
+                        ss << boost::format("%4.3f ") % pose.getBasis()[j][k];
+                    }
+                    ss << boost::format("%4.3f ") % pose.getOrigin()[j] << "| ";
                 }
+                ss << "\n";
             }
-
+            return ss.str();
         }
         std::string DumpEquation() {
             std::stringstream ss;
-            for (size_t i = 0; i < Poses.size(); i++)
-                ss << i << "["<< ToString((MotionEquation::EqTypes) EQUATION[i])<< "]"<<  "=" << RCS::DumpPoseSimple(Poses[i]) ;
-            return ss.str();
+            return DumpMatrices(Poses) ;
+ //           for (size_t i = 0; i < Poses.size(); i++)
+ //               ss << i << "["<< ToString((MotionEquation::EqTypes) EQUATION[i])<< "]"<<  "=" << RCS::DumpPoseSimple(Poses[i]) ;
+ //           return ss.str();
         }
         
         virtual RCS::Pose FindGoal() {
@@ -115,7 +124,9 @@ DEFINE_ENUM_WITH_STRING_CONVERSIONS( EqTypes,(DONE)(EQUALS)( ROBOT)(TOOL)(BASE)(
             return goal;
         }
 
-        virtual std::vector<double> Solve() {
+        virtual std::vector<double> Solve(boost::shared_ptr<IKinematics> kin) {
+            Kin() = kin;
+
             RCS::Pose goal = FindGoal();
             std::cout << "Solve Pose= " << DumpPose(goal).c_str();
             std::cout << "Current Joints" << VectorDump(Cnc.status.currentjoints.position).c_str();

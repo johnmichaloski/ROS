@@ -27,6 +27,7 @@
 
 <!---->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find nist_fanuc)/visualize.rviz" required="true" />
+	<node name="demo" pkg="nist_fanuc" type="nist_fanuc" required="true" />
 
 <!--
  <include file="$(find fanuc_lrmate200id_moveit_config)/launch/move_group.launch">

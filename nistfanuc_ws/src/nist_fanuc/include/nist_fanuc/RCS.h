@@ -98,6 +98,25 @@ namespace RCS {
         return js;
     }
 
+    inline JointState Subset(JointState js, size_t n) {
+        js.position.resize(n);
+        js.velocity.resize(n);
+        js.effort.resize(n);
+        return js;
+    }
+    inline std::vector<double> Subset(std::vector<double> position, size_t n) {
+        position.resize(n);
+        return position;
+    }
+    inline JointState ZeroJointState(size_t numjoints) {
+        JointState joints;
+        for (size_t i = 0; i < numjoints; i++) {
+            joints.position.push_back(0.0);
+            joints.velocity.push_back(DEFAULT_JOINT_MAX_VEL);
+            joints.effort.push_back(DEFAULT_JOINT_MAX_ACCEL);
+        }
+        return joints;
+    }
     /*!
      * \brief enumeration of  length units. Conversion into ROS compatible meters.
      */
@@ -348,6 +367,8 @@ namespace RCS {
         VAR(ParentCommandID, unsigned long long);
         VAR(StatusID, unsigned long long);
         VAR(Rates, IRate);
+	VAR(ConfigMin, std::vector<double>);
+	VAR(ConfigMax, std::vector<double>);
 
         static unsigned long long _cmdid;
 

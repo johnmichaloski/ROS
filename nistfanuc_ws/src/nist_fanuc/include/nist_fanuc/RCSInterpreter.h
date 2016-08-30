@@ -28,12 +28,17 @@ class RCSInterpreter
 {
 public:   
     virtual int ParseCommand(RCS::CanonCmd cmd)=0;
+    virtual void SetRange(std::vector<double> minrange, std::vector<double> maxrange){}
     IKinematicsSharedPtr _kinematics; /**<  kinematics pointer */
 };
 class BangBangInterpreter: public RCSInterpreter
 {
 public:
+    std::vector<double> minrange;
+    std::vector<double> maxrange;
+   
     virtual int ParseCommand(RCS::CanonCmd cmd);
+    virtual void SetRange(std::vector<double> minrange, std::vector<double> maxrange);
 };
 
 class SimpleMotionInterpreter: public RCSInterpreter

@@ -17,6 +17,8 @@ protected:
     std::vector<std::string> joint_names;
     std::vector<std::string> link_names;
     std::vector< double> jointvalues;
+    std::vector< double>  joint_min;
+    std::vector< double>  joint_max;
     size_t num_joints;
     std::string _groupname;
     std::string _eelinkname;
@@ -34,7 +36,7 @@ public:
     virtual std::vector<std::string> LinkNames() {
         return link_names;
     }
-
+    void VerifyLimits(std::vector<double> joints) { }
     /*!
      * \brief GetJointValues returns latest reading of end effector.
      * \return vector of joint values in doubles.
@@ -64,7 +66,14 @@ public:
      */
     virtual std::vector<double> IK(RCS::Pose & pose,
             std::vector<double> oldjoints) = 0;
-
+    /*!
+     * \brief IK performs the inverse kinematics using the Cartesian pose provided.
+     * \param  Cartesian robot pose of end  effector.
+     * \param  optional seed joint values to use as best guess for IK joint values.
+     * \return vector of all robot joint values in doubles.
+     */
+    virtual std::vector<double> IK(RCS::Pose & pose,
+            std::vector<double> minrange, std::vector<double> maxrange) { return std::vector<double>(); }
     /*!
      * \brief AllPoseToJoints solves  the inverse kinematics to find all solutions using the Cartesian pose provided.
      * \param  Cartesian robot pose of end  effector.
@@ -110,15 +119,6 @@ public:
     virtual void Init(ros::NodeHandle &nh) {
     }
 
-    virtual JointState ZeroJointState() {
-        JointState joints;
-        for (size_t i = 0; i < joint_names.size(); i++) {
-            joints.position.push_back(0.0);
-            joints.velocity.push_back(DEFAULT_JOINT_MAX_VEL);
-            joints.effort.push_back(DEFAULT_JOINT_MAX_ACCEL);
-        }
-        return joints;
-    }
 
     virtual JointState UpdateJointState(std::vector<uint64_t> jointnums,
             JointState oldjoints,
@@ -508,7 +508,8 @@ public:
         RCS::Pose pose;
         pose.getOrigin().setX(eetrans[0]);
         pose.getOrigin().setY( eetrans[1]);
-        pose.getOrigin().setZ( eetrans[2] - 0.33);
+ //       pose.getOrigin().setZ( eetrans[2] - 0.33);
+        pose.getOrigin().setZ( eetrans[2] );
 
         // RosMatrix m = _3x3matrixConvert(eerot);
         // pose.rotation=_quatFromMatrix( m);
@@ -523,7 +524,7 @@ public:
         ikfast::IkSolutionList<IkReal> solutions;
 
         std::vector<IkReal> vfree(GetNumFreeParameters());
-        IkReal eetrans[3] = {pose.getOrigin().x(), pose.getOrigin().y(), pose.getOrigin().z() + .33};
+        IkReal eetrans[3] = {pose.getOrigin().x(), pose.getOrigin().y(), pose.getOrigin().z()}; // + .33};
 
         IkReal eerot[9];
         Convert2RotationMatrix(pose.getRotation(), eerot);
@@ -614,6 +615,26 @@ public:
         //response.error_code.val == response.error_code.SUCCES
         //return response.solution.joint_state.position;
     }
+   virtual std::vector<double> IK(RCS::Pose & pose,
+            std::vector<double> minrange, std::vector<double> maxrange) { 
+        std::vector<std::vector<double>> allsolutions;
+        size_t bFlag = AllPoseToJoints(pose, allsolutions);
+        for(size_t i=0; i<allsolutions.size(); i++)
+        {
+            bool bFlag=true;
+            for(size_t j=0; j< allsolutions[0].size(); j++)
+            {
+                if(allsolutions[i][j]< minrange[j] || allsolutions[i][j]> maxrange[j])
+                    bFlag=false;
+            }
+            if(bFlag)
+                return allsolutions[i];
+        
+        }
+        // just pick one
+        size_t n=  rand() % allsolutions.size();
+        return allsolutions[n];
+   }
 
     virtual void Init(
             std::string groupname,
@@ -641,7 +662,18 @@ public:
         for (unsigned int i = 0; i < response.kinematic_solver_info.link_names.size(); i++) {
             link_names.push_back(response.kinematic_solver_info.link_names[i]);
         }
+        for (int i = 0; i < armkin->joint_min.rows(); i++)
+            joint_min.push_back(armkin->joint_min(i));
+        for (int i = 0; i < armkin->joint_max.rows(); i++)
+            joint_max .push_back(armkin->joint_max(i));
     }
 
+    void VerifyLimits(std::vector<double> joints)
+    {
+        for(size_t i=0; i< joints.size(); i++)
+            if(joints[i] < joint_min[i] || joints[i] > joint_max[i] )
+                ROS_ERROR_STREAM("Verify Joint Limits Joint" << joint_names[i] << "out of range");
+    
+    }
 
 };

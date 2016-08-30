@@ -1,6 +1,7 @@
 
 
 #include <rviz_visual_tools/rviz_visual_tools.h>
+#include "Globals.h"
 using namespace rviz_visual_tools;
 
 rviz_visual_tools::RvizVisualToolsPtr visual_tools;
@@ -16,6 +17,9 @@ void InitSceneObject() {
     visual_tools = boost::shared_ptr<RvizVisualTools>(new RvizVisualTools("base_link", "/visualization_marker_array"));
     visual_tools->deleteAllMarkers();
 //    visual_tools->enableBatchPublishing();
+    //visual_tools->waitForMarkerPub();
+    visual_tools->loadMarkerPub(true,false);
+    Globals.Sleep(10000);
 }
 
 // INitialize Eigen::Affine3d http://stackoverflow.com/questions/25504397/eigen-combine-rotation-and-translation-into-one-matrix

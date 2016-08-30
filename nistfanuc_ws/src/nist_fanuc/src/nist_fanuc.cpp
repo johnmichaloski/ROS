@@ -128,7 +128,7 @@ int main(int argc, char** argv) {
         pRvizMarker->Init();
         pLinkReader = boost::shared_ptr<CLinkReader>(new CLinkReader(nh));
 
-//#define ARMKIN
+#define ARMKIN
 #ifdef ARMKIN
         kin = boost::shared_ptr<IKinematics>(new ArmKinematics());
         // Initializatin of Controller instantiatio of shared objects  
@@ -136,7 +136,7 @@ int main(int argc, char** argv) {
         kin->Init(nh);
         RCS::Cnc.Kinematics() = kin;
 #endif
-#define FASTKIN    
+//#define FASTKIN    
 #ifdef FASTKIN
         kin = boost::shared_ptr<IKinematics>(new FastKinematics());
         // Initializatin of Controller instantiatio of shared objects  
@@ -145,17 +145,6 @@ int main(int argc, char** argv) {
         RCS::Cnc.Kinematics() = kin;
 #endif
 
-//#define MOVEITKIN      
-#ifdef MOVEITKIN
-        kin = boost::shared_ptr<IKinematics>(new MoveitKinematics(nh));
-        // Initializatin of Controller instantiatio of shared objects  
-        kin->Init(std::string("manipulator"), std::string("tool0"));
-        RCS::Cnc.Kinematics() = kin;
-#endif
-#ifdef MOVEITPLANNER
-        moveitPlanner = boost::shared_ptr<MoveitPlanning>(new MoveitPlanning(nh));
-        RCS::Cnc.MoveitPlanner() = moveitPlanner;
-#endif
 
         // Initialize Controller...
         RCS::Cnc.Setup(nh);
@@ -163,7 +152,7 @@ int main(int argc, char** argv) {
         RCS::Cnc.status.Init();
         RCS::Cnc.CycleTime() = DEFAULT_LOOP_CYCLE;
 
-        #if 1
+#if 0
         //http://www.radmangames.com/programming/how-to-use-boost-bind
         RCS::Pose Base(Quaternion(0, 0, 0, 1), Vector3(0, 0, 0));
 
@@ -177,7 +166,7 @@ int main(int argc, char** argv) {
         //RCS::Pose GoalPose(Quaternion (0, 0, 0, 1), Vector3(0.465, 0, .335));
 
         KinematicChain::MotionEquation chain;
-        chain.make_equation("Test", kin,
+        chain.make_equation("Test", //kin,
                 KinematicChain::MotionEquation::BASE, 
                 KinematicChain::MotionEquation::ROBOT, 
                 KinematicChain::MotionEquation::TOOL, 
@@ -191,7 +180,7 @@ int main(int argc, char** argv) {
         //chain.SetPoseCallback(KinematicChain::MotionEquation::GOAL, boost::bind(&KinematicChain::MotionEquation::GetPose, &chain, _1));
         chain.SetPose( KinematicChain::MotionEquation::TOOL, Gripper);
         std::cout << chain.DumpEquation();
-       std::vector<double> joints = chain. Solve();
+       std::vector<double> joints = chain. Solve(kin);
 #endif
        
 
@@ -232,41 +221,15 @@ int main(int argc, char** argv) {
 
 #endif
 
-#if DESCARTES
-        boost::shared_ptr<CTrajectory> traj = boost::shared_ptr<CTrajectory> (new CTrajectory());
-        // Descarte trajectory writer - uses action lib
-        //boost::shared_ptr<CTrajectoryWriter> trajWriter = boost::shared_ptr<CTrajectoryWriter>(new CTrajectoryWriter(traj));
-
-        // INitialize this if you are using Descartes
-        // Create a robot model and initialize trajectory with it
-        const std::string robot_description = "robot_description";
-        const std::string group_name = "manipulator"; // name of the kinematic group
-        const std::string world_frame = "/base_link"; // Name of frame in which you are expressing poses.
-        const std::string tcp_frame = "tool0"; // tool center point frame
-        std::vector<std::string> names;
-        // This assumes the yaml file containgin ros param controller_joint_names is loaded
-        nh.getParam("controller_joint_names", names);
-        RCS::Controller.TrajectoryModel() = traj;
-        RCS::Controller.TrajectoryModel()->Init(robot_description, group_name, world_frame, tcp_frame, names);
-#endif
-
-        //#define ROBOTSTATUS
-#ifdef ROBOTSTATUS
-        RCS::RobotStatus robotstatus;
-        //       robotstatus.CrclDelegate() = crcl;
-        robotstatus.JointReader() = jointReader;
-        robotstatus.CycleTime() = DEFAULT_LOOP_CYCLE;
-#ifdef MOVEITKIN
-        robotstatus.Kinematics() = kin;
-#endif
-        //        robotstatus.Start(); // start the controller status thread
-#endif
         InitSceneObject();
         SetupSceneObject();
-        //       jointWriter->Start();
+
         RCS::Cnc._interpreter = boost::shared_ptr<RCSInterpreter>(new BangBangInterpreter());
+        RCS::Cnc._interpreter->_kinematics=kin;
         RCS::Cnc.Start(); // start the Controller Session thread
 
+        TestRobotCommands();
+        
         spinner.stop();
         ros::spin();
         //        do {

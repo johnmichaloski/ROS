@@ -61,11 +61,12 @@ class Kinematics {
     public:
         Kinematics();
         bool init(ros::NodeHandle &nh);
+        KDL::JntArray joint_min, joint_max;
 
     private:
        // ros::NodeHandle nh; //, nh_private;
         std::string root_name, tip_name;
-        KDL::JntArray joint_min, joint_max;
+        //KDL::JntArray joint_min, joint_max;
         KDL::Chain chain;
         unsigned int num_joints;
 

@@ -191,3 +191,6 @@ namespace RCS {
     };
 #endif
 }
+
+
+extern void TestRobotCommands() ;

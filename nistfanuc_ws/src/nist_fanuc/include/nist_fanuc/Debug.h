@@ -7,26 +7,24 @@
 #include "RCS.h"
 
 template<typename T>
-inline std::string VectorDump (std::vector<T> v)
-{
-	std::stringstream s;
+inline std::string VectorDump(std::vector<T> v) {
+    std::stringstream s;
 
-	for ( size_t i = 0; i < v.size( ); i++ )
-	{
-		s << v[i] << ":";
-	}
-	s << std::endl;
-	return s.str();
+    for (size_t i = 0; i < v.size(); i++) {
+        s << v[i] << ":";
+    }
+    s << std::endl;
+    return s.str();
 }
 
-namespace RCS
-{
-  /*!
+namespace RCS {
+
+    /*!
      * \brief DumpPose takes a urdf pose  and generates a string describing pose. 
      * Can be used as std::cout << DumpPose(pose); 
 
      */
-    inline     std::string DumpPose(RCS::Pose & pose) {
+    inline std::string DumpPose(RCS::Pose & pose) {
         std::stringstream s;
 
         s << "Translation = " << 1000.0 * pose.getOrigin().x() << ":" << 1000.0 * pose.getOrigin().y() << ":" << 1000.0 * pose.getOrigin().z() << std::endl;
@@ -37,15 +35,17 @@ namespace RCS
         //s << Crcl::DumpRotationAsCrcl(pose)<< std::endl;
         return s.str();
     }
-    inline     std::string DumpPoseSimple(RCS::Pose & pose) {
+
+    inline std::string DumpPoseSimple(RCS::Pose & pose) {
         std::stringstream s;
 
-        s << "Translation = " << 1000.0 * pose.getOrigin().x() << ":" << 1000.0 * pose.getOrigin().y() << ":" << 1000.0 * pose.getOrigin().z() ;
+        s << "Translation = " << 1000.0 * pose.getOrigin().x() << ":" << 1000.0 * pose.getOrigin().y() << ":" << 1000.0 * pose.getOrigin().z();
         double roll, pitch, yaw;
         getRPY(pose, roll, pitch, yaw);
         s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw) << std::endl;
-         return s.str();
+        return s.str();
     }
+
     /*!
      * \brief DumpJoints takes a list of joints and generates a string describing pose. 
      * Can be used as std::cout << DumpPose(pose); 
@@ -56,7 +56,6 @@ namespace RCS
         s << VectorDump<double> (joints.position);
         return s.str();
     }
-  
 
     /*!
      * \brief DumpPose takes a urdf pose  and generates a string describing pose. 
@@ -87,6 +86,7 @@ namespace RCS
         return s.str();
     }
 };
+
 inline std::ostream & operator<<(std::ostream & os, const RCS::CanonCmd & cc) {
     os << "Cmd = " << cc.crclcommand << " Status = " << cc.status << std::endl << "Joints = ";
 
@@ -97,22 +97,19 @@ inline std::ostream & operator<<(std::ostream & os, const RCS::CanonCmd & cc) {
     return os;
 }
 
-
 template<typename T>
-inline std::vector<T> ToVector (int n,  ...)
-{
-	std::vector<T> ds;
-	va_list        args; // define argument list variable
-	va_start(args, n);   // init list; point to last
-	//   defined argument
+inline std::vector<T> ToVector(int n, ...) {
+    std::vector<T> ds;
+    va_list args; // define argument list variable
+    va_start(args, n); // init list; point to last
+    //   defined argument
 
-	for ( int i = 0; i < n; i++ )
-	{
-		double d = va_arg(args, T); // get next argument
-		ds.push_back(d);
-	}
-	va_end(args);   // clean up the system stack
-	return ds;
+    for (int i = 0; i < n; i++) {
+        double d = va_arg(args, T); // get next argument
+        ds.push_back(d);
+    }
+    va_end(args); // clean up the system stack
+    return ds;
 }
 
 template<typename T>
@@ -125,3 +122,4 @@ inline std::string MapDump(std::map<std::string, T> m) {
     s << std::endl;
     return s.str();
 }
+

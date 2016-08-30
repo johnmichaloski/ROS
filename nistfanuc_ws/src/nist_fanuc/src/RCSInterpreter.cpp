@@ -42,7 +42,11 @@ using namespace descartes_trajectory;
     float64 eepercent
     CrclMaxProfileMsg[] profile # maximum profile 
  */
-
+void BangBangInterpreter::SetRange(std::vector<double> minrange, std::vector<double> maxrange)
+{
+    this->minrange=minrange;
+    this->maxrange=maxrange;
+}
 int BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd) {
 
 	if (cmd.crclcommand == CanonCmdType::CANON_MOVE_JOINT) {
@@ -53,7 +57,9 @@ int BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd) {
 	{
 		// FIXME: need to subtract off tool offset from tcp
                 RCS::Pose goalpose = Conversion::GeomMsgPose2RcsPose(cmd.finalpose);
-		cmd.joints.position = Cnc.Kinematics()->IK(goalpose, Cnc.status.currentjoints.position);
+		//cmd.joints.position = Cnc.Kinematics()->IK(goalpose, cmd.ConfigMin(), cmd.ConfigMax());
+                 cmd.joints.position = Cnc.Kinematics()->IK(goalpose, Subset(Cnc.status.currentjoints.position,6 ));
+                cmd.joints.name=Cnc.Kinematics()->JointNames();
 		cmd.crclcommand = CanonCmdType::CANON_MOVE_JOINT;
 	}
 

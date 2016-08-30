@@ -28,9 +28,10 @@
 
 // ROS
 #include <ros/ros.h>
-#include <urdf/model.h>
+//#include <urdf/model.h>
 #include <sensor_msgs/JointState.h>
 
+#include "RCS.h"
 #include "Debug.h"
 /***
     // Couple code attempts at reading from robot joints names - see above
@@ -128,14 +129,15 @@ public:
         publish_jointstate();
     }
 
-    void setPosition(double position) {
+    sensor_msgs::JointState setPosition(double position) {
+        joint_state.header.stamp = ros::Time(0); // Start immediately
         joint_state.position[0] = position;
         joint_state.position[1] = position;
         joint_state.position[2] = position;
         joint_state.position[3] = position;
-        joint_state.position[4] = position;
-        joint_state.position[5] = position;
-        publish_jointstate();
+        joint_state.position[4] = -position;
+        joint_state.position[5] = -position;
+        return joint_state;
     }
 
 #if 0
