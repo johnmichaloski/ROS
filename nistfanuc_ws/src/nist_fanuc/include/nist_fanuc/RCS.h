@@ -205,6 +205,11 @@ namespace RCS {
         static const int CANON_OPEN_GRIPPER = 11;
         static const int CANON_CLOSE_GRIPPER = 12;
         static const int CANON_SET_TOLERANCE = 0;
+	// Extensions:
+        static const int CANON_DRAW_OBJECT = 13;
+        static const int CANON_ERASE_OBJECT = 14;
+        static const int CANON_SET_GRIPPER_POSE = 15;
+
         static const int CANON_UNKNOWN = -1;
 #if 0
         static const int CANON_SET_MAX_CART_ACC = 0;

@@ -22,12 +22,11 @@
 #include "NIST/TrajModel.h"
 #include "NIST/BLogging.h"
 #include "Debug.h"
+#include "Scene.h"
 using namespace KinematicChain;
 
 // /opt/ros/indigo/include/moveit/robot_state/robot_state.h
 // /opt/ros/indigo/include/moveit/move_group_interface/move_group.h
-extern void SetupSceneObject();
-extern void InitSceneObject();
 
 int main(int argc, char** argv) {
 

@@ -1,10 +1,12 @@
 
+#include "Scene.h"
+using namespace rviz_visual_tools;
 
+#if 0
 #include <rviz_visual_tools/rviz_visual_tools.h>
 #include "Globals.h"
 #include <boost/bind.hpp>
 #include <algorithm>
-using namespace rviz_visual_tools;
 struct ObjectDB;
 
 #define XYWALL 1
@@ -77,6 +79,9 @@ struct ObjectDB
    static  std::vector<ObjectDB*> objects;
    static ObjectDB * dummy;
 };
+
+#endif
+
 std::size_t ObjectDB::gid=1;
 std::vector<ObjectDB*> ObjectDB::objects;
 ObjectDB * ObjectDB::dummy= new ObjectDB("dummy","nevermatch");

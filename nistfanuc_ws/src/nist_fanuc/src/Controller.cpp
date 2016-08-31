@@ -22,7 +22,7 @@
 #include "urdf_model/rosmath.h"
 #include "RvizMarker.h"
 #include "Debug.h"
-
+#include "Scene.h"
 // No namespace declarations
 //////////////////////////////////
 //ALogger Logger;
@@ -58,6 +58,9 @@ namespace RCS {
         bCvsPoseLogging() = false;
         bMarker() = false;
         bSimulation() = true;
+        gripperPose = RCS::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0, 0, 0));
+        invGripperPose = gripperPose.inverse();
+
     }
 
     CController::~CController(void) {
@@ -226,7 +229,25 @@ namespace RCS {
                     rviz_jntcmd.publish(gripperjoints);
                     // No speed control for now.
 
-                } else {
+                } 
+                else if (_newcc.crclcommand == CanonCmdType::CANON_ERASE_OBJECT)
+                {
+                    Eigen::Affine3d& pose = ObjectDB::FindPose(_newcc.opmessage);
+                    UpdateScene(_newcc.opmessage, pose, rviz_visual_tools::CLEAR );
+                }
+                else if (_newcc.crclcommand == CanonCmdType::CANON_DRAW_OBJECT)
+                {
+                     Eigen::Affine3d pose; tf::poseMsgToEigen(_newcc.finalpose, pose);
+                     UpdateScene(_newcc.opmessage,
+                            pose,
+                            rviz_visual_tools::RED );
+                }
+                else if (_newcc.crclcommand == CanonCmdType::CANON_SET_GRIPPER_POSE)
+                {
+                          gripperPose=  Conversion::GeomMsgPose2RcsPose(_newcc.finalpose);
+                          invGripperPose=gripperPose.inverse();
+                }
+                else {
 #ifdef FEEDBACKTEST2
                     Cnc.status.currentjoints = Cnc.Kinematics()->UpdateJointState(_newcc.jointnum, Cnc.status.currentjoints, _newcc.joints);
 #else
@@ -251,7 +272,9 @@ namespace RCS {
                     }
                 }
             }
+#if 0
             PublishCrclStatus();
+#endif
             if (bCvsPoseLogging())
                 MotionLogging();
 
@@ -382,4 +405,31 @@ void TestRobotCommands() {
     cmd.eepercent = 0.0; // close
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
 
+    cmd.crclcommand = CanonCmdType::CANON_DWELL;
+    cmd.crclcommandnum = crclcommandnum++;
+    cmd.dwell_seconds = 5;
+    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+    
+    
+    cmd.crclcommand = CanonCmdType::CANON_ERASE_OBJECT;
+    cmd.crclcommandnum = crclcommandnum++;
+    cmd.opmessage = "bolt"; 
+    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+
+    cmd.crclcommandnum = crclcommandnum++;
+    cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
+    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192), 
+            tf::Vector3(0.26319, -0.46395, 0.15002)));
+
+
+    cmd.crclcommand = CanonCmdType::CANON_DRAW_OBJECT;
+    cmd.crclcommandnum = crclcommandnum++;
+    cmd.opmessage = "bolt";
+    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0, 0, 0, 1),
+            tf::Vector3(0.390496134758, -0.101964049041, 0.0101734995842)));
+   
+    
+            
+    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+    
 }

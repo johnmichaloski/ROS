@@ -107,7 +107,8 @@ namespace RCS {
         GripperInterface gripper;
         void MotionLogging();
         void PublishCrclStatus();
-
+        RCS::Pose gripperPose;
+        RCS::Pose invGripperPose;
         /*!
          *\brief Routine to set the kinematics reference pointer. Uses the interface class IKinematics, but can have any implementation instance. 
          */
