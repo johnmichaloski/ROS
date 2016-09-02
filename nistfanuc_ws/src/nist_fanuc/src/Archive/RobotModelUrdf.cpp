@@ -1,3 +1,0 @@
-
-#define URDFDOM_STATIC
-

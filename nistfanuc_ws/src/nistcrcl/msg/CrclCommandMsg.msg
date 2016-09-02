@@ -21,6 +21,11 @@ uint8 stopMotion=9
 uint8 setEndEffector=10
 uint8 openToolChange=11
 uint8 closeToolChanger=12
+uint8 drawObject = 13
+uint8 eraseObject = 14
+uint8 setGripperPose = 15
+uint8 pick = 16
+uint8 place = 17
 ########################################
 uint64 crclcommandnum
 
@@ -30,9 +35,12 @@ geometry_msgs/Pose[] waypoints
 # Below joint info could be  trajectory_msgs/JointTrajectoryPoint
 sensor_msgs/JointState joints
 uint64[] jointnum
+float64[] hint
 bool bStraight
 float64   dwell_seconds
 string opmessage
+string partname
+string partfeature
 bool bCoordinated
 float64 eepercent
 CrclMaxProfileMsg[] profile # maximum profile 

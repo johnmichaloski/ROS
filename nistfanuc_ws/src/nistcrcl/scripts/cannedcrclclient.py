@@ -274,7 +274,7 @@ mysocket.connect()
 print 'Socket connected'
 while not rospy.is_shutdown():
 	parseline("j 1 90 0 0")
-	time.sleep(mywait+2)
+	time.sleep(mywait)
 	parseline("c");
 #	parseline("d 5")
 	time.sleep(mywait+2)
