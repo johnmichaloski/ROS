@@ -7,6 +7,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/thread/mutex.hpp>
 #include "Debug.h"
+#include "arm_kinematics.h"
 
 /**
  * \brief The IKinematics provides is an abstract class with pure virtual functions that are
@@ -22,12 +23,17 @@ protected:
     size_t num_joints;
     std::string _groupname;
     std::string _eelinkname;
+    boost::shared_ptr<::Kinematics> armkin;
 public:
 
     size_t NumJoints() {
         assert(joint_names.size() != 0);
         return joint_names.size();
     }
+    
+//    RCS:Pose GetJointTransform(std::string jointname){
+//    boost::shared_ptr<const urdf::Joint> urdf_joint = armkin->robot_model->getJoint(jointname);
+//    }
 
     virtual std::vector<std::string> JointNames() {
         return joint_names;
@@ -305,7 +311,6 @@ public:
 // https://github.com/ros-planning/moveit_kinematics_tests/blob/kinetic-devel/kinematics_base_test/src/test_kinematics_plugin.cpp
 // https://github.com/IDSCETHZurich/re_trajectory-generator/blob/master/poseToOrocos/src/poseStampedLoop.cpp
 #include <boost/shared_ptr.hpp>
-#include "arm_kinematics.h"
 #include <moveit_msgs/GetPositionFK.h>
 #include <moveit_msgs/GetPositionIK.h>
 #include <moveit_msgs/GetKinematicSolverInfo.h>
@@ -400,7 +405,6 @@ public:
 #include <algorithm>
 
 class FastKinematics : public IKinematics {
-    boost::shared_ptr<::Kinematics> armkin;
 
     static double SIGN(double x) {
         return ( x >= 0.0f) ? +1.0f : -1.0f;

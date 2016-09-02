@@ -27,7 +27,7 @@ using namespace KinematicChain;
 
 // /opt/ros/indigo/include/moveit/robot_state/robot_state.h
 // /opt/ros/indigo/include/moveit/move_group_interface/move_group.h
-
+extern RCS::Pose ComputeGripperOffset();
 int main(int argc, char** argv) {
 
     // Current robot joints declaration
@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
             ros::console::notifyLoggerLevelsChanged();
         }
 #endif  
-        LOG_DEBUG << ExecuteShellCommand("env|sort\n");
+//        LOG_DEBUG << ExecuteShellCommand("env|sort\n");
 
 
         // Controller shared objects dependent on ROS - many with abstract interface definition
@@ -98,13 +98,9 @@ int main(int argc, char** argv) {
         boost::shared_ptr<CRvizMarker> pRvizMarker;
         boost::shared_ptr<CLinkReader> pLinkReader;
 
-
-
-
         //  Required for multithreaded ROS communication  NOT TRUE: if not ros::spinOnce
         ros::AsyncSpinner spinner(1);
         spinner.start();
-
 
         // This is useful for rosbag i suppose
         //        std::string run_id;
@@ -134,6 +130,7 @@ int main(int argc, char** argv) {
         kin->Init(std::string("manipulator"), std::string("tool0"));
         kin->Init(nh);
         RCS::Cnc.Kinematics() = kin;
+        ComputeGripperOffset();
 #endif
 //#define FASTKIN    
 #ifdef FASTKIN
@@ -142,6 +139,15 @@ int main(int argc, char** argv) {
         kin->Init(std::string("manipulator"), std::string("tool0"));
         kin->Init(nh);
         RCS::Cnc.Kinematics() = kin;
+        JointState cmd;
+        cmd.position = ToVector<double>(6,   0.0,  0.0,  0.0,  0.0,  0.0, 0.0);
+        cmd.name = kin->JointNames();
+        RCS::Pose pose = Cnc.Kinematics()->FK(cmd.position);
+        LOG_DEBUG << "Test FK Pose 1" << RCS::DumpPoseSimple(pose).c_str();
+        cmd.position = ToVector<double>(6, -1.05, 1.03, 0.0, 0.07, -0.51, 0.0);
+        pose = Cnc.Kinematics()->FK(cmd.position);
+        LOG_DEBUG << "Test FK Pose 2 " << RCS::DumpPoseSimple(pose).c_str();
+
 #endif
 
 

@@ -73,7 +73,6 @@ bool Kinematics::init(ros::NodeHandle &nh) {
 
 bool Kinematics::loadModel(const std::string xml) {
     // http://wiki.ros.org/urdf/Tutorials/Parse%20a%20urdf%20file
-    urdf::Model robot_model;
     KDL::Tree tree;
 
     if (!robot_model.initString(xml)) {

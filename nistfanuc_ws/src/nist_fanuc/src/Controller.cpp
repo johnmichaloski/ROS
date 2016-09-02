@@ -39,15 +39,8 @@ namespace RCS {
     RCS::CController Cnc(DEFAULT_LOOP_CYCLE);
 
     // Static definitions
-#if 0
-    RCS::CanonWorldModel CController::status;
-    RCS::CanonWorldModel CController::laststatus;
-    RCS::CMessageQueue<RCS::CanonCmd> CController::robotcmds; /**< queue of commands interpreted into robot motion */
-    RCS::CMessageQueue<nistcrcl::CrclCommandMsg> CController::crclcmds; /**< queue of commands from Crcl messages */
-    std::list<RCS::CanonCmd> CController::donecmds;
-#endif
-    //Trajectory CController::trajectory_model;
 
+    
     // ----------------------------------------------------
     // CController 
 
@@ -177,6 +170,7 @@ namespace RCS {
                 // FIXME: this is an upcast
                 RCS::CanonCmd cc;
                 nistcrcl::CrclCommandMsg msg = crclcmds.PopFrontMsgQueue();
+                LOG_DEBUG << "Command = " << RCS::sCmd[msg.crclcommand]; 
                 cc.Set(msg);
                 LOG_TRACE<< "Msg Joints " << VectorDump<double>(msg.joints.position).c_str();
                 LOG_TRACE << "CC Joints " << VectorDump<double>(cc.joints.position).c_str();
@@ -220,7 +214,7 @@ namespace RCS {
                     if (_newcc.eepercent < 1.0)
                     {
                         //gripperjoints = gripper.closeSetup();
-                        gripperjoints = gripper.setPosition(0.85);
+                        gripperjoints = gripper.setPosition(0.75);
                     }
                     else
                         gripperjoints = gripper.openSetup();
@@ -232,13 +226,13 @@ namespace RCS {
                 } 
                 else if (_newcc.crclcommand == CanonCmdType::CANON_ERASE_OBJECT)
                 {
-                    Eigen::Affine3d& pose = ObjectDB::FindPose(_newcc.opmessage);
-                    UpdateScene(_newcc.opmessage, pose, rviz_visual_tools::CLEAR );
+                    Eigen::Affine3d& pose = ObjectDB::FindPose(_newcc.partname);
+                    UpdateScene(_newcc.partname, pose, rviz_visual_tools::CLEAR );
                 }
                 else if (_newcc.crclcommand == CanonCmdType::CANON_DRAW_OBJECT)
                 {
                      Eigen::Affine3d pose; tf::poseMsgToEigen(_newcc.finalpose, pose);
-                     UpdateScene(_newcc.opmessage,
+                     UpdateScene(_newcc.partname,
                             pose,
                             rviz_visual_tools::RED );
                 }
@@ -338,8 +332,12 @@ namespace RCS {
 
 void TestRobotCommands() {
     static int crclcommandnum = 1;
+    static double dwelltime=3.0;
+    
+    RCS:Pose retract =  RCS::Pose(tf::Quaternion(0,0,0,1), tf::Vector3(0,0, 0.2));
     RCS::CanonCmd cmd;
 
+    //return ; // skip all commands 
     cmd.joints = RCS::ZeroJointState(6);
     // These tovectors must match double or long
     cmd.joints.position = ToVector<double>(6, 1.4, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -351,7 +349,7 @@ void TestRobotCommands() {
 
     cmd.crclcommand = CanonCmdType::CANON_DWELL;
     cmd.crclcommandnum = crclcommandnum++;
-    cmd.dwell_seconds = 5;
+    cmd.dwell_seconds = dwelltime;
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
     
     cmd.joints.position = ToVector<double>(6, -1.4, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -363,7 +361,7 @@ void TestRobotCommands() {
 
     cmd.crclcommand = CanonCmdType::CANON_DWELL;
     cmd.crclcommandnum = crclcommandnum++;
-    cmd.dwell_seconds = 5;
+    cmd.dwell_seconds = dwelltime;
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
 
 #if 0
@@ -376,30 +374,47 @@ void TestRobotCommands() {
 #endif 
     cmd.crclcommand = CanonCmdType::CANON_DWELL;
     cmd.crclcommandnum = crclcommandnum++;
-    cmd.dwell_seconds = 5;
+    cmd.dwell_seconds = dwelltime;
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+
+
+    
     
    // cmd.finalpose = Conversion::RcsPose2GeomMsgPose(Cnc.Kinematics()->FK(ToVector<double>(6, -1.05, 1.03, 0.0, 0.07, -0.51, 0.0)));
     cmd.crclcommandnum = crclcommandnum++;
     cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
+    cmd.hint = ToVector<double>(6, -1.05, 1.03, 0.0, 0.07, -0.51, 0.0);
     cmd.ConfigMin() = ToVector<double>(6, -PI_2, -PI_2, -PI_2, -PI_2, -PI_2, -PI_2);
     cmd.ConfigMax() = ToVector<double>(6, PI_2, PI_2, PI_2, PI_2, PI_2, PI_2);
 ///    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(
 //            tf::createQuaternionFromRPY(Deg2Rad(-126.967),Deg2Rad(60.5293), Deg2Rad(171.827)), 
 //            tf::Vector3(0.364,-0.641,0.165)
 //            ));
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192), tf::Vector3(0.26319, -0.46395, 0.15002)));
+    // This was computed taking the FK of the joints to reach (so tool is identity)
+    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192), 
+            tf::Vector3(0.26319, -0.46395, 0.04+ 0.15002)));
+ //   cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
+ //           tf::Vector3(0.26319, -0.46395, 0.04+ 0.015002)));
+    
    
+    cmd.bStraight = true;
+  //  RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+ #if 1   
+    cmd.crclcommandnum = crclcommandnum++;
+    cmd.crclcommand = CanonCmdType::CANON_SET_GRIPPER_POSE;
+    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
+             tf::Vector3(0.09884, 0.0, -0.01156)));
+     //      tf::Vector3(0.14041, 0.0, -0.0041)));
+    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+
+#endif
+    cmd.crclcommandnum = crclcommandnum++;
+    cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
+    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
+            tf::Vector3(0.26319, -0.46395, 0.04+ 0.015002)));
     cmd.bStraight = true;
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
 
-#if 0
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0.25, -.45, 0.4)));
-    cmd.bStraight = true;
-    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
-#endif
     cmd.crclcommand = CanonCmdType::CANON_SET_GRIPPER;
     cmd.crclcommandnum = crclcommandnum++;
     cmd.eepercent = 0.0; // close
@@ -407,29 +422,55 @@ void TestRobotCommands() {
 
     cmd.crclcommand = CanonCmdType::CANON_DWELL;
     cmd.crclcommandnum = crclcommandnum++;
-    cmd.dwell_seconds = 5;
+    cmd.dwell_seconds = dwelltime;
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
     
-    
+#if 1
     cmd.crclcommand = CanonCmdType::CANON_ERASE_OBJECT;
     cmd.crclcommandnum = crclcommandnum++;
-    cmd.opmessage = "bolt"; 
+    cmd.partname = "bolt"; 
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
 
+    
     cmd.crclcommandnum = crclcommandnum++;
     cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192), 
-            tf::Vector3(0.26319, -0.46395, 0.15002)));
+    cmd.hint = ToVector<double>(6, 0.27, 0.7, -0.57, 0.0, 0.0, 0.0);
+    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
+            tf::Vector3(0.390496134758, -0.101964049041, 0.0245+0.04)));
+    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
 
 
     cmd.crclcommand = CanonCmdType::CANON_DRAW_OBJECT;
     cmd.crclcommandnum = crclcommandnum++;
-    cmd.opmessage = "bolt";
+    cmd.partname = "bolt";
     cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0, 0, 0, 1),
-            tf::Vector3(0.390496134758, -0.101964049041, 0.0101734995842)));
-   
-    
-            
+            tf::Vector3(0.390496134758, -0.101964049041, 0.0245)));     
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+
+    cmd.crclcommand = CanonCmdType::CANON_DWELL;
+    cmd.crclcommandnum = crclcommandnum++;
+    cmd.dwell_seconds = 1.0;
+    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+
+
+    cmd.crclcommand = CanonCmdType::CANON_SET_GRIPPER;
+    cmd.crclcommandnum = crclcommandnum++;
+    cmd.eepercent = 1.0; // open
+    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+
+    // Now retract
+    cmd.crclcommand = CanonCmdType::CANON_DWELL;
+    cmd.crclcommandnum = crclcommandnum++;
+    cmd.dwell_seconds = 1.0;
+    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+
+    cmd.crclcommandnum = crclcommandnum++;
+    cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
+    cmd.hint = ToVector<double>(6, 0.27, 0.5, -0.4, 0.0, 0.0, 0.0);
+    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
+            tf::Vector3(0.390496134758, -0.101964049041, 0.0245+0.04))*retract);
+    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+
     
+#endif
 }

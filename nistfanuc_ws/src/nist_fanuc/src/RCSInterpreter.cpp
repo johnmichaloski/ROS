@@ -11,13 +11,15 @@
  * See NIST Administration Manual 4.09.07 b and Appendix I.
  */
 
+
+#include <algorithm>  // max
+#include <tf/transform_datatypes.h>
+#include <boost/ref.hpp>
+
 #include "RCSInterpreter.h"
 #include "Controller.h"
 #include "Globals.h"
-#include <algorithm>  // max
-#include "Conversions.h"
 #include "trajectoryMaker.h"
-#include <tf/transform_datatypes.h>
 #include "Conversions.h"
 #include "Debug.h"
 using namespace RCS;
@@ -42,31 +44,40 @@ using namespace descartes_trajectory;
     float64 eepercent
     CrclMaxProfileMsg[] profile # maximum profile 
  */
-void BangBangInterpreter::SetRange(std::vector<double> minrange, std::vector<double> maxrange)
-{
-    this->minrange=minrange;
-    this->maxrange=maxrange;
+void BangBangInterpreter::SetRange(std::vector<double> minrange, std::vector<double> maxrange) {
+    this->minrange = minrange;
+    this->maxrange = maxrange;
 }
+
 int BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd) {
 
-	if (cmd.crclcommand == CanonCmdType::CANON_MOVE_JOINT) {
-		// Move immediately to joint value - Fill in other joints with current values
-		cmd.joints = Cnc.Kinematics()->UpdateJointState(cmd.jointnum, Cnc.status.currentjoints, cmd.joints);
-	}
-	else if(cmd.crclcommand == CanonCmdType::CANON_MOVE_TO)
-	{
-		// FIXME: need to subtract off tool offset from tcp
-                RCS::Pose goalpose = Conversion::GeomMsgPose2RcsPose(cmd.finalpose);
-		//cmd.joints.position = Cnc.Kinematics()->IK(goalpose, cmd.ConfigMin(), cmd.ConfigMax());
-                 cmd.joints.position = Cnc.Kinematics()->IK(goalpose, Subset(Cnc.status.currentjoints.position,6 ));
-                cmd.joints.name=Cnc.Kinematics()->JointNames();
-		cmd.crclcommand = CanonCmdType::CANON_MOVE_JOINT;
-	}
+    if (cmd.crclcommand == CanonCmdType::CANON_MOVE_JOINT) {
+        // Move immediately to joint value - Fill in other joints with current values
+        cmd.joints = Cnc.Kinematics()->UpdateJointState(cmd.jointnum, Cnc.status.currentjoints, cmd.joints);
+    } else if (cmd.crclcommand == CanonCmdType::CANON_MOVE_TO) {
+        // FIXME: need to subtract off tool offset from tcp
+        RCS::Pose finalpose = Conversion::GeomMsgPose2RcsPose(cmd.finalpose);
+        RCS::Pose goalpose = finalpose * Cnc.invGripperPose;
+        LOG_DEBUG << "Final Pose " << RCS::DumpPoseSimple(finalpose).c_str();
+        LOG_DEBUG << "Goal Pose " << RCS::DumpPoseSimple(goalpose).c_str();
+        if (cmd.hint.size() ==0)
+            //cmd.joints.position = Cnc.Kinematics()->IK(goalpose, cmd.ConfigMin(), cmd.ConfigMax());
+            cmd.joints.position = Cnc.Kinematics()->IK(goalpose, Subset(Cnc.status.currentjoints.position, 6));
+        else
+            // KDL needs a hint or algorithm won't converge
+            // http://www.orocos.org/forum/orocos/orocos-users/kdl-ik-position-solver
+            cmd.joints.position = Cnc.Kinematics()->IK(goalpose, cmd.hint);
+           
+        assert(cmd.joints.position.size() > 0);
+        cmd.joints.name = Cnc.Kinematics()->JointNames();
+        cmd.crclcommand = CanonCmdType::CANON_MOVE_JOINT;
+    }
 
     RCS::Cnc.robotcmds.AddMsgQueue(cmd);
 
     return 0;
 }
+
 SimpleMotionInterpreter::SimpleMotionInterpreter(IKinematicsSharedPtr pKinematics) {
     _kinematics = pKinematics; // hopefully can be null
     //    _kinematics = IKinematicsSharedPtr(new DummyKinematics());
@@ -111,8 +122,8 @@ std::vector<JointState> SimpleMotionInterpreter::PlanCartesianMotion(std::vector
         }
 #else
         // assume first one is where were are already
-        for(size_t j=1; j< poses.size(); j++) {
-            if (RCS::Cnc.MoveitPlanner()->Plan(poses[j-1], poses[j])) {
+        for (size_t j = 1; j < poses.size(); j++) {
+            if (RCS::Cnc.MoveitPlanner()->Plan(poses[j - 1], poses[j])) {
                 std::vector<JointState> intermedjoints;
                 intermedjoints = RCS::Cnc.MoveitPlanner()->GetJtsPlan();
                 gotojoints.insert(gotojoints.end(), intermedjoints.begin(), intermedjoints.end());
@@ -143,13 +154,13 @@ std::vector<JointState> SimpleMotionInterpreter::PlanCartesianMotion(std::vector
             gotojoints.back().position = joints;
             oldjoints = joints;
         }
- #endif
-       return gotojoints;
+#endif
+        return gotojoints;
     }
 }
 
 int SimpleMotionInterpreter::ParseCommand(RCS::CanonCmd cc) {
- //   IfDebug(Globals.ErrorMessage("SimpleMotionInterpreter::ParseCommand\n"));
+    //   IfDebug(Globals.ErrorMessage("SimpleMotionInterpreter::ParseCommand\n"));
 
     // This approach should debounce multiple commands to same position - e.g., 0->30, 0->30
     JointState currentjoints;
@@ -164,15 +175,14 @@ int SimpleMotionInterpreter::ParseCommand(RCS::CanonCmd cc) {
 #endif
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // SET GRIPPERTS
-        if (cc.crclcommand == CanonCmdType::CANON_SET_GRIPPER) {
-        RCS::CanonCmd newcc=cc;
+    if (cc.crclcommand == CanonCmdType::CANON_SET_GRIPPER) {
+        RCS::CanonCmd newcc = cc;
         //newcc.crclcommand = CanonCmdType::CANON_SET_GRIPPER;
         //newcc.eepercent=cc.eepercent;
         newcc.status = CanonStatusType::CANON_WAITING;
-         Cnc.robotcmds.AddMsgQueue(newcc);            
-        }
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // MOVE JOINTS
+        Cnc.robotcmds.AddMsgQueue(newcc);
+    }        ////////////////////////////////////////////////////////////////////////////////////////////////
+        // MOVE JOINTS
     else if (cc.crclcommand == CanonCmdType::CANON_MOVE_JOINT) {
         rates = IRate(DEFAULT_JOINT_MAX_VEL, DEFAULT_JOINT_MAX_ACCEL, DEFAULT_LOOP_CYCLE);
 
@@ -213,30 +223,26 @@ int SimpleMotionInterpreter::ParseCommand(RCS::CanonCmd cc) {
             maker.setRates(rates);
             maker.makeJointPositionTrajectory(rates, currentjoints.position, joints.position);
             gotojoints = maker.GetJtsPlan();
-        } 
+        }
 #ifdef MOVEITPLANNER
         else if (RCS::Cnc.eJointMotionPlanner == RCS::CController::MOVEIT) {
             if (!RCS::Cnc.MoveitPlanner()->Plan(joints))
                 return -1;
             gotojoints = RCS::Cnc.MoveitPlanner()->GetJtsPlan();
-        } 
+        }
 #endif
         else {
             gotojoints = motioncontrol.computeCoorindatedWaypoints(currentjoints.position, joints.position, 0.001, true);
         }
-        if(cc.bCoordinated)
-        {
+        if (cc.bCoordinated) {
             AddJointCommands(gotojoints);
-        }
-        else
-        {
+        } else {
             // uncoordinated motion - 1st 0 joint, then 1 joint motion, etc.
             // unlikely to crash into itself with this joint motion
-            for(size_t k=0; k< currentjoints.position.size(); k++)
-            {
-                JointState  eachjoint;
+            for (size_t k = 0; k < currentjoints.position.size(); k++) {
+                JointState eachjoint;
                 eachjoint.position = currentjoints.position;
-                eachjoint.position[k]=joints.position[k];
+                eachjoint.position[k] = joints.position[k];
                 TrajectoryMaker maker;
                 maker.Rates().CurrentFeedrate() = jointsmaxvel;
                 maker.Rates().MaximumAccel() = jointsmaxacc;
@@ -259,8 +265,8 @@ int SimpleMotionInterpreter::ParseCommand(RCS::CanonCmd cc) {
     else if (cc.crclcommand == CanonCmdType::CANON_MOVE_TO) {
 
         rates = cc.Rates(); // IRate(DEFAULT_CART_MAX_VEL, DEFAULT_CART_MAX_ACCEL, DEFAULT_LOOP_CYCLE);
-        RCS::Pose goalpose ;
-        tf::poseMsgToTF (cc.finalpose, goalpose);
+        RCS::Pose goalpose;
+        tf::poseMsgToTF(cc.finalpose, goalpose);
 #ifdef MOVEITKIN
         if (RCS::Cnc.Kinematics()->IsSingular(goalpose, 0.0001)) {
             std::cout << "Is singular pose: " << DumpPose(goalpose).c_str();
@@ -268,7 +274,7 @@ int SimpleMotionInterpreter::ParseCommand(RCS::CanonCmd cc) {
 #endif
         std::vector<JointState> gotojoints;
         std::cout << "Current Pose " << DumpPose(currentpose).c_str();
-        std::vector<RCS::Pose> poses = motioncontrol.computeWaypoints(currentpose, goalpose, 
+        std::vector<RCS::Pose> poses = motioncontrol.computeWaypoints(currentpose, goalpose,
                 0.01, // cc.Rates().CurrentFeedrate() * DEFAULT_LOOP_CYCLE, //0.01, 
                 true);
         for (size_t k = 0; k < poses.size(); k++)
@@ -280,7 +286,7 @@ int SimpleMotionInterpreter::ParseCommand(RCS::CanonCmd cc) {
         rates = IRate(DEFAULT_CART_MAX_VEL, DEFAULT_CART_MAX_ACCEL, DEFAULT_LOOP_CYCLE);
         std::vector<JointState> gotojoints;
         // FIXME: waypoints must have a point!
-        std::vector<RCS::Pose> poses ( sizeof(cc.waypoints)/sizeof(cc.waypoints[0]));
+        std::vector<RCS::Pose> poses(sizeof (cc.waypoints) / sizeof (cc.waypoints[0]));
         poses.insert(poses.begin(), currentpose); // add beginning pose -again?
         // and in case interrupted
         gotojoints = PlanCartesianMotion(poses);

@@ -19,6 +19,24 @@ inline std::string VectorDump(std::vector<T> v) {
 
 namespace RCS {
 
+       static const char * sCmd[] = { "CANON_NOOP",
+        "CANON_INIT_CANON ",
+        "CANON_END_CANON",
+        "CANON_MOVE_JOINT",
+        "CANON_MOVE_TO",
+       "CANON_DWELL",
+        "CANON_MESSAGE",
+       "CANON_MOVE_THRU ",
+        "CANON_SET_COORDINATED_MOTION",
+        "CANON_STOP_MOTION",
+        "CANON_SET_GRIPPER",
+        "CANON_OPEN_GRIPPER ",
+        "CANON_CLOSE_GRIPPER",
+        "CANON_DRAW_OBJECT",
+        "CANON_ERASE_OBJECT",
+        "CANON_SET_GRIPPER_POSE",
+        "CANON_PICK ",
+        "CANON_PLACE "};
     /*!
      * \brief DumpPose takes a urdf pose  and generates a string describing pose. 
      * Can be used as std::cout << DumpPose(pose); 
@@ -31,7 +49,7 @@ namespace RCS {
         double roll, pitch, yaw;
         getRPY(pose, roll, pitch, yaw);
         s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw) << std::endl;
-        s << "Quaternion = " << pose.getRotation().x() << ":" << pose.getRotation().y() << ":" << pose.getRotation().z() << ":" << pose.getRotation().w() << std::endl;
+        s << "Quaternion = " << pose.getRotation().x() << ":" << pose.getRotation().y() << ":" << pose.getRotation().z() << ":" << pose.getRotation().w() ;
         //s << Crcl::DumpRotationAsCrcl(pose)<< std::endl;
         return s.str();
     }
@@ -42,7 +60,7 @@ namespace RCS {
         s << "Translation = " << 1000.0 * pose.getOrigin().x() << ":" << 1000.0 * pose.getOrigin().y() << ":" << 1000.0 * pose.getOrigin().z();
         double roll, pitch, yaw;
         getRPY(pose, roll, pitch, yaw);
-        s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw) << std::endl;
+        s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw) ;
         return s.str();
     }
 
@@ -67,7 +85,7 @@ namespace RCS {
         double roll, pitch, yaw;
         getRPY(pose, roll, pitch, yaw);
         s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw) << std::endl;
-        s << "Quaterion = " << pose.getRotation().x() << ":" << pose.getRotation().y() << ":" << pose.getRotation().z() << ":" << pose.getRotation().w() << std::endl;
+        s << "Quaterion = " << pose.getRotation().x() << ":" << pose.getRotation().y() << ":" << pose.getRotation().z() << ":" << pose.getRotation().w() ;
         os << s.str();
     }
 
@@ -82,7 +100,7 @@ namespace RCS {
         s << boost::format("Y=%8.4f") % rot.y() << ":";
         s << boost::format("Z=%8.4f") % rot.z() << ":";
         s << boost::format("W=%8.4f") % rot.w() << ":";
-        s << std::endl;
+//       s << std::endl;
         return s.str();
     }
 };

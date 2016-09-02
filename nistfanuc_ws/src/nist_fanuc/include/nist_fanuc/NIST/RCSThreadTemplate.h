@@ -177,7 +177,7 @@ namespace RCS {
 
         /*!
          * \brief Cycle is the thread main function. It calls init, action, and cleanup.
-         * After each cycle waits exactly amount given by cycle time.
+         * After each cycle waits exa_newccctly amount given by cycle time.
          */
         void Cycle() {
             _bDone = false;

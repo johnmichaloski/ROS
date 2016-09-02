@@ -27,6 +27,10 @@ struct ObjectDB
     double scale;
     std::size_t id;
     int walltype;
+    rviz_visual_tools::colors firstcolor;
+    Eigen::Affine3d grippedpose; // where actually gripper point of object is
+    double gripperclose; // size of gripper closed in meters
+
 
      ObjectDB(
             std::string name,
@@ -40,7 +44,7 @@ struct ObjectDB
         this->pose = pose;
         this->type = type;
         this->filepath = filepath;
-        this->color = color;
+        this->firstcolor=this->color = color;
         this->scale = scale;
         if(id==0)
             this->id = gid++;

@@ -62,6 +62,7 @@ class Kinematics {
         Kinematics();
         bool init(ros::NodeHandle &nh);
         KDL::JntArray joint_min, joint_max;
+        urdf::Model robot_model;
 
     private:
        // ros::NodeHandle nh; //, nh_private;

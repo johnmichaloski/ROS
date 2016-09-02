@@ -46,24 +46,28 @@ std::vector<double> RosKinematics::GetJointValues() {
     kinematic_state->copyJointGroupPositions(joint_model_group, joint_values);
     return joint_values;
 }
+
 void RosKinematics::SetJointValues(std::vector<double> joint_values) {
     assert(kinematic_state != NULL);
     // setJointGroupPositions() does not enforce joint limits by itself, but a call to enforceBounds() will do it.
     kinematic_state->setJointGroupPositions(joint_model_group, joint_values);
 }
+
 bool RosKinematics::SatisfiesBounds() {
     assert(kinematic_state != NULL);
     /* Check whether any joint is outside its joint limits */
-    return (kinematic_state->satisfiesBounds()) ;
+    return (kinematic_state->satisfiesBounds());
 }
+
 void RosKinematics::EnforceBounds() {
     assert(kinematic_state != NULL);
-   /* Enforce the joint limits for this state */
+    /* Enforce the joint limits for this state */
     kinematic_state->enforceBounds();
 }
+
 RCS::Pose RosKinematics::FK(std::vector<double> jv) {
-     boost::mutex::scoped_lock lock(kinmutex);
-   // gearing kludge for now - this should be override for each robot
+    boost::mutex::scoped_lock lock(kinmutex);
+    // gearing kludge for now - this should be override for each robot
     //jv[2] = jv[1] + jv[2];
     // This creates a unique robot model/kinematics, loads joints, computes FK
     assert(kinematic_model != NULL);
@@ -75,7 +79,7 @@ RCS::Pose RosKinematics::FK(std::vector<double> jv) {
 
     Eigen::Affine3d end_effector_state = Eigen::Affine3d(
             ks->getGlobalLinkTransform(_eelinkname));
-//   std::cout << "end_effector_state=" << end_effector_state.translation() << std::endl;
+    //   std::cout << "end_effector_state=" << end_effector_state.translation() << std::endl;
     RCS::Pose pose;
     pose = Conversion::Affine3d2RcsPose(end_effector_state);
     return pose;
@@ -102,7 +106,8 @@ std::vector<double> RosKinematics::IK(RCS::Pose & pose, std::vector<double> oldj
 
 // --------------------------------------------------
 // http://moveit.ros.org/code-api/
-MoveitKinematics::MoveitKinematics(ros::NodeHandle &nh): _nh(nh) {
+
+MoveitKinematics::MoveitKinematics(ros::NodeHandle &nh) : _nh(nh) {
     _bInit = false;
 }
 
@@ -111,18 +116,18 @@ void MoveitKinematics::Init(
         std::string eelinkname) {
 
     _groupname = groupname;
-    _eelinkname=eelinkname;
+    _eelinkname = eelinkname;
     _nh.getParam("controller_joint_names", joint_names);
     robot_model_loader::RobotModelLoader robot_model_loader("robot_description");
 
-    kinematic_model = robot_model_loader.getModel(); 
+    kinematic_model = robot_model_loader.getModel();
     kinematic_state = robot_state::RobotStatePtr(
             new robot_state::RobotState(kinematic_model));
-    joint_model_group =  kinematic_model->getJointModelGroup( _groupname.c_str());
+    joint_model_group = kinematic_model->getJointModelGroup(_groupname.c_str());
     group = boost::shared_ptr< moveit::planning_interface::MoveGroup>(new moveit::planning_interface::MoveGroup(_groupname.c_str()));
     std::cout << "Reference frame " << group->getPlanningFrame().c_str();
     std::cout << "EE frame " << group->getEndEffectorLink().c_str();
-   _bInit = true;
+    _bInit = true;
 
     assert(kinematic_model != NULL);
     assert(kinematic_state != NULL);
@@ -130,34 +135,37 @@ void MoveitKinematics::Init(
 }
 
 std::vector<double> MoveitKinematics::GetJointValues() {
-   assert(_bInit); 
+    assert(_bInit);
     std::vector<double> joint_values;
     kinematic_state->copyJointGroupPositions(joint_model_group, joint_values);
     return joint_values;
 }
+
 void MoveitKinematics::SetJointValues(std::vector<double> joint_values) {
     assert(kinematic_state != NULL);
- //   std::cout << "MoveitKinematics::SetJointValues" << VectorDump<double>(joint_values);
+    //   std::cout << "MoveitKinematics::SetJointValues" << VectorDump<double>(joint_values);
     // setJointGroupPositions() does not enforce joint limits by itself, but a call to enforceBounds() will do it.
     kinematic_state->setJointGroupPositions(joint_model_group, joint_values);
 }
 #if 0
+
 bool MoveitKinematics::SatisfiesBounds() {
     assert(kinematic_state != NULL);
     /* Check whether any joint is outside its joint limits */
-    return (kinematic_state->satisfiesBounds()) ;
+    return (kinematic_state->satisfiesBounds());
 }
+
 void MoveitKinematics::EnforceBounds() {
     assert(kinematic_state != NULL);
-   /* Enforce the joint limits for this state */
+    /* Enforce the joint limits for this state */
     kinematic_state->enforceBounds();
 }
 #endif
+
 RCS::Pose MoveitKinematics::FK(std::vector<double> jv) {
     boost::mutex::scoped_lock lock(kinmutex);
-    if(jv.size()==0)
-    {
-        jv=ToVector<double>(6, 0,0,0,0,0,0);
+    if (jv.size() == 0) {
+        jv = ToVector<double>(6, 0, 0, 0, 0, 0, 0);
         DebugBreak();
     }
     SetJointValues(jv);
@@ -166,6 +174,7 @@ RCS::Pose MoveitKinematics::FK(std::vector<double> jv) {
     return Conversion::Affine3d2RcsPose(end_effector_state);
 }
 // http://docs.ros.org/jade/api/moveit_core/html/classmoveit_1_1core_1_1RobotState.html
+
 std::vector<double> MoveitKinematics::IK(RCS::Pose & pose, std::vector<double> oldjoints) {
     boost::mutex::scoped_lock lock(kinmutex);
     std::vector<double> joints;
@@ -186,27 +195,28 @@ std::vector<double> MoveitKinematics::IK(RCS::Pose & pose, std::vector<double> o
 }
 
 // http://docs.ros.org/jade/api/moveit_core/html/classmoveit_1_1core_1_1RobotState.html
+
 bool MoveitKinematics::IsSingular(RCS::Pose & pose,
-            double threshold){
+        double threshold) {
     double MIN_DETERMINANT_VALUE = threshold;
     //The reference point position (with respect to the link specified in link_name) - Base?
     Eigen::Vector3d reference_point_position(0.0, 0.0, 0.0); // or with z offset?
     Eigen::MatrixXd jacobian;
     Eigen::Affine3d end_effector_state = Conversion::RcsPose2Affine3d(pose);
-    bool found_ik = kinematic_state->setFromIK(joint_model_group, 
-            end_effector_state, 
-            1/*attempts*/, 
+    bool found_ik = kinematic_state->setFromIK(joint_model_group,
+            end_effector_state,
+            1/*attempts*/,
             0.1/*timeout*/);
     if (!found_ik)
         return false;
-    kinematic_state->getJacobian(joint_model_group, 
+    kinematic_state->getJacobian(joint_model_group,
             kinematic_state->getLinkModel(joint_model_group->getLinkModelNames().back()),
-            reference_point_position, 
+            reference_point_position,
             jacobian);
 
     return std::abs(jacobian.determinant()) < MIN_DETERMINANT_VALUE;
 }
-        
+
 #if 0
 
 class CPrimitive {
@@ -548,7 +558,7 @@ int main(int argc, char** argv) {
         //prim.AddObstacle("box1");		prim.PlanPath(target_pose1, 0.01, 1, 1);
         /*		if(i%20) prim.RemoveObstacle("box1");*/
 
-#endif		
+#endif  
         loop_rate.sleep();
     }
 
@@ -666,18 +676,119 @@ ROS_INFO_STREAM("Jacobian: " << jacobian);
 #if 0
 
 / move_group / manipulator / planner_configs
-        / move_group / manipulator / projection_evaluator
-        / move_group / max_range
-        / move_group / max_safe_path_cost
-        / move_group / moveit_controller_manager
-        / move_group / moveit_manage_controllers
-        / move_group / octomap_resolution
-        / move_group / ompl / display_random_valid_states
-        / move_group / ompl / link_for_exploration_tree
-        / move_group / ompl / maximum_waypoint_distance
-        / move_group / ompl / minimum_waypoint_count
-        / move_group / ompl / simplify_solutions
-        / move_group / plan_execution / max_replan_attempts
-        / move_group / plan_execution / record_trajectory_state_frequency
+/ move_group / manipulator / projection_evaluator
+/ move_group / max_range
+/ move_group / max_safe_path_cost
+/ move_group / moveit_controller_manager
+/ move_group / moveit_manage_controllers
+/ move_group / octomap_resolution
+/ move_group / ompl / display_random_valid_states
+/ move_group / ompl / link_for_exploration_tree
+/ move_group / ompl / maximum_waypoint_distance
+/ move_group / ompl / minimum_waypoint_count
+/ move_group / ompl / simplify_solutions
+/ move_group / plan_execution / max_replan_attempts
+/ move_group / plan_execution / record_trajectory_state_frequency
 #endif
 #endif
+
+#include <boost/format.hpp>
+#include "BLogging.h"
+
+std::string DumpEPosition(const Eigen::Vector3d & v) {
+    std::stringstream s;
+    for (int j = 0; j < v.size(); j++) {
+        s << boost::format("%8.5f") % v(0) << boost::format("%8.5f") % v(1) << boost::format("%8.5f") % v(2) << "\n";
+    }
+    return s.str();
+}
+
+struct UrdfJoint {
+    std::string name;
+    Eigen::Vector3d axis;
+    Eigen::Vector3d xyzorigin;
+    Eigen::Vector3d rpyorigin;
+
+    std::string DumpUrdfJoint() {
+        const UrdfJoint & j(*this);
+        std::stringstream s;
+        s << " Axis = " << DumpEPosition(j.axis).c_str() << std::endl;
+        s << " XYZ Origin = " << DumpEPosition(j.xyzorigin).c_str() << std::endl;
+        s << " RPY Origin = " << DumpEPosition(j.rpyorigin).c_str() << std::endl;
+        return s.str();
+    }
+};
+
+static std::vector<Eigen::Matrix4d> A0;
+static std::vector<Eigen::Matrix4d> AllM;
+
+Eigen::Matrix4d ComputeUrdfTransform(double angle,
+        Eigen::Vector3d axis,
+        Eigen::Vector3d origin,
+        Eigen::Vector3d rotation) {
+    Eigen::Matrix3d t33;
+    Eigen::Matrix4d m1 = Eigen::Matrix4d::Identity(); // Create4x4IdentityMatrix();
+    Eigen::Matrix4d tmp = Eigen::Matrix4d::Identity();
+
+    Eigen::Vector3d unit = axis.array().abs();
+    t33 = Eigen::AngleAxisd(axis.sum() * angle, unit);
+    m1.block<3, 3>(0, 0) = t33;
+    tmp.block<3, 1>(0, 3) = origin;
+    return tmp * m1; // http://answers.ros.org/question/193286/some-precise-definition-or-urdfs-originrpy-attribute/
+}
+static RCS::Pose EMatrix2Pose(Eigen::Matrix4d& m)
+{
+    RCS::Pose pose;
+    Eigen::Vector3d trans(m.block<3, 1>(0, 3));
+    Eigen::Quaterniond q(m.block<3, 3>(0, 0));
+    //pose.setBasis(m.block<3, 3>(0, 0));
+    pose.setRotation(tf::Quaternion(q.x(),q.y(), q.z(), q.w()));// pose.getRotation());
+    pose.setOrigin(tf::Vector3(trans.x(), trans.y(), trans.z()));
+ //   tf::vectorEigenToTF(trans, pose.getOrigin());
+    return pose;
+}
+
+static void quaternionEigenToTF(const Eigen::Quaterniond& e, tf::Quaternion& t) {
+    t[0] = e.x();
+    t[1] = e.y();
+    t[2] = e.z();
+    t[3] = e.w();
+}
+ 
+static RCS::Pose ComputeFk()// std::vector<double> thetas)
+{
+    Eigen::Matrix4d t = Eigen::Matrix4d::Identity();
+    A0.clear();
+
+    //	for ( int i = 0; i< thetas.size( ); i++ )
+    //	{
+    //		AllM.push_back(ComputeUrdfTransform(thetas[i], jointspec[i].axis, jointspec[i].xyzorigin, jointspec[i].rpyorigin));
+    //	}
+
+    for (size_t i = 0; i < AllM.size(); i++) {
+        t = t * AllM[i];
+        A0.push_back(t);
+    }
+
+    return EMatrix2Pose(t);
+}
+
+
+/**
+ * robotiq_85_base_joint                axis=1,0,0 rpy="0 0 0" xyz=".0085 0 -.0041"
+ * robotiq_85_right_knuckle_joint       axis=1,0,0 rpy="1.5707 -1.5707 0" xyz=".04191 -.0306 0"
+ * robotiq_85_right_finger_joint 	axis=1,0,0 rpy="3.1415 0 0" xyz="0 .00508 .03134"
+ * robotiq_85_right_inner_knuckle_joint axis=1,0,0 rpy="-1.5707 -1.5707 0" xyz=".04843 -.0127 0"
+ * robotiq_85_right_finger_tip_joint 	axis=1,0,0 rpy="0 0 0" xyz="0 .04196 -.0388"
+ * @return 
+ */
+RCS::Pose ComputeGripperOffset() {
+    AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(1, 0, 0), Eigen::Vector3d(.0085 ,0 ,-.0041), Eigen::Vector3d(0, 0, 0)));
+    AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(1, 0, 0), Eigen::Vector3d(.04191, -.0306, 0), Eigen::Vector3d(1.5707, - 1.5707, 0)));
+    AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(0, -1, 0), Eigen::Vector3d(0, .00508, .03134), Eigen::Vector3d(3.1415, 0, 0)));
+    AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(-1, 0, 0), Eigen::Vector3d(.04843 ,- .0127, 0), Eigen::Vector3d(-1.5707, - 1.5707, 0)));
+    AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(0, -1, 0), Eigen::Vector3d(0 ,.04196, - .0388), Eigen::Vector3d(0, 0, 0)));
+    RCS::Pose  pose = ComputeFk();
+    LOG_DEBUG << "Gripper Offset Pose " << RCS::DumpPoseSimple(pose).c_str();
+    
+} 

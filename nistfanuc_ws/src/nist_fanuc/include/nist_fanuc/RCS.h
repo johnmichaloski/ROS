@@ -209,6 +209,8 @@ namespace RCS {
         static const int CANON_DRAW_OBJECT = 13;
         static const int CANON_ERASE_OBJECT = 14;
         static const int CANON_SET_GRIPPER_POSE = 15;
+        static const int CANON_PICK = 16;
+        static const int CANON_PLACE = 17;
 
         static const int CANON_UNKNOWN = -1;
 #if 0
@@ -362,7 +364,11 @@ namespace RCS {
             this->bCoordinated = msg.bCoordinated;
 
             this->eepercent = msg.eepercent;
+            this->partname = msg.partname;
+            this->partfeature = msg.partfeature;
+            this->hint = msg.hint;
 
+	    // Doesn't seem to work copying
             //    static_cast<nistcrcl::CrclCommandMsg>(*this)  = msg;
 
         }
