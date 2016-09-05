@@ -25,8 +25,8 @@ protected:
     size_t num_joints;
     std::string _groupname;
     std::string _eelinkname;
-    boost::shared_ptr<::Kinematics> armkin;
 public:
+    boost::shared_ptr<::Kinematics> armkin;
 
     size_t NumJoints() {
         assert(joint_names.size() != 0);
@@ -158,9 +158,6 @@ typedef boost::shared_ptr<IKinematics> IKinematicsSharedPtr;
 
 class ArmKinematics : public IKinematics {
 public:
-    boost::shared_ptr<::Kinematics> armkin;
-
-
 
     virtual RCS::Pose FK(std::vector<double> jv) {
         moveit_msgs::GetPositionFK::Response response;

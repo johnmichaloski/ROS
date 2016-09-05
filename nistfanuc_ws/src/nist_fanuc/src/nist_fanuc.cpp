@@ -27,6 +27,9 @@
 // /opt/ros/indigo/include/moveit/robot_state/robot_state.h
 // /opt/ros/indigo/include/moveit/move_group_interface/move_group.h
 extern RCS::Pose ComputeGripperOffset();
+extern RCS::Pose AutoComputeGripperOffset(urdf::Model& robot_model);
+
+
 int main(int argc, char** argv) {
 
     // Current robot joints declaration
@@ -129,6 +132,7 @@ int main(int argc, char** argv) {
         kin->Init(nh);
         RCS::Cnc.Kinematics() = kin;
         ComputeGripperOffset();
+        AutoComputeGripperOffset(kin->armkin->robot_model);
 #endif
 //#define FASTKIN    
 #ifdef FASTKIN

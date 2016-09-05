@@ -126,3 +126,46 @@ RCS::Pose ComputeGripperOffset() {
     LOG_DEBUG << "Gripper Offset Pose " << RCS::DumpPoseSimple(pose).c_str();
     
 } 
+ Eigen::Vector3d UrdfVector2EigenVector(const urdf::Vector3 &in){
+     Eigen::Vector3d out;
+    out<<in.x, in.y, in.z;
+    return out;
+  }
+ 
+// http://docs.ros.org/jade/api/urdf/html/
+ //http://docs.ros.org/diamondback/api/urdf/html/classurdf_1_1Pose.html
+//http://docs.ros.org/diamondback/api/urdf/html/classurdf_1_1Rotation.html
+// http://docs.ros.org/diamondback/api/urdf/html/classurdf_1_1Vector3.html
+// Auto in quotes so far
+RCS::Pose AutoComputeGripperOffset(urdf::Model& robot_model) {
+#if 0
+    AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(1, 0, 0), Eigen::Vector3d(.0085 ,0 ,-.0041), Eigen::Vector3d(0, 0, 0)));
+    AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(1, 0, 0), Eigen::Vector3d(.04191, -.0306, 0), Eigen::Vector3d(1.5707, - 1.5707, 0)));
+    AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(0, -1, 0), Eigen::Vector3d(0, .00508, .03134), Eigen::Vector3d(3.1415, 0, 0)));
+    AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(-1, 0, 0), Eigen::Vector3d(.04843 ,- .0127, 0), Eigen::Vector3d(-1.5707, - 1.5707, 0)));
+    AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(0, -1, 0), Eigen::Vector3d(0, .04196, -.0388), Eigen::Vector3d(0, 0, 0)));
+#endif
+    AllM.clear();
+    std::vector<boost::shared_ptr <const urdf::Joint>> joints;
+    joints.push_back(robot_model.getJoint("robotiq_85_base_joint"));
+    joints.push_back(robot_model.getJoint("robotiq_85_right_knuckle_joint"));
+    joints.push_back(robot_model.getJoint("robotiq_85_right_finger_joint"));
+    joints.push_back(robot_model.getJoint("robotiq_85_right_inner_knuckle_joint"));
+    joints.push_back(robot_model.getJoint("robotiq_85_right_finger_tip_joint"));
+    for(size_t i=0; i< joints.size(); i++){
+        urdf::Vector3 axis = joints[i]->axis;
+        urdf::Pose jpose = joints[i]->parent_to_joint_origin_transform;
+        urdf::Vector3 position = jpose.position;
+        double roll, pitch, yaw;
+        jpose.rotation.getRPY(roll,pitch,yaw);
+        urdf::Vector3 rpy(roll,pitch,yaw);
+        AllM.push_back(ComputeUrdfTransform(0.0, 
+                UrdfVector2EigenVector(axis), 
+                UrdfVector2EigenVector(position), 
+                UrdfVector2EigenVector(rpy)));
+    }
+    RCS::Pose pose = ComputeFk();
+    LOG_DEBUG << "Gripper Offset Pose " << RCS::DumpPoseSimple(pose).c_str();
+    return pose;
+   
+} 
