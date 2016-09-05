@@ -8,22 +8,21 @@
 #include <iostream>
 #include <sstream>
 
+
+#include <ros/package.h>
+#include <ros/console.h>
+
+
 #include "MotionControl.h"
 #include "Globals.h"
 #include "Controller.h"
 #include "Kinematics.h"
 #include "Communication.h"
-#include "Setup.h"
-
-#include <ros/package.h>
-#include <ros/console.h>
-
+#include "RosSetup.h"
 #include "RvizMarker.h"
-#include "NIST/TrajModel.h"
 #include "NIST/BLogging.h"
 #include "Debug.h"
 #include "Scene.h"
-using namespace KinematicChain;
 
 // /opt/ros/indigo/include/moveit/robot_state/robot_state.h
 // /opt/ros/indigo/include/moveit/move_group_interface/move_group.h
@@ -94,7 +93,6 @@ int main(int argc, char** argv) {
         boost::shared_ptr<CJointReader>jointReader;
         boost::shared_ptr<CJointWriter>jointWriter;
         boost::shared_ptr<IKinematics> kin;
-        boost::shared_ptr<MoveitPlanning> moveitPlanner;
         boost::shared_ptr<CRvizMarker> pRvizMarker;
         boost::shared_ptr<CLinkReader> pLinkReader;
 

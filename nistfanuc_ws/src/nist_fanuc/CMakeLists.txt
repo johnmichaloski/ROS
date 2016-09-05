@@ -105,10 +105,9 @@ src/RCS.cpp
 src/RCSInterpreter.cpp
 src/RvizMarker.cpp
 src/Scene.cpp
-src/Setup.cpp
-src/TrajModel.cpp
+src/RosSetup.cpp
 src/arm_kinematics.cpp
-src/moveit.cpp
+#src/moveit.cpp
 src/nist_fanuc.cpp
 src/trajectoryMaker.cpp
 src/fanuc_lrmate200id_manipulator_ikfast_solver.cpp

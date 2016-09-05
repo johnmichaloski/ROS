@@ -54,7 +54,8 @@ namespace RCS {
         return s.str();
     }
 
-    inline std::string DumpPoseSimple(RCS::Pose & pose) {
+    //inline std::string DumpPoseSimple(RCS::Pose & pose) {
+    inline std::string DumpPoseSimple(RCS::Pose  pose) {
         std::stringstream s;
 
         s << "Translation = " << 1000.0 * pose.getOrigin().x() << ":" << 1000.0 * pose.getOrigin().y() << ":" << 1000.0 * pose.getOrigin().z();

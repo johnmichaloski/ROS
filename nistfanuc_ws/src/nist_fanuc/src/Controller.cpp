@@ -231,7 +231,8 @@ namespace RCS {
                 }
                 else if (_newcc.crclcommand == CanonCmdType::CANON_DRAW_OBJECT)
                 {
-                     Eigen::Affine3d pose; tf::poseMsgToEigen(_newcc.finalpose, pose);
+                     Eigen::Affine3d pose; 
+                     tf::poseMsgToEigen(_newcc.finalpose, pose);
                      UpdateScene(_newcc.partname,
                             pose,
                             rviz_visual_tools::RED );
@@ -331,6 +332,8 @@ namespace RCS {
 #endif
 
 void TestRobotCommands() {
+    // Finish queuing commands before handling them....
+    boost::mutex::scoped_lock lock(cncmutex);
     static int crclcommandnum = 1;
     static double dwelltime=3.0;
     
@@ -467,8 +470,11 @@ void TestRobotCommands() {
     cmd.crclcommandnum = crclcommandnum++;
     cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
     cmd.hint = ToVector<double>(6, 0.27, 0.5, -0.4, 0.0, 0.0, 0.0);
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
-            tf::Vector3(0.390496134758, -0.101964049041, 0.0245+0.04))*retract);
+    LOG_DEBUG << "Retract " << RCS::DumpPoseSimple(retract).c_str();
+    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(retract * RCS::Pose(tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
+            tf::Vector3(0.390496134758, -0.101964049041, 0.0245 + 0.04)) );
+    RCS::Pose  retractPose = Conversion::GeomMsgPose2RcsPose(cmd.finalpose);
+    LOG_DEBUG << "pose finalpose " << RCS::DumpPoseSimple(retractPose).c_str();
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
 
     

@@ -22,11 +22,10 @@
 #include "NIST/RCSThreadTemplate.h"
 #include "NIST/RCSMsgQueue.h"
 #include "NIST/BLogging.h"
+
 #include "nist_fanuc/Gripper.h"
 #include "nist_fanuc/RCSInterpreter.h"
-//#include "nist_fanuc/Trajectory.h"
 #include "nist_fanuc/Communication.h"
-#include "nist_fanuc/moveit.h"
 #include "nist_fanuc/RvizMarker.h"
 #include "nist_fanuc/arm_kinematics.h"
 #include "nist_fanuc/Gripper.h"
@@ -90,7 +89,6 @@ namespace RCS {
         VAR(Kinematics, boost::shared_ptr<IKinematics>);
 //        VAR(TrajectoryModel, boost::shared_ptr<CTrajectory>);
         VAR(JointWriter, boost::shared_ptr<CJointWriter>);
-        VAR(MoveitPlanner, boost::shared_ptr<MoveitPlanning>);
         VAR(RvizMarker, boost::shared_ptr<CRvizMarker>)
         VAR(EEPoseReader, boost::shared_ptr<CLinkReader>)
         VAR(Gripper, boost::shared_ptr<GripperInterface>)

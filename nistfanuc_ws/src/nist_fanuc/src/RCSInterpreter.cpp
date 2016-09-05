@@ -120,7 +120,7 @@ std::vector<JointState> SimpleMotionInterpreter::PlanCartesianMotion(std::vector
             gotojoints = RCS::Cnc.MoveitPlanner()->GetJtsPlan();
             return gotojoints;
         }
-#else
+
         // assume first one is where were are already
         for (size_t j = 1; j < poses.size(); j++) {
             if (RCS::Cnc.MoveitPlanner()->Plan(poses[j - 1], poses[j])) {
