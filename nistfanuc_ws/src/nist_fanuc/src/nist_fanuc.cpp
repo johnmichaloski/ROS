@@ -230,6 +230,7 @@ int main(int argc, char** argv) {
 
         InitSceneObject();
         SetupSceneObject();
+        DrawCheckerboard();
 
         RCS::Cnc._interpreter = boost::shared_ptr<RCSInterpreter>(new BangBangInterpreter());
         RCS::Cnc._interpreter->_kinematics=kin;

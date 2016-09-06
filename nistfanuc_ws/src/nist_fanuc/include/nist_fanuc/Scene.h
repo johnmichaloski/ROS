@@ -4,35 +4,23 @@
 #include "Globals.h"
 #include <boost/bind.hpp>
 #include <algorithm>
+#include <map>
 
 struct ObjectDB;
 
-#define XYWALL 1
-#define XZWALL 2
-#define YZWALL 3
 
-extern bool publishWall(int WallType, const Eigen::Affine3d & inpose, const rviz_visual_tools::colors &color, double scale);
 extern void DrawObject(ObjectDB *obj);
 extern void InitSceneObject();
 extern void UpdateScene(std::string objname, Eigen::Affine3d pose, rviz_visual_tools::colors color );
 extern void SetupSceneObject();
+extern void DrawCheckerboard();
 
-struct Wall {
-
-    Wall(int type = 0, double length = 0.0, double width = 0.0, double height = 0.0) {
-        this->type = type;
-        this->length = length;
-        this->height = height;
-        this->width = width;
-    }
-    int type;
-    double length, height, width;
-};  
 struct ObjectDB
 {
     Eigen::Affine3d pose;
     std::string name;
-    std::string type;
+    //std::string type;
+    std::string metatype;
     std::string filepath;
     rviz_visual_tools::colors color;
     double scale;
@@ -40,14 +28,13 @@ struct ObjectDB
      rviz_visual_tools::colors firstcolor;
     Eigen::Affine3d grippedpose; // where actually gripper point of object is
     double gripperclose; // displacement of gripper closed in meters
+    Eigen::Affine3d adjacentpose;
 
-
-    // Wall specifics
  
-    Wall wall;
+    static std::map<std::string,std::string> _typemapping;
      ObjectDB(
             std::string name,
-            std::string type,
+            std::string metatype,
             std::size_t id=0,
             Eigen::Affine3d pose=Eigen::Affine3d::Identity(),
             std::string filepath="",
@@ -55,7 +42,7 @@ struct ObjectDB
             double scale = 1.0) {
         this->name = name;
         this->pose = pose;
-        this->type = type;
+        this->metatype = metatype;
         this->filepath = filepath;
         this->firstcolor=this->color = color;
         this->scale = scale;
@@ -64,20 +51,17 @@ struct ObjectDB
         else this->id = id;
      }
 ObjectDB(
-            Wall wall,
             std::string name,
-            std::string type,
-            std::size_t id = 0,
+            std::string metatype,
             Eigen::Affine3d pose = Eigen::Affine3d::Identity(),
-            rviz_visual_tools::colors color = rviz_visual_tools::CLEAR,
-            double scale = 1.0
-            ) {
+            Eigen::Affine3d adjacentpose = Eigen::Affine3d::Identity(),
+            rviz_visual_tools::colors color = rviz_visual_tools::CLEAR
+             ) {
         this->name = name;
         this->pose = pose;
-        this->type = type;
+        this->metatype = metatype;
         this->firstcolor=this->color = color;
-        this->scale = scale;
-        this->wall=wall;
+        this->adjacentpose=adjacentpose;
 
     }
      static void Save( ObjectDB * obj) { objects.push_back(obj); }

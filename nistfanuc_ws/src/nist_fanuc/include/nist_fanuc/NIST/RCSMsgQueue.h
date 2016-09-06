@@ -29,6 +29,7 @@ namespace RCS {
     class CMessageQueue {
     public:
         typedef std::deque<T> xml_message_queue;
+        typedef typename std::deque<T>::iterator xml_message_queue_iterator;
 
         CMessageQueue() {
         }
@@ -104,6 +105,8 @@ namespace RCS {
 
             xml_msgs.insert(xml_msgs.begin(), t);
         }
+	xml_message_queue_iterator  end() { return xml_msgs.end(); }
+	xml_message_queue_iterator  begin() { return xml_msgs.begin(); }
     protected:
         boost::mutex m;
         xml_message_queue xml_msgs;
