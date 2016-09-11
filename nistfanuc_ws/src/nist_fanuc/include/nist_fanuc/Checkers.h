@@ -1,0 +1,470 @@
+
+
+#pragma once
+
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <stdarg.h>
+#include <iostream>
+#include <math.h>
+#include <assert.h>
+#include <iterator> 
+#include <fstream>   
+#include <iomanip>
+#include <sstream>
+
+#define ROWS 8
+#define COLS 8
+
+#define EMPTY 1
+#define RED 2
+#define BLACK 4
+#define KING 8
+#define MAX_DEPTH 50
+
+#define ISRED(c) ( (c & RED) >0)
+#define ISBLACK(c) ((c & BLACK) >0)
+#define ISEMPTY(c) (c == EMPTY)
+#define ISKING(c) ( (c & KING) >0)
+#define SIGN(x) (x < 0) ? -1 : (x > 0)
+
+inline	std::string StrFormat (const char *fmt, ...)
+{
+	va_list argptr;
+	va_start(argptr, fmt);
+	int m;
+	int n = (int) strlen(fmt) + 1028;
+	std::string tmp(n, '0');
+	while ( ( m = vsnprintf(&tmp[0], n - 1, fmt, argptr) ) < 0 )
+	{
+		n = n + 1028;
+		tmp.resize(n, '0');
+	}
+	va_end(argptr);
+	return tmp.substr(0, m);
+}
+
+struct Move
+{
+	Move() {player=0; bJump=bDoubleJumps=false; row=col=srow=scol=0;score=0.0;}
+	Move(int row, int col, bool bJump=false) 
+	{ 
+		this->row=row; this->col=col; this->bJump=bJump;
+		player=0; bDoubleJumps=false; srow=scol=0;score=0.0;
+	}
+	int row;
+	int col;
+	int player;
+	bool bJump;
+	bool bDoubleJumps;
+	std::vector<Move> doublejumps;
+	int srow;
+	int scol;
+	double score;
+	void Start(int player, int row, int col) { this->player=player; srow=row; scol=col; }
+
+	// For std::map use
+	friend 	bool operator < (const Move &left, const Move &other ) 
+	{
+		return(   (left.row*8+left.col)< (other.row*8 + other.col));
+	}
+	// For serialization
+	friend std::ostream & operator<<(std::ostream & output_out, const Move & move_in)
+	{
+		return output_out << move_in.player<<"\t" <<  move_in.srow  <<"\t" << move_in.scol  <<"\t"
+			<< move_in.row  <<"\t" << move_in.col  <<"\t" << move_in.bJump ;
+	}
+	friend std::istream& operator>>(std::istream& s_in, Move & move_out)
+    {
+        s_in >> move_out.player >> move_out.srow>> move_out.scol >> move_out.row >> move_out.col >> move_out.bJump ;
+        return s_in;
+    }
+
+};
+
+struct BoardType : std::vector<std::vector<int> >
+{
+	BoardType() 
+	{
+		this->resize( ROWS, std::vector<int> ( COLS, EMPTY ) );
+	}
+};
+
+struct Checkers
+{
+	BoardType aboard; 
+	BoardType &Board() { return aboard; }
+	std::vector<Move> allmoves;
+	Checkers() 
+	{
+		aboard[0][1]=RED; aboard[0][3]=RED; aboard[0][5]=RED; aboard[0][7]=RED;
+		aboard[1][0]=RED; aboard[1][2]=RED; aboard[1][4]=RED; aboard[1][6]=RED;
+		aboard[2][1]=RED; aboard[2][3]=RED; aboard[2][5]=RED; aboard[2][7]=RED;
+
+		aboard[5][0]=BLACK; aboard[5][2]=BLACK; aboard[5][4]=BLACK; aboard[5][6]=BLACK;
+		aboard[6][1]=BLACK; aboard[6][3]=BLACK; aboard[6][5]=BLACK; aboard[6][7]=BLACK;
+		aboard[7][0]=BLACK; aboard[7][2]=BLACK; aboard[7][4]=BLACK; aboard[7][6]=BLACK;
+	} 
+	void Restore(std::string filename, std::vector<Move> & moves )
+	{
+		std::ifstream f( filename.c_str() );
+		if(!f)
+			throw std::exception(std::string("Checkers game could not open file : " + filename + " for reading!").c_str());
+		moves.clear();
+		std::copy(std::istream_iterator<Move>(f), std::istream_iterator<Move>(), std::back_inserter(moves));
+	}
+	void Save(std::string filename)
+	{
+		std::ofstream f( filename.c_str() );
+		if(!f)
+			throw std::exception(std::string("Checkers game could not open file : " + filename + " for writing!").c_str());
+		std::ostream_iterator<Move> out_it (f,"\n");
+		std::copy ( allmoves.begin(), allmoves.end(), out_it );
+	}
+	void Dump(std::ostream &str, const Move move)
+	{
+		std::string typemove = move.bJump ? "jump" : "move";
+		std::string splayer = ISBLACK(move.player) ? "BLACK" : "RED";
+		str <<  StrFormat("%s %s from %d,%d to %d,%d\n",splayer.c_str(), typemove.c_str(), move.srow, move.scol, move.row, move.col);
+
+	}
+	void Dump(std::ostream &str, const std::vector<Move> &moves)
+	{
+		for(size_t i=0; i< moves.size() ; i++)
+		{
+			std::string typemove = moves[i].bJump ? "jump" : "move";
+			std::string splayer = ISBLACK(moves[i].player) ? "BLACK" : "RED";
+			str <<  StrFormat("%s %s from %d,%d to %d,%d\n",splayer.c_str(), typemove.c_str(), moves[i].srow, moves[i].scol, moves[i].row, moves[i].col);
+		
+		}
+	}
+	bool LegalRow(int n) {		return n>=0 && n < 8;	}
+	char value2symbol(int i) 
+	{
+		switch(i)
+		{
+		case EMPTY:
+			return ' ';  
+		case RED:
+			return 'r';
+		case BLACK:
+			return 'b';     
+		case RED+KING:
+			return 'R';
+		case BLACK+KING:
+			return 'B'; 
+		}
+		return ('?');
+	}
+	void printDisplayFancy(BoardType inboard)
+	{
+		int rr, cc;
+		std::cout << "  +---+---+---+---+---+---+---+---+\n";
+		for (rr=0; rr<ROWS; ++rr)
+		{
+			std::cout << StrFormat("%d |", rr).c_str();
+			for (cc=0; cc<COLS; ++cc)
+			{
+				std::cout <<  StrFormat(" %c |", value2symbol(inboard[rr][cc]) ).c_str();
+			}
+			std::cout << "\n";
+			std::cout << "  +---+---+---+---+---+---+---+---+\n";
+		}
+		std::cout << "    0   1   2   3   4   5   6   7\n";
+	}
+	void KingMe(BoardType & inboard)
+	{
+		for (int i = 0; i < 8; i++)
+		{
+			if (ISBLACK(inboard[0][i] ))
+				inboard[0][i] |= KING;
+
+			if (ISRED(inboard[7][i]))
+				inboard[7][i] |= KING;
+		}
+	}
+	void Jump(BoardType & inboard, int i, int j, Move move)
+	{
+		int  temp;
+		//std::cout <<  StrFormat("SWAP: %d,%d to %d,%d\n", i, j, move.row, move.col).c_str();
+		temp = inboard[i][j];
+		inboard[i][j] = inboard[move.row][move.col];
+		inboard[move.row][move.col] = temp;
+		KingMe(inboard);  // check if kinged
+	}
+
+	bool IsWin(BoardType & inboard, int player)
+	{
+		int opponent = (player == BLACK) ? RED : BLACK;
+		for(int i=0; i< ROWS; i++)
+			for(int j=0; j< COLS; j++)
+				if((inboard[i][j]& opponent) > 0)  // King
+					return false;
+		return true;
+	}
+	std::vector<Move> BuildMoves(BoardType inboard, int player, Move from, bool bJumpOnly=false)
+	{
+		std::vector<Move> moves;
+		int row=from.row;
+		int col=from.col;
+		int nJump;
+		int opponent = (player == BLACK) ? RED : BLACK;
+		bool bKing = ISKING(inboard[row][col]);
+		int tries = (bKing)? 2: 1;
+		int nDir = ISBLACK(player) ? -1: 1;
+
+		for(size_t n=0; n< tries; n++)
+		{
+			nJump=1;
+			if(n==1) nDir= -1 * nDir;  //second time for kings
+
+			if(!bJumpOnly && (col+nJump<8) 
+				&& LegalRow(row+nDir*nJump) 
+				&& inboard[row+nDir*nJump][col+nJump]== EMPTY)
+				moves.push_back(Move(row+nDir*nJump,col+nJump));
+
+			if(!bJumpOnly && (col-nJump>=0) 
+				&& LegalRow(row+nDir*nJump) 
+				&& inboard[row+nDir*nJump][col-nJump]== EMPTY)
+				moves.push_back(Move(row+nDir*nJump,col-nJump));
+
+			nJump=2;
+			if((col+nJump<8) && LegalRow(row+nDir*nJump) &&
+				inboard[row+nDir*nJump][col+nJump]== EMPTY &&
+				inboard[row+nDir*(nJump-1)][col+nJump-1]== opponent)
+			{
+				Move move(row+nDir*nJump,col+nJump,true) ;
+				BoardType newboard=MakeMove(inboard, player,row, col, move);
+				move.doublejumps=BuildMoves(newboard, player, move, true);
+				moves.push_back(move);
+			}
+
+			if((col-nJump>=0) && LegalRow(row+nDir*nJump) &&
+				inboard[row+nDir*nJump][col-nJump]== EMPTY &&
+				inboard[row+nDir*(nJump-1)][col-nJump+1]== opponent)
+			{
+				Move move(row+nDir*nJump,col-nJump,true);
+				BoardType newboard=MakeMove(inboard, player,row, col, move);
+				move.doublejumps=BuildMoves(newboard, player, move, true);
+				moves.push_back(move);
+				//moves.push_back(Move(row+nDir*nJump,col-nJump,true));
+			}
+		}
+		return moves;
+	}
+	// position (i,j) and possible moves
+	std::map<Move, std::vector<Move>> GenerateMoveList(BoardType inboard, int player)
+	{
+		int nDir = 1;
+
+		int nJump=1;
+		std::map<Move,	std::vector<Move>> sqmoves;
+		if(ISBLACK(player)) 
+		{
+			nDir = -1;
+		}
+		for(int i=0; i< ROWS; i++)
+		{		
+			for(int j=0; j< COLS; j++)
+			{
+				if((inboard[i][j] & player) == 0 )  // 
+					continue;
+				std::vector<Move> moves;
+				moves=BuildMoves(inboard, player, Move(i,j));
+				if(moves.size()!=0)
+					sqmoves[Move(i,j)]=moves;
+			}
+		}					
+		return sqmoves;
+	}
+	std::string DumpLegalMoves(std::map<Move, std::vector<Move>> &moves)
+	{
+		std::map<Move, std::vector<Move>>::iterator it;
+		std::string str;
+		for(it=moves.begin(); it!=moves.end(); it++)
+		{
+			if((*it).second.size()==0)
+				continue;
+			str+=StrFormat("[%d,%d]=", (*it).first.row,(*it).first.col);
+			for(size_t i=0; i < (*it).second.size(); i++)
+			{
+				Move &move((*it).second[i]);
+				str+=StrFormat("(%d,%d),", move.row,move.col);
+			}
+			str+="\n";
+		}
+		return str;
+	}
+	std::string LegalMove(const BoardType & inboard, int player,int i,int j, Move m)
+	{
+		int k = m.row;
+		int l=m.col;
+
+		if(i < 0 && ROWS <= i){ // keeping in bounds
+			return StrFormat("i is out of bounds\n");
+		}
+		if(j < 0 && COLS <= j){
+			return StrFormat("j is out of bound");
+		}
+
+		if(k < 0 && ROWS <= k){
+			return StrFormat("k is out of bounds");
+		}
+		if(l < 0 && COLS<= l){
+			return StrFormat("l is out of bounds\n");
+		}
+
+		// check player is moving his own piece.
+		if((player == RED && !ISRED(inboard[i][j]) ) || (player == BLACK && !ISBLACK(inboard[i][j]) )){
+			return StrFormat("move your own piece!\n").c_str();
+		}
+
+		//make sure they are jumping to a empty loacation
+		if(inboard[k][l] != EMPTY){
+			return StrFormat("You must move to a empty location");
+		}
+
+		return "";
+	}
+
+	BoardType MakeMove(BoardType inboard, int player,int i,int j, Move m)
+	{
+		std::string errmsg;
+		std::string typemove("move");
+		if(m.bJump)
+			typemove="jump";
+#if 0
+		if(player == RED){
+			std::cout <<  StrFormat("RED %s from %d,%d to %d,%d\n", typemove.c_str(), i, j, m.row, m.col);
+		} else {
+			std::cout <<  StrFormat("BLACK %s from %d,%d to %d,%d\n", typemove.c_str(),  i, j, m.row, m.col);
+		}
+#endif
+		//if(!(errmsg=LegalMove( player, i, j, m)).empty())
+		//{
+		//	std::cout << errmsg<< std::endl;
+		//	return errmsg;
+		//}
+		int rowsign = SIGN(m.row-i);
+		int colsign = SIGN(m.col-j);
+		if(abs(i-m.row) == 2)
+		{
+			inboard[i+(rowsign*1)][j+(colsign*1)]=EMPTY;
+		}
+		Jump(inboard, i,j,m);
+		Move move(m.row, m.col, m.bJump);
+		if(move.doublejumps.size() > 0)
+		{
+			Move m2 = move.doublejumps[0];
+			inboard= MakeMove(inboard,  player, m.row, m.col, m2);
+		}
+		// Save move - only good if no mixmax lookahead
+		move.Start(player, i,j);
+		allmoves.push_back(move);
+
+		return inboard;
+	}
+	double Eval( BoardType &inBoard, int player)  // add in player, subtract opponent
+	{
+		int sum=0;
+		int opponent = (player == BLACK) ? RED : BLACK;
+		for(int i=0; i< ROWS; i++)
+			for(int j=0; j< COLS; j++)
+			{
+				int nKing=1;
+				if(ISKING(inBoard[i][j])) nKing=5;
+				if((inBoard[i][j] & player) > 0) 
+				{
+					sum = sum + nKing * 1;
+				}
+				else if((inBoard[i][j] & opponent) > 0) 
+				{
+					sum = sum - nKing * 1;
+				}
+			}
+
+			return sum;
+	}
+	bool RandomMove(std::map<Move, std::vector<Move>> &moves, Move &m1, Move &m2)
+	{
+		if(moves.size() == 0)
+			return false;
+
+		std::map<Move, std::vector<Move>>::iterator it;
+
+		int n = rand() % moves.size();
+		it=moves.begin();
+		for(size_t i=0; i< n; i++) it++;
+		int m = rand() % (*it).second.size();
+		m1=(*it).first;
+		m2= (*it).second[m];
+		return true;
+	}
+	double MinMaxEval(int depth, int player, BoardType curBoard, double signFactor)
+	{
+		if ( depth >= MAX_DEPTH )
+			return Eval(curBoard, player);
+		int opponent = (player == BLACK) ? RED : BLACK;
+		std::map<Move, std::vector<Move>> moves  = GenerateMoveList(curBoard, player);
+		float posValue = -FLT_MAX;
+
+		std::map<Move, std::vector<Move>>::iterator it;
+		for (it=moves.begin(); it!=moves.end(); it++)  
+		{
+			if((*it).second.size()==0)
+				continue;
+			Move from((*it).first);
+			for(size_t i=0; i < (*it).second.size(); i++)
+			{
+				Move &to((*it).second[i]);
+				BoardType newBoard = MakeMove(curBoard, player, from.row, from.col, to);
+				float newValue = signFactor*MinMaxEval(depth+1, opponent,  newBoard, -signFactor);
+				if ( newValue > posValue ) 
+					posValue = newValue;
+			}
+		}
+
+		return signFactor*posValue;
+	}
+	bool MinMaxBestMove(std::map<Move, std::vector<Move>> &moves, BoardType curBoard, int player, Move &m1, Move &m2)
+	{
+		float bestScore =-FLT_MAX;
+		int opponent = (player == BLACK) ? RED : BLACK;
+
+		Move bestfrom, bestto;
+		std::map<Move, std::vector<Move>>::iterator it;
+		std::map<Move, std::vector<Move>> bestmoves;
+		for(it=moves.begin(); it!=moves.end(); it++)
+		{
+			if((*it).second.size()==0)
+				continue;
+			for(size_t i=0; i < (*it).second.size(); i++)
+			{
+				Move &move((*it).second[i]);
+				BoardType newBoard = MakeMove(curBoard, player, (*it).first.row, (*it).first.col, move);
+				move.score = MinMaxEval(48,  opponent,  newBoard, -1.0);
+				if(move.score>bestScore)
+				{
+					m1=(*it).first;
+					m2=move;
+					bestScore=move.score;
+					bestmoves.clear();
+					bestmoves[(*it).first]=std::vector<Move>();
+					bestmoves[(*it).first].push_back(move);
+				}
+				if(move.score==bestScore)
+				{
+					bestmoves[(*it).first].push_back(move);
+				}
+			}
+		}
+		// Lots of moves with same mixmax value - randomly pick one
+		if(bestmoves.size() > 1)
+		{
+			RandomMove(bestmoves, m1, m2);
+		}
+		return true;
+	}
+};

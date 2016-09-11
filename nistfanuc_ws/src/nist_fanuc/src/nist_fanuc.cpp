@@ -23,6 +23,7 @@
 #include "NIST/BLogging.h"
 #include "Debug.h"
 #include "Scene.h"
+#include "Checkerboard.h"
 
 // /opt/ros/indigo/include/moveit/robot_state/robot_state.h
 // /opt/ros/indigo/include/moveit/move_group_interface/move_group.h
@@ -228,10 +229,16 @@ int main(int argc, char** argv) {
 
 #endif
 
+#if 1
         InitSceneObject();
+        Checkerboard game;
+        game.RvizSetup();
         SetupSceneObject();
-        DrawCheckerboard();
+        LOG_DEBUG << ObjectDB::DumpDB();
+ 	game.Board()=game.PhysicalMove(game.Board(),BLACK, 5,0,  Move(4,1));
+	game.Board()=game.PhysicalMove(game.Board(),RED, 2,1,  Move(3,0));
 
+#endif
         RCS::Cnc._interpreter = boost::shared_ptr<RCSInterpreter>(new BangBangInterpreter());
         RCS::Cnc._interpreter->_kinematics=kin;
         RCS::Cnc.Start(); // start the Controller Session thread

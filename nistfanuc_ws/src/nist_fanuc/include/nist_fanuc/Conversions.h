@@ -1,5 +1,9 @@
 
 
+
+// Must webs:
+// http://docs.ros.org/kinetic/api/tf_conversions/html/c++/tf__eigen_8cpp_source.html
+
 #pragma once
 #include <Eigen/Core>
 #include <Eigen/Geometry>
@@ -14,6 +18,25 @@
 
 namespace Conversion {
 
+    inline Eigen::Vector3d vectorTFToEigen(tf::Vector3 t) {
+        Eigen::Vector3d e;
+        e(0) = t[0];
+        e(1) = t[1];
+        e(2) = t[2];
+        return e;
+    }
+
+    template<typename T>
+    inline tf::Vector3 vectorEigenToTF(T e) { // Eigen::Vector3d e) {
+        tf::Vector3 t;
+        t[0] = e(0);
+        t[1] = e(1);
+        t[2] = e(2);
+        return t;
+    }
+   
+    
+  
     inline geometry_msgs::Pose& TfPose2GeometryPose(RCS::Pose & m, geometry_msgs::Pose & p) {
         p.position.x = m.getOrigin().x();
         p.position.y = m.getOrigin().y();

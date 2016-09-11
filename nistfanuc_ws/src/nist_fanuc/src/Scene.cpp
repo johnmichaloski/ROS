@@ -10,17 +10,28 @@ using namespace boost::assign;
 #include "Debug.h"
 using namespace rviz_visual_tools;
 
-std::map<std::string,std::string> ObjectDB::_typemapping =  map_list_of  ("bolt", "mesh") ("boltholder", "mesh") ("wall", "cuboid") ;
+
+std::map<std::string,std::string> ObjectDB::_typemapping = 
+        map_list_of  ("bolt", "mesh") 
+        ("boltholder", "mesh")
+        ("wall", "cuboid") 
+        ("Checkerboard", "cuboid") 
+        ("Cylinder", "Cylinder") 
+         ;
         
 std::size_t ObjectDB::gid = 1;
 std::vector<ObjectDB*> ObjectDB::objects;
 ObjectDB * ObjectDB::dummy = new ObjectDB("dummy", "nevermatch", (std::size_t) 0);
 
 rviz_visual_tools::RvizVisualToolsPtr visual_tools;
+//boost::shared_ptr<SonOfRvizVisualTools> visual_tools;
 visualization_msgs::Marker triangle_marker_;
+visualization_msgs::Marker cylinder_marker_;
 
 void InitSceneObject() {
     visual_tools = boost::shared_ptr<RvizVisualTools>(new RvizVisualTools("base_link", "/visualization_marker_array"));
+    //visual_tools = boost::shared_ptr<SonOfRvizVisualTools>(new SonOfRvizVisualTools("base_link"));
+    
     //visual_tools->deleteAllMarkers();
     //    visual_tools->enableBatchPublishing();
     //visual_tools->waitForMarkerPub();
@@ -33,26 +44,32 @@ void InitSceneObject() {
     triangle_marker_.action = visualization_msgs::Marker::ADD;
     triangle_marker_.type = visualization_msgs::Marker::TRIANGLE_LIST;
     triangle_marker_.lifetime = ros::Duration(0.0);
-
-
+    // Load Cylinder ----------------------------------------------------
+    cylinder_marker_.header.frame_id = "base_link";
+     cylinder_marker_.ns = "Cylinder";
+    cylinder_marker_.action = visualization_msgs::Marker::ADD;
+    cylinder_marker_.type = visualization_msgs::Marker::CYLINDER;
+    cylinder_marker_.lifetime = ros::Duration(0.0);
+    cylinder_marker_.id=1;
     ObjectDB * obj;
 
-#if 1
+#if 0
     ObjectDB::Save(obj = new ObjectDB(
-            "rightwall", "wall", 
-             Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, 0.5, 1.0),
+            "rightwall", "wall",
+            Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, 0.5, 1.0),
             Eigen::Affine3d::Identity() * Eigen::Translation3d(1.0, 0.501, 0.0),
             rviz_visual_tools::TRANSLUCENT_DARK)
             );
     ObjectDB::gid++;
-#endif    
-           ObjectDB::Save(obj = new ObjectDB(
-            "backwall", "wall", 
-             Eigen::Affine3d::Identity() * Eigen::Translation3d(-0.5, 1.0,  1.0),
-            Eigen::Affine3d::Identity() * Eigen::Translation3d(-0.501,  -1.0,  0.0),
+
+    ObjectDB::Save(obj = new ObjectDB(
+            "backwall", "wall",
+            Eigen::Affine3d::Identity() * Eigen::Translation3d(-0.5, 1.0, 1.0),
+            Eigen::Affine3d::Identity() * Eigen::Translation3d(-0.501, -1.0, 0.0),
             rviz_visual_tools::TRANSLUCENT_DARK)
-            );  
-           ObjectDB::gid++;
+            );
+    ObjectDB::gid++;
+#endif 
 #if 0
         ObjectDB::Save(obj = new ObjectDB(
             "leftwall", "wall", 
@@ -83,12 +100,25 @@ void InitSceneObject() {
 
 void UpdateScene(std::string objname, Eigen::Affine3d pose, rviz_visual_tools::colors color) {
     ObjectDB * obj = ObjectDB::Find(objname);
+    if(obj==NULL) 
+        throw std::runtime_error("Gak UpdateScene!");
     obj->color = color;
     obj->pose = pose;
     DrawObject(obj);
 
 }
 
+void ChangeColor(std::string objname, rviz_visual_tools::colors color) {
+    ObjectDB * obj = ObjectDB::Find(objname);
+    if (obj == NULL)
+        throw std::runtime_error("Gak ChangeColor!");
+    obj->color = color;
+    cylinder_marker_.action = visualization_msgs::Marker::MODIFY;
+    DrawObject(obj);
+
+    cylinder_marker_.action = visualization_msgs::Marker::ADD;
+
+}
 void DrawObject(ObjectDB *obj) {
     bool b;
     std::string type = ObjectDB::_typemapping[obj->metatype];
@@ -99,17 +129,35 @@ void DrawObject(ObjectDB *obj) {
                 obj->scale, 
                 type,  
                 obj->id);
-    } else if (type == "cuboid") {
-//        visual_tools->publishCuboid(obj->pose.translation(), 
-//                obj->adjacentpose.translation(), 
-//                obj->color); // Eigen::Vector3d(0.0, 0.5, 1.0), 
+    } 
+#if 0
+    else if (type == "cuboid") {
+        b=visual_tools->publishCuboid(obj->pose.translation(), 
+                obj->adjacentpose.translation(), 
+                obj->color); // Eigen::Vector3d(0.0, 0.5, 1.0), 
     }
-    BOOST_ASSERT_MSG(b>0, "Failed to publish object");
+#endif
+#if 1
+    else if ( type == "Cylinder") {
+//        visual_tools->publishCylinder(obj->pose, 
+//                obj->color, 
+//                obj-> height, 
+//                obj-> radius,
+//                "Cylinder");
+       publishCylinder(obj->pose,
+                obj->color,
+                obj-> height,
+                obj-> radius,
+                obj->id); 
+
+    }
+#endif          
+    //BOOST_ASSERT_MSG(b>0, "Failed to publish object");
     ros::spinOnce();
     ros::Duration(0.5).sleep(); // sleep for half a second
     ros::spinOnce();
-    ros::Duration(0.5).sleep(); // sleep for half a second
-    ros::spinOnce();
+//    ros::Duration(0.5).sleep(); // sleep for half a second
+//    ros::spinOnce();
 
 }
 
@@ -157,4 +205,47 @@ void DrawCheckerboard() {
         }
     }
 
+}
+
+bool publishCylinder(Eigen::Affine3d pose,
+        rviz_visual_tools::colors color, 
+        double height, 
+        double radius, 
+        size_t &id)
+{
+#if 0
+// Distance between two points
+  double height = (point1 - point2).lpNorm<2>();
+
+  // Find center point
+  Eigen::Vector3d pt_center = getCenterPoint(point1, point2);
+
+  // Create vector
+  Eigen::Affine3d pose;
+  pose = getVectorBetweenPoints(pt_center, point2);
+  // Convert pose to be normal to cylindar axis
+  Eigen::Affine3d rotation;
+  rotation = Eigen::AngleAxisd(0.5 * M_PI, Eigen::Vector3d::UnitY());
+  pose = pose * rotation;
+  #endif
+
+   // Set the timestamp
+  cylinder_marker_.header.stamp = ros::Time::now();
+  cylinder_marker_.ns = "Cylinder";
+  //id=cylinder_marker_.id;
+  cylinder_marker_.id=id; // ++;
+
+  // Set the pose
+  cylinder_marker_.pose = visual_tools->convertPose(pose);
+
+  // Set marker size
+  cylinder_marker_.scale.x = radius;
+  cylinder_marker_.scale.y = radius;
+  cylinder_marker_.scale.z = height;
+
+  // Set marker color
+  cylinder_marker_.color = visual_tools->getColor(color);
+
+  // Helper for publishing rviz markers
+  return visual_tools->publishMarker(cylinder_marker_);
 }

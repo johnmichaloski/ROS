@@ -60,7 +60,8 @@ namespace RCS {
 
         s << "Translation = " << 1000.0 * pose.getOrigin().x() << ":" << 1000.0 * pose.getOrigin().y() << ":" << 1000.0 * pose.getOrigin().z();
         double roll, pitch, yaw;
-        getRPY(pose, roll, pitch, yaw);
+        //getRPY(pose, roll, pitch, yaw);
+        tf::Matrix3x3(pose.getRotation()).getRPY(roll, pitch, yaw);
         s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw) ;
         return s.str();
     }

@@ -351,8 +351,9 @@ void TestRobotCommands() {
     boost::mutex::scoped_lock lock(cncmutex);
     static double dwelltime = 3.0;
 
-RCS:
-    Pose retract = RCS::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0, 0, 0.2));
+    RCS::Pose retract = RCS::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0, 0, 0.2));
+    tf::Quaternion QBend(M_PI/2.0,0.0, 0.0);
+
     RCS::CanonCmd cmd;
 
     //return ; // skip all commands 
@@ -391,7 +392,8 @@ RCS:
     cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
     cmd.hint = ToVector<double>(6, -1.05, 1.03, 0.0, 0.07, -0.51, 0.0);
     cmd.bStraight = true;
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
+    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(
+            RCS::Pose(QBend, // tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
             tf::Vector3(0.25, -.45, 0.04 + 0.15002)));
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
     // This works, was based on reading joints after manually moving with joint_publisher
@@ -412,7 +414,8 @@ RCS:
 
     cmd.crclcommandnum = crclcommandnum++;
     cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
+    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(
+            RCS::Pose(QBend, //tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
             tf::Vector3(0.26319, -0.46395, 0.04 + 0.015002)));
     cmd.bStraight = true;
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
@@ -434,7 +437,8 @@ RCS:
     cmd.crclcommandnum = crclcommandnum++;
     cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
     cmd.hint = ToVector<double>(6, 0.27, 0.5, -0.4, 0.0, 0.0, 0.0);
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(retract * RCS::Pose(tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
+    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(retract * 
+            RCS::Pose(QBend, //tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
             tf::Vector3(0.390496134758, -0.101964049041, 0.0245 + 0.04)));
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
     
@@ -446,16 +450,29 @@ RCS:
     cmd.crclcommandnum = crclcommandnum++;
     cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
     cmd.hint = ToVector<double>(6, 0.27, 0.7, -0.57, 0.0, 0.0, 0.0);
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
-            tf::Vector3(0.390496134758, -0.101964049041, 0.0245 + 0.04)));
+//    RCS::Pose anglepitch = RCS::Pose(
+//            tf::Quaternion(tf::Vector3(0,1,0), M_PI),
+//            tf::Vector3(0.390496134758, -0.101964049041, 0.0245 + 0.04));
+    
+    cmd.finalpose =Conversion::RcsPose2GeomMsgPose(
+            RCS::Pose(
+            QBend,
+            tf::Vector3(0.390496134758, -0.101964049041, 0.0245 + 0.04))
+            );
+//    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(
+//            RCS::Pose(tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
+//            tf::Vector3(0.390496134758, -0.101964049041, 0.0245 + 0.04)));
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+//    LOG_DEBUG << "anglepitch " << RCS::DumpPoseSimple(anglepitch).c_str();
+    LOG_DEBUG << "finalpose " << RCS::DumpPoseSimple(Conversion::GeomMsgPose2RcsPose(cmd.finalpose)).c_str();
 
 
     // Draw bolt
     cmd.crclcommand = CanonCmdType::CANON_DRAW_OBJECT;
     cmd.crclcommandnum = crclcommandnum++;
     cmd.partname = "bolt1";
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0, 0, 0, 1),
+    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(
+            RCS::Pose(tf::Quaternion(0, 0, 0, 1),
             tf::Vector3(0.390496134758, -0.101964049041, 0.0245)));
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
 
@@ -476,7 +493,8 @@ RCS:
     cmd.crclcommandnum = crclcommandnum++;
     cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
     cmd.hint = ToVector<double>(6, 0.27, 0.5, -0.4, 0.0, 0.0, 0.0);
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(retract * RCS::Pose(tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
+    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(retract * 
+            RCS::Pose(QBend, //tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
             tf::Vector3(0.390496134758, -0.101964049041, 0.0245 + 0.04)));
      RCS::Cnc.crclcmds.AddMsgQueue(cmd);
 
