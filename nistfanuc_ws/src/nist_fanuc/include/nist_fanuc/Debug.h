@@ -5,6 +5,7 @@
 #include <stdarg.h>
 #include <vector>
 #include "RCS.h"
+#include "Conversions.h"
 
 template<typename T>
 inline std::string VectorDump(std::vector<T> v) {
@@ -54,6 +55,19 @@ namespace RCS {
         return s.str();
     }
 
+    inline std::string DumpEigenPose(Eigen::Affine3d pose) {
+        std::stringstream s;
+        s << "Translation = " << 1000.0 * pose(0, 3) << ":" << 1000.0 * pose(1, 3) << ":" << 1000.0 * pose(2, 3);
+        tf::Matrix3x3 tfMatrix3x3;
+        Eigen::Matrix3d e = pose.rotation();
+        tf::matrixEigenToTF(e, tfMatrix3x3);
+        
+        double roll, pitch, yaw;
+        tfMatrix3x3.getRPY(roll, pitch, yaw);
+        s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw);
+
+        return s.str();
+   }
     //inline std::string DumpPoseSimple(RCS::Pose & pose) {
     inline std::string DumpPoseSimple(RCS::Pose  pose) {
         std::stringstream s;

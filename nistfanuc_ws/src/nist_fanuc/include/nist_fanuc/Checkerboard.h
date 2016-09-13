@@ -41,14 +41,14 @@ struct RvizCheckers {
     double rowoffset;
     double yoffset;
     double offset;
-    Checkers::Checkers game;
+    Checkers::CheckersGame game;
     int curplayer;
     ros::Subscriber sub;
     ros::NodeHandle &_nh;
     bool bFlag;
 
     RvizCheckers(ros::NodeHandle &nh) : _nh(nh) {
-        xoffset = 0.20;
+        xoffset = 0.30;
         rowoffset = 0.04;
         yoffset = -0.20;
         offset = 0.04;
@@ -66,10 +66,11 @@ struct RvizCheckers {
     }
 
     Eigen::Affine3d GetPose(int row, int col) {
+        // Input into this method assumes only correct row/col choices
         assert((row + col) % 2 == 1);
         double rowoffset = xoffset + (offset * row);
         double coloffset = yoffset + (col * offset);
-        if (row % 2 == 0) coloffset = coloffset + offset;
+        //if (row % 2 == 0) coloffset = coloffset + offset;
         Eigen::Affine3d pose = visual_tools->convertPointToPose((
                 Eigen::Vector3d(rowoffset + offset / 2.0, coloffset + offset / 2.0, 0.01))
                 );
@@ -139,8 +140,10 @@ struct RvizCheckers {
         //UpdateScene(checkername, pose, color);
     }
 
-    // Robot doesn't move yet
-
+    bool IsKing(Checkers::Move m) {
+            return ISKING(game.Board()[m.row][m.col]);
+    }
+ 
     void PhysicalMove(int player, int i, int j, Checkers::Move m) {
         std::string errmsg;
         std::string typemove("move");
@@ -154,12 +157,24 @@ struct RvizCheckers {
         // If blank space there can be no actual checkername2 object
         std::string checkername1 = Globals.StrFormat("Checker[%d:%d]", i, j);
         std::string checkername2 = Globals.StrFormat("Checker[%d:%d]", m.row, m.col);
+        Eigen::Affine3d frompose = GetPose(i,j);
         Eigen::Affine3d pose = GetPose(m.row, m.col);
-        std::cout << Globals.StrFormat("[%d,%d]=%f,%f\n", m.row, m.col, pose(0,3),pose(1,3) );
         ObjectDB * obj = ObjectDB::Find(checkername1);
+        
         assert(obj != NULL);
+        LOG_DEBUG << "Move From " << Globals.StrFormat("[%d,%d]=%f,%f", i,j, frompose(0,3),frompose(1,3) );
+        LOG_DEBUG << "Move To   " << Globals.StrFormat("[%d,%d]=%f,%f", m.row, m.col, pose(0,3),pose(1,3) );
+        LOG_DEBUG << "tf    Checkerboard1 pose" << DumpPoseSimple(Conversion::Affine3d2RcsPose(obj-> pose));
+        LOG_DEBUG << "Eigen Checkerboard1 pose" << DumpEigenPose(obj-> pose);
+        
         Pick(Conversion::Affine3d2RcsPose(obj-> pose) , checkername1);
         Place(Conversion::Affine3d2RcsPose(pose), checkername1);
+        if(IsKing( m))
+        {
+            // Double checker height - for now 
+            obj->height*=2;
+            obj->pose =Eigen::Translation3d(Eigen::Vector3d(0,0,0.01)) *  obj->pose; 
+        }
         UpdateScene(checkername1, pose, obj->color);
         ros::spinOnce();
         obj->name = checkername2; // change checker name (old space is blank)

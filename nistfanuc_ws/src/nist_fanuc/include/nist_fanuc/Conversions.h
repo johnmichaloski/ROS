@@ -5,16 +5,20 @@
 // http://docs.ros.org/kinetic/api/tf_conversions/html/c++/tf__eigen_8cpp_source.html
 
 #pragma once
+// Eigen
 #include <Eigen/Core>
 #include <Eigen/Geometry>
-//#include "urdf_model/tfmath.h"
 
+// ROS messages
+#include "geometry_msgs/PointStamped.h"
+#include "geometry_msgs/Point32.h"
 #include "geometry_msgs/PoseStamped.h"
-#include "RCS.h"
 
 // Conversions
 #include <tf_conversions/tf_eigen.h>
 #include <eigen_conversions/eigen_msg.h>
+
+#include "RCS.h"
 
 namespace Conversion {
 
@@ -83,5 +87,16 @@ namespace Conversion {
         joints.effort.resize(src.size(), 0.0);
         return joints;
     }
-
+    // From rviz_visual_tools
+    geometry_msgs::Pose convertPose(const Eigen::Affine3d &pose);
+    Eigen::Affine3d convertPose(const geometry_msgs::Pose &pose) ;
+    Eigen::Affine3d convertPoint32ToPose(const geometry_msgs::Point32 &point);
+    geometry_msgs::Pose convertPointToPose(const geometry_msgs::Point &point);
+    Eigen::Affine3d convertPointToPose(const Eigen::Vector3d &point) ;
+    geometry_msgs::Point convertPoseToPoint(const Eigen::Affine3d &pose) ;
+    Eigen::Vector3d convertPoint(const geometry_msgs::Point &point) ;
+    Eigen::Vector3d convertPoint32(const geometry_msgs::Point32 &point);
+    geometry_msgs::Point32 convertPoint32(const Eigen::Vector3d &point) ;
+    geometry_msgs::Point convertPoint(const geometry_msgs::Vector3 &point);
+    geometry_msgs::Point convertPoint(const Eigen::Vector3d &point) ;
 }

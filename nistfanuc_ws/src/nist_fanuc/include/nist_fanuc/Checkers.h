@@ -25,10 +25,10 @@ namespace Checkers {
     static const int KING = 8;
 #define MAX_DEPTH 50
 
-#define ISRED(c) ( (c & RED) >0)
-#define ISBLACK(c) ((c & BLACK) >0)
-#define ISEMPTY(c) (c == EMPTY)
-#define ISKING(c) ( (c & KING) >0)
+#define ISRED(c) ( (c & Checkers::RED) >0)
+#define ISBLACK(c) ((c & Checkers::BLACK) >0)
+#define ISEMPTY(c) (c == Checkers::EMPTY)
+#define ISKING(c) ( (c & Checkers::KING) >0)
 #define SIGN(x) (x < 0) ? -1 : (x > 0)
 
     inline std::string StrFormat(const char *fmt, ...) {
@@ -79,12 +79,11 @@ namespace Checkers {
             scol = col;
         }
 
-        Move Diff(Move start)
-        {
-           int  rdiff = (row-start.row)/2;
-           int  cdiff = (col-start.col)/2;
-           return Move(start.row+rdiff, start.col+cdiff);
-        
+        Move Diff(Move start) {
+            int rdiff = (row - start.row) / 2;
+            int cdiff = (col - start.col) / 2;
+            return Move(start.row + rdiff, start.col + cdiff);
+
         }
         // For std::map use
 
@@ -112,7 +111,7 @@ namespace Checkers {
         }
     };
 
-    struct Checkers {
+    struct CheckersGame {
         BoardType aboard;
 
         BoardType &Board() {
@@ -120,7 +119,7 @@ namespace Checkers {
         }
         std::vector<Move> allmoves;
 
-        Checkers() {
+        CheckersGame() {
             aboard[0][1] = RED;
             aboard[0][3] = RED;
             aboard[0][5] = RED;
@@ -178,6 +177,10 @@ namespace Checkers {
                 str << StrFormat("%s %s from %d,%d to %d,%d\n", splayer.c_str(), typemove.c_str(), moves[i].srow, moves[i].scol, moves[i].row, moves[i].col);
 
             }
+        }
+
+        bool IsKing(int player, Move m) {
+                return ISKING(Board()[m.row][m.col]);
         }
 
         bool LegalRow(int n) {
@@ -363,13 +366,7 @@ namespace Checkers {
             std::string typemove("move");
             if (m.bJump)
                 typemove = "jump";
-#if 0
-            if (player == RED) {
-                std::cout << StrFormat("RED %s from %d,%d to %d,%d\n", typemove.c_str(), i, j, m.row, m.col);
-            } else {
-                std::cout << StrFormat("BLACK %s from %d,%d to %d,%d\n", typemove.c_str(), i, j, m.row, m.col);
-            }
-#endif
+
             //if(!(errmsg=LegalMove( player, i, j, m)).empty())
             //{
             //	std::cout << errmsg<< std::endl;

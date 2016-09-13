@@ -6,6 +6,91 @@
 
 namespace Conversion {
 
+    //==================================================
+    // Adapted from: https://github.com/davetcoleman/rviz_visual_tools/blob/kinetic-devel/src/rviz_visual_tools.cpp
+    geometry_msgs::Pose convertPose(const Eigen::Affine3d &pose) {
+        geometry_msgs::Pose local_msg;
+        tf::poseEigenToMsg(pose, local_msg);
+        return local_msg;
+    }
+    Eigen::Affine3d convertPose(const geometry_msgs::Pose &pose) {
+        Eigen::Affine3d local_;
+        tf::poseMsgToEigen(pose, local_);
+        return local_;
+    }
+
+    Eigen::Affine3d convertPoint32ToPose(const geometry_msgs::Point32 &point) {
+        Eigen::Affine3d shared_pose_eigen_;
+        shared_pose_eigen_ = Eigen::Affine3d::Identity();
+        shared_pose_eigen_.translation().x() = point.x;
+        shared_pose_eigen_.translation().y() = point.y;
+        shared_pose_eigen_.translation().z() = point.z;
+        return shared_pose_eigen_;
+    }
+
+    geometry_msgs::Pose convertPointToPose(const geometry_msgs::Point &point) {
+        geometry_msgs::Pose shared_pose_msg_;
+        shared_pose_msg_.orientation.x = 0.0;
+        shared_pose_msg_.orientation.y = 0.0;
+        shared_pose_msg_.orientation.z = 0.0;
+        shared_pose_msg_.orientation.w = 1.0;
+        shared_pose_msg_.position = point;
+        return shared_pose_msg_;
+    }
+
+    Eigen::Affine3d convertPointToPose(const Eigen::Vector3d &point) {
+        Eigen::Affine3d shared_pose_eigen_;
+        shared_pose_eigen_ = Eigen::Affine3d::Identity();
+        shared_pose_eigen_.translation() = point;
+        return shared_pose_eigen_;
+    }
+
+    geometry_msgs::Point convertPoseToPoint(const Eigen::Affine3d &pose) {
+        geometry_msgs::Pose shared_pose_msg_;
+        tf::poseEigenToMsg(pose, shared_pose_msg_);
+        return shared_pose_msg_.position;
+    }
+
+    Eigen::Vector3d convertPoint(const geometry_msgs::Point &point) {
+         Eigen::Vector3d   shared_point_eigen_;
+        shared_point_eigen_[0] = point.x;
+        shared_point_eigen_[1] = point.y;
+        shared_point_eigen_[2] = point.z;
+        return shared_point_eigen_;
+    }
+
+    Eigen::Vector3d convertPoint32(const geometry_msgs::Point32 &point) {
+        Eigen::Vector3d shared_point_eigen_;
+        shared_point_eigen_[0] = point.x;
+        shared_point_eigen_[1] = point.y;
+        shared_point_eigen_[2] = point.z;
+        return shared_point_eigen_;
+    }
+
+    geometry_msgs::Point32 convertPoint32(const Eigen::Vector3d &point) {
+        geometry_msgs::Point32  shared_point32_msg_;
+        shared_point32_msg_.x = point[0];
+        shared_point32_msg_.y = point[1];
+        shared_point32_msg_.z = point[2];
+        return shared_point32_msg_;
+    }
+
+    geometry_msgs::Point convertPoint(const geometry_msgs::Vector3 &point) {
+        geometry_msgs::Point shared_point_msg_;
+        shared_point_msg_.x = point.x;
+        shared_point_msg_.y = point.y;
+        shared_point_msg_.z = point.z;
+        return shared_point_msg_;
+    }
+
+    geometry_msgs::Point convertPoint(const Eigen::Vector3d &point) {
+        geometry_msgs::Point shared_point_msg_;
+        shared_point_msg_.x = point.x();
+        shared_point_msg_.y = point.y();
+        shared_point_msg_.z = point.z();
+        return shared_point_msg_;
+    }
+    //==================================================
     geometry_msgs::Pose RcsPose2GeomMsgPose(const RCS::Pose &m) {
         geometry_msgs::Pose p;
         p.position.x = m.getOrigin().x();

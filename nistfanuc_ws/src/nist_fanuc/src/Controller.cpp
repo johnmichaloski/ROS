@@ -337,6 +337,7 @@ namespace RCS {
 // Simplistic Testing code
 static int crclcommandnum = 1;
 RCS::Pose retract = RCS::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0, 0, 0.1));
+tf::Quaternion QBend(M_PI / 2.0, 0.0, 0.0);
 
     
 void CloseGripper() {
@@ -366,7 +367,8 @@ void AddGripperOffset(){
     cmd.crclcommand = CanonCmdType::CANON_SET_GRIPPER_POSE;
     cmd.finalpose = Conversion::RcsPose2GeomMsgPose(
             RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
-            tf::Vector3(0.140, 0.0, -0.17) )); // -0.01156)));
+ //           tf::Vector3(0.085, 0.0, -0.17) )); // -0.01156)));
+            tf::Vector3(0.140, 0.0, -0.017) )); // -0.01156)));
             //tf::Vector3(0.09884, 0.0, -0.17) )); // -0.01156)));
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
 }
@@ -388,7 +390,6 @@ void MoveTo(RCS::Pose pose){
 }
     
 void Pick(RCS::Pose pose, std::string objname) {
-    tf::Quaternion QBend(M_PI / 2.0, 0.0, 0.0);
 
     tf::Vector3 offset = pose.getOrigin();
  
@@ -397,13 +398,12 @@ void Pick(RCS::Pose pose, std::string objname) {
     DoDwell(2.0);
     MoveTo(RCS::Pose(QBend, offset+tf::Vector3(0.0,0.0,0.02)));
     DoDwell(2.0);
-    CloseGripper();
+    OpenGripper();
     DoDwell(2.0);
     MoveTo(retract * RCS::Pose(QBend, offset));
 }
 
 void Place(RCS::Pose pose, std::string objname) {
-    tf::Quaternion QBend(M_PI / 2.0, 0.0, 0.0);
 
     tf::Vector3 offset = pose.getOrigin();
     // Retract
@@ -413,7 +413,7 @@ void Place(RCS::Pose pose, std::string objname) {
     DoDwell(2.0);
     CloseGripper();
     DoDwell(2.0);
-    MoveTo(retract * RCS::Pose(QBend, offset));
+//    MoveTo(retract * RCS::Pose(QBend, offset));
 
 }
 void TestRobotCommands() {

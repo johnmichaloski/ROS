@@ -151,21 +151,14 @@ void DrawObject(ObjectDB *obj) {
                 obj->color); // Eigen::Vector3d(0.0, 0.5, 1.0), 
     }
 #endif
-#if 1
     else if ( type == "Cylinder") {
-//        visual_tools->publishCylinder(obj->pose, 
-//                obj->color, 
-//                obj-> height, 
-//                obj-> radius,
-//                "Cylinder");
        publishCylinder(obj->pose,
                 obj->color,
                 obj-> height,
                 obj-> radius,
                 obj->id); 
 
-    }
-#endif          
+    }        
     //BOOST_ASSERT_MSG(b>0, "Failed to publish object");
     ros::spinOnce();
     //ros::Duration(0.5).sleep(); // sleep for half a second

@@ -57,12 +57,14 @@ int BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd) {
     } else if (cmd.crclcommand == CanonCmdType::CANON_MOVE_TO) {
         // FIXME: need to subtract off tool offset from tcp
         RCS::Pose finalpose = Conversion::GeomMsgPose2RcsPose(cmd.finalpose);
-        RCS::Pose goalpose = finalpose * Cnc.invGripperPose;
+        //RCS::Pose goalpose =  Cnc.invGripperPose * finalpose;
+        RCS::Pose goalpose =  finalpose * Cnc.invGripperPose ;
         LOG_DEBUG << "Final Pose " << RCS::DumpPoseSimple(finalpose).c_str();
-        LOG_DEBUG << "Goal Pose " << RCS::DumpPoseSimple(goalpose).c_str();
-        if (cmd.hint.size() ==0)
+        LOG_DEBUG << "Minus Gripper Pose " << RCS::DumpPoseSimple(goalpose).c_str();
+        if (cmd.hint.size() ==0){
             //cmd.joints.position = Cnc.Kinematics()->IK(goalpose, cmd.ConfigMin(), cmd.ConfigMax());
             cmd.joints.position = Cnc.Kinematics()->IK(goalpose, Subset(Cnc.status.currentjoints.position, 6));
+        }
         else
             // KDL needs a hint or algorithm won't converge
             // http://www.orocos.org/forum/orocos/orocos-users/kdl-ik-position-solver

@@ -49,7 +49,7 @@ bool Kinematics::init(ros::NodeHandle &nh) {
     int maxIterations;
     double epsilon;
     
-    nh.param("maxIterations", maxIterations, 1000);
+    nh.param("maxIterations", maxIterations, 10000);
     nh.param("epsilon", epsilon, 1e-2);
 
 
