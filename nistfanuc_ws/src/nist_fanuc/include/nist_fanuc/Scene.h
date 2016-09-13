@@ -15,6 +15,7 @@ extern void ChangeColor(std::string objname, rviz_visual_tools::colors color);
 extern void UpdateScene(std::string objname, Eigen::Affine3d pose, rviz_visual_tools::colors color);
 extern void SetupSceneObject();
 extern void DrawCheckerboard();
+extern void DeleteObject(std::string objname) ;
 extern bool publishCylinder(Eigen::Affine3d pose,
         rviz_visual_tools::colors color, 
         double radius, 

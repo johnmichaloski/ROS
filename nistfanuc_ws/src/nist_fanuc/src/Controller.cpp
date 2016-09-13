@@ -336,7 +336,40 @@ namespace RCS {
 
 // Simplistic Testing code
 static int crclcommandnum = 1;
+RCS::Pose retract = RCS::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0, 0, 0.1));
 
+    
+void CloseGripper() {
+    // Close gripper
+    RCS::CanonCmd cmd;
+    cmd.crclcommand = CanonCmdType::CANON_SET_GRIPPER;
+    cmd.crclcommandnum = crclcommandnum++;
+    cmd.eepercent = 0.0; // close
+    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+}
+
+void OpenGripper() {
+    // Close gripper
+    RCS::CanonCmd cmd;
+    cmd.crclcommand = CanonCmdType::CANON_SET_GRIPPER;
+    cmd.crclcommandnum = crclcommandnum++;
+    cmd.eepercent = 1.0; // close
+    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+}
+       
+void AddGripperOffset(){
+    // http://robotiq.com/products/adaptive-robot-gripper/
+    RCS::CanonCmd cmd;
+       //  Gripper Offset Pose Translation = 98.84:3.74:-11.56
+    // y is immaterial - it is the gripper opening, not offsets in x,z
+    cmd.crclcommandnum = crclcommandnum++;
+    cmd.crclcommand = CanonCmdType::CANON_SET_GRIPPER_POSE;
+    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(
+            RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
+            tf::Vector3(0.140, 0.0, -0.17) )); // -0.01156)));
+            //tf::Vector3(0.09884, 0.0, -0.17) )); // -0.01156)));
+    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+}
 void DoDwell(double dwelltime) {
 
     RCS::CanonCmd cmd;
@@ -345,7 +378,44 @@ void DoDwell(double dwelltime) {
     cmd.dwell_seconds = dwelltime;
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
 }
+void MoveTo(RCS::Pose pose){
+    RCS::CanonCmd cmd;
+    cmd.crclcommandnum = crclcommandnum++;
+    cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
+    cmd.hint = ToVector<double>(6, 0.27, 0.5, -0.4, 0.0, 0.0, 0.0);
+    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(pose);
+    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+}
+    
+void Pick(RCS::Pose pose, std::string objname) {
+    tf::Quaternion QBend(M_PI / 2.0, 0.0, 0.0);
 
+    tf::Vector3 offset = pose.getOrigin();
+ 
+    // Retract
+    MoveTo(retract * RCS::Pose(QBend, offset));
+    DoDwell(2.0);
+    MoveTo(RCS::Pose(QBend, offset+tf::Vector3(0.0,0.0,0.02)));
+    DoDwell(2.0);
+    CloseGripper();
+    DoDwell(2.0);
+    MoveTo(retract * RCS::Pose(QBend, offset));
+}
+
+void Place(RCS::Pose pose, std::string objname) {
+    tf::Quaternion QBend(M_PI / 2.0, 0.0, 0.0);
+
+    tf::Vector3 offset = pose.getOrigin();
+    // Retract
+    MoveTo(retract * RCS::Pose(QBend, offset));
+    DoDwell(2.0);
+    MoveTo(RCS::Pose(QBend, offset + tf::Vector3(0.0, 0.0, 0.02)));
+    DoDwell(2.0);
+    CloseGripper();
+    DoDwell(2.0);
+    MoveTo(retract * RCS::Pose(QBend, offset));
+
+}
 void TestRobotCommands() {
     // Finish queuing commands before handling them....
     boost::mutex::scoped_lock lock(cncmutex);

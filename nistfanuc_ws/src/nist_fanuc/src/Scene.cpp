@@ -86,6 +86,7 @@ void InitSceneObject() {
            
 #endif
 
+#ifdef BOLTDEMO
     // Scene bolt and boltholder objects
     ObjectDB::Save(new ObjectDB("boltholder1", "boltholder", ObjectDB::gid++, Eigen::Affine3d::Identity() * Eigen::Translation3d(0.5, 0, 0.0),
             "file:///usr/local/michalos/nistfanuc_ws/src/nist_fanuc/worldmodel/medium_gear_holder.stl",
@@ -93,6 +94,7 @@ void InitSceneObject() {
     ObjectDB::Save(new ObjectDB("bolt1", "bolt", ObjectDB::gid++, Eigen::Affine3d::Identity() * Eigen::Translation3d(0.25, -.45, 0.04),
             "file:///usr/local/michalos/nistfanuc_ws/src/nist_fanuc/worldmodel/medium_gear.stl",
             rviz_visual_tools::RED, 0.035));
+#endif
 
 }
 
@@ -105,7 +107,18 @@ void UpdateScene(std::string objname, Eigen::Affine3d pose, rviz_visual_tools::c
     obj->color = color;
     obj->pose = pose;
     DrawObject(obj);
+    visual_tools->triggerBatchPublish ();
 
+}
+
+void DeleteObject(std::string objname) {
+    ObjectDB * obj = ObjectDB::Find(objname);
+    if (obj == NULL)
+        throw std::runtime_error("Gak DeleteObject!");
+    cylinder_marker_.action = visualization_msgs::Marker::DELETE;
+    DrawObject(obj);
+    visual_tools->triggerBatchPublish();
+    cylinder_marker_.action = visualization_msgs::Marker::ADD;
 }
 
 void ChangeColor(std::string objname, rviz_visual_tools::colors color) {
@@ -115,6 +128,7 @@ void ChangeColor(std::string objname, rviz_visual_tools::colors color) {
     obj->color = color;
     cylinder_marker_.action = visualization_msgs::Marker::MODIFY;
     DrawObject(obj);
+    visual_tools->triggerBatchPublish ();
 
     cylinder_marker_.action = visualization_msgs::Marker::ADD;
 
@@ -130,7 +144,7 @@ void DrawObject(ObjectDB *obj) {
                 type,  
                 obj->id);
     } 
-#if 0
+#if 1
     else if (type == "cuboid") {
         b=visual_tools->publishCuboid(obj->pose.translation(), 
                 obj->adjacentpose.translation(), 
@@ -154,10 +168,11 @@ void DrawObject(ObjectDB *obj) {
 #endif          
     //BOOST_ASSERT_MSG(b>0, "Failed to publish object");
     ros::spinOnce();
-    ros::Duration(0.5).sleep(); // sleep for half a second
+    //ros::Duration(0.5).sleep(); // sleep for half a second
     ros::spinOnce();
 //    ros::Duration(0.5).sleep(); // sleep for half a second
 //    ros::spinOnce();
+    visual_tools->triggerBatchPublish ();
 
 }
 

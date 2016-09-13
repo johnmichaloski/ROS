@@ -193,3 +193,11 @@ namespace RCS {
 
 
 extern void TestRobotCommands() ;
+
+extern void Pick(RCS::Pose pose, std::string objname);
+extern void MoveTo(RCS::Pose pose);
+extern void DoDwell(double dwelltime);
+extern void AddGripperOffset();
+extern void OpenGripper();
+extern void CloseGripper();
+extern void Place(RCS::Pose pose, std::string objname);

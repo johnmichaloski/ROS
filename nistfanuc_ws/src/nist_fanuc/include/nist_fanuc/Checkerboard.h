@@ -2,8 +2,10 @@
 
 #pragma once
 #include <rviz_visual_tools/rviz_visual_tools.h>
-#include "Globals.h"
-#include <boost/bind.hpp>
+#include <ros/ros.h>
+#include <geometry_msgs/PointStamped.h>
+
+
 #include <algorithm>
 #include <map>
 #include <string>
@@ -18,123 +20,78 @@
 #include <fstream>   
 #include <iomanip>
 #include <sstream>
+
+
+#include <boost/bind.hpp>
+#include <boost/thread/mutex.hpp>
+
+
+#include "Globals.h"
 #include "Scene.h"
+// Checkers makes move 
+#include "Checkers.h"
+#include "Controller.h"
 using namespace Conversion;
-using namespace rviz_visual_tools;
-#define ROWS 8
-#define COLS 8
 
-
-
-//#define RED (rviz_visual_tools::RED) 
-//#define BLACK (rviz_visual_tools::BLACK) 
-#define EMPTY  NULL
-
-#define ISRED(c) (c != NULL && c->color == rviz_visual_tools::RED)
-#define ISBLACK(c) (c!=NULL && c->color == rviz_visual_tools::BLACK)
-#define ISPLAYER(c,player) (c!=NULL && c->color == player)
-#define ISEMPTY(c) (c == NULL)
-#define ISKING(c) ( c != NULL && c.King)
-#define SIGN(x) (x < 0) ? -1 : (x > 0)
-
-struct BoardType : std::vector<std::vector<ObjectDB *> > {
-
-    BoardType() {
-        this->resize(ROWS, std::vector<ObjectDB *> (COLS, NULL));
-    }
-};
-
-struct Move {
-
-    Move() {
-        player = 0;
-        bJump = bDoubleJumps = false;
-        row = col = srow = scol = 0;
-        score = 0.0;
-    }
-
-    Move(int row, int col, bool bJump = false) {
-        this->row = row;
-        this->col = col;
-        this->bJump = bJump;
-        player = 0;
-        bDoubleJumps = false;
-        srow = scol = 0;
-        score = 0.0;
-    }
-    int row;
-    int col;
-    int player;
-    bool bJump;
-    bool bDoubleJumps;
-    std::vector<Move> doublejumps;
-    int srow;
-    int scol;
-    double score;
-
-    void Start(int player, int row, int col) {
-        this->player = player;
-        srow = row;
-        scol = col;
-    }
-
-    // For std::map use
-
-    friend bool operator<(const Move &left, const Move &other) {
-        return ( (left.row * 8 + left.col)< (other.row * 8 + other.col));
-    }
-    // For serialization
-
-    friend std::ostream & operator<<(std::ostream & output_out, const Move & move_in) {
-        return output_out << move_in.player << "\t" << move_in.srow << "\t" << move_in.scol << "\t"
-                << move_in.row << "\t" << move_in.col << "\t" << move_in.bJump;
-    }
-
-    friend std::istream& operator>>(std::istream& s_in, Move & move_out) {
-        s_in >> move_out.player >> move_out.srow >> move_out.scol >> move_out.row >> move_out.col >> move_out.bJump;
-        return s_in;
-    }
-
-};
-
-/**
-  bool publishCylinder(const Eigen::Affine3d &pose, colors color = BLUE, double height = 0.1, double radius = 0.01,
-                       const std::string &ns = "Cylinder");
- geometry_msgs::Pose convertPose(const Eigen::Affine3d &pose);
- */
-struct Checkerboard {
+struct RvizCheckers {
+    //static boost::mutex _reader_mutex; /**< for mutexed reading access  */
+    static const int rows = 8;
+    static const int cols = 8;
     double xoffset;
     double rowoffset;
     double yoffset;
     double offset;
-    BoardType board;
+    Checkers::Checkers game;
+    int curplayer;
+    ros::Subscriber sub;
+    ros::NodeHandle &_nh;
+    bool bFlag;
 
-    Checkerboard() {
-        xoffset = 1.0;
+    RvizCheckers(ros::NodeHandle &nh) : _nh(nh) {
+        xoffset = 0.20;
         rowoffset = 0.04;
-        yoffset = -0.5;
+        yoffset = -0.20;
         offset = 0.04;
+        curplayer = Checkers::RED;
+        sub = _nh.subscribe("clicked_point", 10, &RvizCheckers::callback, this);
+        bFlag = false;
+    }
+
+    bool & Ready() { return bFlag; }
+    void callback(const geometry_msgs::PointStamped::ConstPtr& msg) {
+        geometry_msgs::Point pt = msg->point;
+        std::cout << Globals.StrFormat("geometry_msgs::PointStamped=%f:%f:%f\n", pt.x, pt.y, pt.z);
+        bFlag = true;
 
     }
 
-    BoardType & Board() {
-        return board;
+    Eigen::Affine3d GetPose(int row, int col) {
+        assert((row + col) % 2 == 1);
+        double rowoffset = xoffset + (offset * row);
+        double coloffset = yoffset + (col * offset);
+        if (row % 2 == 0) coloffset = coloffset + offset;
+        Eigen::Affine3d pose = visual_tools->convertPointToPose((
+                Eigen::Vector3d(rowoffset + offset / 2.0, coloffset + offset / 2.0, 0.01))
+                );
+        return pose;
     }
+
+    // std::vector<std::vector<Eigen::Affine3d> > boardposes;
 
     void RvizSetup() {
         tf::Quaternion qidentity(0.0, 0.0, 0.0, 1.0);
 
-        for (size_t row = 0; row < 8; row++) {
+        for (size_t row = 0; row < rows; row++) {
 
             double rowoffset = xoffset + (offset * row);
-            for (size_t i = 0; i <= 8; i = i + 2) {
+            for (size_t i = 0; i <= cols; i = i + 2) {
                 double coloffset = yoffset + (i * offset);
                 if (row % 2 == 0) coloffset = coloffset + offset; // red offset at zero
 
                 Eigen::Vector3d up(rowoffset, coloffset, 0.01);
                 Eigen::Vector3d down(rowoffset + offset, coloffset + offset, 0.0);
-
-                ObjectDB * obj = new ObjectDB(Globals.StrFormat("Square[%d:%d]", row, i),
+                std::string sqname = Globals.StrFormat("Square[%d:%d]", row, i);
+                ObjectDB * obj = new ObjectDB(sqname,
                         "Checkerboard",
                         RcsPose2Affine3d(RCS::Pose(qidentity, vectorEigenToTF<Eigen::Vector3d>(up))),
                         RcsPose2Affine3d(RCS::Pose(qidentity, vectorEigenToTF<Eigen::Vector3d>(down))),
@@ -143,28 +100,28 @@ struct Checkerboard {
                 ObjectDB::Save(obj);
 
                 ObjectDB * checker;
-                size_t checkercol = (row % 2 == 0)? i+1 : i; //  coloffset = coloffset + offset; // red offset at zero
-               rviz_visual_tools::colors checkercolor = rviz_visual_tools::BLUE;
+                size_t checkercol = (row % 2 == 0) ? i + 1 : i; //  coloffset = coloffset + offset; // red offset at zero
+                rviz_visual_tools::colors checkercolor = rviz_visual_tools::CLEAR;
                 if (row < 3) checkercolor = rviz_visual_tools::RED;
                 if (row >= 5) checkercolor = rviz_visual_tools::BLACK;
-                std::string checkername = Globals.StrFormat("Checker[%d:%d]", row, checkercol);
-                checker = new ObjectDB(checkername,
-                        "Cylinder",
-                        Eigen::Affine3d(Eigen::Translation3d(obj->centroid)),
-                        checkercolor,
-                        0.01,
-                        0.02,
-                        "Cylinder");
-
-                board[row][i] = checker;
-                ObjectDB::Save(checker);
-
+                if (checkercolor != rviz_visual_tools::CLEAR) {
+                    std::string checkername = Globals.StrFormat("Checker[%d:%d]", row, checkercol);
+                    checker = new ObjectDB(checkername,
+                            "Cylinder",
+                            Eigen::Affine3d(Eigen::Translation3d(obj->centroid)),
+                            checkercolor,
+                            0.01,
+                            0.02,
+                            "Cylinder");
+                    ObjectDB::Save(checker);
+                }
 
                 if (row % 2 == 0) coloffset = coloffset - offset; // red offset at zero
                 else coloffset = coloffset + offset;
                 Eigen::Vector3d bup(rowoffset, coloffset, 0.01);
                 Eigen::Vector3d bdown(rowoffset + offset, coloffset + offset, 0.0);
-                obj = new ObjectDB(Globals.StrFormat("Square[%d:%d]", row, i),
+                sqname = Globals.StrFormat("Square[%d:%d]", row, i);
+                obj = new ObjectDB(sqname,
                         "Checkerboard",
                         RcsPose2Affine3d(RCS::Pose(qidentity, vectorEigenToTF<Eigen::Vector3d>(bup))),
                         RcsPose2Affine3d(RCS::Pose(qidentity, vectorEigenToTF<Eigen::Vector3d>(bdown))),
@@ -175,75 +132,85 @@ struct Checkerboard {
         }
     }
 
-    void KingMe(BoardType & inboard) {
-        for (int i = 0; i < 8; i++) {
-            if (ISBLACK(inboard[0][i]))
-                inboard[0][i]->King = true;
-
-            if (ISRED(inboard[7][i]))
-                inboard[7][i]->King = true;
-        }
-    }
-
-    void Jump(BoardType & inboard, int i, int j, Move move) {
-        ObjectDB * temp;
-        //std::cout <<  StrFormat("SWAP: %d,%d to %d,%d\n", i, j, move.row, move.col).c_str();
-        //        temp = inboard[i][j];
-        //        inboard[i][j] = inboard[move.row][move.col];
-        //        inboard[move.row][move.col] = temp;
-        KingMe(inboard); // check if kinged
-    }
-
-    bool IsWin(BoardType & inboard, int player) {
-        int opponent = (player == BLACK) ? RED : BLACK;
-        for (int i = 0; i < ROWS; i++)
-            for (int j = 0; j < COLS; j++) {
-                if (ISPLAYER(inboard[i][j], opponent))
-                    return false;
-            }
-        return true;
-    }
-
-    void SetCheckerColor(Move m, rviz_visual_tools::colors color) {
+    void SetCheckerColor(Checkers::Move m, rviz_visual_tools::colors color) {
         std::string checkername = Globals.StrFormat("Checker[%d:%d]", m.row, m.col);
         Eigen::Affine3d pose = ObjectDB::FindPose(checkername);
         ChangeColor(checkername, color);
         //UpdateScene(checkername, pose, color);
     }
-    // Robot doesn't move yet
-#if 1
 
-    BoardType PhysicalMove(BoardType inboard, int player, int i, int j, Move m) {
+    // Robot doesn't move yet
+
+    void PhysicalMove(int player, int i, int j, Checkers::Move m) {
         std::string errmsg;
         std::string typemove("move");
-        if (m.bJump)
+        //SetCheckerColor(Checkers::Move(i, j), rviz_visual_tools::CLEAR);
+        if (m.bJump) {
             typemove = "jump";
-#if 0
-        int rowsign = SIGN(m.row - i);
-        int colsign = SIGN(m.col - j);
-        if (abs(i - m.row) == 2) {
-            // Clear
-            SetCheckerColor(Move(i + (rowsign * 1), j + (colsign * 1), rviz_visual_tools::CLEAR)
-         }
-#endif
-        Jump(inboard, i, j, m);
-        SetCheckerColor(Move(i, j), rviz_visual_tools::CLEAR);
-         ros::spinOnce();
-        SetCheckerColor(m, player);
-
-                // Single jump only for now
-#if 0
-                Move move(m.row, m.col, m.bJump);
-        if (move.doublejumps.size() > 0) {
-            Move m2 = move.doublejumps[0];
-                    inboard = MakeMove(inboard, player, m.row, m.col, m2);
+            Checkers::Move jumped = m.Diff(Checkers::Move(i, j));
+            std::string jumpedcheckername = Globals.StrFormat("Checker[%d:%d]", jumped.row, jumped.col);
+            DeleteObject(jumpedcheckername);
         }
+        // If blank space there can be no actual checkername2 object
+        std::string checkername1 = Globals.StrFormat("Checker[%d:%d]", i, j);
+        std::string checkername2 = Globals.StrFormat("Checker[%d:%d]", m.row, m.col);
+        Eigen::Affine3d pose = GetPose(m.row, m.col);
+        std::cout << Globals.StrFormat("[%d,%d]=%f,%f\n", m.row, m.col, pose(0,3),pose(1,3) );
+        ObjectDB * obj = ObjectDB::Find(checkername1);
+        assert(obj != NULL);
+        Pick(Conversion::Affine3d2RcsPose(obj-> pose) , checkername1);
+        Place(Conversion::Affine3d2RcsPose(pose), checkername1);
+        UpdateScene(checkername1, pose, obj->color);
+        ros::spinOnce();
+        obj->name = checkername2; // change checker name (old space is blank)
+        // Fixme: check if board moves is for kings
 
-        // Save move - only good if no mixmax lookahead
-        move.Start(player, i, j);
-                allmoves.push_back(move);
-#endif
-                return inboard;
     }
-#endif
+    // Single jump only for now
+
+    int Player() {
+        return curplayer;
+    }
+
+    int Opponent() {
+        return (curplayer == Checkers::BLACK) ? Checkers::RED : Checkers::BLACK;
+    }
+
+    int NextPlayer() {
+        curplayer = Opponent();
+        return curplayer;
+    }
+
+    bool CheckersMove(int & player, Checkers::Move & from, Checkers::Move &to) {
+        static int movenum = 0;
+        player = Player();
+        int opponent;
+        int winner;
+
+        //player = (player == RED) ? BLACK : RED;
+        opponent = (player == Checkers::BLACK) ? Checkers::RED : Checkers::BLACK;
+        std::map<Checkers::Move, std::vector < Checkers::Move>> moves = game.GenerateMoveList(game.Board(), player);
+        std::cout << game.DumpLegalMoves(moves);
+        if (moves.size() == 0) {
+            winner = opponent;
+            return true;
+        }
+        Checkers::Move m1, m2;
+        //game.RandomMove(moves, m1, m2);
+        game.MinMaxBestMove(moves, game.Board(), player, m1, m2);
+        m2.Start(player, m1.row, m1.col);
+        std::cout << movenum++ << "move= ";
+        game.Dump(std::cout, m2);
+        game.Board() = game.MakeMove(game.Board(), player, m1.row, m1.col, m2);
+        //game.printDisplayFancy(game.Board());
+        if (game.IsWin(game.Board(), player)) {
+            winner = player;
+            return true;
+        }
+        from = m1;
+        to = m2;
+        NextPlayer();
+        return false;
+    }
+
 };

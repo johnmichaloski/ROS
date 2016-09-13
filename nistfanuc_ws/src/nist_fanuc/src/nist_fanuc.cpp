@@ -160,38 +160,6 @@ int main(int argc, char** argv) {
         RCS::Cnc.status.Init();
         RCS::Cnc.CycleTime() = DEFAULT_LOOP_CYCLE;
 
-#if 0
-        //http://www.radmangames.com/programming/how-to-use-boost-bind
-        RCS::Pose Base(Quaternion(0, 0, 0, 1), Vector3(0, 0, 0));
-
-        RCS::Pose Robot(Quaternion(0, 0, 0, 1), Vector3(0, 0, 0));
-        RCS::Pose Gripper(Quaternion(0, 0, 0, 1), Vector3(.120, 0, 0));
-        RCS::Pose Table(Quaternion(0, 0, 0, 1), Vector3(0, 0, 0));
-        RCS::Pose GoalPose(Quaternion ( Vector3(0, 1, 0), 1.57), Vector3(0.25, -.45, 0.35));
-        // Works
-        // RCS::Pose GoalPose(Quaternion (0, 0, 0, 1), Vector3(0.465, 0, 0.695));
-       // RCS::Pose GoalPose(Quaternion ( Vector3(0, 1, 0), 1.57), Vector3(0.465, 0, 0.695));
-        //RCS::Pose GoalPose(Quaternion (0, 0, 0, 1), Vector3(0.465, 0, .335));
-
-        KinematicChain::MotionEquation chain;
-        chain.make_equation("Test", //kin,
-                KinematicChain::MotionEquation::BASE, 
-                KinematicChain::MotionEquation::ROBOT, 
-                KinematicChain::MotionEquation::TOOL, 
-                KinematicChain::MotionEquation::EQUALS,
-                KinematicChain::MotionEquation::TABLE, 
-                KinematicChain::MotionEquation::GOAL,
-                KinematicChain::MotionEquation::DONE
-                );
-        //chain.SetPoseCallback(KinematicChain::MotionEquation::GOAL, boost::bind(&KinematicChain::MotionEquation::GetPose, &chain, _1));
-        chain.SetPose( KinematicChain::MotionEquation::GOAL, GoalPose);
-        //chain.SetPoseCallback(KinematicChain::MotionEquation::GOAL, boost::bind(&KinematicChain::MotionEquation::GetPose, &chain, _1));
-        chain.SetPose( KinematicChain::MotionEquation::TOOL, Gripper);
-        std::cout << chain.DumpEquation();
-       std::vector<double> joints = chain. Solve(kin);
-#endif
-       
-
         //        RCS::Controller.TrajectoryWriter() = trajWriter;
         RCS::Cnc.JointWriter() = jointWriter;
         RCS::Cnc.RvizMarker() = pRvizMarker;
@@ -231,20 +199,41 @@ int main(int argc, char** argv) {
 
 #if 1
         InitSceneObject();
-        Checkerboard game;
-        game.RvizSetup();
+        RvizCheckers rvizgame(nh);
+        rvizgame.RvizSetup();
         SetupSceneObject();
-        LOG_DEBUG << ObjectDB::DumpDB();
- 	game.Board()=game.PhysicalMove(game.Board(),BLACK, 5,0,  Move(4,1));
-	game.Board()=game.PhysicalMove(game.Board(),RED, 2,1,  Move(3,0));
+        // LOG_DEBUG << ObjectDB::DumpDB();
+        
+//        for(size_t i=0; i< 8 ; i++)
+//            for(size_t j=0; j< 8; j++)
+//                rvizgame.GetPose(i,j);
+
 
 #endif
         RCS::Cnc._interpreter = boost::shared_ptr<RCSInterpreter>(new BangBangInterpreter());
         RCS::Cnc._interpreter->_kinematics=kin;
         RCS::Cnc.Start(); // start the Controller Session thread
-
-        TestRobotCommands();
+        AddGripperOffset();
         
+        // Play checkers - only move markers, no robot interaction
+         Checkers::Move from, to;
+        int player;
+        for (size_t i = 0; i < 40; i++) {
+            while (!rvizgame.Ready())
+                ros::spinOnce();
+            rvizgame.Ready() = false;
+            if (rvizgame.CheckersMove(player, from, to))
+                break;
+            rvizgame.PhysicalMove(player, from.row, from.col, to);
+            ros::spinOnce();
+            ros::spinOnce();
+            ros::Duration(0.25).sleep();
+        }
+        
+#ifdef BOLTDEMO
+        TestRobotCommands();
+#endif
+       
         spinner.stop();
         ros::spin();
         //        do {
