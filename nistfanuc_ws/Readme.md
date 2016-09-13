@@ -59,6 +59,58 @@ A Kinematic Chain is assembled suing the make_equation method.  A chain is const
 	  chain.SetPose( KinematicChain::MotionEquation::TOOL, Gripper);
 	  std::vector<double> joints = chain. Solve();
 
+##Robot Gripper
+In general, an end effector is the device at the end of a robotic arm, meant to interact with the environment (Wikipedia, 2016). The exact nature of this device depends on the application of the robot.  We are concerned with grasping objects and placing the objects somewhere else. This can be done with a vacuum gripper, but we are interested in the case of using grippers (with 2 fingers) to achieve object manipulation (grasping and releasing).
+<CENTER>
+![Figure2](./images/image2.jpg?raw=true)
+</CENTER>
+
+<p align="center">
+**Figure 2 Fanuc LR Mate 200iD With Robotiq 2 Finger Gripper**
+</p>
+Robotiq's 2-Finger Adaptive Robot Gripper is modeled as the gripper since a ROS URDF description existed for its kinematics and a CAD model existed to described it visually. Of concern, is determining the gripper offset, that is what is the length offsets of the x,y,z axes of the gripper when it is attached to the robot.  To understand the xyz gripper offset, the URDF model describes link6 as having the xaxis point straight ahead, the yaxis points to the side and the z axis points up. Figure 3 shows the positioning of the Link 6 axis and the relationship to the gripper.
+<CENTER>
+![Figure3](./images/image3.jpg?raw=true)
+</CENTER>
+
+<p align="center">
+**Figure 3 Fanuc Robot Arm Link 6 Axes**
+</p>
+So, in the URDF scenario, the  y axis is immaterial – the y axis determines the gripper opening, not offsets. While Figure 2 shows the offsets of concern the x and z axis. In our case the x axis describes the length of the gripper.  The robotiq   description can be found at http://robotiq.com/products/adaptive-robot-gripper/ gives tshe length of the gripper as 140 mm, which we use as the x translation offset.  Notices that the gripper up/down position changes, and this corresponds to a change in the z axis. Since this offset is the negative z direction (down), we will show later how -0.017 meters was determined to be the Z offset. 
+A special CRCL command was added to allow a kinematic ring with gripper offset to be defined as something other than the identity matrix. Below, the RCS (real time control system) canonical command is given that describes the gripper offset pose as a constructor combination of an identity quaternion and translation offset.. 
+
+	void AddGripperOffset(){
+	    RCS::CanonCmd cmd;
+	    cmd.crclcommandnum = crclcommandnum++;
+	    cmd.crclcommand = CanonCmdType::CANON_SET_GRIPPER_POSE;
+	    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(
+	            RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
+	            tf::Vector3(0.140, 0.0, -0.017) )); // -0.01156)));
+	    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+	}
+When processed by the control system the gripper offset commands sets the kinematic pose component for the  gripper and its inverse. 
+
+	else if (_newcc.crclcommand == CanonCmdType::CANON_SET_GRIPPER_POSE) {
+	                    gripperPose = Conversion::GeomMsgPose2RcsPose(_newcc.finalpose);
+	                    invGripperPose = gripperPose.inverse();
+Then any Cartesian motion that has a position and orientation to describe the motion changes the final point destination by postmultiplying the gripper inverse pose against the pose to determine the final robot pose.
+
+	       RCS::Pose goalpose =  finalpose * Cnc.invGripperPose ;
+ 
+Because we didn't actually have a robotiq 2-finger gripper, we couldn't just measure the z axis offset. Instead, a simple forward kinematic solution from the robotiq base joint to the final joint was calculated to give the Z axis. The hard coded solution will be shown to achieve the forward kinematic position, even though the links and axis of rotation and position and rotation  transform from the parent link can be determined from the URDF which was already parsed.
+
+	RCS::Pose ComputeGripperOffset() {
+	    AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(1, 0, 0), Eigen::Vector3d(.0085 ,0 ,-.0041), Eigen::Vector3d(0, 0, 0)));
+	    AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(1, 0, 0), Eigen::Vector3d(.04191, -.0306, 0), Eigen::Vector3d(1.5707, - 1.5707, 0)));
+	    AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(0, -1, 0), Eigen::Vector3d(0, .00508, .03134), Eigen::Vector3d(3.1415, 0, 0)));
+	    AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(-1, 0, 0), Eigen::Vector3d(.04843 ,- .0127, 0), Eigen::Vector3d(-1.5707, - 1.5707, 0)));
+	    AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(0, -1, 0), Eigen::Vector3d(0 ,.04196, - .0388), Eigen::Vector3d(0, 0, 0)));
+	
+	    RCS::Pose  pose = ComputeFk();
+	    LOG_DEBUG << "Gripper Offset Pose " << RCS::DumpPoseSimple(pose).c_str();
+	    }
+This code manually loads the 5 robotiq URDF joint  information, and compute the Forward Kinematics (with zero joint angles) to determine the x and z offset. The x axis offset only goes to the final knuckle and not all the way down the gripper pinchers.
+
 #RVIZ Visualization
 The use of Rviz in simulation and visualization of the robot trajectory behavior is an important element in deploying the CRCL controlled robot. The CRCL includes Cartesian, joint and gripper control that is handled by the controller.
 Rviz visualization is a nice robot visualization tool, but many of the elements are only explained in the context of implementations based on the Willow Garage PR2 robot. Thus, many of the tutorials although helpful, are bundled with other packages making it monolithic and often feel like coding with a heap of spaghetti. However, the source code is available and noodling around in the source code and by searching far and wide across the Internet, pearls of ROS programming can be found and where integrated into the package, and are hopefully understandable in this documentation. This section will attempt to explain how to use Rviz (without moveit planning and obstacle avoidance) to visualize a robot scene. True, eventually you will probably have to use moveit planning and obstacle avoidance, but one sip from a fire hose at a time.
@@ -68,19 +120,19 @@ The easies first step is to use roslaunch, in which you load a robot description
 	<node name="rviz" pkg="rviz" type="rviz">
 When you do this, you will eventually see an RVIZ screen appear with the error condition of "Global Status". 
 <CENTER>
-![Figure2](./images/image2.jpg?raw=true)
+![Figure4](./images/image4.jpg?raw=true)
 </CENTER>
 
 
 To rectify this error, click on the Fixed Frame text box (and possibly the base_link will appear in a combo box which you can select) or type in "base_link" or whatever is the base link in your URDF robot description. Below the error message disappears when base_link is entered.
 <CENTER>
-![Figure3](./images/image3.jpg?raw=true)
+![Figure5](./images/image5.jpg?raw=true)
 </CENTER>
 
 
 Now, the problem is that no robot is visible. Obviously, not a good situation. To rectify this problem, click the [ADD} button above time in the lower left hand corner, and when the Create Visualization dialog box appears, select "Robot Model", as shown below:
 <CENTER>
-![Figure4](./images/image4.jpg?raw=true)
+![Figure6](./images/image6.jpg?raw=true)
 </CENTER>
 
 
@@ -88,7 +140,7 @@ Then, the robot that is described in the robot_description ROS parameter will ap
 
 
 <CENTER>
-![Figure5](./images/image5.jpg?raw=true)
+![Figure7](./images/image7.jpg?raw=true)
 </CENTER>
 
 
@@ -108,7 +160,7 @@ Of importance is the ROS parameter :ource_list", which is a list of topics that 
 #Manual Inserting of an STL File containing a scene object in RViz
 A scene of objects for gripper manipulation by the Crcl Robot Controller in RVIZ must be built. Each object is imported into RVIZ as a Stereolithography Language (STL) file. To import an object, a 3D STL file is imported with the Scene Objects-Import File button. The STL format should be binary, not plain text. (?)
 <CENTER>
-![Figure6](./images/image6.jpg?raw=true)
+![Figure8](./images/image8.jpg?raw=true)
 </CENTER>
 
 RVIZ is independent of moveit, so to get objects registered in the moveit Planning Scene, collision object programmatically to moveit (See http://wiki.ros.org/motion_planning_environment/Tutorials/Adding%20known%20objects%20to%20the%20collision%20environment) .
@@ -119,11 +171,11 @@ For the Fanuc LR Mate 200iD, the addition of two objects will be illustrated to 
 Two objects will be added to the Rviz scene, a medium gear and a gear holder tray.  These scene objects were created in a CAD design system and have been produced by an 3D printing device. 3D printing devices use STL, so the STL files from these objects were imported and displayed Rviz using the displayMesh rviz-visual-tools method.
 In addition, the method publishWall was developed that is based on rviz-visual-tools, to display a wall in Rviz.
 <CENTER>
-![Figure7](./images/image7.jpg?raw=true)
+![Figure9](./images/image9.jpg?raw=true)
 </CENTER>
 
 <p align="center">
-**Figure 3 Gear and Gear Holder Objects Displayed in Rviz Scene**
+**Figure 4 Gear and Gear Holder Objects Displayed in Rviz Scene**
 </p>
 On the Ubuntu 12.4 platform that ROS was running indigo version , rviz-visual-tools was required to be installed. Using instructions from https://github.com/davetcoleman/rviz_visual_tools, the following command line performed the installation:
 
@@ -222,25 +274,25 @@ The Go Motion trajectory planning algorithms are based on smooth   velocity prof
 Constant-jerk (CJ) profiling is shown in Figure 1, a plot of the   speed versus time. There are 7 phases to the motion. Phase 1 is a   jerk phase, where the acceleration varies smoothly from 0 at time 0   to \a a1 at time \a t1 following the jerk (change in acceleration per unit   time) \a j0. Phase 2 is an acceleration phase, with   constant acceleration \a a1 throughout. Phase 3 is a jerk phase (or   de-jerk phase) with constant (negative) jerk slowing down the   acceleration from \a a1 to 0. Phase 4 is a constant speed phase at   speed \a v3. Phase 5 is a constant-jerk counterpart to phase 3,   where the deceleration varies smoothly from 0 to \a -a1. Phase 6 is   a constant-acceleration counterpart to phase 2. Phase 7 is a   constant-jerk counterpart to phase 1, where the deceleration varies   smoothly from \a -a1 to 0 and motion stops. 
 
 <CENTER>
-![Figure8](./images/image8.jpg?raw=true)
+![Figure10](./images/image10.jpg?raw=true)
 </CENTER>
 
 <p align="center">
-**Figure 2 Constant jerk velocity profiling.**
+**Figure 5 Constant jerk velocity profiling.**
 </p>
 
 ##Rviz display of the robot tf (transform) display
 In order to get a visualization of the axes for each axis of you robot, rviz can offer this service is you ADD the "TF" module. Assuming you have started Rviz and configured it so that there is a robot description and the Robot Model module has been added to Rviz,  you can turn on the axes visualization for the links you desire to visualize them. Below, link_1 through link_6 have axis visualization enabled :
 
 <CENTER>
-![Figure9](./images/image9.jpg?raw=true)
+![Figure11](./images/image11.jpg?raw=true)
 </CENTER>
 
 
 
 Here is another vantage point:
 <CENTER>
-![Figure10](./images/image10.jpg?raw=true)
+![Figure12](./images/image12.jpg?raw=true)
 </CENTER>
 
 The X axis is indicated in red, the Y axis is indicated in green, and the Z axis is indicated in blue. (http://wiki.ros.org/rviz/DisplayTypes/TF).  Thus, in the scene above the bolt is located at (.25,-45,0) which is not the centroid of the object.
@@ -248,13 +300,13 @@ The X axis is indicated in red, the Y axis is indicated in green, and the Z axis
 The STL meshes mapping into the Rviz scene use a pose to position the STL object. At this point in time, this Rviz mapping of the object pose is that it is not a centroid or it would be assumed the centroid of the pose to place the bolt object would give the bolt location – and it does not.
 Instead trusty joint publisher GUI has sliders to move the joint values around to place the robot with the correct position and orientation to pick up the bolt. Suffice to say that it was not trivial centering the robot over the bolt but can be done. You can get the joint positions on the Joint State Publisher GUI :
 <CENTER>
-![Figure11](./images/image11.jpg?raw=true)
+![Figure13](./images/image13.jpg?raw=true)
 </CENTER>
 
 
 Assuming you have started Rviz and configured it so that there is a robot description and the Robot Model module has been added to Rviz, you can read the position and orientation of link_6 which should place the robot in the correct position to grasp the bolt:
 <CENTER>
-![Figure12](./images/image12.jpg?raw=true)
+![Figure14](./images/image14.jpg?raw=true)
 </CENTER>
 
 **** 
