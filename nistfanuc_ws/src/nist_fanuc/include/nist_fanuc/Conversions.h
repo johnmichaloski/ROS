@@ -28,10 +28,6 @@ namespace Conversion {
 
     inline Eigen::Vector3d vectorTFToEigen(tf::Vector3 t) {
         return Eigen::Vector3d(t[0], t[1], t[2]);
-//        e(0) = t[0];
-//        e(1) = t[1];
-//        e(2) = t[2];
-//        return e;
     }
 
     template<typename T>
@@ -57,10 +53,8 @@ namespace Conversion {
     }
 
     inline tf::Pose & GeometryPose2TfPose(const geometry_msgs::Pose & m, tf::Pose & p) {
-        tf::Vector3 trans(m.position.x, m.position.y, m.position.z);
-        p.setOrigin(trans);
-        tf::Quaternion q(m.orientation.x, m.orientation.y, m.orientation.z, m.orientation.w);
-        p.setRotation(q);
+        p.setOrigin(tf::Vector3(m.position.x, m.position.y, m.position.z));
+        p.setRotation(tf::Quaternion(m.orientation.x, m.orientation.y, m.orientation.z, m.orientation.w));
         return p;
     }
 
