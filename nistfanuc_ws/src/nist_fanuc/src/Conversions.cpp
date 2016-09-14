@@ -91,7 +91,7 @@ namespace Conversion {
         return shared_point_msg_;
     }
     //==================================================
-    geometry_msgs::Pose RcsPose2GeomMsgPose(const RCS::Pose &m) {
+    geometry_msgs::Pose RcsPose2GeomMsgPose(const tf::Pose &m) {
         geometry_msgs::Pose p;
         p.position.x = m.getOrigin().x();
         p.position.y = m.getOrigin().y();
@@ -145,7 +145,7 @@ namespace Conversion {
      * \param pose is the urdf pose with position and rotation.
      * \return   eigen Affine3d pose 
      */
-    Eigen::Affine3d RcsPose2Affine3d(const RCS::Pose &pose) {
+    Eigen::Affine3d RcsPose2Affine3d(const tf::Pose &pose) {
         Eigen::Quaterniond q(pose.getRotation().w(), pose.getRotation().x(), pose.getRotation().y(), pose.getRotation().z());
         Eigen::Affine3d af(Eigen::Translation3d(pose.getOrigin().x(), pose.getOrigin().y(), pose.getOrigin().z()) * q.toRotationMatrix());
         return af;
@@ -156,8 +156,8 @@ namespace Conversion {
      * vparam pose   eigen Affine3d pose 
      * \return   urdf pose with position and rotation.
      */
-    RCS::Pose Affine3d2RcsPose(const Eigen::Affine3d &pose) {
-        RCS::Pose p;
+    tf::Pose Affine3d2RcsPose(const Eigen::Affine3d &pose) {
+        tf::Pose p;
         p.getOrigin().setX(pose.translation().x());
         p.getOrigin().setY(pose.translation().y());
         p.getOrigin().setZ(pose.translation().z());
@@ -185,14 +185,14 @@ namespace Conversion {
     //------------------------------------------------
     // vector conversions
 
-    std::vector<geometry_msgs::Pose> RcsPoses2PoseMsgs(const std::vector<RCS::Pose> &src) {
+    std::vector<geometry_msgs::Pose> RcsPoses2PoseMsgs(const std::vector<tf::Pose> &src) {
         std::vector<geometry_msgs::Pose> dest;
         dest.resize(src.size());
         std::transform(src.begin(), src.end(), dest.begin(), Conversion::RcsPose2GeomMsgPose);
     }
 
-    std::vector<RCS::Pose> PoseMsgs2RcsPoses(const std::vector<geometry_msgs::Pose> &src) {
-        std::vector<RCS::Pose> dest;
+    std::vector<tf::Pose> PoseMsgs2RcsPoses(const std::vector<geometry_msgs::Pose> &src) {
+        std::vector<tf::Pose> dest;
         dest.resize(src.size());
         std::transform(src.begin(), src.end(), dest.begin(), Conversion::GeomMsgPose2RcsPose);
     }

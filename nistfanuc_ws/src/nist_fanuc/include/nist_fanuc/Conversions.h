@@ -20,28 +20,32 @@
 
 #include "RCS.h"
 
+// tf
+// Transform http://docs.ros.org/jade/api/tf/html/c++/classtf_1_1Transform.html
+// Quaternion http://docs.ros.org/jade/api/tf/html/c++/classtf_1_1Quaternion.html
+
 namespace Conversion {
 
     inline Eigen::Vector3d vectorTFToEigen(tf::Vector3 t) {
-        Eigen::Vector3d e;
-        e(0) = t[0];
-        e(1) = t[1];
-        e(2) = t[2];
-        return e;
+        return Eigen::Vector3d(t[0], t[1], t[2]);
+//        e(0) = t[0];
+//        e(1) = t[1];
+//        e(2) = t[2];
+//        return e;
     }
 
     template<typename T>
-    inline tf::Vector3 vectorEigenToTF(T e) { // Eigen::Vector3d e) {
-        tf::Vector3 t;
-        t[0] = e(0);
-        t[1] = e(1);
-        t[2] = e(2);
-        return t;
+    inline tf::Vector3 vectorEigenToTF(T e) { 
+        return tf::Vector3(e(0), e(1), e(2));
     }
-   
+
+    template<typename T>
+    inline tf::Vector3 matrixEigenToTfVector(T e) {
+        return tf::Vector3(e(0, 3), e(1, 3), e(2, 3));
+    }
     
   
-    inline geometry_msgs::Pose& TfPose2GeometryPose(RCS::Pose & m, geometry_msgs::Pose & p) {
+    inline geometry_msgs::Pose& TfPose2GeometryPose(tf::Pose & m, geometry_msgs::Pose & p) {
         p.position.x = m.getOrigin().x();
         p.position.y = m.getOrigin().y();
         p.position.z = m.getOrigin().z();
@@ -52,30 +56,45 @@ namespace Conversion {
         return p;
     }
 
-    inline RCS::Pose & GeometryPose2TfPose(const geometry_msgs::Pose & m, RCS::Pose & p) {
-        RCS::Vector3 trans(m.position.x, m.position.y, m.position.z);
+    inline tf::Pose & GeometryPose2TfPose(const geometry_msgs::Pose & m, tf::Pose & p) {
+        tf::Vector3 trans(m.position.x, m.position.y, m.position.z);
         p.setOrigin(trans);
-        RCS::Rotation q(m.orientation.x, m.orientation.y, m.orientation.z, m.orientation.w);
+        tf::Quaternion q(m.orientation.x, m.orientation.y, m.orientation.z, m.orientation.w);
         p.setRotation(q);
         return p;
     }
 
-     inline RCS::Pose GeomMsgPose2RcsPose(const geometry_msgs::Pose &m) {
-        RCS::Pose p;
-        RCS::Vector3 trans(m.position.x, m.position.y, m.position.z);
+     inline tf::Pose GeomMsgPose2RcsPose(const geometry_msgs::Pose &m) {
+        tf::Pose p;
+        tf::Vector3 trans(m.position.x, m.position.y, m.position.z);
         p.setOrigin(trans);
-        RCS::Rotation q(m.orientation.x, m.orientation.y, m.orientation.z, m.orientation.w);
+        tf::Quaternion q(m.orientation.x, m.orientation.y, m.orientation.z, m.orientation.w);
         p.setRotation(q);
         return p;
     }
-    geometry_msgs::Pose RcsPose2GeomMsgPose(const RCS::Pose &m);
+
+    inline Eigen::Translation3d RcsPose2EigenPosition(const geometry_msgs::Pose &pose) {
+        return Eigen::Translation3d(pose.position.x, pose.position.y, pose.position.z);
+    }
+     inline Eigen::Affine3d EigenPosition2EigenAffine3d(const Eigen::Translation3d &trans) {
+        return Eigen::Affine3d::Identity() * trans;
+    }
+
+    inline tf::Pose Identity() {
+        tf::Transform t;
+        t.setIdentity(); //= tf::Transform::getIdentity();
+        return t;
+    }
+ 	
+                       
+    geometry_msgs::Pose RcsPose2GeomMsgPose(const tf::Pose &m);
     Eigen::Affine3d GeomMsgPose2Affine3d(const geometry_msgs::Pose &m);
     geometry_msgs::Pose PoseAffineToGeomMsg(const Eigen::Affine3d &e);
-    RCS::Pose Affine3d2RcsPose(const Eigen::Affine3d &pose);
-    Eigen::Affine3d RcsPose2Affine3d(const RCS::Pose &pose);
+    tf::Pose Affine3d2RcsPose(const Eigen::Affine3d &pose);
+    Eigen::Affine3d RcsPose2Affine3d(const tf::Pose &pose);
 
-    std::vector<geometry_msgs::Pose> RcsPoses2PoseMsgs(const std::vector<RCS::Pose> &src);
-    std::vector<RCS::Pose> PoseMsgs2RcsPoses(const std::vector<geometry_msgs::Pose> &src);
+    std::vector<geometry_msgs::Pose> RcsPoses2PoseMsgs(const std::vector<tf::Pose> &src);
+    std::vector<tf::Pose> PoseMsgs2RcsPoses(const std::vector<geometry_msgs::Pose> &src);
     std::vector<Eigen::Affine3d> PoseMsgs2AffEigenPoses(const std::vector<geometry_msgs::Pose> &src);
     std::vector<geometry_msgs::Pose> AffEigenPoses2PoseMsgs(const std::vector<Eigen::Affine3d> &src);
     //JointState     Vector2JointState(const  std::vector<double>  &src);
