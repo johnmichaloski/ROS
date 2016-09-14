@@ -58,12 +58,10 @@ namespace Conversion {
         return p;
     }
 
-     inline tf::Pose GeomMsgPose2RcsPose(const geometry_msgs::Pose &m) {
+    inline tf::Pose GeomMsgPose2RcsPose(const geometry_msgs::Pose &m) {
         tf::Pose p;
-        tf::Vector3 trans(m.position.x, m.position.y, m.position.z);
-        p.setOrigin(trans);
-        tf::Quaternion q(m.orientation.x, m.orientation.y, m.orientation.z, m.orientation.w);
-        p.setRotation(q);
+        p.setOrigin(tf::Vector3(m.position.x, m.position.y, m.position.z));
+        p.setRotation(tf::Quaternion(m.orientation.x, m.orientation.y, m.orientation.z, m.orientation.w));
         return p;
     }
 
@@ -76,11 +74,10 @@ namespace Conversion {
 
     inline tf::Pose Identity() {
         tf::Transform t;
-        t.setIdentity(); //= tf::Transform::getIdentity();
+        t.setIdentity(); 
         return t;
     }
- 	
-                       
+ 	     
     geometry_msgs::Pose RcsPose2GeomMsgPose(const tf::Pose &m);
     Eigen::Affine3d GeomMsgPose2Affine3d(const geometry_msgs::Pose &m);
     geometry_msgs::Pose PoseAffineToGeomMsg(const Eigen::Affine3d &e);
