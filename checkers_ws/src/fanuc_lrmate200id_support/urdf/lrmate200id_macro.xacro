@@ -1,0 +1,393 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find fanuc_resources)/urdf/common_materials.xacro"/>
+  <xacro:include filename="$(find fanuc_resources)/urdf/common_constants.xacro"/>
+  <xacro:include filename="$(find fanuc_lrmate200id_support)/urdf/visuals.xacro"/>
+  <xacro:include filename="$(find fanuc_lrmate200id_support)/urdf/jointlimits.xacro"/>
+ <!-- <xacro:include filename="$(find fanuc_lrmate200id_support)/urdf/robotiq_c2_model_macro.xacro" /> -->
+
+  <xacro:macro name="fanuc_lrmate200id" params="prefix">
+    <link name="${prefix}base_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+	<xacro:insert_mesh_base_link />
+        <xacro:material_fanuc_gray28 />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+  	<xacro:insert_mesh_base_link />
+      </collision>
+    </link>
+    <link name="${prefix}link_1">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+ 	<xacro:insert_mesh_link1 />
+        <xacro:material_fanuc_yellow />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+ 	<xacro:insert_mesh_link1 />
+      </collision>
+    </link>
+    <link name="${prefix}link_2">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+ 	<xacro:insert_mesh_link2 />
+        <xacro:material_fanuc_yellow />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+ 	<xacro:insert_mesh_link2 />
+      </collision>
+    </link>
+    <link name="${prefix}link_3">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+ 	<xacro:insert_mesh_link3 />
+        <xacro:material_fanuc_yellow />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+ 	<xacro:insert_mesh_link3 />
+      </collision>
+    </link>
+    <link name="${prefix}link_4">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+ 	<xacro:insert_mesh_link4 />
+        <xacro:material_fanuc_yellow />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+ 	<xacro:insert_mesh_link4 />
+      </collision>
+    </link>
+    <link name="${prefix}link_5">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+ 	<xacro:insert_mesh_link5 />
+        <xacro:material_fanuc_yellow />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+ 	<xacro:insert_mesh_link5 />
+      </collision>
+    </link>
+    <link name="${prefix}link_6">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+	<xacro:insert_mesh_link6 />
+        <xacro:material_fanuc_black />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+	<xacro:insert_mesh_link6 />
+      </collision>
+    </link>
+
+ <!--   <link name="${prefix}tool0" /> -->
+ 
+    <joint name="${prefix}joint_1" type="revolute">
+      <origin xyz="0 0 0.330" rpy="0 0 0" />
+      <parent link="${prefix}base_link" />
+      <child link="${prefix}link_1" />
+      <axis xyz="0 0 1" />
+      <limit effort="${joint1effort}" lower="${joint1lower}" upper="${joint1upper}" velocity="${joint1velocity}" />
+    </joint>
+    <joint name="${prefix}joint_2" type="revolute">
+      <origin xyz="0.050 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_1" />
+      <child link="${prefix}link_2" />
+      <axis xyz="0 1 0" />
+      <limit effort="${joint2effort}" lower="${joint2lower}" upper="${joint2upper}" velocity="${joint2velocity}" />
+    </joint>
+    <joint name="${prefix}joint_3" type="revolute">
+      <origin xyz="0 0 0.330" rpy="0 0 0"/>
+      <parent link="${prefix}link_2" />
+      <child link="${prefix}link_3" />
+      <axis xyz="0 -1 0" />
+      <limit effort="${joint3effort}" lower="${joint3lower}" upper="${joint3upper}" velocity="${joint3velocity}" />
+    </joint>
+    <joint name="${prefix}joint_4" type="revolute">
+      <origin xyz="0 0 0.035" rpy="0 0 0"/>
+      <parent link="${prefix}link_3"/>
+      <child link="${prefix}link_4"/>
+      <axis xyz="-1 0 0"/>
+      <limit effort="${joint4effort}" lower="${joint4lower}" upper="${joint4upper}" velocity="${joint4velocity}" />
+    </joint>
+    <joint name="${prefix}joint_5" type="revolute">
+      <origin xyz="0.335 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_4"/>
+      <child link="${prefix}link_5"/>
+      <axis xyz="0 -1 0"/>
+      <limit effort="${joint5effort}" lower="${joint5lower}" upper="${joint5upper}" velocity="${joint5velocity}" />
+    </joint>
+    <joint name="${prefix}joint_6" type="revolute">
+      <origin xyz="0.080 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_5"/>
+      <child link="${prefix}link_6"/>
+      <axis xyz="-1 0 0"/>
+      <limit effort="${joint6effort}" lower="${joint6lower}" upper="${joint6upper}" velocity="${joint6velocity}" />
+    </joint>
+    <joint name="${prefix}joint_6-tool0" type="fixed">
+<!--      <origin xyz="0 0 0" rpy="${m_pi} ${-m_pi_2} 0" /> -->
+      <origin xyz="0 0 0" rpy="0 0 0" />
+     <parent link="${prefix}link_6" />
+      <child link="${prefix}robotiq_85_adapter_link" />
+     <axis xyz="0 0 0"/> <!-- no rotation -->
+    </joint>
+
+    <!-- ROS base_link to Fanuc World Coordinates transform -->
+    <link name="${prefix}base" />
+    <joint name="${prefix}base_link-base" type="fixed">
+      <origin xyz="0 0 0.330" rpy="0 0 0"/>
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}base"/>
+    </joint>
+
+  <link name="${prefix}robotiq_85_adapter_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_adapter_plate.dae"/>
+      </geometry>
+      <origin rpy="1.5707 0 1.5707" xyz="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_adapter_plate.dae"/>
+      </geometry>
+      <origin rpy="0 0 1.5707" xyz="0 0 0"/>
+    </collision>
+  </link>
+
+  <!--  /\  -->
+  <joint name="${prefix}robotiq_85_base_joint" type="fixed">
+    <parent link="${prefix}robotiq_85_adapter_link"/>
+    <child link="${prefix}robotiq_85_base_link"/>
+    <axis xyz="1 0 0"/>
+    <origin rpy="0 0 0" xyz=".0085 0 -.0041"/>
+  </joint>
+  <!--  \/  -->
+
+  <link name="${prefix}robotiq_85_base_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_base.dae"/>
+      </geometry>
+      <origin rpy="3.1415 0 1.5707" xyz="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_base.dae"/>
+      </geometry>
+      <origin rpy="1.5707 0 1.5707" xyz="0 0 0"/>
+    </collision>
+  </link>
+
+  <!--  /\  -->
+  <!--  /\  -->
+  <joint name="${prefix}robotiq_85_left_knuckle_joint" type="revolute">
+    <parent link="${prefix}robotiq_85_base_link"/>
+    <child link="${prefix}robotiq_85_left_knuckle_link"/>
+    <axis xyz="1 0 0"/>
+    <origin rpy="-1.5707 1.5707 0" xyz=".04191 .0306 0"/>
+    <limit lower="0" upper=".8575" velocity="2.0" effort="1000"/>
+  </joint>
+
+  <joint name="${prefix}robotiq_85_right_knuckle_joint" type="revolute">
+    <parent link="${prefix}robotiq_85_base_link"/>
+    <child link="${prefix}robotiq_85_right_knuckle_link"/>
+    <axis xyz="1 0 0"/>
+    <origin rpy="1.5707 -1.5707 0" xyz=".04191 -.0306 0"/>
+    <limit lower="0" upper="1.5707" velocity="2.0" effort="1000"/>
+    <mimic joint="${prefix}robotiq_85_left_knuckle_joint" multiplier="1"/>
+  </joint>
+  <!--  \/  -->
+  <!--  \/  -->
+
+  <link name="${prefix}robotiq_85_left_knuckle_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_0_L.dae"/>
+      </geometry>
+      <origin rpy="3.14159 -1.5707 0" xyz="0 .04191 -.0306"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_0_L.dae"/>
+      </geometry>
+      <origin rpy="1.5707 -1.5707 0" xyz="0 .04191 -.0306"/>
+    </collision>
+  </link> 
+
+  <link name="${prefix}robotiq_85_right_knuckle_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_0_R.dae"/>
+      </geometry>
+      <origin rpy="3.14159 1.5707 0" xyz="0 .04191 -.0306"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_0_R.dae"/>
+      </geometry>
+      <origin rpy="1.5707 1.5707 0" xyz="0 .04191 -.0306"/>
+    </collision>
+  </link>
+
+  <!--  /\  -->
+  <!--  /\  -->
+  <joint name="${prefix}robotiq_85_left_finger_joint" type="fixed">
+    <parent link="${prefix}robotiq_85_left_knuckle_link"/>
+    <child link="${prefix}robotiq_85_left_finger_link"/>
+    <axis xyz="1 0 0"/>
+    <origin rpy="3.1415 0 0" xyz="0 .00508 .03134"/>
+    <limit lower="0" upper="1.5707" velocity="2.0" effort="1000"/>
+  </joint>
+
+  <joint name="${prefix}robotiq_85_right_finger_joint" type="fixed">
+    <parent link="${prefix}robotiq_85_right_knuckle_link"/>
+    <child link="${prefix}robotiq_85_right_finger_link"/>
+    <axis xyz="1 0 0"/>
+    <origin rpy="3.1415 0 0" xyz="0 .00508 .03134"/>
+    <limit lower="0" upper="1.5707" velocity="2.0" effort="1000"/>
+  </joint>
+  <!--  \/  --> 
+  <!--  \/  -->  
+
+  <link name="${prefix}robotiq_85_left_finger_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_1_L.dae"/>
+      </geometry>
+      <origin rpy="0 1.5707 0" xyz="0 -.03683 .06194"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_1_L.dae"/>
+      </geometry>
+      <origin rpy="-1.5707 1.5707 0" xyz="0 -.03683 .06194"/>
+    </collision>
+  </link> 
+
+  <link name="${prefix}robotiq_85_right_finger_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_1_R.dae"/>
+      </geometry>
+      <origin rpy="0 -1.5707 0" xyz="0 -.03683 .06194"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_1_R.dae"/>
+      </geometry>
+      <origin rpy="-1.5707 -1.5707 0" xyz="0 -.03683 .06194"/>
+    </collision>
+  </link> 
+
+  <!--  /\  -->
+  <!--  /\  -->
+  <joint name="${prefix}robotiq_85_left_inner_knuckle_joint" type="revolute">
+    <parent link="${prefix}robotiq_85_base_link"/>
+    <child link="${prefix}robotiq_85_left_inner_knuckle_link"/>
+    <axis xyz="1 0 0"/>
+    <origin rpy="1.5707 1.5707 0" xyz=".04843 .0127 0"/>
+    <limit lower="0" upper="1.5707" velocity="2.0" effort="1000"/>
+    <mimic joint="${prefix}robotiq_85_left_knuckle_joint" offset="0"/>
+  </joint> 
+
+  <joint name="${prefix}robotiq_85_right_inner_knuckle_joint" type="revolute">
+    <parent link="${prefix}robotiq_85_base_link"/>
+    <child link="${prefix}robotiq_85_right_inner_knuckle_link"/>
+    <axis xyz="1 0 0"/>
+    <origin rpy="-1.5707 -1.5707 0" xyz=".04843 -.0127 0"/>
+    <limit lower="0" upper="1.5707" velocity="2.0" effort="1000"/>
+    <mimic joint="${prefix}robotiq_85_left_knuckle_joint" offset="0"/>
+  </joint>
+  <!--  \/  --> 
+  <!--  \/  -->  
+
+  <link name="${prefix}robotiq_85_left_inner_knuckle_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_2_L.dae"/>
+      </geometry>
+      <origin rpy="0 1.5707 0" xyz="0 -.04843 .0127"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_2_L.dae"/>
+      </geometry>
+      <origin rpy="-1.5707 1.5707 0" xyz="0 -.04843 .0127"/>
+    </collision>
+  </link>
+
+  <link name="${prefix}robotiq_85_right_inner_knuckle_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_2_R.dae"/>
+      </geometry>
+      <origin rpy="0 -1.5707 0" xyz="0 -.04843 .0127"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_2_R.dae"/>
+      </geometry>
+      <origin rpy="-1.5707 -1.5707 0" xyz="0 -.04843 .0127"/>
+    </collision>
+  </link>
+
+  <!--  /\  -->
+  <!--  /\  -->
+  <joint name="${prefix}robotiq_85_left_finger_tip_joint" type="revolute">
+    <parent link="${prefix}robotiq_85_left_inner_knuckle_link"/>
+    <child link="${prefix}robotiq_85_left_finger_tip_link"/>
+    <axis xyz="1 0 0"/>
+    <origin rpy="0 0 0" xyz="0 .04196 -.0388"/>
+    <limit lower="0" upper="1.5707" velocity="2.0" effort="1000"/>
+    <mimic joint="${prefix}robotiq_85_left_knuckle_joint" multiplier="-1"/>
+  </joint>
+
+  <joint name="${prefix}robotiq_85_right_finger_tip_joint" type="revolute">
+    <parent link="${prefix}robotiq_85_right_inner_knuckle_link"/>
+    <child link="${prefix}robotiq_85_right_finger_tip_link"/>
+    <axis xyz="1 0 0"/>
+    <origin rpy="0 0 0" xyz="0 .04196 -.0388"/>
+    <limit lower="0" upper="1.5707" velocity="2.0" effort="1000"/>
+    <mimic joint="${prefix}robotiq_85_left_knuckle_joint" multiplier="-1"/>
+  </joint>
+  <!--  \/  --> 
+  <!--  \/  -->  
+
+  <link name="${prefix}robotiq_85_left_finger_tip_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_3_L.dae"/>
+      </geometry>
+      <origin rpy="0 1.5707 0" xyz="0 -.090381 .051505"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_3_L.dae"/>
+      </geometry>
+      <origin rpy="-1.5707 1.5707 0" xyz="0 -.090381 .051505"/>
+    </collision>
+  </link> 
+
+  <link name="${prefix}robotiq_85_right_finger_tip_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_3_R.dae"/>
+      </geometry>
+      <origin rpy="0 -1.5707 0" xyz="0 -.090381 .051505"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_3_R.dae"/>
+      </geometry>
+      <origin rpy="-1.5707 -1.5707 0" xyz="0 -.090381 .051505"/>
+    </collision>
+  </link>
+  </xacro:macro>
+</robot>
