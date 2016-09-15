@@ -20,10 +20,42 @@ CRCL models a status message from a low-level robot controller. Status includes 
  - whether joint torque or force should be reported
  - whether joint velocity should be reported
 During a CRCL session, until a ConfigureJointReports command has been executed that sets the reporting status for a joint, default joint status is reported for that joint. The ConfigureJointReports command may be used more than once during a session to change joint status reporting.
+#Software Architecture
+The controller handles a Fanuc LRMate 200 iD and a robotiq two finger gripper, as shownin the figure below:
+<CENTER>
+![Figure1](./images/image1.jpg?raw=true)
+</CENTER>
+
+The robot and gripper are modeled in ROS URDF shown below:
+<CENTER>
+![Figure3](./images/image3.jpg?raw=true)
+</CENTER>
+
+
+The following diagram describes the ROS topic communication between modules in the contol system.
+<CENTER>
+![Figure4](./images/image4.jpg?raw=true)
+</CENTER>
+
+The Robot model combines the Fanuc LR Mate 200 id with the robotiq 2 finger gripper. The controller advertised updates to the /nist_controller/robot/joint_states which is read by the joint_state_publisher package. This communication is enabled in the launch file by the following snippet:
+
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+	    <param name="/use_gui" value="true"/>
+	    <rosparam param="/source_list">[nist_controller/robot/joint_states]</rosparam>
+	</node>
+The architecture also supports CRCL command input and status reporting via a CRCL package. NIST CRCL package accepts CRCL commands and reports status to connected  ip and socket ports and then published  commands using the topic /crcl_command and subsribes to topic /crcl_status to receive feedback.  This CRCL communication is enabled in the launch file by the following snippet:
+
+	<node name="nistcrcl" pkg="nistcrcl" type="nistcrcl" respawn="false" output="screen" >
+	 <param name="crclip" value="127.0.0.1"/>
+	 <param name="crclport" value="64444"/>
+	</node>
+	
+This snippet loads the ROS node "nistcrcl" with the parameters specified as ip (i.e., crclip)  equal to "127.0.0.1" and the port (i.e., crclport) equal to 64444.
+
 #Robot Kinematic Chain
 The robot path is specified I terms of a "kinematic chain " made up of a series of homogeneous matrix transforms relation the manipulator to the task.
 <CENTER>
-![Figure1](./images/image1.jpg?raw=true)
+![Figure5](./images/image5.jpg?raw=true)
 </CENTER>
 
 <p align="center">
@@ -62,7 +94,7 @@ A Kinematic Chain is assembled suing the make_equation method.  A chain is const
 ##Robot Gripper
 In general, an end effector is the device at the end of a robotic arm, meant to interact with the environment (Wikipedia, 2016). The exact nature of this device depends on the application of the robot.  We are concerned with grasping objects and placing the objects somewhere else. This can be done with a vacuum gripper, but we are interested in the case of using grippers (with 2 fingers) to achieve object manipulation (grasping and releasing).
 <CENTER>
-![Figure2](./images/image2.jpg?raw=true)
+![Figure6](./images/image6.jpg?raw=true)
 </CENTER>
 
 <p align="center">
@@ -70,7 +102,7 @@ In general, an end effector is the device at the end of a robotic arm, meant to 
 </p>
 Robotiq's 2-Finger Adaptive Robot Gripper is modeled as the gripper since a ROS URDF description existed for its kinematics and a CAD model existed to described it visually. Of concern, is determining the gripper offset, that is what is the length offsets of the x,y,z axes of the gripper when it is attached to the robot.  To understand the xyz gripper offset, the URDF model describes link6 as having the xaxis point straight ahead, the yaxis points to the side and the z axis points up. Figure 3 shows the positioning of the Link 6 axis and the relationship to the gripper.
 <CENTER>
-![Figure3](./images/image3.jpg?raw=true)
+![Figure7](./images/image7.jpg?raw=true)
 </CENTER>
 
 <p align="center">
@@ -120,19 +152,19 @@ The easies first step is to use roslaunch, in which you load a robot description
 	<node name="rviz" pkg="rviz" type="rviz">
 When you do this, you will eventually see an RVIZ screen appear with the error condition of "Global Status". 
 <CENTER>
-![Figure4](./images/image4.jpg?raw=true)
+![Figure8](./images/image8.jpg?raw=true)
 </CENTER>
 
 
 To rectify this error, click on the Fixed Frame text box (and possibly the base_link will appear in a combo box which you can select) or type in "base_link" or whatever is the base link in your URDF robot description. Below the error message disappears when base_link is entered.
 <CENTER>
-![Figure5](./images/image5.jpg?raw=true)
+![Figure9](./images/image9.jpg?raw=true)
 </CENTER>
 
 
 Now, the problem is that no robot is visible. Obviously, not a good situation. To rectify this problem, click the [ADD} button above time in the lower left hand corner, and when the Create Visualization dialog box appears, select "Robot Model", as shown below:
 <CENTER>
-![Figure6](./images/image6.jpg?raw=true)
+![Figure10](./images/image10.jpg?raw=true)
 </CENTER>
 
 
@@ -140,7 +172,7 @@ Then, the robot that is described in the robot_description ROS parameter will ap
 
 
 <CENTER>
-![Figure7](./images/image7.jpg?raw=true)
+![Figure11](./images/image11.jpg?raw=true)
 </CENTER>
 
 
@@ -160,7 +192,7 @@ Of importance is the ROS parameter :ource_list", which is a list of topics that 
 #Manual Inserting of an STL File containing a scene object in RViz
 A scene of objects for gripper manipulation by the Crcl Robot Controller in RVIZ must be built. Each object is imported into RVIZ as a Stereolithography Language (STL) file. To import an object, a 3D STL file is imported with the Scene Objects-Import File button. The STL format should be binary, not plain text. (?)
 <CENTER>
-![Figure8](./images/image8.jpg?raw=true)
+![Figure12](./images/image12.jpg?raw=true)
 </CENTER>
 
 RVIZ is independent of moveit, so to get objects registered in the moveit Planning Scene, collision object programmatically to moveit (See http://wiki.ros.org/motion_planning_environment/Tutorials/Adding%20known%20objects%20to%20the%20collision%20environment) .
@@ -171,7 +203,7 @@ For the Fanuc LR Mate 200iD, the addition of two objects will be illustrated to 
 Two objects will be added to the Rviz scene, a medium gear and a gear holder tray.  These scene objects were created in a CAD design system and have been produced by an 3D printing device. 3D printing devices use STL, so the STL files from these objects were imported and displayed Rviz using the displayMesh rviz-visual-tools method.
 In addition, the method publishWall was developed that is based on rviz-visual-tools, to display a wall in Rviz.
 <CENTER>
-![Figure9](./images/image9.jpg?raw=true)
+![Figure13](./images/image13.jpg?raw=true)
 </CENTER>
 
 <p align="center">
@@ -274,7 +306,7 @@ The Go Motion trajectory planning algorithms are based on smooth   velocity prof
 Constant-jerk (CJ) profiling is shown in Figure 1, a plot of the   speed versus time. There are 7 phases to the motion. Phase 1 is a   jerk phase, where the acceleration varies smoothly from 0 at time 0   to \a a1 at time \a t1 following the jerk (change in acceleration per unit   time) \a j0. Phase 2 is an acceleration phase, with   constant acceleration \a a1 throughout. Phase 3 is a jerk phase (or   de-jerk phase) with constant (negative) jerk slowing down the   acceleration from \a a1 to 0. Phase 4 is a constant speed phase at   speed \a v3. Phase 5 is a constant-jerk counterpart to phase 3,   where the deceleration varies smoothly from 0 to \a -a1. Phase 6 is   a constant-acceleration counterpart to phase 2. Phase 7 is a   constant-jerk counterpart to phase 1, where the deceleration varies   smoothly from \a -a1 to 0 and motion stops. 
 
 <CENTER>
-![Figure10](./images/image10.jpg?raw=true)
+![Figure14](./images/image14.jpg?raw=true)
 </CENTER>
 
 <p align="center">
@@ -285,14 +317,14 @@ Constant-jerk (CJ) profiling is shown in Figure 1, a plot of the   speed versus 
 In order to get a visualization of the axes for each axis of you robot, rviz can offer this service is you ADD the "TF" module. Assuming you have started Rviz and configured it so that there is a robot description and the Robot Model module has been added to Rviz,  you can turn on the axes visualization for the links you desire to visualize them. Below, link_1 through link_6 have axis visualization enabled :
 
 <CENTER>
-![Figure11](./images/image11.jpg?raw=true)
+![Figure15](./images/image15.jpg?raw=true)
 </CENTER>
 
 
 
 Here is another vantage point:
 <CENTER>
-![Figure12](./images/image12.jpg?raw=true)
+![Figure16](./images/image16.jpg?raw=true)
 </CENTER>
 
 The X axis is indicated in red, the Y axis is indicated in green, and the Z axis is indicated in blue. (http://wiki.ros.org/rviz/DisplayTypes/TF).  Thus, in the scene above the bolt is located at (.25,-45,0) which is not the centroid of the object.
@@ -300,13 +332,13 @@ The X axis is indicated in red, the Y axis is indicated in green, and the Z axis
 The STL meshes mapping into the Rviz scene use a pose to position the STL object. At this point in time, this Rviz mapping of the object pose is that it is not a centroid or it would be assumed the centroid of the pose to place the bolt object would give the bolt location – and it does not.
 Instead trusty joint publisher GUI has sliders to move the joint values around to place the robot with the correct position and orientation to pick up the bolt. Suffice to say that it was not trivial centering the robot over the bolt but can be done. You can get the joint positions on the Joint State Publisher GUI :
 <CENTER>
-![Figure13](./images/image13.jpg?raw=true)
+![Figure17](./images/image17.jpg?raw=true)
 </CENTER>
 
 
 Assuming you have started Rviz and configured it so that there is a robot description and the Robot Model module has been added to Rviz, you can read the position and orientation of link_6 which should place the robot in the correct position to grasp the bolt:
 <CENTER>
-![Figure14](./images/image14.jpg?raw=true)
+![Figure18](./images/image18.jpg?raw=true)
 </CENTER>
 
 **** 

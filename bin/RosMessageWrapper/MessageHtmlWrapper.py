@@ -22,8 +22,6 @@ import getopt
 packagelist = {}
 def GetCurrentPath():
     return os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-
-
 class Msg(object):
     def __init__(self, typename=None, name=None, comment=None):
         self.typename = typename
@@ -31,37 +29,6 @@ class Msg(object):
         self.comment = comment
     def Dump(self):
         print "TypeName=",self.typename, "Name=",self.name, "Comment=",self.comment,
-
-#def ScriptSheet():
-#    mystr = ""
-#    mystr = ""
-#    mystr+="<!-- Javascript goes in the document HEAD -->\n"
-#    mystr+="<script type=\"text/javascript\">\n"
-#    mystr+="function altRows(id){\n"
-#    mystr+="               if(document.getElementsByTagName){ \n"
-#    mystr+="                            \n"
-#    mystr+="                              var table = document.getElementById(id); \n"
-#    mystr+="                              var rows = table.getElementsByTagName(\"tr\");\n"
-#    mystr+="                               \n"
-#    mystr+="                             for(i = 0; i < rows.length; i++){         \n"
-#    mystr+="                                             if(i % 2 == 0){\n"
-#    mystr+="                                                            rows[i].className = \"evenrowcolor\";\n"
-#    mystr+="                                            }else{\n"
-#    mystr+="               import sys                                             rows[i].className = \"oddrowcolor\";\n"
-#    mystr+="                                             }    \n" 
-#    mystr+="                              }\n"
-#    mystr+="               }\n"
-#    mystr+="}\n"
-#    return mystr
-#
-#def ScriptSheet():
-#    mystr = ""
-#    mystr+="window.onload=function(){\n"
-#    mystr+="               altRows('alternatecolor');\n"
-#    mystr+="}\n"
-#    mystr+="</script>\n"
-#    return mystr
-
 def StyleSheet():
     mystr = ""
     mystr+="<!-- CSS goes in the document HEAD or added to your external stylesheet -->\n"
@@ -99,11 +66,9 @@ def StyleSheet():
     mystr+="}\n"
     mystr+="</style>\n"
     return mystr
-
 def run_command(cmd):
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     return proc.communicate()[0]
-
 def GetRosMsgDepends():
     p = subprocess.Popen(['rospack', 'list'], stdout=subprocess.PIPE,  stderr=subprocess.PIPE, stdin=subprocess.PIPE)
     out, err = p.communicate()
@@ -116,7 +81,6 @@ rosdepends = []
             rosdepends.append(words[0])
             packagelist[words[0]] = words[1]
     return  rosdepends   
-
 def BuildHtmlMsgTable(package):
     mymystr = "<h1>" + package + "</h1>\n"
     msgs = run_command(['rosmsg','package', package])
