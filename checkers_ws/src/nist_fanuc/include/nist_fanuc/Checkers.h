@@ -422,7 +422,21 @@ namespace Checkers {
             m2 = (*it).second[m];
             return true;
         }
+	double DoubleJumpEval(Move &m)
+	{
+		double val=0;
+		double bestScore = 0;
+		for(size_t i=0; i< m.doublejumps.size(); i++)
+		{
+			val=10;
+			// 1 versus 2 double jumps
+			val += DoubleJumpEval(m.doublejumps[i]);
+			if(val>bestScore)
+				bestScore=val;
+		}
 
+		return bestScore;
+	}
         double MinMaxEval(int depth, int player, BoardType curBoard, double signFactor) {
             int opponent = (player == BLACK) ? RED : BLACK;
             if (depth >= MAX_DEPTH)
@@ -449,40 +463,47 @@ namespace Checkers {
             return signFactor*posValue;
         }
 
-        bool MinMaxBestMove(std::map<Move, std::vector<Move>> &moves, BoardType curBoard, int player, Move &m1, Move &m2) {
-            float bestScore = -FLT_MAX;
-            int opponent = (player == BLACK) ? RED : BLACK;
+	bool MinMaxBestMove(std::map<Move, std::vector<Move>> &moves, BoardType curBoard, int player, Move &m1, Move &m2)
+	{
+		double bestScore =-LDBL_MAX;
+		int opponent = (player == BLACK) ? RED : BLACK;
 
-            Move bestfrom, bestto;
-            std::map<Move, std::vector < Move>>::iterator it;
-            std::map<Move, std::vector < Move>> bestmoves;
-            for (it = moves.begin(); it != moves.end(); it++) {
-                if ((*it).second.size() == 0)
-                    continue;
-                for (size_t i = 0; i < (*it).second.size(); i++) {
-                    Move & move((*it).second[i]);
-                    BoardType newBoard = MakeMove(curBoard, player, (*it).first.row, (*it).first.col, move);
-                    move.score = MinMaxEval(50, opponent, newBoard, 1.0);
-                    if (move.bJump)
-                        move.score = 10;
-                    if (move.score > bestScore) {
-                        m1 = (*it).first;
-                        m2 = move;
-                        bestScore = move.score;
-                        bestmoves.clear();
-                        bestmoves[(*it).first] = std::vector<Move>();
-                        bestmoves[(*it).first].push_back(move);
-                    }
-                    if (move.score == bestScore) {
-                        bestmoves[(*it).first].push_back(move);
-                    }
-                }
-            }
-            // Lots of moves with same mixmax value - randomly pick one 
-            if (bestmoves.size() > 1) {
-                RandomMove(bestmoves, m1, m2);
-            }
-            return true;
-        }
+		Move bestfrom, bestto;
+		std::map<Move, std::vector<Move>>::iterator it;
+		std::map<Move, std::vector<Move>> bestmoves;
+		for(it=moves.begin(); it!=moves.end(); it++)
+		{
+			if((*it).second.size()==0)
+				continue;
+			for(size_t i=0; i < (*it).second.size(); i++)
+			{
+				Move &move((*it).second[i]);
+				BoardType newBoard = MakeMove(curBoard, player, (*it).first.row, (*it).first.col, move);
+				move.score = MinMaxEval(50,  opponent,  newBoard, -1.0);
+				if(move.bJump)
+					move.score+=10;
+				move.score+= DoubleJumpEval(move);
+				if(move.score>bestScore)
+				{
+					m1=(*it).first;
+					m2=move;
+					bestScore=move.score;
+					bestmoves.clear();
+					bestmoves[(*it).first]=std::vector<Move>();
+					bestmoves[(*it).first].push_back(move);
+				}
+				if(move.score==bestScore)
+				{
+					bestmoves[(*it).first].push_back(move);
+				}
+			}
+		}
+		// Lots of moves with same mixmax value - randomly pick one
+		if(bestmoves.size() > 1)
+		{
+			RandomMove(bestmoves, m1, m2);
+		}
+		return true;
+	}
     };
 };

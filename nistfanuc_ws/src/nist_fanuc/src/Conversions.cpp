@@ -103,6 +103,16 @@ namespace Conversion {
         return p;
     }
 
+     geometry_msgs::Pose& TfPose2GeometryPose(tf::Pose & m, geometry_msgs::Pose & p) {
+        p.position.x = m.getOrigin().x();
+        p.position.y = m.getOrigin().y();
+        p.position.z = m.getOrigin().z();
+        p.orientation.x = m.getRotation().x();
+        p.orientation.y = m.getRotation().y();
+        p.orientation.z = m.getRotation().z();
+        p.orientation.w = m.getRotation().w();
+        return p;
+    }
     Eigen::Affine3d GeomMsgPose2Affine3d(const geometry_msgs::Pose &m) {
         Eigen::Affine3d e = Eigen::Translation3d(m.position.x,
                 m.position.y,

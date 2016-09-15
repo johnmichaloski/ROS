@@ -195,10 +195,13 @@ struct RvizCheckers {
 #endif
         ros::spinOnce();
         obj->name = checkername2; // change checker name 
+        if(m.doublejumps.size()>0)
+        {
+            PhysicalMove(player, m.row, m.col, m.doublejumps[0]);
+        }
 
     }
-    // Single jump only for now
-
+ 
     int Player() {
         return curplayer;
     }
