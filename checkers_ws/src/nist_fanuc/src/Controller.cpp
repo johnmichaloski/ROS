@@ -202,7 +202,6 @@ namespace RCS {
 
             // Motion commands to robot - only joint at this point
             if (Cnc.robotcmds.SizeMsgQueue() == 0) {
-                _lastcc = _newcc;
                 _lastcc.status = CanonStatusType::CANON_DONE;
                 Cnc.status.crclcommandstatus = CanonStatusType::CANON_DONE;
             } else {
@@ -270,6 +269,8 @@ namespace RCS {
 #endif
                     rviz_jntcmd.publish(Cnc.status.currentjoints);
                     rviz_jntcmd.publish(Cnc.status.currentjoints);
+                    ros::spinOnce();
+                    ros::spinOnce();
 #if 1
                     if (!_newcc.partname.empty()) {
                         Eigen::Translation3d trans(_newcc.finalpose.position.x, _newcc.finalpose.position.y, _newcc.finalpose.position.z);

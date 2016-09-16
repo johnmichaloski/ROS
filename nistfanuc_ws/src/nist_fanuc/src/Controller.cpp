@@ -361,6 +361,9 @@ double chessdwell=1.0;
 static int crclcommandnum = 1;
 RCS::Pose retract = RCS::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0, 0, 0.1));
 tf::Quaternion QBend(M_PI / 2.0, 0.0, 0.0);
+// Checkers hint
+//  ToVector<double>(6, 0.27, 0.5, -0.4, 0.0, 0.0, 0.0);
+std::vector<double> hint= ToVector<double> (6, 0.27, 0.7, -0.57, 0.0, 0.0, 0.0);
 
 void SetGripper(double ee) {
     // set gripper to 0..1
@@ -395,9 +398,12 @@ void MoveTo(RCS::Pose pose,std::string objname){
     RCS::CanonCmd cmd;
     cmd.crclcommandnum = crclcommandnum++;
     cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
-    cmd.hint = ToVector<double>(6, 0.27, 0.5, -0.4, 0.0, 0.0, 0.0);
+    if (hint.size() > 0)
+        cmd.hint = hint;
+    else cmd.hint = ToVector<double>(6, 0.27, 0.7, -0.57, 0.0, 0.0, 0.0);
+
     cmd.finalpose = Conversion::RcsPose2GeomMsgPose(pose);
-    if(!objname.empty())
+    if (!objname.empty())
     {
         ObjectDB * obj = ObjectDB::Find(objname);
         cmd.partname=objname;
@@ -433,9 +439,23 @@ void Pick(RCS::Pose pose, std::string objname) {
     DoDwell(chessdwell);
     CloseGripper();
     DoDwell(chessdwell);
+    hint= ToVector<double> (6, -0.99, 0.78, 0.0, 0.0, 0.0, 0.0);
     MoveTo(retract * RCS::Pose(QBend, offset),objname);
 }
 
+void MoveJoints(std::vector<long unsigned int> jointnum,
+        std::vector<double> positions) {
+    RCS::CanonCmd cmd;
+    cmd.crclcommandnum = crclcommandnum++;
+    cmd.crclcommand = CanonCmdType::CANON_MOVE_JOINT;
+    cmd.joints = RCS::ZeroJointState(6);
+    // These tovectors must match double or long depending on template or wont work
+    cmd.joints.position = positions; // ToVector<double>(6, 1.4, 0.0, 0.0, 0.0, 0.0, 0.0);
+    cmd.jointnum = jointnum; // ToVector<long unsigned int>(6, 0L, 1L, 2L, 3L, 4L, 5L);
+    cmd.bCoordinated = true;
+    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+
+}
 // fixme: object has to be richer description
 void Place(RCS::Pose pose, std::string objname) {
 
@@ -452,157 +472,42 @@ void Place(RCS::Pose pose, std::string objname) {
     MoveTo(retract * RCS::Pose(QBend, offset));
 
 }
+
+// Major problem is the KDL expects a reaonable hint at the joint solution for IK
+// And with large jumps in bang-bang control, not realistic yet.
+/// Either ik or more trajectory control with spacing between joint updates small so KDL happy
 void TestRobotCommands() {
     // Finish queuing commands before handling them....
     boost::mutex::scoped_lock lock(cncmutex);
     static double dwelltime = 3.0;
-
+    std::vector<long unsigned int> vjointnum = ToVector<long unsigned int>(6, 0L, 1L, 2L, 3L, 4L, 5L);
     RCS::Pose retract = RCS::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0, 0, 0.2));
  
     RCS::CanonCmd cmd;
 
-    //return ; // skip all commands 
-    cmd.joints = RCS::ZeroJointState(6);
-    // These tovectors must match double or long depending on template or wont work
-    cmd.joints.position = ToVector<double>(6, 1.4, 0.0, 0.0, 0.0, 0.0, 0.0);
-    cmd.jointnum = ToVector<long unsigned int>(6, 0L, 1L, 2L, 3L, 4L, 5L);
-    cmd.bCoordinated = true;
-    cmd.crclcommand = CanonCmdType::CANON_MOVE_JOINT;
-    cmd.crclcommandnum = crclcommandnum++;
-    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
-
+    // Warm up
+    MoveJoints(vjointnum, ToVector<double>(6, 1.4, 0.0, 0.0, 0.0, 0.0, 0.0));
+    DoDwell(dwelltime);
+    MoveJoints(vjointnum, ToVector<double>(6, -1.4, 0.0, 0.0, 0.0, 0.0, 0.0));
     DoDwell(dwelltime);
 
-    cmd.joints.position = ToVector<double>(6, -1.4, 0.0, 0.0, 0.0, 0.0, 0.0);
-    cmd.jointnum = ToVector<long unsigned int>(6, 0L, 1L, 2L, 3L, 4L, 5L);
-    cmd.bCoordinated = true;
-    cmd.crclcommand = CanonCmdType::CANON_MOVE_JOINT;
-    cmd.crclcommandnum = crclcommandnum++;
-    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
-
-    DoDwell(dwelltime);
-
-
-    //  Gripper Offset Pose Translation = 98.84:3.74:-11.56
-    // y is immaterial - it is the gripper opening, not offsets in x,z
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.crclcommand = CanonCmdType::CANON_SET_GRIPPER_POSE;
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
-            tf::Vector3(0.09884, 0.0, -0.01156)));
-    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
-
-
-
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
-    cmd.hint = ToVector<double>(6, -1.05, 1.03, 0.0, 0.07, -0.51, 0.0);
-    cmd.bStraight = true;
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(
-            RCS::Pose(QBend, // tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
-            tf::Vector3(0.25, -.45, 0.04 + 0.15002)));
-    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
-    // This works, was based on reading joints after manually moving with joint_publisher
-    //   cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
-    //           tf::Vector3(0.26319, -0.46395, 0.04 + 0.15002)));
-
-
-
-#if 1   
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.crclcommand = CanonCmdType::CANON_SET_GRIPPER_POSE;
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
-            tf::Vector3(0.09884, 0.0, -0.01156)));
-    //      tf::Vector3(0.14041, 0.0, -0.0041)));
-    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
-
-#endif
-
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(
-            RCS::Pose(QBend, //tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
-            tf::Vector3(0.26319, -0.46395, 0.04 + 0.015002)));
-    cmd.bStraight = true;
-    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
-
-    // Close gripper
-    cmd.crclcommand = CanonCmdType::CANON_SET_GRIPPER;
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.eepercent = 0.0; // close
-    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
-
-
-#if 1
-    cmd.crclcommand = CanonCmdType::CANON_ERASE_OBJECT;
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.partname = "bolt1";
-    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
-
-    // Move to Retract point so we don't hit boltholder
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
-    cmd.hint = ToVector<double>(6, 0.27, 0.5, -0.4, 0.0, 0.0, 0.0);
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(retract * 
-            RCS::Pose(QBend, //tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
-            tf::Vector3(0.390496134758, -0.101964049041, 0.0245 + 0.04)));
-    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+    RCS::Pose pickpose =  RCS::Pose(QBend, tf::Vector3(0.25, -0.45, 0.04 + 0.015002));
     
-    // Wait
-    DoDwell(3.0);
-   
-
-    // Move bolt to boltholder slot  
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
-    cmd.hint = ToVector<double>(6, 0.27, 0.7, -0.57, 0.0, 0.0, 0.0);
-//    RCS::Pose anglepitch = RCS::Pose(
-//            tf::Quaternion(tf::Vector3(0,1,0), M_PI),
-//            tf::Vector3(0.390496134758, -0.101964049041, 0.0245 + 0.04));
-    
-    cmd.finalpose =Conversion::RcsPose2GeomMsgPose(
-            RCS::Pose(
-            QBend,
-            tf::Vector3(0.390496134758, -0.101964049041, 0.0245 + 0.04))
-            );
-//    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(
-//            RCS::Pose(tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
-//            tf::Vector3(0.390496134758, -0.101964049041, 0.0245 + 0.04)));
-    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
-//    LOG_DEBUG << "anglepitch " << RCS::DumpPoseSimple(anglepitch).c_str();
-    LOG_DEBUG << "finalpose " << RCS::DumpPoseSimple(Conversion::GeomMsgPose2RcsPose(cmd.finalpose)).c_str();
-
-
-    // Draw bolt
-    cmd.crclcommand = CanonCmdType::CANON_DRAW_OBJECT;
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.partname = "bolt1";
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(
-            RCS::Pose(tf::Quaternion(0, 0, 0, 1),
-            tf::Vector3(0.390496134758, -0.101964049041, 0.0245)));
-    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
-
-    // Wait
-    DoDwell(1.0);
-
-
-    // Open gripper
-    cmd.crclcommand = CanonCmdType::CANON_SET_GRIPPER;
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.eepercent = 1.0; // open
-    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
-
-    // Wait
-    DoDwell(1.0);
-
+    tf::Vector3 offset = pickpose.getOrigin();
+ 
     // Retract
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
-    cmd.hint = ToVector<double>(6, 0.27, 0.5, -0.4, 0.0, 0.0, 0.0);
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(retract * 
-            RCS::Pose(QBend, //tf::Quaternion(0.34063, 0.62224, -0.34978, 0.61192),
-            tf::Vector3(0.390496134758, -0.101964049041, 0.0245 + 0.04)));
-     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+    hint = ToVector<double> (6, -0.99, 0.78, 0.0, 0.0, 0.0, 0.0);
+    MoveTo(retract * RCS::Pose(QBend, offset));
+    DoDwell(chessdwell);
+    MoveTo(RCS::Pose(QBend, offset));
+    DoDwell(chessdwell);
+    CloseGripper();
+    DoDwell(chessdwell);
+    hint = ToVector<double> (6, -0.99, 0.78, 0.0, 0.0, 0.0, 0.0);
+    MoveTo(retract * RCS::Pose(QBend, offset), "bolt1");
 
-
-#endif
+    hint = ToVector<double> (6, -0.27, 0.8, -0.55, 0.0, 0.0, 0.0);
+    RCS::Pose placepose = RCS::Pose(QBend, 
+            tf::Vector3(0.390496134758, -0.101964049041, 0.0245));
+    Place(placepose, "bolt1");
 }

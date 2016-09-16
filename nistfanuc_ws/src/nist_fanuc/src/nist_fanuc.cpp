@@ -198,19 +198,20 @@ int main(int argc, char** argv) {
 
 #endif
 
-#if 1
         InitSceneObject();
+#ifdef CHECKERS
         RvizCheckers rvizgame(nh);
         rvizgame.RvizSetup();
+#endif
         SetupSceneObject();
         // LOG_DEBUG << ObjectDB::DumpDB();
         
-#endif
         RCS::Cnc._interpreter = boost::shared_ptr<RCSInterpreter>(new BangBangInterpreter());
         RCS::Cnc._interpreter->_kinematics=kin;
         RCS::Cnc.Start(); // start the Controller Session thread
         AddGripperOffset();
-
+        
+#ifdef CHECKERS
         // Play checkers - only move markers, no robot interaction
         Checkers::Move from, to;
         int player;
@@ -228,6 +229,7 @@ int main(int argc, char** argv) {
             ros::spinOnce();
             ros::Duration(0.2).sleep();
         }
+#endif
         
 #ifdef BOLTDEMO
         TestRobotCommands();

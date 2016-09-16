@@ -53,7 +53,7 @@ void InitSceneObject() {
     cylinder_marker_.id=1;
     ObjectDB * obj;
 
-#if 0
+#if WALLS
     ObjectDB::Save(obj = new ObjectDB(
             "rightwall", "wall",
             Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, 0.5, 1.0),
@@ -95,11 +95,7 @@ void InitSceneObject() {
             "file:///usr/local/michalos/nistfanuc_ws/src/nist_fanuc/worldmodel/medium_gear.stl",
             rviz_visual_tools::RED, 0.035));
 #endif
-    // NOthing
-//   ObjectDB::Save(new ObjectDB("checkerboard1", "bolt", ObjectDB::gid++, Eigen::Affine3d::Identity() * Eigen::Translation3d(0.25, -.45, 0.04),
-//            "file:///usr/local/michalos/nistfanuc_ws/src/nist_fanuc/worldmodell/1425308929_checkerboard.stl",
-//            rviz_visual_tools::WHITE, 0.035));
-
+ 
     
 }
 
@@ -149,13 +145,11 @@ bool DrawObject(ObjectDB *obj) {
                 type,  
                 obj->id);
     } 
-#if 1
     else if (type == "cuboid") {
         b=visual_tools->publishCuboid(obj->pose.translation(), 
                 obj->adjacentpose.translation(), 
                 obj->color); // Eigen::Vector3d(0.0, 0.5, 1.0), 
     }
-#endif
     else if ( type == "Cylinder") {
        b=publishCylinder(obj->pose,
                 obj->color,
@@ -171,11 +165,14 @@ bool DrawObject(ObjectDB *obj) {
     ros::spinOnce();
     ros::spinOnce();
     ros::spinOnce();
-    ros::Duration(0.05).sleep(); // sleep for half a second
+    ros::Duration(0.05).sleep(); // sleep 5 milliseconds
+#ifdef CHECKERS
+    // Lots of markers causes timing issues...
     ros::spinOnce();
     ros::spinOnce();
     ros::spinOnce();
     ros::spinOnce();
+#endif
     return b;
 }
 
