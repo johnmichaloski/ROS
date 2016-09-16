@@ -49,6 +49,7 @@ struct RvizCheckers {
     ros::NodeHandle &_nh;
     bool bFlag;
 
+    Checkers::CheckersGame & Game() { return game; }
     RvizCheckers(ros::NodeHandle &nh) : _nh(nh) {
         xoffset = 0.30;
         rowoffset = 0.04;

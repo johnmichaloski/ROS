@@ -166,6 +166,7 @@ bool DrawObject(ObjectDB *obj) {
     }
     visual_tools->triggerBatchPublish();
    // BOOST_ASSERT_MSG(b == 0, "Failed to publish object");
+     LOG_DEBUG << "Draw " << obj->name;
     ros::spinOnce();
     ros::spinOnce();
     ros::spinOnce();
@@ -182,7 +183,8 @@ void SetupSceneObject() {
     for (size_t i = 0; i < ObjectDB::objects.size(); i++) {
         ObjectDB *obj = ObjectDB::objects[i];
         bool bFlag=false;
-        while(!bFlag) {
+        //while(!bFlag) 
+        {
             bFlag=DrawObject(obj);
         }
     }

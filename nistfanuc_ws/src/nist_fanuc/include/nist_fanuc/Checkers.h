@@ -379,8 +379,8 @@ namespace Checkers {
             }
             Jump(inboard, i, j, m);
             Move move(m.row, m.col, m.bJump);
-            if (move.doublejumps.size() > 0) {
-                Move m2 = move.doublejumps[0];
+            if (m.doublejumps.size() > 0) {
+                Move m2 = m.doublejumps[0];
                 inboard = MakeMove(inboard, player, m.row, m.col, m2);
             }
             // Save move - only good if no mixmax lookahead

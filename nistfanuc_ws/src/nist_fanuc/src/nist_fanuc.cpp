@@ -24,7 +24,7 @@
 #include "Debug.h"
 #include "Scene.h"
 #include "Checkerboard.h"
-
+#include "StackTrace.h"
 // /opt/ros/indigo/include/moveit/robot_state/robot_state.h
 // /opt/ros/indigo/include/moveit/move_group_interface/move_group.h
 extern RCS::Pose ComputeGripperOffset();
@@ -36,6 +36,7 @@ int main(int argc, char** argv) {
     // Current robot joints declaration
     sensor_msgs::JointState cjoints;
     int bPublishPoint=0;
+    signal(SIGSEGV, handler);   // install our handler
     try {
         // Find path of executable
         std::string path(argv[0]);
@@ -221,6 +222,7 @@ int main(int argc, char** argv) {
             }
             if (rvizgame.CheckersMove(player, from, to))
                 break;
+            rvizgame.Game().printDisplayFancy(rvizgame.Game().Board());
             rvizgame.PhysicalMove(player, from.row, from.col, to);
             ros::spinOnce();
             ros::spinOnce();
