@@ -2,6 +2,17 @@
 
 #pragma once
 
+/*
+DISCLAIMER:
+This software was produced by the National Institute of Standards
+and Technology (NIST), an agency of the U.S. government, and by statute is
+not subject to copyright in the United States.  Recipients of this software
+assume all responsibility associated with its operation, modification,
+maintenance, and subsequent redistribution.
+
+See NIST Administration Manual 4.09.07 b and Appendix I.
+*/
+
 #include <stdarg.h>
 #include <vector>
 #include "RCS.h"
@@ -131,20 +142,7 @@ inline std::ostream & operator<<(std::ostream & os, const RCS::CanonCmd & cc) {
     return os;
 }
 
-template<typename T>
-inline std::vector<T> ToVector(int n, ...) {
-    std::vector<T> ds;
-    va_list args; // define argument list variable
-    va_start(args, n); // init list; point to last
-    //   defined argument
 
-    for (int i = 0; i < n; i++) {
-        double d = va_arg(args, T); // get next argument
-        ds.push_back(d);
-    }
-    va_end(args); // clean up the system stack
-    return ds;
-}
 
 template<typename T>
 inline std::string MapDump(std::map<std::string, T> m) {

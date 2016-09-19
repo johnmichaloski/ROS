@@ -65,7 +65,20 @@ inline void sincos(double x, double *sx, double *cx) {
 #define Meter2MM(d)     ( (double) ( d * 1000.00 ) )
 #endif
 
+template<typename T>
+inline std::vector<T> ToVector(int n, ...) {
+    std::vector<T> ds;
+    va_list args; // define argument list variable
+    va_start(args, n); // init list; point to last
+    //   defined argument
 
+    for (int i = 0; i < n; i++) {
+        double d = va_arg(args, T); // get next argument
+        ds.push_back(d);
+    }
+    va_end(args); // clean up the system stack
+    return ds;
+}
 namespace RCS {
 
     //typedef tf::Transform Pose;

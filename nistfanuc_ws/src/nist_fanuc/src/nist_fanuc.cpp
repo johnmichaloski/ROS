@@ -25,6 +25,9 @@
 #include "Scene.h"
 #include "Checkerboard.h"
 #include "StackTrace.h"
+#include "fanuc_lrmate200id.h"
+
+
 // /opt/ros/indigo/include/moveit/robot_state/robot_state.h
 // /opt/ros/indigo/include/moveit/move_group_interface/move_group.h
 extern RCS::Pose ComputeGripperOffset();
@@ -153,6 +156,14 @@ int main(int argc, char** argv) {
         LOG_DEBUG << "Test FK Pose 2 " << RCS::DumpPoseSimple(pose).c_str();
 
 #endif
+        
+        fanuc_lrmate200id lrmate;
+        // 0.465; 0; 0.695
+        LOG_DEBUG << "Test fanuc_lrmate200id FK " << RCS::DumpPoseSimple(lrmate.fws_kin(0.0,0.0,0.0,0.0,0.0,0.0 ));
+        LOG_DEBUG << "Test armkin FK " << RCS::DumpPoseSimple(kin->FK(ToVector<double>(6, 0.0,0.0,0.0,0.0,0.0,0.0 )));
+        LOG_DEBUG << "Test fanuc_lrmate200id IK " << VectorDump<double>(lrmate.fanuc_lrmate200id_kin_inv(
+                tf::Pose(tf::Quaternion(0,0,0,1),
+                tf::Vector3(.465,0,.365 ) )));
 
 
         // Initialize Controller...

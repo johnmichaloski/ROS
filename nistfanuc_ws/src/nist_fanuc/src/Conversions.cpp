@@ -1,6 +1,17 @@
 
+/*
+DISCLAIMER:
+This software was produced by the National Institute of Standards
+and Technology (NIST), an agency of the U.S. government, and by statute is
+not subject to copyright in the United States.  Recipients of this software
+assume all responsibility associated with its operation, modification,
+maintenance, and subsequent redistribution.
+
+See NIST Administration Manual 4.09.07 b and Appendix I.
+ */
 
 #include "Conversions.h"
+
 // Eigen conversions
 //http://docs.ros.org/kinetic/api/eigen_conversions/html/eigen__msg_8cpp_source.html 
 
@@ -8,11 +19,13 @@ namespace Conversion {
 
     //==================================================
     // Adapted from: https://github.com/davetcoleman/rviz_visual_tools/blob/kinetic-devel/src/rviz_visual_tools.cpp
+
     geometry_msgs::Pose convertPose(const Eigen::Affine3d &pose) {
         geometry_msgs::Pose local_msg;
         tf::poseEigenToMsg(pose, local_msg);
         return local_msg;
     }
+
     Eigen::Affine3d convertPose(const geometry_msgs::Pose &pose) {
         Eigen::Affine3d local_;
         tf::poseMsgToEigen(pose, local_);
@@ -52,7 +65,7 @@ namespace Conversion {
     }
 
     Eigen::Vector3d convertPoint(const geometry_msgs::Point &point) {
-         Eigen::Vector3d   shared_point_eigen_;
+        Eigen::Vector3d shared_point_eigen_;
         shared_point_eigen_[0] = point.x;
         shared_point_eigen_[1] = point.y;
         shared_point_eigen_[2] = point.z;
@@ -67,8 +80,31 @@ namespace Conversion {
         return shared_point_eigen_;
     }
 
+    Eigen::Affine3d GeomMsgPose2Affine3d(const geometry_msgs::Pose &m) {
+        Eigen::Affine3d e = Eigen::Translation3d(m.position.x,
+                m.position.y,
+                m.position.z) *
+                Eigen::Quaterniond(m.orientation.w,
+                m.orientation.x,
+                m.orientation.y,
+                m.orientation.z);
+        return e;
+    }
+
+    /*!
+     * \brief urdfPose2Affine3d converts urdf pose into an  Eigen affine 4x4 matrix  o represent the pose
+     * \param pose is the urdf pose with position and rotation.
+     * \return   eigen Affine3d pose 
+     */
+    Eigen::Affine3d RcsPose2Affine3d(const tf::Pose &pose) {
+        Eigen::Quaterniond q(pose.getRotation().w(), pose.getRotation().x(), pose.getRotation().y(), pose.getRotation().z());
+        Eigen::Affine3d af(Eigen::Translation3d(pose.getOrigin().x(), pose.getOrigin().y(), pose.getOrigin().z()) * q.toRotationMatrix());
+        return af;
+    }
+    ////////////////////////////////////////////////////////////////////////////
+
     geometry_msgs::Point32 convertPoint32(const Eigen::Vector3d &point) {
-        geometry_msgs::Point32  shared_point32_msg_;
+        geometry_msgs::Point32 shared_point32_msg_;
         shared_point32_msg_.x = point[0];
         shared_point32_msg_.y = point[1];
         shared_point32_msg_.z = point[2];
@@ -90,7 +126,7 @@ namespace Conversion {
         shared_point_msg_.z = point.z();
         return shared_point_msg_;
     }
-    //==================================================
+
     geometry_msgs::Pose RcsPose2GeomMsgPose(const tf::Pose &m) {
         geometry_msgs::Pose p;
         p.position.x = m.getOrigin().x();
@@ -103,7 +139,7 @@ namespace Conversion {
         return p;
     }
 
-     geometry_msgs::Pose& TfPose2GeometryPose(tf::Pose & m, geometry_msgs::Pose & p) {
+    geometry_msgs::Pose& TfPose2GeometryPose(tf::Pose & m, geometry_msgs::Pose & p) {
         p.position.x = m.getOrigin().x();
         p.position.y = m.getOrigin().y();
         p.position.z = m.getOrigin().z();
@@ -112,16 +148,6 @@ namespace Conversion {
         p.orientation.z = m.getRotation().z();
         p.orientation.w = m.getRotation().w();
         return p;
-    }
-    Eigen::Affine3d GeomMsgPose2Affine3d(const geometry_msgs::Pose &m) {
-        Eigen::Affine3d e = Eigen::Translation3d(m.position.x,
-                m.position.y,
-                m.position.z) *
-                Eigen::Quaterniond(m.orientation.w,
-                m.orientation.x,
-                m.orientation.y,
-                m.orientation.z);
-        return e;
     }
 
     geometry_msgs::Pose PoseAffineToGeomMsg(const Eigen::Affine3d &e) {
@@ -148,17 +174,6 @@ namespace Conversion {
             m.orientation.w *= -1;
         }
 #endif
-    }
-
-    /*!
-     * \brief urdfPose2Affine3d converts urdf pose into an  Eigen affine 4x4 matrix  o represent the pose
-     * \param pose is the urdf pose with position and rotation.
-     * \return   eigen Affine3d pose 
-     */
-    Eigen::Affine3d RcsPose2Affine3d(const tf::Pose &pose) {
-        Eigen::Quaterniond q(pose.getRotation().w(), pose.getRotation().x(), pose.getRotation().y(), pose.getRotation().z());
-        Eigen::Affine3d af(Eigen::Translation3d(pose.getOrigin().x(), pose.getOrigin().y(), pose.getOrigin().z()) * q.toRotationMatrix());
-        return af;
     }
 
     /*!
@@ -218,7 +233,4 @@ namespace Conversion {
         dest.resize(src.size());
         std::transform(src.begin(), src.end(), dest.begin(), Conversion::PoseAffineToGeomMsg);
     }
-
-
-
 }
