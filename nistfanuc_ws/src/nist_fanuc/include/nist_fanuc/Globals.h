@@ -13,17 +13,20 @@
 
 #pragma once
 #include <stdio.h>
+#include <stdarg.h>
+#include <time.h>
+
 #include <vector>
 #include <map>
 #include <string>
 #include <fstream>
+#include <sstream>
+#include <ctime>
+#include <sstream>
+
 #include <boost/thread.hpp>
 #include <boost/preprocessor.hpp>
 
-#include <ctime>
-#include <stdarg.h>
-#include <sstream>
-#include <time.h>
 ///#include "Logging.h"
 //extern ALogger LogFile;
 
@@ -46,6 +49,20 @@
 #define S_OK 0
 #define E_FAIL -1
 #endif
+
+
+
+#ifndef IKFAST_ASSERT
+#include <stdexcept>
+#include <sstream>
+#include <iostream>
+#ifndef __PRETTY_FUNCTION__
+#define __PRETTY_FUNCTION__ __func__
+#endif
+#define IKFAST_ASSERT(b) { if( !(b) ) { std::stringstream ss; ss << "ikfast exception: " << __FILE__ << ":" << __LINE__ << ": " <<__PRETTY_FUNCTION__ << ": Assertion '" << #b << "' failed"; throw std::runtime_error(ss.str()); } }
+#endif
+
+
 
 #ifndef CLEANSTORE
 #define CLEANSTORE(Y, X, Z) \

@@ -97,6 +97,7 @@ namespace RCS {
         VAR(bCvsPoseLogging, bool)
         VAR(CvsPoseLoggingFile, std::string)
         VAR(PoseLogging, CsvLogging )
+         VAR(NearestJoints,       NearestJointsLookup);
         ros::Publisher crcl_status; /**< ros publisher information used for crcl status updates */
         ros::Subscriber crcl_cmd; /**< ros subscriber information used for crcl command updates */
         ros::Publisher  rviz_jntcmd; /**< ros publisher information for joint_publisher */
@@ -204,3 +205,4 @@ extern void SetGripper(double ee);
 extern void Place(RCS::Pose pose, std::string objname);
 extern void MoveObject(std::string objname, RCS::Pose pose, int color);
 extern void EraseObject(std::string objname);
+extern void SetRobotHints();

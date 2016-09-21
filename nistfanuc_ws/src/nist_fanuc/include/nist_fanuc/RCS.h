@@ -79,6 +79,14 @@ inline std::vector<T> ToVector(int n, ...) {
     va_end(args); // clean up the system stack
     return ds;
 }
+
+template<typename T>
+inline std::vector<T> ToRadianVector(std::vector<T> goaljts) {
+    // transform angles from degree to radians
+    std::transform(goaljts.begin(), goaljts.end(), goaljts.begin(),
+            std::bind1st(std::multiplies<double>(), M_PI / 180.0));
+    return goaljts;
+}
 namespace RCS {
 
     //typedef tf::Transform Pose;

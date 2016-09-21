@@ -96,15 +96,24 @@ void InitSceneObject() {
             );
            
 #endif
-
+#define BOLTDEMO
 #ifdef BOLTDEMO
     // Scene bolt and boltholder objects
     ObjectDB::Save(new ObjectDB("boltholder1", "boltholder", ObjectDB::gid++, Eigen::Affine3d::Identity() * Eigen::Translation3d(0.5, 0, 0.0),
             "file:///usr/local/michalos/nistfanuc_ws/src/nist_fanuc/worldmodel/medium_gear_holder.stl",
             rviz_visual_tools::RED, 0.035));
-    ObjectDB::Save(new ObjectDB("bolt1", "bolt", ObjectDB::gid++, Eigen::Affine3d::Identity() * Eigen::Translation3d(0.25, -.45, 0.04),
-            "file:///usr/local/michalos/nistfanuc_ws/src/nist_fanuc/worldmodel/medium_gear.stl",
-            rviz_visual_tools::RED, 0.035));
+    for(size_t i=0; i< 4; i++){
+         Eigen::Translation3d spot[4]={Eigen::Translation3d(0.25, -.45, 0.04),
+         Eigen::Translation3d(0.25, .45, 0.04),
+         Eigen::Translation3d(0.45, -.45, 0.04),
+         Eigen::Translation3d(0.45, .45, 0.04)};
+        std::string boltname = Globals.StrFormat("bolt%d", i+1);
+        ObjectDB::Save(new ObjectDB(boltname, "bolt",
+                ObjectDB::gid++, Eigen::Affine3d::Identity() *
+                spot[i], // Eigen::Translation3d(0.25, -.45, 0.04),
+                "file:///usr/local/michalos/nistfanuc_ws/src/nist_fanuc/worldmodel/medium_gear.stl",
+                rviz_visual_tools::RED, 0.035));
+    }
 #endif
  
     

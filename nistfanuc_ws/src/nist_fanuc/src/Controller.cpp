@@ -163,7 +163,7 @@ namespace RCS {
     int CController::Action() {
         //     IfDebug(LOG_DEBUG << "CController::Action");
         try {
-            
+
             // STOP untested
             // Check for STOP MOTION - interrupts any commands and stops motion and clears message queue
             boost::mutex::scoped_lock lock(cncmutex);
@@ -173,7 +173,7 @@ namespace RCS {
             if (it != crclcmds.end()) {
                 crclcmds.ClearMsgQueue();
             }
-            
+
             // Now, we only do one command at a time
             if (crclcmds.SizeMsgQueue() > 0 && robotcmds.SizeMsgQueue() == 0) {
                 // Translate into Cnc.cmds 
@@ -184,8 +184,8 @@ namespace RCS {
                 cc.Set(msg);
                 LOG_TRACE << "Msg Joints " << VectorDump<double>(msg.joints.position).c_str();
                 LOG_TRACE << "CC Joints " << VectorDump<double>(cc.joints.position).c_str();
-                
-//#define FEEDBACKTEST2
+
+                //#define FEEDBACKTEST2
 #ifdef FEEDBACKTEST
                 Cnc.status.echocmd = cc; /**<  copy of current command */
                 Cnc.status.currentjoints = Cnc.Kinematics()->UpdateJointState(cc.jointnum, Controller.status.currentjoints, cc.joints);
@@ -206,10 +206,10 @@ namespace RCS {
                 Cnc.status.crclcommandstatus = CanonStatusType::CANON_DONE;
             } else {
                 _lastcc = _newcc;
-                
+
                 _newcc = Cnc.robotcmds.PeekFrontMsgQueue();
-              // _newcc = Cnc.robotcmds.PopFrontMsgQueue();
-                  Cnc.robotcmds.PopFrontMsgQueue();
+                // _newcc = Cnc.robotcmds.PopFrontMsgQueue();
+                Cnc.robotcmds.PopFrontMsgQueue();
 
                 _newcc.status = CanonStatusType::CANON_WORKING;
                 // update status
@@ -229,15 +229,14 @@ namespace RCS {
                         gripperjoints = gripper.closeSetup();
                     } else if (_newcc.eepercent == 1.0)
                         gripperjoints = gripper.openSetup();
-                    else 
+                    else
                         gripperjoints = gripper.setPosition(_newcc.eepercent);
                     Cnc.status.eepercent = _newcc.eepercent;
                     rviz_jntcmd.publish(gripperjoints);
                     rviz_jntcmd.publish(gripperjoints);
                     // No speed control for now.
 
-                }
-                else if (_newcc.crclcommand == CanonCmdType::CANON_ERASE_OBJECT) {
+                } else if (_newcc.crclcommand == CanonCmdType::CANON_ERASE_OBJECT) {
                     Eigen::Affine3d& pose = ObjectDB::FindPose(_newcc.partname);
                     UpdateScene(_newcc.partname, pose, rviz_visual_tools::CLEAR);
                 } else if (_newcc.crclcommand == CanonCmdType::CANON_DRAW_OBJECT) {
@@ -298,7 +297,7 @@ namespace RCS {
 #endif
             if (bCvsPoseLogging())
                 MotionLogging();
- 
+
         } catch (std::exception & e) {
             std::cerr << "Exception in  CController::Action() thread: " << e.what() << "\n";
         } catch (...) {
@@ -356,36 +355,43 @@ namespace RCS {
 #ifndef PI_2
 #define PI_2 1.5707963268
 #endif
-double chessdwell=1.0;
+double chessdwell = 1.0;
 // Simplistic Testing code
 static int crclcommandnum = 1;
 RCS::Pose retract = RCS::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0, 0, 0.1));
 tf::Quaternion QBend(M_PI / 2.0, 0.0, 0.0);
 // Checkers hint
 //  ToVector<double>(6, 0.27, 0.5, -0.4, 0.0, 0.0, 0.0);
-std::vector<double> hint= ToVector<double> (6, 0.27, 0.7, -0.57, 0.0, 0.0, 0.0);
+std::vector<double> hint = ToVector<double> (6, 0.27, 0.7, -0.57, 0.0, 0.0, 0.0);
 
 void SetGripper(double ee) {
     // set gripper to 0..1
     RCS::CanonCmd cmd;
     cmd.crclcommand = CanonCmdType::CANON_SET_GRIPPER;
     cmd.crclcommandnum = crclcommandnum++;
-    cmd.eepercent = ee; 
+    cmd.eepercent = ee;
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
 }
-void CloseGripper() { SetGripper(0.75); }
-void OpenGripper() { SetGripper(0.45); }
-      
-void AddGripperOffset(){
+
+void CloseGripper() {
+    SetGripper(0.75);
+}
+
+void OpenGripper() {
+    SetGripper(0.45);
+}
+
+void AddGripperOffset() {
     // http://robotiq.com/products/adaptive-robot-gripper/
     RCS::CanonCmd cmd;
     cmd.crclcommandnum = crclcommandnum++;
     cmd.crclcommand = CanonCmdType::CANON_SET_GRIPPER_POSE;
     cmd.finalpose = Conversion::RcsPose2GeomMsgPose(
             RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
-            tf::Vector3(0.140, 0.0, -0.017) )); // -0.01156)));
-     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
+            tf::Vector3(0.140, 0.0, -0.017))); // -0.01156)));
+    RCS::Cnc.crclcmds.AddMsgQueue(cmd);
 }
+
 void DoDwell(double dwelltime) {
 
     RCS::CanonCmd cmd;
@@ -394,32 +400,36 @@ void DoDwell(double dwelltime) {
     cmd.dwell_seconds = dwelltime;
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
 }
-void MoveTo(RCS::Pose pose,std::string objname){
+
+void MoveTo(RCS::Pose pose, std::string objname) {
     RCS::CanonCmd cmd;
     cmd.crclcommandnum = crclcommandnum++;
     cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
+#if 0
     if (hint.size() > 0)
         cmd.hint = hint;
     else cmd.hint = ToVector<double>(6, 0.27, 0.7, -0.57, 0.0, 0.0, 0.0);
-
+#endif
+    cmd.hint = RCS::Cnc.NearestJoints().FindClosest(pose);
     cmd.finalpose = Conversion::RcsPose2GeomMsgPose(pose);
-    if (!objname.empty())
-    {
+    if (!objname.empty()) {
         ObjectDB * obj = ObjectDB::Find(objname);
-        cmd.partname=objname;
+        cmd.partname = objname;
         cmd.partcolor = obj->color;
         // lookup gripper close amount from object
     }
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
 }
+
 void EraseObject(std::string objname) {
-   RCS::CanonCmd cmd;
+    RCS::CanonCmd cmd;
     cmd.crclcommand = CanonCmdType::CANON_ERASE_OBJECT;
     cmd.crclcommandnum = crclcommandnum++;
     cmd.partname = objname;
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
 }
-void MoveObject(std::string objname, RCS::Pose pose, int color){
+
+void MoveObject(std::string objname, RCS::Pose pose, int color) {
     RCS::CanonCmd cmd;
     cmd.crclcommand = CanonCmdType::CANON_DRAW_OBJECT;
     cmd.crclcommandnum = crclcommandnum++;
@@ -428,10 +438,11 @@ void MoveObject(std::string objname, RCS::Pose pose, int color){
     cmd.finalpose = Conversion::RcsPose2GeomMsgPose(pose);
     RCS::Cnc.crclcmds.AddMsgQueue(cmd);
 }
+
 void Pick(RCS::Pose pose, std::string objname) {
 
     tf::Vector3 offset = pose.getOrigin();
- 
+
     // Retract
     MoveTo(retract * RCS::Pose(QBend, offset));
     DoDwell(chessdwell);
@@ -439,8 +450,8 @@ void Pick(RCS::Pose pose, std::string objname) {
     DoDwell(chessdwell);
     CloseGripper();
     DoDwell(chessdwell);
-    hint= ToVector<double> (6, -0.99, 0.78, 0.0, 0.0, 0.0, 0.0);
-    MoveTo(retract * RCS::Pose(QBend, offset),objname);
+    hint = ToVector<double> (6, -0.99, 0.78, 0.0, 0.0, 0.0, 0.0);
+    MoveTo(retract * RCS::Pose(QBend, offset), objname);
 }
 
 void MoveJoints(std::vector<long unsigned int> jointnum,
@@ -457,6 +468,7 @@ void MoveJoints(std::vector<long unsigned int> jointnum,
 
 }
 // fixme: object has to be richer description
+
 void Place(RCS::Pose pose, std::string objname) {
 
     tf::Vector3 offset = pose.getOrigin();
@@ -465,7 +477,7 @@ void Place(RCS::Pose pose, std::string objname) {
     DoDwell(chessdwell);
     // MoveTo(RCS::Pose(QBend, offset + tf::Vector3(0.0, 0.0, 0.02)));
     MoveTo(RCS::Pose(QBend, offset), objname);
-   // DrawObject(objname, pose);
+    // DrawObject(objname, pose);
     DoDwell(chessdwell);
     OpenGripper();
     DoDwell(chessdwell);
@@ -473,16 +485,88 @@ void Place(RCS::Pose pose, std::string objname) {
 
 }
 
-// Major problem is the KDL expects a reaonable hint at the joint solution for IK
+// Major problem is the KDL expects a reasonable hint at the joint solution for IK
 // And with large jumps in bang-bang control, not realistic yet.
 /// Either ik or more trajectory control with spacing between joint updates small so KDL happy
+
+void SetRobotHints() {
+    double xmin, xmax, ymin, ymax;
+    tf::Vector3 vec;
+    //tf::Vector3 xvmax(0.7, 0.0  ,0.0);
+    tf::Pose goalpose;
+    std::vector<double> joints;
+
+    hint = ToVector<double>(6, -0.160, 1.8, 1.22, 0.0, 0.0, 0.0);
+    vec = tf::Vector3(0.0, .45, 0.0);
+    do {
+        vec += tf::Vector3(0.0, .1, 0.0);
+        goalpose = tf::Pose(QBend, vec);
+        joints = Cnc.Kinematics()->IK(goalpose, hint);
+        if (joints.size() > 0) {
+            RCS::Cnc.NearestJoints().Add(goalpose, joints);
+            hint = joints;
+        }
+    } while (joints.size() > 0);
+    ymax = vec.y() - 0.01;
+
+    vec = tf::Vector3(0.0, .45, 0.0);
+    hint = ToVector<double>(6, 0.160, 1.8, 1.22, 0.0, 0.0, 0.0);
+    do {
+        vec += tf::Vector3(0.0, -.1, 0.0);
+        goalpose = tf::Pose(QBend, vec);
+        joints = Cnc.Kinematics()->IK(goalpose, hint);
+        if (joints.size() > 0) {
+            RCS::Cnc.NearestJoints().Add(goalpose, joints);
+            hint = joints;
+        }
+    } while (joints.size() > 0 && vec.getY() > 0.0);
+    ymin = vec.y() + 0.01;
+
+    hint = ToVector<double>(6, 0.0, 1.33, 0, 0.0, 0.0, 0.0);
+    vec = tf::Vector3(0.45, 0.0, 0.0);
+    do {
+        vec += tf::Vector3(.1, 0.0, 0.0);
+        goalpose = tf::Pose(QBend, vec);
+        joints = Cnc.Kinematics()->IK(goalpose, hint);
+        if (joints.size() > 0) {
+            RCS::Cnc.NearestJoints().Add(goalpose, joints);
+            hint = joints;
+        }
+    } while (joints.size() > 0);
+    xmax = vec.x() - 0.01;
+
+    hint = ToVector<double>(6, 0.0, 1.33, 0, 0.0, 0.0, 0.0);
+    vec = tf::Vector3(0.45, 0.0, 0.0);
+    do {
+        vec += tf::Vector3(-.1, 0.0, 0.0);
+        goalpose = tf::Pose(QBend, vec);
+        joints = Cnc.Kinematics()->IK(goalpose, hint);
+        if (joints.size() > 0) {
+            RCS::Cnc.NearestJoints().Add(goalpose, joints);
+            hint = joints;
+        }
+    } while (joints.size() > 0 && vec.getX() > 0.0);
+    xmin = vec.x() + 0.01;
+
+    RCS::Cnc.NearestJoints().Add(RCS::Pose(QBend, tf::Vector3(0.25, -0.45, 0.04)),
+            ToVector<double> (6, -0.99, 0.78, 0.0, 0.0, 0.0, 0.0));
+    RCS::Cnc.NearestJoints().Add(RCS::Pose(QBend, tf::Vector3(0.25, 0.45, 0.04)),
+            ToVector<double> (6, 0.99, 0.78, 0.0, 0.0, 0.0, 0.0));
+
+    RCS::Cnc.NearestJoints().Add(RCS::Pose(QBend, 
+            tf::Vector3(0.390496134758, -0.101964049041, 0.0245)),
+            ToVector<double> (6, -0.27, 0.8, -0.55, 0.0, 0.0, 0.0));
+    
+    LOG_DEBUG << RCS::Cnc.NearestJoints().Dump();
+}
+
 void TestRobotCommands() {
     // Finish queuing commands before handling them....
     boost::mutex::scoped_lock lock(cncmutex);
     static double dwelltime = 3.0;
     std::vector<long unsigned int> vjointnum = ToVector<long unsigned int>(6, 0L, 1L, 2L, 3L, 4L, 5L);
     RCS::Pose retract = RCS::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0, 0, 0.2));
- 
+
     RCS::CanonCmd cmd;
 
     // Warm up
@@ -491,23 +575,42 @@ void TestRobotCommands() {
     MoveJoints(vjointnum, ToVector<double>(6, -1.4, 0.0, 0.0, 0.0, 0.0, 0.0));
     DoDwell(dwelltime);
 
-    RCS::Pose pickpose =  RCS::Pose(QBend, tf::Vector3(0.25, -0.45, 0.04 + 0.015002));
     
-    tf::Vector3 offset = pickpose.getOrigin();
- 
-    // Retract
-    hint = ToVector<double> (6, -0.99, 0.78, 0.0, 0.0, 0.0, 0.0);
-    MoveTo(retract * RCS::Pose(QBend, offset));
-    DoDwell(chessdwell);
-    MoveTo(RCS::Pose(QBend, offset));
-    DoDwell(chessdwell);
-    CloseGripper();
-    DoDwell(chessdwell);
-    hint = ToVector<double> (6, -0.99, 0.78, 0.0, 0.0, 0.0, 0.0);
-    MoveTo(retract * RCS::Pose(QBend, offset), "bolt1");
+    RCS::Pose pickpose;
+    // Bolt slots don't move for now
+    tf::Vector3 boltslots[4] = {
+        tf::Vector3(0.390496134758, -0.101964049041, 0.0245),
+        tf::Vector3(0.38512814045, 0.00476559251547, 0.0245),
+        tf::Vector3(0.497517108917, -0.106719098985, 0.0245),
+        tf::Vector3(0.497517108917, 0.00590129941702, 0.0245)
+    };
+    std::vector<int> bolts;
+    for (size_t i = 0; i < 4; ++i) bolts.push_back(i); // 0 1 2 3 
+    std::random_shuffle(bolts.begin(), bolts.end());
 
-    hint = ToVector<double> (6, -0.27, 0.8, -0.55, 0.0, 0.0, 0.0);
-    RCS::Pose placepose = RCS::Pose(QBend, 
-            tf::Vector3(0.390496134758, -0.101964049041, 0.0245));
-    Place(placepose, "bolt1");
+    for (size_t i = 0; i < 4; i++) {
+        std::string boltname = Globals.StrFormat("bolt%d", i+1);
+        int bolt = bolts.back();  bolts.pop_back();
+        ObjectDB * obj = ObjectDB::Find(boltname);
+        Eigen::Affine3d affpose = Conversion::convertPointToPose(obj->pose.translation() + Eigen::Vector3d(0.0, 0.0, 0.015002));
+
+        pickpose = RCS::Pose(QBend, Conversion::vectorEigenToTF(affpose.translation())); // tf::Vector3(0.25, -0.45, 0.04 + 0.015002));
+
+        tf::Vector3 offset = pickpose.getOrigin();
+
+        // Retract
+        //hint = ToVector<double> (6, -0.99, 0.78, 0.0, 0.0, 0.0, 0.0);
+        MoveTo(retract * RCS::Pose(QBend, offset));
+        DoDwell(chessdwell);
+        MoveTo(RCS::Pose(QBend, offset));
+        DoDwell(chessdwell);
+        CloseGripper();
+        DoDwell(chessdwell);
+        //hint = ToVector<double> (6, -0.99, 0.78, 0.0, 0.0, 0.0, 0.0);
+        MoveTo(retract * RCS::Pose(QBend, offset), boltname);
+
+        //hint = ToVector<double> (6, -0.27, 0.8, -0.55, 0.0, 0.0, 0.0);
+         RCS::Pose placepose = RCS::Pose(QBend,boltslots[bolt]);
+         Place(placepose, boltname);
+    }
 }

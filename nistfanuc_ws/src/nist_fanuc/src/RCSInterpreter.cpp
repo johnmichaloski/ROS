@@ -66,9 +66,12 @@ int BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd) {
             cmd.joints.position = Cnc.Kinematics()->IK(goalpose, Subset(Cnc.status.currentjoints.position, 6));
         }
         else
+        {
+            LOG_DEBUG << "Pose Hint " << VectorDump<double>(  cmd.hint).c_str();
             // KDL needs a hint or algorithm won't converge
             // http://www.orocos.org/forum/orocos/orocos-users/kdl-ik-position-solver
             cmd.joints.position = Cnc.Kinematics()->IK(goalpose, cmd.hint);
+        }
            
         assert(cmd.joints.position.size() > 0);
         cmd.joints.name = Cnc.Kinematics()->JointNames();

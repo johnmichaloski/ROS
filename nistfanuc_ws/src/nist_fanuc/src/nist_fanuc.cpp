@@ -28,6 +28,8 @@
 #include "fanuc_lrmate200id.h"
 
 
+#include "Test.h"
+
 // /opt/ros/indigo/include/moveit/robot_state/robot_state.h
 // /opt/ros/indigo/include/moveit/move_group_interface/move_group.h
 extern RCS::Pose ComputeGripperOffset();
@@ -78,6 +80,17 @@ int main(int argc, char** argv) {
         ros::NodeHandle nh;
         ros::Rate r(50); // 10 times a second - 10Hz
 
+        /**
+         * The five different verbosity levels are, in order:
+         * DEBUG ROS_DEBUG
+         * INFO ROS_INFO
+         * WARN
+         * ERROR
+         * FATAL  ROS_FATAL
+         */
+        if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info)) {
+            ros::console::notifyLoggerLevelsChanged();
+        }
 
         // Accessing Private Parameters
         // ros::param::get("~private_name", param); 
@@ -138,33 +151,34 @@ int main(int argc, char** argv) {
         RCS::Cnc.Kinematics() = kin;
         ComputeGripperOffset();
         AutoComputeGripperOffset(kin->armkin->robot_model);
-#endif
-//#define FASTKIN    
-#ifdef FASTKIN
-        kin = boost::shared_ptr<IKinematics>(new FastKinematics());
-        // Initializatin of Controller instantiatio of shared objects  
-        kin->Init(std::string("manipulator"), std::string("tool0"));
-        kin->Init(nh);
-        RCS::Cnc.Kinematics() = kin;
-        JointState cmd;
-        cmd.position = ToVector<double>(6,   0.0,  0.0,  0.0,  0.0,  0.0, 0.0);
-        cmd.name = kin->JointNames();
-        RCS::Pose pose = Cnc.Kinematics()->FK(cmd.position);
-        LOG_DEBUG << "Test FK Pose 1" << RCS::DumpPoseSimple(pose).c_str();
-        cmd.position = ToVector<double>(6, -1.05, 1.03, 0.0, 0.07, -0.51, 0.0);
-        pose = Cnc.Kinematics()->FK(cmd.position);
-        LOG_DEBUG << "Test FK Pose 2 " << RCS::DumpPoseSimple(pose).c_str();
 
+        TestFk(kin, "armkin");
+        TestIk(kin, "armkin");
+
+#endif
+#define FASTKIN    
+#ifdef FASTKIN
+        boost::shared_ptr<IKinematics> fastkin;
+        fastkin = boost::shared_ptr<IKinematics>(new FastKinematics());
+        // Initializatin of Controller instantiatio of shared objects  
+        fastkin->Init(std::string("manipulator"), std::string("tool0"));
+        fastkin->Init(nh);
+        //RCS::Cnc.Kinematics() = fastkin;
+        TestFk(fastkin, "fastkin");
+        TestIk(fastkin, "fastkin");
+#endif
+
+//#define lrmate200KIN    
+#ifdef lrmate200KIN
+        boost::shared_ptr<IKinematics> lrmate200idkin;
+        lrmate200idkin = boost::shared_ptr<IKinematics>(new FanucLrMate200idKinematics());
+        lrmate200idkin->Init(std::string("manipulator"), std::string("tool0"));
+        lrmate200idkin->Init(nh);
+        TestFk(lrmate200idkin, "lrmate200idkin");
+        TestIk(lrmate200idkin, "lrmate200idkin");  
 #endif
         
-        fanuc_lrmate200id lrmate;
-        // 0.465; 0; 0.695
-        LOG_DEBUG << "Test fanuc_lrmate200id FK " << RCS::DumpPoseSimple(lrmate.fws_kin(0.0,0.0,0.0,0.0,0.0,0.0 ));
-        LOG_DEBUG << "Test armkin FK " << RCS::DumpPoseSimple(kin->FK(ToVector<double>(6, 0.0,0.0,0.0,0.0,0.0,0.0 )));
-        LOG_DEBUG << "Test fanuc_lrmate200id IK " << VectorDump<double>(lrmate.fanuc_lrmate200id_kin_inv(
-                tf::Pose(tf::Quaternion(0,0,0,1),
-                tf::Vector3(.465,0,.365 ) )));
-
+        SetRobotHints();
 
         // Initialize Controller...
         RCS::Cnc.Setup(nh);

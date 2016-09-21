@@ -46,7 +46,7 @@ Rotation    =    179.9945:     0.3920:    -1.1920
 #include "RCS.h"
 //#include "DenavitHartenberg.h"
 
-#define WRIST_OFFSET              0.000 /*  nominal offset in -Z for wrist */
+#define WRIST_OFFSET              0.080 /*  nominal offset in -Z for wrist */
 
 #define THREE21_KIN_NUM_JOINTS    6
 
@@ -78,12 +78,22 @@ struct  fanuc_lrmate200id_kin_struct
 class fanuc_lrmate200id
 {
 public:
-  fanuc_lrmate200id(void);
-  ~fanuc_lrmate200id(void);
-  tf::Pose          fws_kin (double j1, double j2, double j3, double j4, double j5, double j6, std::string answer = "");
-  tf::Pose          fanuc_lrmate200id_kin_fwd (const double *motors);
-  std::vector<double> fanuc_lrmate200id_kin_inv (const tf::Pose & pos);
+    fanuc_lrmate200id(void);
+    ~fanuc_lrmate200id(void);
+    tf::Pose fanuc_lrmate200id_kin_fwd(const double *motors);
+    std::vector<double> fanuc_lrmate200id_kin_inv(const tf::Pose & pos);
 
+    std::vector<double> add_fkgearing(std::vector<double> motors) {
+        std::vector<double> joints(motors.size(), 0.0);
+        /* gearing equations */
+        joints[0] = motors[0];
+        joints[1] = motors[1] - M_PI_2;
+        joints[2] = -(motors[1] + motors[2]);
+        joints[3] = -motors[3];
+        joints[4] = -motors[4];
+        joints[5] = -motors[5];
+        return joints;
+    }
   // -------------------------------------------
   fanuc_lrmate200id_kin_struct kins;
 };

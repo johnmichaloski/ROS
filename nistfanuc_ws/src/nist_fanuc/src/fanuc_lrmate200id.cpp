@@ -143,34 +143,6 @@ fanuc_lrmate200id::fanuc_lrmate200id(void)
 }
 fanuc_lrmate200id::~fanuc_lrmate200id(void)
 { }
-tf::Pose fanuc_lrmate200id::fws_kin (double j1, double j2, double j3, double j4, double j5, double j6, std::string answer)
-{
-  // these thetas in degrees
-  std::vector<double> thetas = ToVector<double>(6, j1, j2, j3, j4, j5, j6);
-
-  // transform angles from degree to radians
-  std::transform(thetas.begin( ), thetas.end( ), thetas.begin( ),
-    std::bind1st(std::multiplies<double>( ), M_PI / 180.0) );
-
-  tf::Pose pose = fanuc_lrmate200id_kin_fwd(&thetas[0]);
-
-#ifdef DEBUG
-  std::stringstream s;
-  s << "----------------------------------------------------------\n";
-  s << "Goal Joints: ";
-
-  for ( size_t i = 0; i < thetas.size( ); i++ )
-  {
-    s << boost::format("%11.4f") % Rad2Deg(thetas[i]) << ":";
-  }
-  s << std::endl;
-  s << "Answer: " << answer.c_str( ) << std::endl;
-  s << "FK\n";
-  s << RCS::DumpPoseSimple(pose);
-  Globals.AppendFile(Globals.ExeDirectory + "DH.txt", s.str( ) );
-#endif
-  return pose;
-}
 tf::Pose three21_kin_fwd (three21_kin & kins,
   const double *                          joints)
 {
@@ -288,26 +260,16 @@ tf::Pose three21_kin_fwd (three21_kin & kins,
 
   return _poseFromMatrix(hom);
 }
-tf::Pose fanuc_lrmate200id::fanuc_lrmate200id_kin_fwd (const double *motors)
-{
-  double joints[6];
 
-  tf::Pose pose;
-
-  /* gearing equations */
-  joints[0] = motors[0];
-  joints[1] = motors[1] - M_PI_2;
-  joints[2] = -( motors[1] + motors[2] );
-  joints[3] = -motors[3];
-  joints[4] = -motors[4];
-  joints[5] = -motors[5];
-
-  pose = three21_kin_fwd(kins.tk, joints);
-
-  // if (GO_RESULT_OK != retval) return retval;
-
-   return pose;
+tf::Pose fanuc_lrmate200id::fanuc_lrmate200id_kin_fwd(const double *motors) {
+    std::vector<double> joints(motors, motors + 6);
+    joints=add_fkgearing(joints);
+    tf::Pose pose = three21_kin_fwd(kins.tk, &joints[0]);
+    // if (GO_RESULT_OK != retval) return retval;
+    // Add .33 to base z
+    return pose;
 }
+
 int three21_kin_inv (three21_kin *kins,
   const tf::Pose &                world,
   std::vector<double> &           joints)
@@ -450,14 +412,17 @@ int three21_kin_inv (three21_kin *kins,
 }
 std::vector<double> fanuc_lrmate200id::fanuc_lrmate200id_kin_inv (const tf::Pose & end_pos)
 {
-  //tf::Pose end_pos;
-
+  // assume move 1st z up by 330
+    
   std::vector<double> joints;
+ 
   std::vector<double> motors;
   int                 t;
 
+  // assume this has already been done
   /* take off the end frame */
   //end_pos = _poseMult(pos, kins.t7_inv);
+
 
   kins.tk.iflags = kins.tk.iflags & THREE21_ELBOW_DOWN;
 

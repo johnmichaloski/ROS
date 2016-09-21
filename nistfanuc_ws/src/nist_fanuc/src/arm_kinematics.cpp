@@ -109,7 +109,7 @@ bool Kinematics::readJoints(urdf::Model &robot_model) {
             return false;
         }
         if (joint->type != urdf::Joint::UNKNOWN && joint->type != urdf::Joint::FIXED) {
-            ROS_INFO( "adding joint: [%s]", joint->name.c_str() );
+            ROS_DEBUG( "adding joint: [%s]", joint->name.c_str() );
             num_joints++;
         }
         link = robot_model.getLink(link->getParent()->name);
@@ -126,7 +126,7 @@ bool Kinematics::readJoints(urdf::Model &robot_model) {
     while (link && i < num_joints) {
         joint = robot_model.getJoint(link->parent_joint->name);
         if (joint->type != urdf::Joint::UNKNOWN && joint->type != urdf::Joint::FIXED) {
-            ROS_INFO( "getting bounds for joint: [%s]", joint->name.c_str() );
+            ROS_DEBUG( "getting bounds for joint: [%s]", joint->name.c_str() );
 
             float lower, upper;
             int hasLimits;

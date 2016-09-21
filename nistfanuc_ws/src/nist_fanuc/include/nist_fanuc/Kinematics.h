@@ -11,7 +11,7 @@ assume all responsibility associated with its operation, modification,
 maintenance, and subsequent redistribution.
 
 See NIST Administration Manual 4.09.07 b and Appendix I.
-*/
+ */
 
 #include <boost/shared_ptr.hpp>
 #include <boost/thread/mutex.hpp>
@@ -22,6 +22,123 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 #include "Conversions.h"
 #include "Debug.h"
 
+
+#define _USE_MATH_DEFINES
+#include <math.h>
+
+/***
+ * \brief ArmConfiguration provides a class to handle manipulator arm configuration.
+ * using a bit mask determines a configuration. Given a configuration, a min and max vector 
+ * of angles can be used to determine the desired solution, when mutliple solutions are available (e.g. ikfast).
+ */
+class IArmConfiguration {
+protected:
+    int _config;
+    size_t _size;
+    std::vector<double> _min;
+    std::vector<double> _max;
+    bool bConfig;
+public:
+    static const int BASE_FLIP = 0x01;
+    static const int ARM_BACKWARD = 0x02; // ex. base flip, arm backwards
+    static const int SHOULDER_RIGHT = 0x040;
+    static const int SHOULDER_DOWN = 0x04;
+    static const int SHOULDER_UP = 0x040;
+
+    static const int ELBOW_DOWN = 0x08;
+    static const int ELBOW_UP = 0x080;
+    static const int FOREARM_UP = 0x10;
+    static const int FOREARM_DOWN = 0x100;
+
+    static const int WRIST_NORMAL = 0x200;
+    static const int WRIST_FLIP = 0x400;
+
+    static const int SINGULAR = -1;
+
+    IArmConfiguration() : _config(0), _size(0), bConfig(false) {
+    }
+
+    /***
+     * \brief Configure provides an overloaded virtual function to assign joint ranges based on configuration.
+     * \param config arm configuration mask
+     * \param size number of joints in arm
+     * \param min reference to vector for storing min values to match configuration
+     * \param max reference to vector for storing max values to match configuration
+     */
+    virtual void Configure(int config, size_t size,
+            std::vector<double>& min,
+            std::vector<double> &max) {
+
+    }
+
+    void Range(std::vector<double> & min, std::vector<double> &max) {
+        if (!bConfig)
+            throw std::runtime_error("ArmConfiguration not configured\n");
+        min = _min;
+        max = _max;
+    }
+};
+
+class FanucLRmate200iD : public IArmConfiguration {
+public:
+
+    FanucLRmate200iD() {
+        Configure(SHOULDER_DOWN | FOREARM_UP | ELBOW_DOWN | WRIST_NORMAL, 6, _min, _max);
+
+    }
+    virtual void Configure(int config, size_t size,
+            std::vector<double>& min,
+            std::vector<double> &max);
+
+};
+
+class NearestJointsLookup {
+protected:
+
+    struct cmp_op {
+
+        bool operator()(const tf::Pose&a, const tf::Pose&b) {
+            if(a.getOrigin().x() == b.getOrigin().x())
+                return  a.getOrigin().y() < b.getOrigin().y();
+            return a.getOrigin().x() < b.getOrigin().x();
+        }
+    };
+    std::map<tf::Pose, std::vector<double>, cmp_op> mapping;
+    typedef std::map<tf::Pose, std::vector<double>, cmp_op>::iterator MapIterator;
+public:
+
+    void Add(tf::Pose pose, std::vector<double> joints) {
+        mapping[pose] = joints;
+    }
+
+    std::string Dump() {
+        std::stringstream str;
+        for (MapIterator it = mapping.begin(); it != mapping.end(); it++) {
+            str << "Pose Hint " << RCS::DumpPoseSimple((*it).first) <<
+                    " = " << VectorDump<double>((*it).second);
+
+        }
+        return str.str();
+    }
+
+    std::vector<double> FindClosest(tf::Pose pose) {
+        double closest = std::numeric_limits<double>::infinity();
+
+        MapIterator closestit = mapping.end();
+        for (MapIterator it = mapping.begin(); it != mapping.end(); it++) {
+            double err = ((*it).first.getOrigin() - pose.getOrigin()).length();
+            if (err < closest) {
+                closestit = it;
+                closest = err;
+            }
+        }
+        if (closestit != mapping.end())
+            return (*closestit).second;
+
+        return std::vector<double>();
+    }
+};
+
 /**
  * \brief The IKinematics provides is an abstract class with pure virtual functions that are
  * overriden by actual kinematic implementations.
@@ -31,8 +148,9 @@ protected:
     std::vector<std::string> joint_names;
     std::vector<std::string> link_names;
     std::vector< double> jointvalues;
-    std::vector< double>  joint_min;
-    std::vector< double>  joint_max;
+    std::vector< double> joint_min;
+    std::vector< double> joint_max;
+    std::vector< double> hint;
     size_t num_joints;
     std::string _groupname;
     std::string _eelinkname;
@@ -43,10 +161,13 @@ public:
         assert(joint_names.size() != 0);
         return joint_names.size();
     }
-    
-//    RCS:Pose GetJointTransform(std::string jointname){
-//    boost::shared_ptr<const urdf::Joint> urdf_joint = armkin->robot_model->getJoint(jointname);
-//    }
+
+    virtual void SetHint(std::vector< double> hint) {
+        this->hint = hint;
+    }
+    //    RCS:Pose GetJointTransform(std::string jointname){
+    //    boost::shared_ptr<const urdf::Joint> urdf_joint = armkin->robot_model->getJoint(jointname);
+    //    }
 
     virtual std::vector<std::string> JointNames() {
         return joint_names;
@@ -55,7 +176,10 @@ public:
     virtual std::vector<std::string> LinkNames() {
         return link_names;
     }
-    void VerifyLimits(std::vector<double> joints) { }
+
+    void VerifyLimits(std::vector<double> joints) {
+    }
+
     /*!
      * \brief GetJointValues returns latest reading of end effector.
      * \return vector of joint values in doubles.
@@ -85,6 +209,7 @@ public:
      */
     virtual std::vector<double> IK(RCS::Pose & pose,
             std::vector<double> oldjoints) = 0;
+
     /*!
      * \brief IK performs the inverse kinematics using the Cartesian pose provided.
      * \param  Cartesian robot pose of end  effector.
@@ -92,7 +217,10 @@ public:
      * \return vector of all robot joint values in doubles.
      */
     virtual std::vector<double> IK(RCS::Pose & pose,
-            std::vector<double> minrange, std::vector<double> maxrange) { return std::vector<double>(); }
+            std::vector<double> minrange, std::vector<double> maxrange) {
+        return std::vector<double>();
+    }
+
     /*!
      * \brief AllPoseToJoints solves  the inverse kinematics to find all solutions using the Cartesian pose provided.
      * \param  Cartesian robot pose of end  effector.
@@ -116,9 +244,12 @@ public:
      * \param  groupname name of  chained joints in robot model.
      * \param  eelinkname name of end effector joint in robot model.
      */
+
     virtual void Init(
             std::string groupname,
             std::string eelinkname) {
+        _groupname = groupname;
+        _eelinkname = eelinkname;
     }
 
     /*!
@@ -135,9 +266,8 @@ public:
      * \param  groupname name of  chained joints in robot model.
      * \param  eelinkname name of end effector joint in robot model.
      */
-    virtual void Init(ros::NodeHandle &nh) {
+    virtual void Init(ros::NodeHandle & nh) {
     }
-
 
     virtual JointState UpdateJointState(std::vector<uint64_t> jointnums,
             JointState oldjoints,
@@ -153,6 +283,16 @@ public:
         return joints;
     }
 
+    virtual std::vector<double> FindBoundedSolution(std::vector<std::vector<double>> &solutions,
+            std::vector<double> &min,
+            std::vector<double> &max) {
+        return std::vector<double>();
+    }
+
+    virtual std::vector<double> FindBoundedSolution(std::vector<std::vector<double>> &solutions,
+            boost::shared_ptr<IArmConfiguration> config) {
+        return std::vector<double>();
+    }
 };
 typedef boost::shared_ptr<IKinematics> IKinematicsSharedPtr;
 
@@ -244,9 +384,6 @@ public:
             link_names.push_back(response.kinematic_solver_info.link_names[i]);
         }
     }
-
-
-
 };
 
 #include "ikfast.h"
@@ -359,13 +496,9 @@ public:
 
         RCS::Pose pose;
         pose.getOrigin().setX(eetrans[0]);
-        pose.getOrigin().setY( eetrans[1]);
- //       pose.getOrigin().setZ( eetrans[2] - 0.33);
-        pose.getOrigin().setZ( eetrans[2] );
-
-        // RosMatrix m = _3x3matrixConvert(eerot);
-        // pose.rotation=_quatFromMatrix( m);
-        pose.setRotation( Convert2Rotation(eerot));
+        pose.getOrigin().setY(eetrans[1]);
+        pose.getOrigin().setZ(eetrans[2]);
+        pose.setRotation(Convert2Rotation(eerot));
         return pose;
     }
     // http://docs.ros.org/jade/api/moveit_msgs/html/msg/PositionIKRequest.html
@@ -381,10 +514,10 @@ public:
         IkReal eerot[9];
         Convert2RotationMatrix(pose.getRotation(), eerot);
 #ifdef DEBUG
-            std::cout << Globals.StrFormat("IKFAST IK\n");
-            std::cout << Globals.StrFormat("Pos  X=%6.4f Y=%6.4f Z=%6.4f\n", eetrans[0], eetrans[1], eetrans[2]);
-            std::cout << Globals.StrFormat("XROT I=%6.4f J=%6.4f K=%6.4f\n", eerot[0], eerot[1], eerot[2]);
-            std::cout << Globals.StrFormat("ZROT I=%6.4f J=%6.4f K=%6.4f\n", eerot[6], eerot[7], eerot[8]);
+        std::cout << Globals.StrFormat("IKFAST IK\n");
+        std::cout << Globals.StrFormat("Pos  X=%6.4f Y=%6.4f Z=%6.4f\n", eetrans[0], eetrans[1], eetrans[2]);
+        std::cout << Globals.StrFormat("XROT I=%6.4f J=%6.4f K=%6.4f\n", eerot[0], eerot[1], eerot[2]);
+        std::cout << Globals.StrFormat("ZROT I=%6.4f J=%6.4f K=%6.4f\n", eerot[6], eerot[7], eerot[8]);
 #endif
         bool bSuccess = ComputeIk(eetrans, eerot, vfree.size() > 0 ? &vfree[0] : NULL, solutions);
 
@@ -402,16 +535,16 @@ public:
             const ikfast::IkSolutionBase<IkReal> & sol = solutions.GetSolution(i);
 
 #ifdef DEBUG
-                std::cerr << Globals.StrFormat("sol%d (free=%d): ", (int) i, (int) sol.GetFree().size());
+            std::cerr << Globals.StrFormat("sol%d (free=%d): ", (int) i, (int) sol.GetFree().size());
 #endif
             std::vector<IkReal> vsolfree(sol.GetFree().size());
             sol.GetSolution(&solvalues[0], vsolfree.size() > 0 ? &vsolfree[0] : NULL);
 
 #ifdef DEBUG
-                for (std::size_t j = 0; j < solvalues.size(); ++j) {
-                    std::cerr << Globals.StrFormat("%6.4f, ", Rad2Deg(solvalues[j]));
-                }
-                std::cerr << Globals.StrFormat("\n");
+            for (std::size_t j = 0; j < solvalues.size(); ++j) {
+                std::cerr << Globals.StrFormat("%6.4f, ", Rad2Deg(solvalues[j]));
+            }
+            std::cerr << Globals.StrFormat("\n");
 #endif
 
             std::vector<double> jnts;
@@ -438,6 +571,7 @@ public:
             v.push_back(ev(i));
         return v;
     }
+
     virtual std::vector<double> NearestJoints(
             std::vector<double> oldjoints,
             std::vector<std::vector<double>> &newjoints) {
@@ -467,26 +601,25 @@ public:
         //response.error_code.val == response.error_code.SUCCES
         //return response.solution.joint_state.position;
     }
-   virtual std::vector<double> IK(RCS::Pose & pose,
-            std::vector<double> minrange, std::vector<double> maxrange) { 
+
+    virtual std::vector<double> IK(RCS::Pose & pose,
+            std::vector<double> minrange, std::vector<double> maxrange) {
         std::vector<std::vector<double>> allsolutions;
         size_t bFlag = AllPoseToJoints(pose, allsolutions);
-        for(size_t i=0; i<allsolutions.size(); i++)
-        {
-            bool bFlag=true;
-            for(size_t j=0; j< allsolutions[0].size(); j++)
-            {
-                if(allsolutions[i][j]< minrange[j] || allsolutions[i][j]> maxrange[j])
-                    bFlag=false;
+        for (size_t i = 0; i < allsolutions.size(); i++) {
+            bool bFlag = true;
+            for (size_t j = 0; j < allsolutions[0].size(); j++) {
+                if (allsolutions[i][j] < minrange[j] || allsolutions[i][j] > maxrange[j])
+                    bFlag = false;
             }
-            if(bFlag)
+            if (bFlag)
                 return allsolutions[i];
-        
+
         }
         // just pick one
-        size_t n=  rand() % allsolutions.size();
+        size_t n = rand() % allsolutions.size();
         return allsolutions[n];
-   }
+    }
 
     virtual void Init(
             std::string groupname,
@@ -520,12 +653,74 @@ public:
             joint_max .push_back(armkin->joint_max(i));
     }
 
-    void VerifyLimits(std::vector<double> joints)
-    {
-        for(size_t i=0; i< joints.size(); i++)
-            if(joints[i] < joint_min[i] || joints[i] > joint_max[i] )
+    void VerifyLimits(std::vector<double> joints) {
+        for (size_t i = 0; i < joints.size(); i++)
+            if (joints[i] < joint_min[i] || joints[i] > joint_max[i])
                 ROS_ERROR_STREAM("Verify Joint Limits Joint" << joint_names[i] << "out of range");
-    
+
     }
+    virtual std::vector<double> FindBoundedSolution(std::vector<std::vector<double>> &solutions,
+            std::vector<double> &min,
+            std::vector<double> &max);
+
+};
+#include "fanuc_lrmate200id.h"
+
+class FanucLrMate200idKinematics : public IKinematics {
+    fanuc_lrmate200id fanuckin;
+    tf::Pose base;
+public:
+
+    FanucLrMate200idKinematics() {
+        base = tf::Pose(tf::Quaternion(0, 0, 0, 1),
+                tf::Vector3(0.0, 0.0, 0.330));
+    }
+
+    virtual RCS::Pose FK(std::vector<double> jv) {
+
+        tf::Pose pose = fanuckin.fanuc_lrmate200id_kin_fwd(&jv[0]);
+        return base*pose;
+        //return pose;
+    }
+
+    virtual std::vector<double> IK(RCS::Pose & pose,
+            std::vector<double> oldjoints) {
+        tf::Pose base(tf::Quaternion(0, 0, 0, 1),
+                tf::Vector3(0.0, 0.0, 0.330));
+        pose = base.inverse() * pose;
+        std::vector<double> joints = fanuckin.fanuc_lrmate200id_kin_inv(pose);
+        return joints;
+    }
+
+    virtual size_t AllPoseToJoints(RCS::Pose & pose,
+            std::vector<std::vector<double> > & newjoints) {
+        return 0;
+    }
+
+    virtual std::vector<double> NearestJoints(
+            std::vector<double> oldjoints,
+            std::vector<std::vector<double> > & newjoints) {
+        ROS_ERROR("FanucLrMate200idKinematics::NearestJoints() not implemented");
+        return std::vector<double>();
+    }
+
+    virtual void Init(ros::NodeHandle &nh) {
+        armkin = boost::shared_ptr<::Kinematics>(new ::Kinematics());
+        armkin->init(nh);
+        moveit_msgs::GetKinematicSolverInfo::Request request;
+        moveit_msgs::GetKinematicSolverInfo::Response response;
+        armkin->getFKSolverInfo(request, response);
+        joint_names.clear();
+        link_names.clear();
+        num_joints = response.kinematic_solver_info.joint_names.size();
+        for (unsigned int i = 0; i < response.kinematic_solver_info.joint_names.size(); i++) {
+            joint_names.push_back(response.kinematic_solver_info.joint_names[i]);
+        }
+        for (unsigned int i = 0; i < response.kinematic_solver_info.link_names.size(); i++) {
+            link_names.push_back(response.kinematic_solver_info.link_names[i]);
+        }
+    }
+
+
 
 };

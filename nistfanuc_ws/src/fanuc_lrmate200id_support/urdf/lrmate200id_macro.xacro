@@ -7,6 +7,7 @@
   <xacro:include filename="$(find fanuc_lrmate200id_support)/urdf/jointlimits.xacro"/>
  <!-- <xacro:include filename="$(find fanuc_lrmate200id_support)/urdf/robotiq_c2_model_macro.xacro" /> -->
 
+
   <xacro:macro name="fanuc_lrmate200id" params="prefix">
     <link name="${prefix}base_link">
       <visual>
