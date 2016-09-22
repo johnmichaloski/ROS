@@ -43,6 +43,7 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 // Checkers makes move 
 #include "Checkers.h"
 #include "Controller.h"
+#include "Demo.h"
 using namespace Conversion;
 
 struct RvizCheckers {

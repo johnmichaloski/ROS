@@ -232,6 +232,7 @@ namespace RCS {
         static const int CANON_SET_GRIPPER_POSE = 15;
         static const int CANON_PICK = 16;
         static const int CANON_PLACE = 17;
+        static const int CANON_SET_BASE_POSE = 18;
 
         static const int CANON_UNKNOWN = -1;
 #if 0

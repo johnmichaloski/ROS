@@ -92,52 +92,7 @@ public:
 
 };
 
-class NearestJointsLookup {
-protected:
 
-    struct cmp_op {
-
-        bool operator()(const tf::Pose&a, const tf::Pose&b) {
-            if(a.getOrigin().x() == b.getOrigin().x())
-                return  a.getOrigin().y() < b.getOrigin().y();
-            return a.getOrigin().x() < b.getOrigin().x();
-        }
-    };
-    std::map<tf::Pose, std::vector<double>, cmp_op> mapping;
-    typedef std::map<tf::Pose, std::vector<double>, cmp_op>::iterator MapIterator;
-public:
-
-    void Add(tf::Pose pose, std::vector<double> joints) {
-        mapping[pose] = joints;
-    }
-
-    std::string Dump() {
-        std::stringstream str;
-        for (MapIterator it = mapping.begin(); it != mapping.end(); it++) {
-            str << "Pose Hint " << RCS::DumpPoseSimple((*it).first) <<
-                    " = " << VectorDump<double>((*it).second);
-
-        }
-        return str.str();
-    }
-
-    std::vector<double> FindClosest(tf::Pose pose) {
-        double closest = std::numeric_limits<double>::infinity();
-
-        MapIterator closestit = mapping.end();
-        for (MapIterator it = mapping.begin(); it != mapping.end(); it++) {
-            double err = ((*it).first.getOrigin() - pose.getOrigin()).length();
-            if (err < closest) {
-                closestit = it;
-                closest = err;
-            }
-        }
-        if (closestit != mapping.end())
-            return (*closestit).second;
-
-        return std::vector<double>();
-    }
-};
 
 /**
  * \brief The IKinematics provides is an abstract class with pure virtual functions that are
@@ -273,13 +228,19 @@ public:
             JointState oldjoints,
             JointState njoints) {
         JointState joints = oldjoints;
+        if (joints.velocity.size() != joints.position.size())
+            joints.velocity.resize(joints.position.size(), 0.0);
+        if (joints.effort.size() != joints.position.size())
+            joints.effort.resize(joints.position.size(), 0.0);
+       
         // Check each joint, to see if joint is being actuated, if so, change goal position
         for (size_t i = 0; i < jointnums.size(); i++) {
             size_t n = jointnums[i];
             joints.position[n] = njoints.position[n]; // joint numbers already adjusted from CRCL to rcs model
             joints.velocity[n] = njoints.velocity[n];
             joints.effort[n] = njoints.effort[n];
-        }
+            joints.effort[n] = 0.0;
+       }
         return joints;
     }
 

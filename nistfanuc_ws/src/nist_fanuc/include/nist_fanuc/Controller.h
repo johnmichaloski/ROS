@@ -33,7 +33,7 @@
 
 #include "nistcrcl/CrclCommandMsg.h"
 #include "nistcrcl/CrclStatusMsg.h"
-
+#include "nist_fanuc/Demo.h"
 namespace RCS {
 
     extern boost::mutex cncmutex;
@@ -106,8 +106,15 @@ namespace RCS {
         GripperInterface gripper;
         void MotionLogging();
         void PublishCrclStatus();
-        RCS::Pose gripperPose;
-        RCS::Pose invGripperPose;
+        
+        
+        //RCS::Pose gripperPose;
+        //RCS::Pose invGripperPose;
+         VAR(gripperPose, RCS::Pose);
+        VAR(invGripperPose, RCS::Pose);
+       VAR(basePose, RCS::Pose);
+        VAR(invBasePose, RCS::Pose);
+        
         /*!
          *\brief Routine to set the kinematics reference pointer. Uses the interface class IKinematics, but can have any implementation instance. 
          */
@@ -192,17 +199,3 @@ namespace RCS {
 #endif
 }
 
-
-extern void TestRobotCommands() ;
-
-extern void Pick(RCS::Pose pose, std::string objname);
-extern void MoveTo(RCS::Pose pose,std::string objname="");
-extern void DoDwell(double dwelltime);
-extern void AddGripperOffset();
-extern void OpenGripper();
-extern void CloseGripper();
-extern void SetGripper(double ee);
-extern void Place(RCS::Pose pose, std::string objname);
-extern void MoveObject(std::string objname, RCS::Pose pose, int color);
-extern void EraseObject(std::string objname);
-extern void SetRobotHints();

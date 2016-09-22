@@ -22,16 +22,19 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 struct ObjectDB;
 
 extern bool DrawObject(ObjectDB *obj);
-extern void InitSceneObject();
+extern void ClearScene();
+extern void NewScene();
+extern void InitScene();
 extern void ChangeColor(std::string objname, rviz_visual_tools::colors color);
 extern void UpdateScene(std::string objname, Eigen::Affine3d pose, rviz_visual_tools::colors color);
-extern void SetupSceneObject();
+extern void DrawScene();
 extern void DeleteObject(std::string objname) ;
 extern bool publishCylinder(Eigen::Affine3d pose,
         rviz_visual_tools::colors color, 
         double radius, 
         double height, 
         size_t &id);
+extern Eigen::Affine3d fanucoffset00;
 
 struct SonOfRvizVisualTools : public rviz_visual_tools::RvizVisualTools {
 

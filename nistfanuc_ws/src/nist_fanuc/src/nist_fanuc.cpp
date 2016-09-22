@@ -27,7 +27,7 @@
 #include "StackTrace.h"
 #include "fanuc_lrmate200id.h"
 
-
+#include "Demo.h"
 #include "Test.h"
 
 // /opt/ros/indigo/include/moveit/robot_state/robot_state.h
@@ -37,11 +37,10 @@ extern RCS::Pose AutoComputeGripperOffset(urdf::Model& robot_model);
 
 
 int main(int argc, char** argv) {
-
     // Current robot joints declaration
     sensor_msgs::JointState cjoints;
     int bPublishPoint=0;
-    signal(SIGSEGV, handler);   // install our handler
+    //signal(SIGSEGV, handler);   // install our handler
     try {
         // Find path of executable
         std::string path(argv[0]);
@@ -66,7 +65,7 @@ int main(int argc, char** argv) {
                 "/opt/ros/indigo/lib/python2.7/dist-packages:"
                 "/home/isd/michalos/el-robotics-core/nist_kitting/src", true);
 
-        setenv("PKG_CONFIG_PATH", "/usr/local/michalos/nistfanuc_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/opt/ros/indigo/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistfanuc_ws/devel/lib/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/pkgconfig:/opt/ros/indigo/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig", true);
+        setenv("RCS::Cnc.Start()PKG_CONFIG_PATH", "/usr/local/michalos/nistfanuc_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/opt/ros/indigo/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistfanuc_ws/devel/lib/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/pkgconfig:/opt/ros/indigo/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig", true);
         setenv("PATH", "/usr/local/michalos/nistfanuc_ws/devel/bin:/usr/local/michalos/nistcrcl_ws/devel/bin:/opt/ros/indigo/bin:/usr/local/jdk1.8.0_60/bin:/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:/usr/X11R6/bin:/usr/local/ulapi/bin:/usr/local/gomotion/bin:/home/isd/michalos/bin", true);
 
         // This sets up some application name/value pairs: user, hostname
@@ -91,7 +90,9 @@ int main(int argc, char** argv) {
         if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info)) {
             ros::console::notifyLoggerLevelsChanged();
         }
-
+ #ifdef BOLTDEMO       
+        BoltDemo boltdemo(nh);
+#endif
         // Accessing Private Parameters
         // ros::param::get("~private_name", param); 
         boostlogfile = nh.param<std::string>("logfile", "/home/isd/michalos/Documents/example.log");
@@ -118,7 +119,7 @@ int main(int argc, char** argv) {
         boost::shared_ptr<CLinkReader> pLinkReader;
 
         //  Required for multithreaded ROS communication  NOT TRUE: if not ros::spinOnce
-        ros::AsyncSpinner spinner(1);
+        ros::AsyncSpinner spinner(2);
         spinner.start();
 
         // This is useful for rosbag i suppose
@@ -223,12 +224,12 @@ int main(int argc, char** argv) {
 
 #endif
 
-        InitSceneObject();
+        InitScene();
 #ifdef CHECKERS
         RvizCheckers rvizgame(nh);
         rvizgame.RvizSetup();
 #endif
-        SetupSceneObject();
+        DrawScene();
         // LOG_DEBUG << ObjectDB::DumpDB();
         
         RCS::Cnc._interpreter = boost::shared_ptr<RCSInterpreter>(new BangBangInterpreter());
@@ -255,18 +256,27 @@ int main(int argc, char** argv) {
             ros::Duration(0.2).sleep();
         }
 #endif
-        
+       while(!boltdemo.Ready() ) {
+           ros::Duration(1.02).sleep();
+       }
+
+
+        //spinner.stop();
+        //      ros::spin();
+        do {
+            //for(size_t i=0; i< 10; i++)
+             //   ros::spinOnce();
 #ifdef BOLTDEMO
-        TestRobotCommands();
-#endif
-       
-        spinner.stop();
-        ros::spin();
-        //        do {
-        //            ros::spinOnce();
-        //            r.sleep();
-        //        } while(ros::ok());
-        //        
+            if (RCS::Cnc.crclcmds.SizeMsgQueue() == 0) {
+                ClearScene();
+                NewScene();
+                DrawScene();
+                TestRobotCommands();
+            }
+#endif           
+            r.sleep();
+        } while(ros::ok());
+        spinner.stop();    
         LOG_DEBUG << "Cntrl C pressed \n" << std::flush;
 
         // ^C pressed - stop all threads or will hang

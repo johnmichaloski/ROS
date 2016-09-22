@@ -54,6 +54,7 @@ namespace Conversion {
         return tf::Vector3(e(0, 3), e(1, 3), e(2, 3));
     }
 
+    //tf::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0, 0, 0))
     inline tf::Pose Identity() {
         tf::Transform t;
         t.setIdentity();

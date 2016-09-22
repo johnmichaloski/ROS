@@ -57,8 +57,8 @@ int BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd) {
     } else if (cmd.crclcommand == CanonCmdType::CANON_MOVE_TO) {
         // FIXME: need to subtract off tool offset from tcp
         RCS::Pose finalpose = Conversion::GeomMsgPose2RcsPose(cmd.finalpose);
-        //RCS::Pose goalpose =  Cnc.invGripperPose * finalpose;
-        RCS::Pose goalpose =  finalpose * Cnc.invGripperPose ;
+        //RCS::Pose goalpose =  Cnc.invGripperPose() * finalpose;
+        RCS::Pose goalpose =  finalpose * Cnc.invGripperPose() ;
         LOG_DEBUG << "Final Pose " << RCS::DumpPoseSimple(finalpose).c_str();
         LOG_DEBUG << "Minus Gripper Pose " << RCS::DumpPoseSimple(goalpose).c_str();
         if (cmd.hint.size() ==0){
