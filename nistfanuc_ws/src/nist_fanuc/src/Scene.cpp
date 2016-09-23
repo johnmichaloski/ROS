@@ -102,7 +102,7 @@ void InitScene() {
             );
 
 #endif
-#if 1
+#ifdef BOLTDEMO
     //#ifdef BOLTDEMO
     // Scene bolt and boltholder objects
     ObjectDB::Save(new ObjectDB("boltholder1", "boltholder", ObjectDB::gid++, 
@@ -126,6 +126,7 @@ void InitScene() {
 }
 
 void NewScene() {
+#ifdef BOLTDEMO
     for (size_t i = 0; i < 4; i++) {
         Eigen::Translation3d spot[4] = {Eigen::Translation3d(0.25, -.45, 0.04),
             Eigen::Translation3d(0.25, .45, 0.04),
@@ -135,6 +136,7 @@ void NewScene() {
         UpdateScene(boltname, Eigen::Affine3d::Identity() *
                 spot[i]*fanucoffset00, rviz_visual_tools::RED);
     }
+#endif
 }
 
 // Initialize Eigen::Affine3d http://stackoverflow.com/questions/25504397/eigen-combine-rotation-and-translation-into-one-matrix
@@ -147,7 +149,6 @@ void UpdateScene(std::string objname, Eigen::Affine3d pose, rviz_visual_tools::c
     obj->pose = pose;
     DrawObject(obj);
     visual_tools->triggerBatchPublish();
-
 }
 
 void DeleteObject(std::string objname) {

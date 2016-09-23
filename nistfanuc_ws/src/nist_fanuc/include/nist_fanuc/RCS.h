@@ -485,6 +485,15 @@ namespace RCS {
         double eepercent;
     };
 
+    /*!
+     * \brief IInterpreter parses a RCS command and generates robot motion commands.
+     */
+    class IRCSInterpreter {
+    public:
+        virtual RCS::CanonCmd ParseCommand(RCS::CanonCmd cmd) = 0;
+        virtual void SetRange(std::vector<double> minrange, std::vector<double> maxrange) {
+        }
+    };
 };
 
 

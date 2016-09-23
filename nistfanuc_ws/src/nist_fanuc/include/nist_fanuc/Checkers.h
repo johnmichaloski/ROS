@@ -11,7 +11,7 @@ assume all responsibility associated with its operation, modification,
 maintenance, and subsequent redistribution.
 
 See NIST Administration Manual 4.09.07 b and Appendix I.
-*/
+ */
 
 #include <string>
 #include <vector>
@@ -191,7 +191,7 @@ namespace Checkers {
         }
 
         bool IsKing(int player, Move m) {
-                return ISKING(Board()[m.row][m.col]);
+            return ISKING(Board()[m.row][m.col]);
         }
 
         bool LegalRow(int n) {
@@ -200,32 +200,67 @@ namespace Checkers {
 
         char value2symbol(int i) {
             switch (i) {
-                case EMPTY:
-                    return ' ';
-                case RED:
-                    return 'r';
-                case BLACK:
-                    return 'b';
-                case RED + KING:
-                    return 'R';
-                case BLACK + KING:
-                    return 'B';
+                case EMPTY: return ' ';
+                case RED: return 'r';
+                case BLACK: return 'b';
+                case RED + KING: return 'R';
+                case BLACK + KING: return 'B';
             }
             return ('?');
         }
 
-        void printDisplayFancy(BoardType inboard) {
-            int rr, cc;
-            std::cout << "  +---+---+---+---+---+---+---+---+\n";
-            for (rr = 0; rr < ROWS; ++rr) {
-                std::cout << StrFormat("%d |", rr).c_str();
-                for (cc = 0; cc < COLS; ++cc) {
-                    std::cout << StrFormat(" %c |", value2symbol(inboard[rr][cc])).c_str();
-                }
-                std::cout << "\n";
-                std::cout << "  +---+---+---+---+---+---+---+---+\n";
+        int symbol2value(char c) {
+            switch (c) {
+                case ' ': return 0;
+                case 'r': return RED;
+                case 'b': return BLACK;
+                case 'R': return RED + KING;
+                case 'B': return BLACK + KING;
             }
-            std::cout << "    0   1   2   3   4   5   6   7\n";
+            return 0;
+        }
+
+        std::string printDisplayFancy(BoardType inboard) {
+            std::stringstream str;
+            int rr, cc;
+            str << "  +---+---+---+---+---+---+---+---+\n";
+            for (rr = 0; rr < ROWS; ++rr) {
+                str << StrFormat("%d |", rr).c_str();
+                for (cc = 0; cc < COLS; ++cc) {
+                    str << StrFormat(" %c |", value2symbol(inboard[rr][cc])).c_str();
+                }
+                str << "\n";
+                str << "  +---+---+---+---+---+---+---+---+\n";
+            }
+           str << "    0   1   2   3   4   5   6   7\n";
+           return str.str();
+        }
+
+        void Deserialize(std::istream& s_in, BoardType &board_out) {
+            int rr, cc;
+            int dummy;
+            char dummyc;
+            char piece;
+            char str[256];
+
+            s_in.get(str, sizeof ("  +---+---+---+---+---+---+---+---+\n"));
+#if 1
+            for (rr = 0; rr < ROWS; ++rr) {
+                s_in.get(str, 3);
+               // s_in >> dummy; //StrFormat("%d |", rr).c_str();
+                //s_in >> dummyc; // | char
+                for (cc = 0; cc < COLS; ++cc) {
+                    memset(&str[0], 0, 256);
+                    s_in.get(str, sizeof (" X |"));
+                    sscanf(str, " %c |", &piece);
+                    board_out[rr][cc] = symbol2value(piece);
+                }
+                s_in >> dummyc; // eat \n
+                s_in.get(str, sizeof ("  +---+---+---+---+---+---+---+---+\n"));
+            }
+            s_in.get (str,sizeof("    0   1   2   3   4   5   6   7\n")); // eat \n
+ #endif
+
         }
 
         void KingMe(BoardType & inboard) {
@@ -433,21 +468,21 @@ namespace Checkers {
             m2 = (*it).second[m];
             return true;
         }
-	double DoubleJumpEval(Move &m)
-	{
-		double val=0;
-		double bestScore = 0;
-		for(size_t i=0; i< m.doublejumps.size(); i++)
-		{
-			val=10;
-			// 1 versus 2 double jumps
-			val += DoubleJumpEval(m.doublejumps[i]);
-			if(val>bestScore)
-				bestScore=val;
-		}
 
-		return bestScore;
-	}
+        double DoubleJumpEval(Move &m) {
+            double val = 0;
+            double bestScore = 0;
+            for (size_t i = 0; i < m.doublejumps.size(); i++) {
+                val = 10;
+                // 1 versus 2 double jumps
+                val += DoubleJumpEval(m.doublejumps[i]);
+                if (val > bestScore)
+                    bestScore = val;
+            }
+
+            return bestScore;
+        }
+
         double MinMaxEval(int depth, int player, BoardType curBoard, double signFactor) {
             int opponent = (player == BLACK) ? RED : BLACK;
             if (depth >= MAX_DEPTH)
@@ -474,47 +509,62 @@ namespace Checkers {
             return signFactor*posValue;
         }
 
-	bool MinMaxBestMove(std::map<Move, std::vector<Move>> &moves, BoardType curBoard, int player, Move &m1, Move &m2)
-	{
-		double bestScore =-LDBL_MAX;
-		int opponent = (player == BLACK) ? RED : BLACK;
+        bool MinMaxBestMove(std::map<Move, std::vector<Move>> &moves, BoardType curBoard, int player, Move &m1, Move &m2) {
+            double bestScore = -LDBL_MAX;
+            int opponent = (player == BLACK) ? RED : BLACK;
 
-		Move bestfrom, bestto;
-		std::map<Move, std::vector<Move>>::iterator it;
-		std::map<Move, std::vector<Move>> bestmoves;
-		for(it=moves.begin(); it!=moves.end(); it++)
-		{
-			if((*it).second.size()==0)
-				continue;
-			for(size_t i=0; i < (*it).second.size(); i++)
-			{
-				Move &move((*it).second[i]);
-				BoardType newBoard = MakeMove(curBoard, player, (*it).first.row, (*it).first.col, move);
-				move.score = MinMaxEval(50,  opponent,  newBoard, -1.0);
-				if(move.bJump)
-					move.score+=10;
-				move.score+= DoubleJumpEval(move);
-				if(move.score>bestScore)
-				{
-					m1=(*it).first;
-					m2=move;
-					bestScore=move.score;
-					bestmoves.clear();
-					bestmoves[(*it).first]=std::vector<Move>();
-					bestmoves[(*it).first].push_back(move);
-				}
-				if(move.score==bestScore)
-				{
-					bestmoves[(*it).first].push_back(move);
-				}
-			}
-		}
-		// Lots of moves with same mixmax value - randomly pick one
-		if(bestmoves.size() > 1)
-		{
-			RandomMove(bestmoves, m1, m2);
-		}
-		return true;
-	}
+            Move bestfrom, bestto;
+            std::map<Move, std::vector < Move>>::iterator it;
+            std::map<Move, std::vector < Move>> bestmoves;
+            for (it = moves.begin(); it != moves.end(); it++) {
+                if ((*it).second.size() == 0)
+                    continue;
+                for (size_t i = 0; i < (*it).second.size(); i++) {
+                    Move & move((*it).second[i]);
+                    BoardType newBoard = MakeMove(curBoard, player, (*it).first.row, (*it).first.col, move);
+                    move.score = MinMaxEval(50, opponent, newBoard, -1.0);
+                    if (move.bJump)
+                        move.score += 10;
+                    move.score += DoubleJumpEval(move);
+                    if (move.score > bestScore) {
+                        m1 = (*it).first;
+                        m2 = move;
+                        bestScore = move.score;
+                        bestmoves.clear();
+                        bestmoves[(*it).first] = std::vector<Move>();
+                        bestmoves[(*it).first].push_back(move);
+                    }
+                    if (move.score == bestScore) {
+                        bestmoves[(*it).first].push_back(move);
+                    }
+                }
+            }
+            // Lots of moves with same mixmax value - randomly pick one
+            if (bestmoves.size() > 1) {
+                RandomMove(bestmoves, m1, m2);
+            }
+            return true;
+        }
+
+        std::string TestBoard() {
+            return "  +---+---+---+---+---+---+---+---+\n"
+            "0 |   | r |   | B |   | r |   | r |\n"
+            "  +---+---+---+---+---+---+---+---+\n"
+            "1 |   |   |   |   |   |   | r |   |\n"
+            "  +---+---+---+---+---+---+---+---+\n"
+            "2 |   |   |   |   |   | r |   |   |\n"
+            "  +---+---+---+---+---+---+---+---+\n"
+            "3 |   |   | r |   |   |   |   |   |\n"
+            "  +---+---+---+---+---+---+---+---+\n"
+            "4 |   |   |   |   |   | b |   | b |\n"
+            "  +---+---+---+---+---+---+---+---+\n"
+            "5 |   |   |   |   |   |   |   |   |\n"
+            "  +---+---+---+---+---+---+---+---+\n"
+            "6 |   | b |   | b |   |   |   | b |\n"
+            "  +---+---+---+---+---+---+---+---+\n"
+            "7 | b |   |   |   |   |   | b |   |\n"
+            "  +---+---+---+---+---+---+---+---+\n"
+            "    0   1   2   3   4   5   6   7\n";
+        }
     };
 };

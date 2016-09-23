@@ -11,34 +11,36 @@ assume all responsibility associated with its operation, modification,
 maintenance, and subsequent redistribution.
 
 See NIST Administration Manual 4.09.07 b and Appendix I.
-*/
+ */
 
 #include <stdarg.h>
 #include <vector>
 #include "RCS.h"
 #include "Conversions.h"
 
-template<typename T>
-inline std::string VectorDump(std::vector<T> v) {
-    std::stringstream s;
 
-    for (size_t i = 0; i < v.size(); i++) {
-        s << v[i] << ":";
-    }
-    s << std::endl;
-    return s.str();
-}
 
 namespace RCS {
 
-       static const char * sCmd[] = { "CANON_NOOP",
+    template<typename T>
+    inline std::string VectorDump(std::vector<T> v) {
+        std::stringstream s;
+
+        for (size_t i = 0; i < v.size(); i++) {
+            s << v[i] << ":";
+        }
+        s << std::endl;
+        return s.str();
+    }
+
+    static const char * sCmd[] = {"CANON_NOOP",
         "CANON_INIT_CANON ",
         "CANON_END_CANON",
         "CANON_MOVE_JOINT",
         "CANON_MOVE_TO",
-       "CANON_DWELL",
+        "CANON_DWELL",
         "CANON_MESSAGE",
-       "CANON_MOVE_THRU ",
+        "CANON_MOVE_THRU ",
         "CANON_SET_COORDINATED_MOTION",
         "CANON_STOP_MOTION",
         "CANON_SET_GRIPPER",
@@ -49,6 +51,7 @@ namespace RCS {
         "CANON_SET_GRIPPER_POSE",
         "CANON_PICK ",
         "CANON_PLACE "};
+
     /*!
      * \brief DumpPose takes a urdf pose  and generates a string describing pose. 
      * Can be used as std::cout << DumpPose(pose); 
@@ -61,7 +64,7 @@ namespace RCS {
         double roll, pitch, yaw;
         getRPY(pose, roll, pitch, yaw);
         s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw) << std::endl;
-        s << "Quaternion = " << pose.getRotation().x() << ":" << pose.getRotation().y() << ":" << pose.getRotation().z() << ":" << pose.getRotation().w() ;
+        s << "Quaternion = " << pose.getRotation().x() << ":" << pose.getRotation().y() << ":" << pose.getRotation().z() << ":" << pose.getRotation().w();
         //s << Crcl::DumpRotationAsCrcl(pose)<< std::endl;
         return s.str();
     }
@@ -72,22 +75,23 @@ namespace RCS {
         tf::Matrix3x3 tfMatrix3x3;
         Eigen::Matrix3d e = pose.rotation();
         tf::matrixEigenToTF(e, tfMatrix3x3);
-        
+
         double roll, pitch, yaw;
         tfMatrix3x3.getRPY(roll, pitch, yaw);
         s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw);
 
         return s.str();
-   }
+    }
     //inline std::string DumpPoseSimple(RCS::Pose & pose) {
-    inline std::string DumpPoseSimple(RCS::Pose  pose) {
+
+    inline std::string DumpPoseSimple(RCS::Pose pose) {
         std::stringstream s;
 
         s << "Translation = " << 1000.0 * pose.getOrigin().x() << ":" << 1000.0 * pose.getOrigin().y() << ":" << 1000.0 * pose.getOrigin().z();
         double roll, pitch, yaw;
         //getRPY(pose, roll, pitch, yaw);
         tf::Matrix3x3(pose.getRotation()).getRPY(roll, pitch, yaw);
-        s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw) ;
+        s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw);
         return s.str();
     }
 
@@ -112,7 +116,7 @@ namespace RCS {
         double roll, pitch, yaw;
         getRPY(pose, roll, pitch, yaw);
         s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw) << std::endl;
-        s << "Quaterion = " << pose.getRotation().x() << ":" << pose.getRotation().y() << ":" << pose.getRotation().z() << ":" << pose.getRotation().w() ;
+        s << "Quaterion = " << pose.getRotation().x() << ":" << pose.getRotation().y() << ":" << pose.getRotation().z() << ":" << pose.getRotation().w();
         os << s.str();
     }
 
@@ -127,7 +131,7 @@ namespace RCS {
         s << boost::format("Y=%8.4f") % rot.y() << ":";
         s << boost::format("Z=%8.4f") % rot.z() << ":";
         s << boost::format("W=%8.4f") % rot.w() << ":";
-//       s << std::endl;
+        //       s << std::endl;
         return s.str();
     }
 };
@@ -141,8 +145,6 @@ inline std::ostream & operator<<(std::ostream & os, const RCS::CanonCmd & cc) {
     os << std::endl;
     return os;
 }
-
-
 
 template<typename T>
 inline std::string MapDump(std::map<std::string, T> m) {

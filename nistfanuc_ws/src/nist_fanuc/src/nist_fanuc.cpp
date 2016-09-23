@@ -26,7 +26,7 @@
 #include "Checkerboard.h"
 #include "StackTrace.h"
 #include "fanuc_lrmate200id.h"
-
+#include "RCSInterpreter.h"
 #include "Demo.h"
 #include "Test.h"
 
@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
                 "/opt/ros/indigo/lib/python2.7/dist-packages:"
                 "/home/isd/michalos/el-robotics-core/nist_kitting/src", true);
 
-        setenv("RCS::Cnc.Start()PKG_CONFIG_PATH", "/usr/local/michalos/nistfanuc_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/opt/ros/indigo/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistfanuc_ws/devel/lib/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/pkgconfig:/opt/ros/indigo/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig", true);
+       // setenv("RCS::Fnc->Start()PKG_CONFIG_PATH", "/usr/local/michalos/nistfanuc_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/opt/ros/indigo/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistfanuc_ws/devel/lib/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/pkgconfig:/opt/ros/indigo/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig", true);
         setenv("PATH", "/usr/local/michalos/nistfanuc_ws/devel/bin:/usr/local/michalos/nistcrcl_ws/devel/bin:/opt/ros/indigo/bin:/usr/local/jdk1.8.0_60/bin:/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:/usr/X11R6/bin:/usr/local/ulapi/bin:/usr/local/gomotion/bin:/home/isd/michalos/bin", true);
 
         // This sets up some application name/value pairs: user, hostname
@@ -90,15 +90,15 @@ int main(int argc, char** argv) {
         if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info)) {
             ros::console::notifyLoggerLevelsChanged();
         }
- #ifdef BOLTDEMO       
-        BoltDemo boltdemo(nh);
-#endif
+    
+        RvizDemo rvizdemo(nh);
+
         // Accessing Private Parameters
         // ros::param::get("~private_name", param); 
         boostlogfile = nh.param<std::string>("logfile", "/home/isd/michalos/Documents/example.log");
         boostloglevel = (boost::log::v2_mt_posix::trivial::severity_level) nh.param<int>("loglevel", 0); // 0 = debug
-        Cnc.bCvsPoseLogging() = nh.param<int>("csvlogging", 0);
-        Cnc.CvsPoseLoggingFile() = nh.param<std::string>("csvlogfile", "/home/isd/michalos/Documents/nistcrcl.csv");
+        RCS::Fnc->bCvsPoseLogging() = nh.param<int>("csvlogging", 0);
+        RCS::Fnc->CvsPoseLoggingFile() = nh.param<std::string>("csvlogfile", "/home/isd/michalos/Documents/nistcrcl.csv");
         bPublishPoint = nh.param<int>("PublishPoint", 0);
         // THIS DOESN'T WORK
 #if 0
@@ -149,7 +149,7 @@ int main(int argc, char** argv) {
         // Initializatin of Controller instantiatio of shared objects  
         kin->Init(std::string("manipulator"), std::string("tool0"));
         kin->Init(nh);
-        RCS::Cnc.Kinematics() = kin;
+        RCS::Fnc->Kinematics() = kin;
         ComputeGripperOffset();
         AutoComputeGripperOffset(kin->armkin->robot_model);
 
@@ -164,7 +164,7 @@ int main(int argc, char** argv) {
         // Initializatin of Controller instantiatio of shared objects  
         fastkin->Init(std::string("manipulator"), std::string("tool0"));
         fastkin->Init(nh);
-        //RCS::Cnc.Kinematics() = fastkin;
+        //RCS::Fnc->Kinematics() = fastkin;
         TestFk(fastkin, "fastkin");
         TestIk(fastkin, "fastkin");
 #endif
@@ -178,22 +178,20 @@ int main(int argc, char** argv) {
         TestFk(lrmate200idkin, "lrmate200idkin");
         TestIk(lrmate200idkin, "lrmate200idkin");  
 #endif
-        
-        SetRobotHints();
 
         // Initialize Controller...
-        RCS::Cnc.Setup(nh);
+        RCS::Fnc->Setup(nh);
         //RCS::Controller._NumJoints = 6; // hard code even thought chainrobotmodel will work
-        RCS::Cnc.status.Init();
-        RCS::Cnc.CycleTime() = DEFAULT_LOOP_CYCLE;
+        RCS::Fnc->status.Init();
+        RCS::Fnc->CycleTime() = DEFAULT_LOOP_CYCLE;
 
         //        RCS::Controller.TrajectoryWriter() = trajWriter;
-        RCS::Cnc.JointWriter() = jointWriter;
-        RCS::Cnc.RvizMarker() = pRvizMarker;
-        RCS::Cnc.EEPoseReader() = pLinkReader;
+        RCS::Fnc->JointWriter() = jointWriter;
+        RCS::Fnc->RvizMarker() = pRvizMarker;
+        RCS::Fnc->EEPoseReader() = pLinkReader;
 
-        RCS::Cnc.eCartesianMotionPlanner = RCS::CController::BASIC;
-        RCS::Cnc.eJointMotionPlanner = RCS::CController::BASIC;
+        RCS::Fnc->eCartesianMotionPlanner = RCS::CController::BASIC;
+        RCS::Fnc->eJointMotionPlanner = RCS::CController::BASIC;
         // RCS::CController::MOVEIT;  NOPLANNER=0, MOVEIT, DESCARTES, BASIC, WAYPOINT, GOMOTION         
 
         //#define INITJOINTCONTROLLER
@@ -212,19 +210,33 @@ int main(int argc, char** argv) {
 
         // Store current joint values
         //RosKinematics kin;
-        RCS::Cnc.status.currentjoints = cjoints;
-        LOG_DEBUG << "Current=" << VectorDump<double> (RCS::Cnc.status.currentjoints.position).c_str();
-        RCS::Controller.status.currentpose = kin->FK(RCS::Cnc.status.currentjoints.position);
+        RCS::Fnc->status.currentjoints = cjoints;
+        LOG_DEBUG << "Current=" << VectorDump<double> (RCS::Fnc->status.currentjoints.position).c_str();
+        RCS::Controller.status.currentpose = kin->FK(RCS::Fnc->status.currentjoints.position);
         LOG_DEBUG << DumpPose(RCS::Controller.status.currentpose).c_str();
-        //        RCS::Cnc.CrclDelegate()->crclwm.Update(RCS::Cnc.status.currentpose);
-        //        RCS::Cnc.CrclDelegate()->crclwm.Update(RCS::Cnc.status.currentjoints);
+        //        RCS::Fnc->CrclDelegate()->crclwm.Update(RCS::Fnc->status.currentpose);
+        //        RCS::Fnc->CrclDelegate()->crclwm.Update(RCS::Fnc->status.currentjoints);
 
         LOG_DEBUG << "Starting current joints=" << DumpJoints(cjoints).c_str();
         LOG_DEBUG << "Starting current pose=" << DumpPose(RCS::Controller.status.currentpose).c_str();
 
 #endif
+        FanucNearestJointsLookup fanuchints(Conversion::Affine3d2RcsPose(fanucoffset00), kin);
+        fanuchints.SetRobotHints();
+        InlineRobotCommands fanucrobot(RCS::Fnc, fanuchints);
+        
 
         InitScene();
+ #if 0       
+        RvizCheckers rvizgame(nh);
+        Checkers::BoardType outboard;
+        std::stringstream str;
+        str<< rvizgame.Game().TestBoard();
+
+        LOG_DEBUG << str.str().c_str();
+        rvizgame.Game().Deserialize(str, outboard);
+         LOG_DEBUG << rvizgame.Game().printDisplayFancy(outboard).c_str();
+#endif
 #ifdef CHECKERS
         RvizCheckers rvizgame(nh);
         rvizgame.RvizSetup();
@@ -232,10 +244,10 @@ int main(int argc, char** argv) {
         DrawScene();
         // LOG_DEBUG << ObjectDB::DumpDB();
         
-        RCS::Cnc._interpreter = boost::shared_ptr<RCSInterpreter>(new BangBangInterpreter());
-        RCS::Cnc._interpreter->_kinematics=kin;
-        RCS::Cnc.Start(); // start the Controller Session thread
-        AddGripperOffset();
+        RCS::Fnc->_interpreter = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter( RCS::Fnc, kin));
+        RCS::Fnc->Kinematics() = kin;
+        RCS::Fnc->Start(); // start the Controller Session thread
+        fanucrobot.AddGripperOffset();
         
 #ifdef CHECKERS
         // Play checkers - only move markers, no robot interaction
@@ -250,14 +262,14 @@ int main(int argc, char** argv) {
             if (rvizgame.CheckersMove(player, from, to))
                 break;
             rvizgame.Game().printDisplayFancy(rvizgame.Game().Board());
-            rvizgame.PhysicalMove(player, from.row, from.col, to);
+            rvizgame.PhysicalMove(fanucrobot, player, from.row, from.col, to);
             ros::spinOnce();
             ros::spinOnce();
             ros::Duration(0.2).sleep();
         }
 #endif
-       while(!boltdemo.Ready() ) {
-           ros::Duration(1.02).sleep();
+       while(!rvizdemo.Ready() ) {
+           ros::Duration(1.0).sleep();
        }
 
 
@@ -267,11 +279,11 @@ int main(int argc, char** argv) {
             //for(size_t i=0; i< 10; i++)
              //   ros::spinOnce();
 #ifdef BOLTDEMO
-            if (RCS::Cnc.crclcmds.SizeMsgQueue() == 0) {
+            if (RCS::Fnc->crclcmds.SizeMsgQueue() == 0) {
                 ClearScene();
                 NewScene();
                 DrawScene();
-                TestRobotCommands();
+                fanucrobot.TestRobotCommands();
             }
 #endif           
             r.sleep();

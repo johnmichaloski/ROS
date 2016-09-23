@@ -18,8 +18,9 @@
 #include "RCS.h"
 #include "Kinematics.h"
 #include "Scene.h"
+#include "Controller.h"
 
-class BoltDemo {
+class RvizDemo {
 protected:
     ros::Subscriber sub;
     ros::NodeHandle &_nh;
@@ -27,8 +28,8 @@ protected:
     static boost::mutex _flag_mutex;
 public:
 
-    BoltDemo(ros::NodeHandle &nh) : _nh(nh) {
-        sub = _nh.subscribe("clicked_point", 10, &BoltDemo::callback, this);
+    RvizDemo(ros::NodeHandle &nh) : _nh(nh) {
+        sub = _nh.subscribe("clicked_point", 10, &RvizDemo::callback, this);
     }
 
     bool Ready() {
@@ -50,7 +51,6 @@ public:
 
 class NearestJointsLookup {
 protected:
-
     struct cmp_op {
 
         bool operator()(const tf::Pose&a, const tf::Pose&b) {
@@ -59,10 +59,14 @@ protected:
             return a.getOrigin().x() < b.getOrigin().x();
         }
     };
-    std::map<tf::Pose, std::vector<double>, cmp_op> mapping;
+     IKinematicsSharedPtr _kinematics;
+   std::map<tf::Pose, std::vector<double>, cmp_op> mapping;
     typedef std::map<tf::Pose, std::vector<double>, cmp_op>::iterator MapIterator;
+	tf::Pose baseOffset;
+	Eigen::Affine3d offset00;
 public:
-
+    NearestJointsLookup(tf::Pose baseoffset,
+            IKinematicsSharedPtr kin): _kinematics(kin), baseOffset(baseoffset) {}
     void Add(tf::Pose pose, std::vector<double> joints) {
         mapping[pose] = joints;
     }
@@ -71,7 +75,7 @@ public:
         std::stringstream str;
         for (MapIterator it = mapping.begin(); it != mapping.end(); it++) {
             str << "Pose Hint " << RCS::DumpPoseSimple((*it).first) <<
-                    " = " << VectorDump<double>((*it).second);
+                    " = " << RCS::VectorDump<double>((*it).second);
 
         }
         return str.str();
@@ -93,17 +97,61 @@ public:
 
         return std::vector<double>();
     }
+
+    virtual void SetRobotHints() {
+    };
+
+    virtual tf::Pose& BaseOffset() {
+        return baseOffset;
+    }
 };
 
-extern void TestRobotCommands();
-extern void Pick(RCS::Pose pose, std::string objname);
-extern void MoveTo(RCS::Pose pose, std::string objname = "");
-extern void DoDwell(double dwelltime);
-extern void AddGripperOffset();
-extern void OpenGripper();
-extern void CloseGripper();
-extern void SetGripper(double ee);
-extern void Place(RCS::Pose pose, std::string objname);
-extern void MoveObject(std::string objname, RCS::Pose pose, int color);
-extern void EraseObject(std::string objname);
-extern void SetRobotHints();
+class FanucNearestJointsLookup : public NearestJointsLookup {
+
+public:
+
+    FanucNearestJointsLookup(tf::Pose baseoffset, IKinematicsSharedPtr kin) :
+    NearestJointsLookup(baseoffset, kin) {
+    }
+    virtual void SetRobotHints();
+};
+class MotomanNearestJointsLookup : public NearestJointsLookup {
+
+public:
+
+    MotomanNearestJointsLookup(tf::Pose baseoffset, IKinematicsSharedPtr kin) :
+    NearestJointsLookup(baseoffset, kin) {
+    }
+    virtual void SetRobotHints();
+};
+class InlineRobotCommands
+{
+protected:
+	boost::shared_ptr<RCS::CController>_cnc;
+    static int crclcommandnum;
+    NearestJointsLookup &_hints;
+public:
+    double mydwell;
+    InlineRobotCommands(boost::shared_ptr<RCS::CController> cnc, NearestJointsLookup &hints) : _cnc(cnc), _hints(hints) {
+        mydwell = .10; // appears slow
+    }
+
+    boost::shared_ptr<RCS::CController> cnc() {
+        return _cnc;
+    }
+    void Pick(RCS::Pose pose, std::string objname);
+    void MoveTo(RCS::Pose pose, std::string objname = "");
+    void DoDwell(double dwelltime);
+    void AddGripperOffset();
+    void OpenGripper();
+    void CloseGripper();
+    void SetGripper(double ee);
+    void Place(RCS::Pose pose, std::string objname);
+    void MoveObject(std::string objname, RCS::Pose pose, int color);
+    void EraseObject(std::string objname);
+    void TestRobotCommands();
+     void MoveJoints(std::vector<long unsigned int> jointnum,
+        std::vector<double> positions);
+};
+
+
