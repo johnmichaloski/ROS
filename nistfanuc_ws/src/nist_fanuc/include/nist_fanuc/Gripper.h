@@ -33,6 +33,7 @@
 
 #include "RCS.h"
 #include "Debug.h"
+
 /***
     // Couple code attempts at reading from robot joints names - see above
     crclinterface->crclwm.jointnames.clear();
@@ -55,34 +56,37 @@ public:
     std::vector<std::string> joint_names;
     const double degree = M_PI / 180;
     sensor_msgs::JointState joint_state;
+    std::string prefix;
 
     GripperInterface() {
     }
 
-    void init(ros::NodeHandle &nh, bool bPublish=false) {
+    void init(ros::NodeHandle &nh, std::string prefix, bool bPublish = false) {
         ROS_INFO("GripperHwInterface init");
-         try {
+        try {
+            this->prefix = prefix;
             //_nh.getParam("controller_joint_names", joint_names);
             if (joint_names.size() == 0) {
                 joint_state.name.resize(6);
                 joint_state.position.resize(6);
-                joint_state.name[0] = "robotiq_85_left_knuckle_joint"; // 0 to 90o
-                joint_state.name[1] = "robotiq_85_right_knuckle_joint"; // 0 to 90o
-                joint_state.name[2] = "robotiq_85_left_inner_knuckle_joint"; // 0 to 90o
-                joint_state.name[3] = "robotiq_85_right_inner_knuckle_joint"; // 0 to 90o
-                joint_state.name[4] = "robotiq_85_left_finger_tip_joint"; // 0 to 90o
-                joint_state.name[5] = "robotiq_85_right_finger_tip_joint"; // 0 to 90o
+                joint_state.name[0] = prefix + "robotiq_85_left_knuckle_joint"; // 0 to 90o
+                joint_state.name[1] = prefix + "robotiq_85_right_knuckle_joint"; // 0 to 90o
+                joint_state.name[2] = prefix + "robotiq_85_left_inner_knuckle_joint"; // 0 to 90o
+                joint_state.name[3] = prefix + "robotiq_85_right_inner_knuckle_joint"; // 0 to 90o
+                joint_state.name[4] = prefix + "robotiq_85_left_finger_tip_joint"; // 0 to 90o
+                joint_state.name[5] = prefix + "robotiq_85_right_finger_tip_joint"; // 0 to 90o
             } else {
 
                 joint_state.position.resize(joint_names.size());
             }
-            if(bPublish) 
+            if (bPublish)
                 joint_pub = nh.advertise<sensor_msgs::JointState>("nist_controller/robot/joint_states", 10);
-       } catch (...) {
+        } catch (...) {
             ROS_ERROR("GripperInterface Failed to init");
 
         }
     }
+
     std::vector<std::string> JointNames() {
         return joint_state.name;
     }
@@ -105,7 +109,7 @@ public:
     }
 
     void publish_jointstate() {
-         joint_pub.publish(joint_state);
+        joint_pub.publish(joint_state);
         joint_pub.publish(joint_state);
         joint_pub.publish(joint_state);
         joint_pub.publish(joint_state);

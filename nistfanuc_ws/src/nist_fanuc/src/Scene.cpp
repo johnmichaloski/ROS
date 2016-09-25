@@ -21,7 +21,7 @@ using namespace boost::assign;
 #include "Debug.h"
 using namespace rviz_visual_tools;
 
-Eigen::Affine3d fanucoffset00=Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0,-0.5, 0.0);
+Eigen::Affine3d fanucoffset00 = Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, -0.5, 0.0);
 
 std::map<std::string, std::string> ObjectDB::_typemapping =
         map_list_of("bolt", "mesh")
@@ -46,23 +46,38 @@ void ClearScene() {
 }
 
 void InitScene() {
-    visual_tools = boost::shared_ptr<RvizVisualTools>(new RvizVisualTools("base_link", "/visualization_marker_array"));
-    //visual_tools = boost::shared_ptr<SonOfRvizVisualTools>(new SonOfRvizVisualTools("base_link"));
+#ifdef FANUCPREFIX
+    visual_tools = boost::shared_ptr<RvizVisualTools>(new RvizVisualTools("world", "/visualization_marker_array"));
 
-    ClearScene();
+#else
+    visual_tools = boost::shared_ptr<RvizVisualTools>(new RvizVisualTools("base_link", "/visualization_marker_array"));
+#endif
+    //visual_tools = boost::shared_ptr<SonOfRvizVisualTools>(new SonOfRvizVisualTools("base_link"));
+    visual_tools->enableBatchPublishing(false);
+
     //visual_tools->enableBatchPublishing();
     //visual_tools->waitForMarkerPub();
     //visual_tools->loadMarkerPub(true,false);
     Globals.Sleep(10000);
 
+    ClearScene();
+
     // Setup up triangle_marker_ for wall drawing
+#ifdef FANUCPREFIX
+    triangle_marker_.header.frame_id = "world";
+#else
     triangle_marker_.header.frame_id = "base_link";
+#endif
     triangle_marker_.ns = "Triangle";
     triangle_marker_.action = visualization_msgs::Marker::ADD;
     triangle_marker_.type = visualization_msgs::Marker::TRIANGLE_LIST;
     triangle_marker_.lifetime = ros::Duration(0.0);
     // Load Cylinder ----------------------------------------------------
+#ifdef FANUCPREFIX
+    cylinder_marker_.header.frame_id = "world";
+#else
     cylinder_marker_.header.frame_id = "base_link";
+#endif
     cylinder_marker_.ns = "Cylinder";
     cylinder_marker_.action = visualization_msgs::Marker::ADD;
     cylinder_marker_.type = visualization_msgs::Marker::CYLINDER;
@@ -105,11 +120,11 @@ void InitScene() {
 #ifdef BOLTDEMO
     //#ifdef BOLTDEMO
     // Scene bolt and boltholder objects
-    ObjectDB::Save(new ObjectDB("boltholder1", "boltholder", ObjectDB::gid++, 
-            (Eigen::Affine3d::Identity() * Eigen::Translation3d(0.5, 0, 0.0))*fanucoffset00,
+    ObjectDB::Save(new ObjectDB("boltholder1", "boltholder", ObjectDB::gid++,
+            (Eigen::Affine3d::Identity() * Eigen::Translation3d(0.5, 0, 0.0)) * fanucoffset00,
             "file:///usr/local/michalos/nistfanuc_ws/src/nist_fanuc/worldmodel/medium_gear_holder.stl",
             rviz_visual_tools::RED, 0.035));
-    
+
     for (size_t i = 0; i < 4; i++) {
         Eigen::Translation3d spot[4] = {Eigen::Translation3d(0.25, -.45, 0.04),
             Eigen::Translation3d(0.25, .45, 0.04),
@@ -118,7 +133,7 @@ void InitScene() {
         std::string boltname = Globals.StrFormat("bolt%d", i + 1);
         ObjectDB::Save(new ObjectDB(boltname, "bolt",
                 ObjectDB::gid++, Eigen::Affine3d::Identity() *
-                spot[i]*fanucoffset00, // Eigen::Translation3d(0.25, -.45, 0.04),
+                spot[i] * fanucoffset00, // Eigen::Translation3d(0.25, -.45, 0.04),
                 "file:///usr/local/michalos/nistfanuc_ws/src/nist_fanuc/worldmodel/medium_gear.stl",
                 rviz_visual_tools::RED, 0.035));
     }
@@ -134,7 +149,7 @@ void NewScene() {
             Eigen::Translation3d(0.45, .45, 0.04)};
         std::string boltname = Globals.StrFormat("bolt%d", i + 1);
         UpdateScene(boltname, Eigen::Affine3d::Identity() *
-                spot[i]*fanucoffset00, rviz_visual_tools::RED);
+                spot[i] * fanucoffset00, rviz_visual_tools::RED);
     }
 #endif
 }
@@ -184,8 +199,7 @@ bool DrawObject(ObjectDB *obj) {
                 obj->scale,
                 type,
                 obj->id);
-    }
-    else if (type == "cuboid") {
+    } else if (type == "cuboid") {
         b = visual_tools->publishCuboid(obj->pose.translation(),
                 obj->adjacentpose.translation(),
                 obj->color); // Eigen::Vector3d(0.0, 0.5, 1.0), 
@@ -247,6 +261,7 @@ bool publishCylinder(Eigen::Affine3d pose,
     rotation = Eigen::AngleAxisd(0.5 * M_PI, Eigen::Vector3d::UnitY());
     pose = pose * rotation;
 #endif
+    bool bWorked;
 
     // Set the timestamp
     cylinder_marker_.header.stamp = ros::Time::now();
@@ -266,5 +281,6 @@ bool publishCylinder(Eigen::Affine3d pose,
     cylinder_marker_.color = visual_tools->getColor(color);
 
     // Helper for publishing rviz markers
-    return visual_tools->publishMarker(cylinder_marker_);
+    bWorked = visual_tools->publishMarker(cylinder_marker_);
+    return bWorked;
 }

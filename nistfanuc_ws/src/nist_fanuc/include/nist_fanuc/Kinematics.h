@@ -109,9 +109,21 @@ protected:
     size_t num_joints;
     std::string _groupname;
     std::string _eelinkname;
+    std::string prefix;
+    tf::Pose baseoffset;
 public:
     boost::shared_ptr<::Kinematics> armkin;
 
+    std::string & Prefix() {
+        return prefix;
+    }
+
+    tf::Pose  baseOffset() {
+        return baseoffset;
+    }
+    tf::Pose  invBaseOffset() {
+        return baseoffset.inverse();
+    }
     size_t NumJoints() {
         assert(joint_names.size() != 0);
         return joint_names.size();
@@ -269,16 +281,29 @@ typedef boost::shared_ptr<IKinematics> IKinematicsSharedPtr;
 #include <moveit_msgs/KinematicSolverInfo.h>
 
 class ArmKinematics : public IKinematics {
+protected:
+
 public:
 
+    ArmKinematics(std::string prefix, tf::Pose baseoffset) {
+        this->prefix = prefix;
+        this->baseoffset=baseoffset;
+       
+#ifdef FANUCPREFIX
+         prefix = "fanuc_";
+#else
+         prefix = "";
+#endif
+       
+    }
     virtual RCS::Pose FK(std::vector<double> jv) {
         moveit_msgs::GetPositionFK::Response response;
         moveit_msgs::GetPositionFK::Request request;
         request.fk_link_names = link_names;
-        request.robot_state.joint_state.header.frame_id = "base_link";
+        request.robot_state.joint_state.header.frame_id = prefix + "base_link";
         request.robot_state.joint_state.name = joint_names;
         request.robot_state.joint_state.position = jv;
-        request.header.frame_id = "base_link";
+        request.header.frame_id = prefix + "base_link";
         armkin->getPositionFK(request, response);
         RCS::Pose pose;
         Conversion::GeometryPose2TfPose(response.pose_stamped[0].pose, pose);

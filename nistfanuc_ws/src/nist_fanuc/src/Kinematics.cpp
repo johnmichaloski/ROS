@@ -137,7 +137,7 @@ Eigen::Vector3d UrdfVector2EigenVector(const urdf::Vector3 &in) {
 // http://docs.ros.org/diamondback/api/urdf/html/classurdf_1_1Vector3.html
 // Auto in quotes so far
 
-RCS::Pose AutoComputeGripperOffset(urdf::Model& robot_model) {
+RCS::Pose AutoComputeGripperOffset(urdf::Model& robot_model, std::string prefix) {
 #if 0
     AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(1, 0, 0), Eigen::Vector3d(.0085, 0, -.0041), Eigen::Vector3d(0, 0, 0)));
     AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(1, 0, 0), Eigen::Vector3d(.04191, -.0306, 0), Eigen::Vector3d(1.5707, -1.5707, 0)));
@@ -147,12 +147,22 @@ RCS::Pose AutoComputeGripperOffset(urdf::Model& robot_model) {
 #endif
     AllM.clear();
     std::vector<boost::shared_ptr <const urdf::Joint>> joints;
-    joints.push_back(robot_model.getJoint("robotiq_85_base_joint"));
-    joints.push_back(robot_model.getJoint("robotiq_85_right_knuckle_joint"));
-    joints.push_back(robot_model.getJoint("robotiq_85_right_finger_joint"));
-    joints.push_back(robot_model.getJoint("robotiq_85_right_inner_knuckle_joint"));
-    joints.push_back(robot_model.getJoint("robotiq_85_right_finger_tip_joint"));
+    std::string grippernames [] = {
+        std::string("robotiq_85_base_joint"),
+        std::string("robotiq_85_right_knuckle_joint"),
+        std::string("robotiq_85_right_finger_joint"),
+        std::string("robotiq_85_right_inner_knuckle_joint"),
+        std::string("robotiq_85_right_finger_tip_joint")
+    };
+ //   std::string prefix = "fanuc_";
+    
+    joints.push_back(robot_model.getJoint(prefix+grippernames [0]));
+    joints.push_back(robot_model.getJoint(prefix+grippernames [1]));
+    joints.push_back(robot_model.getJoint(prefix+grippernames [2]));
+    joints.push_back(robot_model.getJoint(prefix+grippernames [3]));
+    joints.push_back(robot_model.getJoint(prefix+grippernames [4]));
     for (size_t i = 0; i < joints.size(); i++) {
+        assert(joints[i] != NULL);
         urdf::Vector3 axis = joints[i]->axis;
         urdf::Pose jpose = joints[i]->parent_to_joint_origin_transform;
         urdf::Vector3 position = jpose.position;

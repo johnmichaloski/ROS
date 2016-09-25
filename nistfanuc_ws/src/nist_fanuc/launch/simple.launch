@@ -1,12 +1,13 @@
 <?xml version="1.0" ?>
 
 <launch>
+	<arg name="bprefix" default="true"/>
   	<arg name="srdf_file" default="$(find fanuc_lrmate200id_support)/config/fanuc_lrmate200id.srdf" />
 
-	<param name="robot_description" command="cat $(find fanuc_lrmate200id_support)/urdf/tworobot.urdf" />
+	<!--<param name="robot_description" command="cat $(find fanuc_lrmate200id_support)/urdf/tworobot.urdf" />-->
 
-  	<!--<param name="robot_description" 
-		command="$(find xacro)/xacro.py $(find fanuc_lrmate200id_support)/urdf/lrmate200id.xacro" /> -->
+  	<param name="robot_description" 
+		command="$(find xacro)/xacro.py $(find fanuc_lrmate200id_support)/urdf/lrmate200id.xacro" /> 
   	<rosparam  command="load" file="$(find fanuc_lrmate200id_support)/config/joint_names_lrmate200id.yaml" />
 	<param name="robot_description_semantic" command="cat $(arg srdf_file)" />
   
@@ -16,8 +17,20 @@
 	<param name="csvlogging" value="0" />
 	<param name="csvlogfile" value="$(find nist_fanuc)/log/nistcrcl.csv" />
 
-	<param name="tip_name" value="link_6" />
+	<!-- arm kinematics expects name from roslaunch parameter...-->
+	<group if="$(arg bprefix)">
+  	<!-- stuff that will only be evaluated if bprefix is true -->
+  	<param name="tip_name" value="fanuc_link_6" />
+	<param name="root_name" value="world" />
+	</group>	
+	
+	<group unless="$(arg bprefix)">
+  	<!-- stuff that will only be evaluated if bprefix is false -->
+  	<param name="tip_name" value="link_6" />
 	<param name="root_name" value="base_link" />
+	</group>
+	
+	
 	<node name="nistcrcl" pkg="nistcrcl" type="nistcrcl" respawn="false" output="screen" />	
  	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" output="screen" />
 

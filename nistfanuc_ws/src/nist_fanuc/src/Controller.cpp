@@ -76,7 +76,7 @@ namespace RCS {
 
     }
 
-    void CController::Setup(ros::NodeHandle &nh) {
+    void CController::Setup(ros::NodeHandle &nh, std::string prefix) {
         IfDebug(LOG_DEBUG << "CController::Setup");
         Name() = "Controller";
 
@@ -87,7 +87,7 @@ namespace RCS {
         rviz_jntcmd = _nh->advertise<sensor_msgs::JointState>("nist_controller/robot/joint_states", 1);
         status.currentjoints = RCS::ZeroJointState(Kinematics()->JointNames().size());
         status.currentjoints.name = Kinematics()->JointNames();
-        gripper.init(nh);
+        gripper.init(nh, prefix);
         // fixme: read arm and gripper joint positions
         if (bCvsPoseLogging()) {
             if (CvsPoseLoggingFile().empty())

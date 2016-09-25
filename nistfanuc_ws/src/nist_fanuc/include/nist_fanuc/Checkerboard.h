@@ -45,6 +45,7 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 #include "Controller.h"
 #include "Demo.h"
 using namespace Conversion;
+#define UPDOWN
 
 struct RvizCheckers {
     //static boost::mutex _reader_mutex; /**< for mutexed reading access  */
@@ -88,17 +89,22 @@ struct RvizCheckers {
         bFlag = true;
 
     }
-
-    Eigen::Affine3d GetPose(int row, int col) {
+Eigen::Affine3d GetPose(int row, int col) {
         // Input into this method assumes only correct row/col choices
         assert((row + col) % 2 == 1);
-               // double rowoffset = xoffset + (offset * row);
-               // double coloffset = yoffset + (col * offset);
+#ifdef LEFTRIGHT
+        double rowoffset = xoffset + (offset * row);
+        double coloffset = yoffset + (col * offset);
+        Eigen::Affine3d pose = visual_tools->convertPointToPose((
+                Eigen::Vector3d(rowoffset + offset / 2.0, coloffset + offset / 2.0, .01))
+                );
+#elif defined(UPDOWN)
         double rowoffset = yoffset + (offset * row);
         double coloffset = xoffset + (col * offset);
         Eigen::Affine3d pose = visual_tools->convertPointToPose((
-                Eigen::Vector3d( coloffset + offset / 2.0,rowoffset + offset / 2.0, .01))
+                Eigen::Vector3d(coloffset + offset / 2.0, rowoffset + offset / 2.0, .01))
                 );
+#endif
         return pose;
     }
 
@@ -111,7 +117,7 @@ struct RvizCheckers {
         //return yoffset + (offset * col)
         return xoffset + (offset * col);
     }
-#define UPDOWN
+
 
     void RvizSetup() {
         tf::Quaternion qidentity(0.0, 0.0, 0.0, 1.0);
@@ -158,7 +164,7 @@ struct RvizCheckers {
                     std::string checkername = Globals.StrFormat("Checker[%d:%d]", row, checkercol);
                     checker = new ObjectDB(checkername,
                             "Cylinder",
-                            Eigen::Affine3d(Eigen::Translation3d(obj->centroid)),
+                            Eigen::Affine3d(Eigen::Translation3d(obj->centroid)),//FIXME: base offset?
                             checkercolor,
                             height,
                             radius,

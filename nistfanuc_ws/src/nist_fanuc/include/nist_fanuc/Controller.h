@@ -74,7 +74,7 @@ namespace RCS {
         /*!
          *\brief Setup routine for the controller..
          */
-        void Setup(ros::NodeHandle &nh);
+        void Setup(ros::NodeHandle &nh, std::string prefix);
 
         /*!
          *\brief Creates a comma separated string of current state of robot. (Can use other separator). 

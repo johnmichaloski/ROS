@@ -63,6 +63,7 @@ RCS::CanonCmd BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd) {
         RCS::Pose goalpose =  finalpose * _nc->invGripperPose() ;
         LOG_DEBUG << "Final Pose " << RCS::DumpPoseSimple(finalpose).c_str();
         LOG_DEBUG << "Minus Gripper Pose " << RCS::DumpPoseSimple(goalpose).c_str();
+
         if (cmd.hint.size() ==0){
             //cmd.joints.position = Cnc.Kinematics()->IK(goalpose, cmd.ConfigMin(), cmd.ConfigMax());
             cmd.joints.position = _kinematics->IK(goalpose, Subset(_nc->status.currentjoints.position, 6));
@@ -76,6 +77,7 @@ RCS::CanonCmd BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd) {
         }
            
         assert(cmd.joints.position.size() > 0);
+        LOG_DEBUG << "KDL IK Joints " << VectorDump<double>(  cmd.joints.position).c_str();
         cmd.joints.name = _kinematics->JointNames();
         cmd.crclcommand = CanonCmdType::CANON_MOVE_JOINT;
     }

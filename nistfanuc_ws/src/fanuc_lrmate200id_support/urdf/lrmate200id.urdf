@@ -26,25 +26,24 @@
   <!-- Joint 5 -->
   <!-- Joint 6 -->
   <!-- <xacro:include filename="$(find fanuc_lrmate200id_support)/urdf/robotiq_c2_model_macro.xacro" /> -->
+ <link name="world" />
  
-  <link name="world_frame">
-  <visual>
-  <origin rpy="0 0 0" xyz="0 -0.5 0"/>
-    <geometry>
-        <box size="0.01 0.01 -0.1"/>
-      </geometry>
-      </visual>
-  </link>
-  
-  <joint name="base_link-base" type="fixed">
-    <origin rpy="0 0 0" xyz="0 0 0.330"/>
-    <parent link="base_link"/>
-    <child link="base"/>
+  <!-- Dummy Link -->
+  <link name="link0" />
+  <joint name="world_joint" type="fixed">
+    <parent link="world" />
+    <child link="link0" />
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
   </joint>
   
-   <virtual_joint name="virtual_joint" type="fixed" parent_frame="world_frame" child_link="base_link" />
-
-  
+  <!-- First Robot -->
+  <joint name="joint_0" type="fixed">
+    <parent link="link0" />
+    <child link="base_link" />
+    <origin xyz="0 -0.5 0" rpy="0 0 0"/>
+  </joint>
+   
   <link name="base_link">
     <visual>
       <origin rpy="0 0 0" xyz="0 -0.5 0"/>
@@ -167,7 +166,7 @@
   </link>
   <!--   <link name="${prefix}tool0" /> -->
   <joint name="joint_1" type="revolute">
-    <origin rpy="0 0 0" xyz="0 0 0.330"/>
+    <origin rpy="0 0 0" xyz="0 -0.5 0.330"/>
     <parent link="base_link"/>
     <child link="link_1"/>
     <axis xyz="0 0 1"/>

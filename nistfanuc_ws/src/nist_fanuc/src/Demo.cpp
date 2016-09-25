@@ -276,12 +276,16 @@ void FanucNearestJointsLookup::SetRobotHints() {
     Add(RCS::Pose(QBend,
             tf::Vector3(0.390496134758, -0.101964049041, 0.0245)) * baseOffset,
             ToVector<double> (6, -0.27, 0.8, -0.55, 0.0, 0.0, 0.0));
+    
+   // Bolt holder locations
+   Add(RCS::Pose(QBend,
+            tf::Vector3(0.390496134758, -0.101964049041, 0.0245)) * baseOffset,
+            ToVector<double> (6, -0.27, 0.8, -0.55, 0.0, 0.0, 0.0));
 
-    // Bolt holder locations
-    Add(RCS::Pose(QBend,
-            tf::Vector3(0.390496134758, -0.101964049041, 0.0245)) *
-            baseOffset,
-            ToVector<double> (6, -0.27, 0.95, -0.14, 0.0, 0.0, 0.0));
+   // No base offset involved here...
+     Add(RCS::Pose(QBend,
+            tf::Vector3(0.117, -.060, 0.250)) ,
+            ToVector<double> (6, 1.29, 0.63, -0.09, 0.0, 0.0, 0.0));
     //        tf::Vector3(0.38512814045, 0.00476559251547, 0.0245),
     //        tf::Vector3(0.497517108917, -0.106719098985, 0.0245),
     //        tf::Vector3(0.497517108917, 0.00590129941702, 0.0245)

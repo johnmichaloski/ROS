@@ -33,7 +33,7 @@
 // /opt/ros/indigo/include/moveit/robot_state/robot_state.h
 // /opt/ros/indigo/include/moveit/move_group_interface/move_group.h
 extern RCS::Pose ComputeGripperOffset();
-extern RCS::Pose AutoComputeGripperOffset(urdf::Model& robot_model);
+extern RCS::Pose AutoComputeGripperOffset(urdf::Model& robot_model, std::string prefix);
 
 
 int main(int argc, char** argv) {
@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
                 "/opt/ros/indigo/lib/python2.7/dist-packages:"
                 "/home/isd/michalos/el-robotics-core/nist_kitting/src", true);
 
-       // setenv("RCS::Fnc->Start()PKG_CONFIG_PATH", "/usr/local/michalos/nistfanuc_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/opt/ros/indigo/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistfanuc_ws/devel/lib/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/pkgconfig:/opt/ros/indigo/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig", true);
+       // setenv("PKG_CONFIG_PATH", "/usr/local/michalos/nistfanuc_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/opt/ros/indigo/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistfanuc_ws/devel/lib/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/pkgconfig:/opt/ros/indigo/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig", true);
         setenv("PATH", "/usr/local/michalos/nistfanuc_ws/devel/bin:/usr/local/michalos/nistcrcl_ws/devel/bin:/opt/ros/indigo/bin:/usr/local/jdk1.8.0_60/bin:/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:/usr/X11R6/bin:/usr/local/ulapi/bin:/usr/local/gomotion/bin:/home/isd/michalos/bin", true);
 
         // This sets up some application name/value pairs: user, hostname
@@ -142,22 +142,33 @@ int main(int argc, char** argv) {
         pRvizMarker = boost::shared_ptr<CRvizMarker>(new CRvizMarker(nh));
         pRvizMarker->Init();
         pLinkReader = boost::shared_ptr<CLinkReader>(new CLinkReader(nh));
+        
+        tf::Pose baseoffset =Conversion::Affine3d2RcsPose(fanucoffset00);
 
 #define ARMKIN
 #ifdef ARMKIN
-        kin = boost::shared_ptr<IKinematics>(new ArmKinematics());
-        // Initializatin of Controller instantiatio of shared objects  
+ #ifdef FANUCPREFIX
+        kin = boost::shared_ptr<IKinematics>(new ArmKinematics("fanuc_", baseoffset));
+#else
+        kin = boost::shared_ptr<IKinematics>(new ArmKinematics("", ));
+#endif
+        // Initialization of Controller instantiation of shared objects  
+        // Fixme: there is no tool0?
         kin->Init(std::string("manipulator"), std::string("tool0"));
         kin->Init(nh);
         RCS::Fnc->Kinematics() = kin;
         ComputeGripperOffset();
-        AutoComputeGripperOffset(kin->armkin->robot_model);
+#ifdef FANUCPREFIX
+        AutoComputeGripperOffset(kin->armkin->robot_model, "fanuc_");
+#else
+        AutoComputeGripperOffset(kin->armkin->robot_model, "");
+#endif
 
         TestFk(kin, "armkin");
         TestIk(kin, "armkin");
 
 #endif
-#define FASTKIN    
+//#define FASTKIN    
 #ifdef FASTKIN
         boost::shared_ptr<IKinematics> fastkin;
         fastkin = boost::shared_ptr<IKinematics>(new FastKinematics());
@@ -180,7 +191,11 @@ int main(int argc, char** argv) {
 #endif
 
         // Initialize Controller...
-        RCS::Fnc->Setup(nh);
+#ifdef FANUCPREFIX
+        RCS::Fnc->Setup(nh, "fanuc_");
+#else
+        RCS::Fnc->Setup(nh, "");
+#endif
         //RCS::Controller._NumJoints = 6; // hard code even thought chainrobotmodel will work
         RCS::Fnc->status.Init();
         RCS::Fnc->CycleTime() = DEFAULT_LOOP_CYCLE;
@@ -242,7 +257,7 @@ int main(int argc, char** argv) {
         rvizgame.RvizSetup();
 #endif
         DrawScene();
-        // LOG_DEBUG << ObjectDB::DumpDB();
+       // LOG_DEBUG << ObjectDB::DumpDB();
         
         RCS::Fnc->_interpreter = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter( RCS::Fnc, kin));
         RCS::Fnc->Kinematics() = kin;
