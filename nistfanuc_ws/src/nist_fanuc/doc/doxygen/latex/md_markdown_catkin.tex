@@ -49,5 +49,14 @@ You can control the number of build jobs. Typically a job controller is used and
 
 You can control the maximum number of packages allowed to build in parallel by using the -\/p or --parallel-\/packages option and you can change the number of make jobs available with the -\/j or --jobs option.
 
-To disable the job server, you can use the --no-\/jobserver option. \begin{DoxyVerb}catkin build PKG --no-deps -p 7 # Build PKG only, and use only 7 or 8 cores\end{DoxyVerb}
- 
+To disable the job server, you can use the --no-\/jobserver option. \begin{DoxyVerb}catkin build PKG --no-deps -p 7 # Build PKG only, and use only 7 or 8 cores
+\end{DoxyVerb}
+
+
+\subsection*{Building With Warnings }
+
+It can sometimes be useful to compile with additional warnings enabled across your whole catkin workspace. To achieve this, use a command similar to this\-: \begin{DoxyVerb}$ catkin build -v --cmake-args -DCMAKE_C_FLAGS="-Wall -W -Wno-unused-parameter"
+\end{DoxyVerb}
+
+
+This command passes the {\ttfamily -\/\-D\-C\-M\-A\-K\-E\-\_\-\-C\-\_\-\-F\-L\-A\-G\-S=}... argument to all invocations of cmake. 

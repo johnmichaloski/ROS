@@ -103,7 +103,7 @@ add_executable(nist_fanuc
 
 
 src/BLogging.cpp
-src/Communication.cpp
+#src/Communication.cpp
 src/Controller.cpp
 src/Conversions.cpp
 src/CsvLogging.cpp

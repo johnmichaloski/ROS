@@ -14,7 +14,7 @@ static const std::string FK_INFO_SERVICE = "get_fk_solver_info";
 Kinematics::Kinematics() {
 }
 
-bool Kinematics::init(ros::NodeHandle &nh) {
+bool Kinematics::init(ros::NodeHandle &nh, std::string tipname, std::string rootname) {
     // Get URDF XML
     std::string urdf_xml, full_urdf_xml;
     nh.param("urdf_xml",urdf_xml,std::string("robot_description"));
@@ -36,8 +36,11 @@ bool Kinematics::init(ros::NodeHandle &nh) {
         return false;
     }
 #endif
-    nh.getParam("root_name", root_name);
-    nh.getParam("tip_name", tip_name);
+    //nh.getParam("root_name", root_name);
+    //nh.getParam("tip_name", tip_name);
+    // These must be passed in as this class is instantiated numerous times, and using nh more difficult
+     root_name=rootname;
+     tip_name=tipname;
      
     // Load and Read Models
     if (!loadModel(result)) {

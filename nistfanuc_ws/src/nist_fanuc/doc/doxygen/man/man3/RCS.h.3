@@ -1,12 +1,16 @@
-.TH "/usr/local/michalos/github/usnistgov/el-robotics-core/nist_fanuc/include/nist_fanuc/RCS.h" 3 "Fri Apr 15 2016" "CRCL FANUC" \" -*- nroff -*-
+.TH "/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/include/nist_fanuc/RCS.h" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/usr/local/michalos/github/usnistgov/el-robotics-core/nist_fanuc/include/nist_fanuc/RCS.h \- 
+/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/include/nist_fanuc/RCS.h \- 
 .SH SYNOPSIS
 .br
 .PP
 \fC#include <math\&.h>\fP
+.br
+\fC#include <stdarg\&.h>\fP
+.br
+\fC#include <ros/ros\&.h>\fP
 .br
 \fC#include <moveit/robot_model_loader/robot_model_loader\&.h>\fP
 .br
@@ -14,9 +18,13 @@
 .br
 \fC#include <tf/transform_datatypes\&.h>\fP
 .br
-\fC#include '/opt/ros/indigo/include/sensor_msgs/JointState\&.h'\fP
+\fC#include <sensor_msgs/JointState\&.h>\fP
 .br
-\fC#include <stdarg\&.h>\fP
+\fC#include <nistcrcl/CrclCommandMsg\&.h>\fP
+.br
+\fC#include <nistcrcl/CrclStatusMsg\&.h>\fP
+.br
+\fC#include <nistcrcl/CrclMaxProfileMsg\&.h>\fP
 .br
 \fC#include 'Globals\&.h'\fP
 .br
@@ -24,6 +32,53 @@
 .SS "Classes"
 
 .in +1c
+.ti -1c
+.RI "struct \fBRCS::PoseTolerance\fP"
+.br
+.ti -1c
+.RI "struct \fBRCS::CanonLengthUnit\fP"
+.br
+.RI "\fIenumeration of length units\&. \fBConversion\fP into ROS compatible meters\&. \fP"
+.ti -1c
+.RI "struct \fBRCS::TrajPointType\fP"
+.br
+.RI "\fIenumeration of trajectory pose points\&. \fP"
+.ti -1c
+.RI "struct \fBRCS::CanonAngleUnit\fP"
+.br
+.RI "\fIenumeration of angle units\&. \fBConversion\fP into ROS compatible radians\&. \fP"
+.ti -1c
+.RI "struct \fBRCS::CanonForceUnit\fP"
+.br
+.RI "\fIenumeration of force units\&. \fP"
+.ti -1c
+.RI "struct \fBRCS::CanonTorqueUnit\fP"
+.br
+.RI "\fIenumeration of torque units\&. \fP"
+.ti -1c
+.RI "struct \fBRCS::CanonReturn\fP"
+.br
+.RI "\fIenumeration of return type from Crcl intepretation\&. If statusreply, requires status sent to Crcl client\&. \fP"
+.ti -1c
+.RI "struct \fBRCS::CanonCmdType\fP"
+.br
+.RI "\fIenumeration of Crcl commands\&. Many Crcl commands are wm parameter setting and require no motion component\&. \fP"
+.ti -1c
+.RI "struct \fBRCS::CanonStopMotionType\fP"
+.br
+.RI "\fIenumeration of stopping motion, e\&.g\&., estop equivalent to immediate\&. \fP"
+.ti -1c
+.RI "struct \fBRCS::CanonAccProfile\fP"
+.br
+.RI "\fIenumeration of trajectory acceleration profile\&. \fP"
+.ti -1c
+.RI "struct \fBRCS::MovementType\fP"
+.br
+.RI "\fIenumeration of trajectory motion type, joint or cartesian\&. \fP"
+.ti -1c
+.RI "struct \fBRCS::CanonStatusType\fP"
+.br
+.RI "\fIenumeration of controller status types for individual commands\&. Note, even though command types are listed, not all used or supported\&. \fP"
 .ti -1c
 .RI "class \fBRCS::IRate\fP"
 .br
@@ -36,6 +91,10 @@
 .RI "struct \fBRCS::CanonWorldModel\fP"
 .br
 .RI "\fI\fBCanonWorldModel\fP describes the controller state\&. Includes reference to robot model\&. \fP"
+.ti -1c
+.RI "class \fBRCS::IRCSInterpreter\fP"
+.br
+.RI "\fIIInterpreter parses a \fBRCS\fP command and generates robot motion commands\&. \fP"
 .in -1c
 .SS "Namespaces"
 
@@ -127,54 +186,6 @@ sensor_msgs::JointState_
 .RI "typedef std::vector< double > \fBRCS::robotAxes\fP"
 .br
 .in -1c
-.SS "Enumerations"
-
-.in +1c
-.ti -1c
-.RI "enum \fBRCS::CanonLengthUnit\fP { \fBRCS::METER\fP = 0, \fBRCS::MM\fP, \fBRCS::INCH\fP }"
-.br
-.RI "\fIenumeration of length units\&. Conversion into ROS compatible meters\&. \fP"
-.ti -1c
-.RI "enum \fBRCS::TrajPointType\fP { \fBRCS::WAYPOINT\fP = 1, \fBRCS::GOAL\fP }"
-.br
-.RI "\fIenumeration of trajector pose points\&. \fP"
-.ti -1c
-.RI "enum \fBRCS::CanonAngleUnit\fP { \fBRCS::RADIAN\fP = 0, \fBRCS::DEGREE\fP }"
-.br
-.RI "\fIenumeration of angle units\&. Conversion into ROS compatible radians\&. \fP"
-.ti -1c
-.RI "enum \fBRCS::CanonForceUnit\fP { \fBRCS::NEWTON\fP = 0, \fBRCS::POUND\fP, \fBRCS::OUNCE\fP }"
-.br
-.RI "\fIenumeration of force units\&. \fP"
-.ti -1c
-.RI "enum \fBRCS::CanonTorqueUnit\fP { \fBRCS::NEWTONMETER\fP = 0, \fBRCS::FOOTPOUND\fP }"
-.br
-.RI "\fIenumeration of torque units\&. \fP"
-.ti -1c
-.RI "enum \fBRCS::CanonReturn\fP { \fBRCS::CANON_REJECT\fP = -2, \fBRCS::CANON_FAILURE\fP = -1, \fBRCS::CANON_SUCCESS\fP = 0, \fBRCS::CANON_STATUSREPLY\fP = 1, \fBRCS::CANON_MOTION\fP = 2, \fBRCS::CANON_RUNNING\fP }"
-.br
-.RI "\fIenumeration of return type from \fBCrcl\fP intepretation\&. If statusreply, requires status sent to \fBCrcl\fP client\&. \fP"
-.ti -1c
-.RI "enum \fBRCS::CanonCmdType\fP { \fBRCS::CANON_NOOP\fP = 0, \fBRCS::CANON_DWELL\fP, \fBRCS::CANON_END_CANON\fP, \fBRCS::CANON_INIT_CANON\fP, \fBRCS::CANON_MOVE_JOINT\fP, \fBRCS::CANON_MOVE_TO\fP, \fBRCS::CANON_MOVE_THRU\fP, \fBRCS::CANON_SET_MAX_CART_ACC\fP, \fBRCS::CANON_SET_MAX_CART_SPEED\fP, \fBRCS::CANON_SET_MAX_JOINT_ACC\fP, \fBRCS::CANON_SET_MAX_JOINT_SPEED\fP, \fBRCS::CANON_SET_GRIPPER\fP, \fBRCS::CANON_SET_TOLERANCE\fP, \fBRCS::CANON_STOP_MOTION\fP, \fBRCS::CANON_DO_MOTION\fP, \fBRCS::CANON_OTHER\fP, \fBRCS::CANON_UNKNOWN\fP }"
-.br
-.RI "\fIenumeration of \fBCrcl\fP commands\&. Many \fBCrcl\fP commands are wm parameter setting and require no motion component\&. \fP"
-.ti -1c
-.RI "enum \fBRCS::CanonStopMotionType\fP { \fBRCS::UNSET\fP = -1, \fBRCS::IMMEDIATE\fP = 0, \fBRCS::FAST\fP, \fBRCS::NORMAL\fP }"
-.br
-.RI "\fIenumeration of stopping motion, e\&.g\&., estop equivalent to immediate\&. \fP"
-.ti -1c
-.RI "enum \fBRCS::CanonAccProfile\fP { \fBRCS::MS_IS_UNSET\fP = 0, \fBRCS::MS_IS_DONE\fP = 1, \fBRCS::MS_IS_ACCEL\fP = 2, \fBRCS::MS_IS_CONST\fP = 3, \fBRCS::MS_IS_DECEL\fP = 4, \fBRCS::MS_IS_ESTOPPING\fP = 5, \fBRCS::MS_IS_PAUSED\fP = 6 }"
-.br
-.RI "\fIenumeration of trajectory acceleration profile\&. \fP"
-.ti -1c
-.RI "enum \fBRCS::MovementType\fP { \fBRCS::MOVE_DEFAULT\fP = 0, \fBRCS::MOVE_CARTESIAN\fP, \fBRCS::MOVE_JOINT\fP }"
-.br
-.RI "\fIenumeration of trajectory motion type, joint or cartesian\&. \fP"
-.ti -1c
-.RI "enum \fBRCS::CanonStatusType\fP { \fBRCS::CANON_DONE\fP = 0, \fBRCS::CANON_WORKING\fP, \fBRCS::CANON_PAUSED\fP, \fBRCS::CANON_ERROR\fP, \fBRCS::CANON_ABORT\fP, \fBRCS::CANON_WAITING\fP }"
-.br
-.RI "\fIenumeration of controller status types for individual commands\&. Note, even though command types are listed, not all used or supported\&. \fP"
-.in -1c
 .SS "Functions"
 
 .in +1c
@@ -182,26 +193,25 @@ sensor_msgs::JointState_
 .RI "void \fBsincos\fP (double x, double *sx, double *cx)"
 .br
 .ti -1c
-.RI "void \fBRCS::getRPY\fP (const \fBRCS::Pose\fP pose, double &\fBroll\fP, double &\fBpitch\fP, double &\fByaw\fP)"
+.RI "template<typename T > std::vector< T > \fBToVector\fP (int n,\&.\&.\&.)"
 .br
 .ti -1c
-.RI "std::string \fBRCS::DumpJoints\fP (\fBJointState\fP joints)"
+.RI "template<typename T > std::vector< T > \fBToRadianVector\fP (std::vector< T > goaljts)"
 .br
-.RI "\fIDumpJoints takes a list of joints and generates a string describing pose\&. Can be used as std::cout << DumpPose(pose);\&. \fP"
 .ti -1c
-.RI "std::string \fBRCS::DumpPose\fP (\fBRCS::Pose\fP &pose)"
+.RI "void \fBRCS::getRPY\fP (const \fBRCS::Pose\fP pose, double &roll, double &pitch, double &yaw)"
 .br
-.RI "\fIDumpPose takes a urdf pose and generates a string describing pose\&. Can be used as std::cout << DumpPose(pose);\&. \fP"
 .ti -1c
-.RI "std::ostream & \fBRCS::operator<<\fP (std::ostream &os, \fBRCS::Pose\fP &pose)"
+.RI "\fBJointState\fP \fBRCS::EmptyJointState\fP (size_t n)"
 .br
-.RI "\fIDumpPose takes a urdf pose and generates a string describing pose\&. Can be used as std::cout << DumpPose(pose);\&. \fP"
 .ti -1c
-.RI "std::string \fBRCS::DumpQuaterion\fP (std::ostream &os, const \fBRCS::Rotation\fP &rot)"
+.RI "\fBJointState\fP \fBRCS::Subset\fP (\fBJointState\fP js, size_t n)"
 .br
-.RI "\fIDumpQuaterion takes a urdf quaterion and generates a string describing x,y,z,w coordinates\&. Can be used as std::cout << DumpQuaterion(urdf::rotation);\&. \fP"
 .ti -1c
-.RI "std::ostream & \fBoperator<<\fP (std::ostream &os, const \fBRCS::CanonCmd\fP &cc)"
+.RI "std::vector< double > \fBRCS::Subset\fP (std::vector< double > position, size_t n)"
+.br
+.ti -1c
+.RI "\fBJointState\fP \fBRCS::ZeroJointState\fP (size_t numjoints)"
 .br
 .in -1c
 .SH "Macro Definition Documentation"
@@ -240,9 +250,11 @@ sensor_msgs::JointState_
 
 .SH "Function Documentation"
 .PP 
-.SS "std::ostream& operator<< (std::ostream &os, const \fBRCS::CanonCmd\fP &cc)\fC [inline]\fP"
-
 .SS "void sincos (doublex, double *sx, double *cx)\fC [inline]\fP"
+
+.SS "template<typename T > std::vector<T> ToRadianVector (std::vector< T >goaljts)\fC [inline]\fP"
+
+.SS "template<typename T > std::vector<T> ToVector (intn, \&.\&.\&.)\fC [inline]\fP"
 
 .SH "Author"
 .PP 

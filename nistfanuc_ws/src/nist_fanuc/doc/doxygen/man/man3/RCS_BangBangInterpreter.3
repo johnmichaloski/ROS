@@ -1,0 +1,84 @@
+.TH "RCS::BangBangInterpreter" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+RCS::BangBangInterpreter \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <RCSInterpreter\&.h>\fP
+.PP
+Inherits \fBRCS::IRCSInterpreter\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBangBangInterpreter\fP (boost::shared_ptr< \fBRCS::CController\fP > nc, \fBIKinematicsSharedPtr\fP k=NULL)"
+.br
+.ti -1c
+.RI "virtual \fBRCS::CanonCmd\fP \fBParseCommand\fP (\fBRCS::CanonCmd\fP cmd)"
+.br
+.ti -1c
+.RI "virtual void \fBSetRange\fP (std::vector< double > \fBminrange\fP, std::vector< double > \fBmaxrange\fP)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< double > \fBminrange\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBmaxrange\fP"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBIKinematicsSharedPtr\fP \fB_kinematics\fP"
+.br
+.ti -1c
+.RI "boost::shared_ptr
+.br
+< \fBRCS::CController\fP > \fB_nc\fP"
+.br
+.in -1c
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "BangBangInterpreter::BangBangInterpreter (boost::shared_ptr< \fBRCS::CController\fP >nc, \fBIKinematicsSharedPtr\fPk = \fCNULL\fP)"
+uint8 crclcommand
+.PP
+.SH "https://github.com/ros/common_msgs"
+.PP
+.PP
+geometry_msgs/Pose finalpose geometry_msgs/Pose[] waypoints 
+.SH "Below joint info could be trajectory_msgs/JointTrajectoryPoint"
+.PP
+.PP
+sensor_msgs/JointState joints bool bStraight float64 dwell_seconds string opmessage bool bCoordinated float64 eepercent CrclMaxProfileMsg[] profile # maximum profile 
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBRCS::CanonCmd\fP BangBangInterpreter::ParseCommand (\fBRCS::CanonCmd\fPcmd)\fC [virtual]\fP"
+
+.PP
+Implements \fBRCS::IRCSInterpreter\fP\&.
+.SS "void BangBangInterpreter::SetRange (std::vector< double >minrange, std::vector< double >maxrange)\fC [virtual]\fP"
+
+.PP
+Reimplemented from \fBRCS::IRCSInterpreter\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBIKinematicsSharedPtr\fP RCS::BangBangInterpreter::_kinematics\fC [protected]\fP"
+kinematics pointer 
+.SS "boost::shared_ptr<\fBRCS::CController\fP> RCS::BangBangInterpreter::_nc\fC [protected]\fP"
+
+.SS "std::vector<double> RCS::BangBangInterpreter::maxrange"
+
+.SS "std::vector<double> RCS::BangBangInterpreter::minrange"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CRCL FANUC from the source code\&.

@@ -78,13 +78,14 @@ namespace RCS {
 
     void CController::Setup(ros::NodeHandle &nh, std::string prefix) {
         IfDebug(LOG_DEBUG << "CController::Setup");
-        Name() = "Controller";
+        Name() = prefix+"controller";
 
         status.Init();
         _nh = &nh;
         crcl_status = _nh->advertise<nistcrcl::CrclStatusMsg>("crcl_status", 1);
         crcl_cmd = _nh->subscribe("crcl_command", 10, &CController::CmdCallback, this);
         rviz_jntcmd = _nh->advertise<sensor_msgs::JointState>("nist_controller/robot/joint_states", 1);
+        
         status.currentjoints = RCS::ZeroJointState(Kinematics()->JointNames().size());
         status.currentjoints.name = Kinematics()->JointNames();
         gripper.init(nh, prefix);

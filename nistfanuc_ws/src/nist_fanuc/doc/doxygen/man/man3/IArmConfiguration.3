@@ -1,0 +1,136 @@
+.TH "IArmConfiguration" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+IArmConfiguration \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <Kinematics\&.h>\fP
+.PP
+Inherited by \fBFanucLRmate200iD\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBIArmConfiguration\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBConfigure\fP (int config, size_t size, std::vector< double > &min, std::vector< double > &max)"
+.br
+.ti -1c
+.RI "void \fBRange\fP (std::vector< double > &min, std::vector< double > &max)"
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const int \fBBASE_FLIP\fP = 0x01"
+.br
+.ti -1c
+.RI "static const int \fBARM_BACKWARD\fP = 0x02"
+.br
+.ti -1c
+.RI "static const int \fBSHOULDER_RIGHT\fP = 0x040"
+.br
+.ti -1c
+.RI "static const int \fBSHOULDER_DOWN\fP = 0x04"
+.br
+.ti -1c
+.RI "static const int \fBSHOULDER_UP\fP = 0x040"
+.br
+.ti -1c
+.RI "static const int \fBELBOW_DOWN\fP = 0x08"
+.br
+.ti -1c
+.RI "static const int \fBELBOW_UP\fP = 0x080"
+.br
+.ti -1c
+.RI "static const int \fBFOREARM_UP\fP = 0x10"
+.br
+.ti -1c
+.RI "static const int \fBFOREARM_DOWN\fP = 0x100"
+.br
+.ti -1c
+.RI "static const int \fBWRIST_NORMAL\fP = 0x200"
+.br
+.ti -1c
+.RI "static const int \fBWRIST_FLIP\fP = 0x400"
+.br
+.ti -1c
+.RI "static const int \fBSINGULAR\fP = -1"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "int \fB_config\fP"
+.br
+.ti -1c
+.RI "size_t \fB_size\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fB_min\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fB_max\fP"
+.br
+.ti -1c
+.RI "bool \fBbConfig\fP"
+.br
+.in -1c
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "IArmConfiguration::IArmConfiguration ()\fC [inline]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "virtual void IArmConfiguration::Configure (intconfig, size_tsize, std::vector< double > &min, std::vector< double > &max)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Reimplemented in \fBFanucLRmate200iD\fP\&.
+.SS "void IArmConfiguration::Range (std::vector< double > &min, std::vector< double > &max)\fC [inline]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "int IArmConfiguration::_config\fC [protected]\fP"
+
+.SS "std::vector<double> IArmConfiguration::_max\fC [protected]\fP"
+
+.SS "std::vector<double> IArmConfiguration::_min\fC [protected]\fP"
+
+.SS "size_t IArmConfiguration::_size\fC [protected]\fP"
+
+.SS "const int IArmConfiguration::ARM_BACKWARD = 0x02\fC [static]\fP"
+
+.SS "const int IArmConfiguration::BASE_FLIP = 0x01\fC [static]\fP"
+
+.SS "bool IArmConfiguration::bConfig\fC [protected]\fP"
+
+.SS "const int IArmConfiguration::ELBOW_DOWN = 0x08\fC [static]\fP"
+
+.SS "const int IArmConfiguration::ELBOW_UP = 0x080\fC [static]\fP"
+
+.SS "const int IArmConfiguration::FOREARM_DOWN = 0x100\fC [static]\fP"
+
+.SS "const int IArmConfiguration::FOREARM_UP = 0x10\fC [static]\fP"
+
+.SS "const int IArmConfiguration::SHOULDER_DOWN = 0x04\fC [static]\fP"
+
+.SS "const int IArmConfiguration::SHOULDER_RIGHT = 0x040\fC [static]\fP"
+
+.SS "const int IArmConfiguration::SHOULDER_UP = 0x040\fC [static]\fP"
+
+.SS "const int IArmConfiguration::SINGULAR = -1\fC [static]\fP"
+
+.SS "const int IArmConfiguration::WRIST_FLIP = 0x400\fC [static]\fP"
+
+.SS "const int IArmConfiguration::WRIST_NORMAL = 0x200\fC [static]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CRCL FANUC from the source code\&.

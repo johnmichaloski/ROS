@@ -1,0 +1,51 @@
+.TH "/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/src/CsvLogging.cpp" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/src/CsvLogging.cpp \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'CsvLogging\&.h'\fP
+.br
+\fC#include 'BLogging\&.h'\fP
+.br
+\fC#include <fstream>\fP
+.br
+
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBRCS\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBS1\fP(x)   #x"
+.br
+.ti -1c
+.RI "#define \fBS2\fP(x)   \fBS1\fP(x)"
+.br
+.ti -1c
+.RI "#define \fBLOCATION\fP   __func__ ' : ' \fBS2\fP(__LINE__)"
+.br
+.ti -1c
+.RI "#define \fBLOG_ONCE\fP(X)   {static int F=0; if(!F) { X;F=1; } }"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define LOCATION   __func__ ' : ' \fBS2\fP(__LINE__)"
+
+.SS "#define LOG_ONCE(X)   {static int F=0; if(!F) { X;F=1; } }"
+
+.SS "#define S1(x)   #x"
+
+.SS "#define S2(x)   \fBS1\fP(x)"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CRCL FANUC from the source code\&.

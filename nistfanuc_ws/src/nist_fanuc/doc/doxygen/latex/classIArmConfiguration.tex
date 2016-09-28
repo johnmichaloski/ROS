@@ -1,0 +1,156 @@
+\hypertarget{classIArmConfiguration}{\section{I\-Arm\-Configuration Class Reference}
+\label{classIArmConfiguration}\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}}
+}
+
+
+{\ttfamily \#include $<$Kinematics.\-h$>$}
+
+Inheritance diagram for I\-Arm\-Configuration\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classIArmConfiguration}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classIArmConfiguration_a9422c85c85d341b821f2b121aafea7f6}{I\-Arm\-Configuration} ()
+\item 
+virtual void \hyperlink{classIArmConfiguration_ab114c4a856a72d43df7ef0fe3c9675e7}{Configure} (int config, size\-\_\-t size, std\-::vector$<$ double $>$ \&min, std\-::vector$<$ double $>$ \&max)
+\item 
+void \hyperlink{classIArmConfiguration_adc675690b8a93fc0c89af315f8a755df}{Range} (std\-::vector$<$ double $>$ \&min, std\-::vector$<$ double $>$ \&max)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const int \hyperlink{classIArmConfiguration_a350358b5db8e596cfe0a807e86606f73}{B\-A\-S\-E\-\_\-\-F\-L\-I\-P} = 0x01
+\item 
+static const int \hyperlink{classIArmConfiguration_a54057fc8c00daa9cf44af3cf3e89ba47}{A\-R\-M\-\_\-\-B\-A\-C\-K\-W\-A\-R\-D} = 0x02
+\item 
+static const int \hyperlink{classIArmConfiguration_a669c41de4b34b0c56acaabd46a43dadb}{S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-R\-I\-G\-H\-T} = 0x040
+\item 
+static const int \hyperlink{classIArmConfiguration_ad715705eeb8c3835f2e0b749e4e8e043}{S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-D\-O\-W\-N} = 0x04
+\item 
+static const int \hyperlink{classIArmConfiguration_ad933d24036398d6887f6b208866948eb}{S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-U\-P} = 0x040
+\item 
+static const int \hyperlink{classIArmConfiguration_ae27619e20b7e7480cdbfc20062bb251b}{E\-L\-B\-O\-W\-\_\-\-D\-O\-W\-N} = 0x08
+\item 
+static const int \hyperlink{classIArmConfiguration_a408617f0f4302aad13dc8cb43e377d50}{E\-L\-B\-O\-W\-\_\-\-U\-P} = 0x080
+\item 
+static const int \hyperlink{classIArmConfiguration_a4c640de35c1fc5c61b5dc950588089d7}{F\-O\-R\-E\-A\-R\-M\-\_\-\-U\-P} = 0x10
+\item 
+static const int \hyperlink{classIArmConfiguration_a4243f9146bc20c3ce2c8796c04852cb4}{F\-O\-R\-E\-A\-R\-M\-\_\-\-D\-O\-W\-N} = 0x100
+\item 
+static const int \hyperlink{classIArmConfiguration_ae2cf37e0ff2e11888bcf97a5bf9ca824}{W\-R\-I\-S\-T\-\_\-\-N\-O\-R\-M\-A\-L} = 0x200
+\item 
+static const int \hyperlink{classIArmConfiguration_a80649ead98210dbc5fe8d9c28f1f4f98}{W\-R\-I\-S\-T\-\_\-\-F\-L\-I\-P} = 0x400
+\item 
+static const int \hyperlink{classIArmConfiguration_a02c7db5fe651e5e14928c214dfe53da6}{S\-I\-N\-G\-U\-L\-A\-R} = -\/1
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{classIArmConfiguration_a0075e845267a9821acd152ce4866e66c}{\-\_\-config}
+\item 
+size\-\_\-t \hyperlink{classIArmConfiguration_a58e9669a13e5409691f4cc5511bd26b1}{\-\_\-size}
+\item 
+std\-::vector$<$ double $>$ \hyperlink{classIArmConfiguration_ae918d115cd3bb8702dee12799666c630}{\-\_\-min}
+\item 
+std\-::vector$<$ double $>$ \hyperlink{classIArmConfiguration_a3103e1f2fff69e56a46e3277e02649a9}{\-\_\-max}
+\item 
+bool \hyperlink{classIArmConfiguration_ab85f30ca3611448a2cc93583a408d342}{b\-Config}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classIArmConfiguration_a9422c85c85d341b821f2b121aafea7f6}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!I\-Arm\-Configuration@{I\-Arm\-Configuration}}
+\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{I\-Arm\-Configuration}]{\setlength{\rightskip}{0pt plus 5cm}I\-Arm\-Configuration\-::\-I\-Arm\-Configuration (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classIArmConfiguration_a9422c85c85d341b821f2b121aafea7f6}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classIArmConfiguration_ab114c4a856a72d43df7ef0fe3c9675e7}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!Configure@{Configure}}
+\index{Configure@{Configure}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{Configure}]{\setlength{\rightskip}{0pt plus 5cm}virtual void I\-Arm\-Configuration\-::\-Configure (
+\begin{DoxyParamCaption}
+\item[{int}]{config, }
+\item[{size\-\_\-t}]{size, }
+\item[{std\-::vector$<$ double $>$ \&}]{min, }
+\item[{std\-::vector$<$ double $>$ \&}]{max}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}}\label{classIArmConfiguration_ab114c4a856a72d43df7ef0fe3c9675e7}
+
+
+Reimplemented in \hyperlink{classFanucLRmate200iD_a6e8ff8e13061b0c94ce809605218a942}{Fanuc\-L\-Rmate200i\-D}.
+
+\hypertarget{classIArmConfiguration_adc675690b8a93fc0c89af315f8a755df}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!Range@{Range}}
+\index{Range@{Range}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{Range}]{\setlength{\rightskip}{0pt plus 5cm}void I\-Arm\-Configuration\-::\-Range (
+\begin{DoxyParamCaption}
+\item[{std\-::vector$<$ double $>$ \&}]{min, }
+\item[{std\-::vector$<$ double $>$ \&}]{max}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classIArmConfiguration_adc675690b8a93fc0c89af315f8a755df}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classIArmConfiguration_a0075e845267a9821acd152ce4866e66c}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!\-\_\-config@{\-\_\-config}}
+\index{\-\_\-config@{\-\_\-config}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{\-\_\-config}]{\setlength{\rightskip}{0pt plus 5cm}int I\-Arm\-Configuration\-::\-\_\-config\hspace{0.3cm}{\ttfamily [protected]}}}\label{classIArmConfiguration_a0075e845267a9821acd152ce4866e66c}
+\hypertarget{classIArmConfiguration_a3103e1f2fff69e56a46e3277e02649a9}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!\-\_\-max@{\-\_\-max}}
+\index{\-\_\-max@{\-\_\-max}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{\-\_\-max}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$double$>$ I\-Arm\-Configuration\-::\-\_\-max\hspace{0.3cm}{\ttfamily [protected]}}}\label{classIArmConfiguration_a3103e1f2fff69e56a46e3277e02649a9}
+\hypertarget{classIArmConfiguration_ae918d115cd3bb8702dee12799666c630}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!\-\_\-min@{\-\_\-min}}
+\index{\-\_\-min@{\-\_\-min}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{\-\_\-min}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$double$>$ I\-Arm\-Configuration\-::\-\_\-min\hspace{0.3cm}{\ttfamily [protected]}}}\label{classIArmConfiguration_ae918d115cd3bb8702dee12799666c630}
+\hypertarget{classIArmConfiguration_a58e9669a13e5409691f4cc5511bd26b1}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!\-\_\-size@{\-\_\-size}}
+\index{\-\_\-size@{\-\_\-size}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{\-\_\-size}]{\setlength{\rightskip}{0pt plus 5cm}size\-\_\-t I\-Arm\-Configuration\-::\-\_\-size\hspace{0.3cm}{\ttfamily [protected]}}}\label{classIArmConfiguration_a58e9669a13e5409691f4cc5511bd26b1}
+\hypertarget{classIArmConfiguration_a54057fc8c00daa9cf44af3cf3e89ba47}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!A\-R\-M\-\_\-\-B\-A\-C\-K\-W\-A\-R\-D@{A\-R\-M\-\_\-\-B\-A\-C\-K\-W\-A\-R\-D}}
+\index{A\-R\-M\-\_\-\-B\-A\-C\-K\-W\-A\-R\-D@{A\-R\-M\-\_\-\-B\-A\-C\-K\-W\-A\-R\-D}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{A\-R\-M\-\_\-\-B\-A\-C\-K\-W\-A\-R\-D}]{\setlength{\rightskip}{0pt plus 5cm}const int I\-Arm\-Configuration\-::\-A\-R\-M\-\_\-\-B\-A\-C\-K\-W\-A\-R\-D = 0x02\hspace{0.3cm}{\ttfamily [static]}}}\label{classIArmConfiguration_a54057fc8c00daa9cf44af3cf3e89ba47}
+\hypertarget{classIArmConfiguration_a350358b5db8e596cfe0a807e86606f73}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!B\-A\-S\-E\-\_\-\-F\-L\-I\-P@{B\-A\-S\-E\-\_\-\-F\-L\-I\-P}}
+\index{B\-A\-S\-E\-\_\-\-F\-L\-I\-P@{B\-A\-S\-E\-\_\-\-F\-L\-I\-P}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{B\-A\-S\-E\-\_\-\-F\-L\-I\-P}]{\setlength{\rightskip}{0pt plus 5cm}const int I\-Arm\-Configuration\-::\-B\-A\-S\-E\-\_\-\-F\-L\-I\-P = 0x01\hspace{0.3cm}{\ttfamily [static]}}}\label{classIArmConfiguration_a350358b5db8e596cfe0a807e86606f73}
+\hypertarget{classIArmConfiguration_ab85f30ca3611448a2cc93583a408d342}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!b\-Config@{b\-Config}}
+\index{b\-Config@{b\-Config}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{b\-Config}]{\setlength{\rightskip}{0pt plus 5cm}bool I\-Arm\-Configuration\-::b\-Config\hspace{0.3cm}{\ttfamily [protected]}}}\label{classIArmConfiguration_ab85f30ca3611448a2cc93583a408d342}
+\hypertarget{classIArmConfiguration_ae27619e20b7e7480cdbfc20062bb251b}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!E\-L\-B\-O\-W\-\_\-\-D\-O\-W\-N@{E\-L\-B\-O\-W\-\_\-\-D\-O\-W\-N}}
+\index{E\-L\-B\-O\-W\-\_\-\-D\-O\-W\-N@{E\-L\-B\-O\-W\-\_\-\-D\-O\-W\-N}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{E\-L\-B\-O\-W\-\_\-\-D\-O\-W\-N}]{\setlength{\rightskip}{0pt plus 5cm}const int I\-Arm\-Configuration\-::\-E\-L\-B\-O\-W\-\_\-\-D\-O\-W\-N = 0x08\hspace{0.3cm}{\ttfamily [static]}}}\label{classIArmConfiguration_ae27619e20b7e7480cdbfc20062bb251b}
+\hypertarget{classIArmConfiguration_a408617f0f4302aad13dc8cb43e377d50}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!E\-L\-B\-O\-W\-\_\-\-U\-P@{E\-L\-B\-O\-W\-\_\-\-U\-P}}
+\index{E\-L\-B\-O\-W\-\_\-\-U\-P@{E\-L\-B\-O\-W\-\_\-\-U\-P}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{E\-L\-B\-O\-W\-\_\-\-U\-P}]{\setlength{\rightskip}{0pt plus 5cm}const int I\-Arm\-Configuration\-::\-E\-L\-B\-O\-W\-\_\-\-U\-P = 0x080\hspace{0.3cm}{\ttfamily [static]}}}\label{classIArmConfiguration_a408617f0f4302aad13dc8cb43e377d50}
+\hypertarget{classIArmConfiguration_a4243f9146bc20c3ce2c8796c04852cb4}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!F\-O\-R\-E\-A\-R\-M\-\_\-\-D\-O\-W\-N@{F\-O\-R\-E\-A\-R\-M\-\_\-\-D\-O\-W\-N}}
+\index{F\-O\-R\-E\-A\-R\-M\-\_\-\-D\-O\-W\-N@{F\-O\-R\-E\-A\-R\-M\-\_\-\-D\-O\-W\-N}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{F\-O\-R\-E\-A\-R\-M\-\_\-\-D\-O\-W\-N}]{\setlength{\rightskip}{0pt plus 5cm}const int I\-Arm\-Configuration\-::\-F\-O\-R\-E\-A\-R\-M\-\_\-\-D\-O\-W\-N = 0x100\hspace{0.3cm}{\ttfamily [static]}}}\label{classIArmConfiguration_a4243f9146bc20c3ce2c8796c04852cb4}
+\hypertarget{classIArmConfiguration_a4c640de35c1fc5c61b5dc950588089d7}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!F\-O\-R\-E\-A\-R\-M\-\_\-\-U\-P@{F\-O\-R\-E\-A\-R\-M\-\_\-\-U\-P}}
+\index{F\-O\-R\-E\-A\-R\-M\-\_\-\-U\-P@{F\-O\-R\-E\-A\-R\-M\-\_\-\-U\-P}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{F\-O\-R\-E\-A\-R\-M\-\_\-\-U\-P}]{\setlength{\rightskip}{0pt plus 5cm}const int I\-Arm\-Configuration\-::\-F\-O\-R\-E\-A\-R\-M\-\_\-\-U\-P = 0x10\hspace{0.3cm}{\ttfamily [static]}}}\label{classIArmConfiguration_a4c640de35c1fc5c61b5dc950588089d7}
+\hypertarget{classIArmConfiguration_ad715705eeb8c3835f2e0b749e4e8e043}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-D\-O\-W\-N@{S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-D\-O\-W\-N}}
+\index{S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-D\-O\-W\-N@{S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-D\-O\-W\-N}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-D\-O\-W\-N}]{\setlength{\rightskip}{0pt plus 5cm}const int I\-Arm\-Configuration\-::\-S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-D\-O\-W\-N = 0x04\hspace{0.3cm}{\ttfamily [static]}}}\label{classIArmConfiguration_ad715705eeb8c3835f2e0b749e4e8e043}
+\hypertarget{classIArmConfiguration_a669c41de4b34b0c56acaabd46a43dadb}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-R\-I\-G\-H\-T@{S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-R\-I\-G\-H\-T}}
+\index{S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-R\-I\-G\-H\-T@{S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-R\-I\-G\-H\-T}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-R\-I\-G\-H\-T}]{\setlength{\rightskip}{0pt plus 5cm}const int I\-Arm\-Configuration\-::\-S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-R\-I\-G\-H\-T = 0x040\hspace{0.3cm}{\ttfamily [static]}}}\label{classIArmConfiguration_a669c41de4b34b0c56acaabd46a43dadb}
+\hypertarget{classIArmConfiguration_ad933d24036398d6887f6b208866948eb}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-U\-P@{S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-U\-P}}
+\index{S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-U\-P@{S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-U\-P}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-U\-P}]{\setlength{\rightskip}{0pt plus 5cm}const int I\-Arm\-Configuration\-::\-S\-H\-O\-U\-L\-D\-E\-R\-\_\-\-U\-P = 0x040\hspace{0.3cm}{\ttfamily [static]}}}\label{classIArmConfiguration_ad933d24036398d6887f6b208866948eb}
+\hypertarget{classIArmConfiguration_a02c7db5fe651e5e14928c214dfe53da6}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!S\-I\-N\-G\-U\-L\-A\-R@{S\-I\-N\-G\-U\-L\-A\-R}}
+\index{S\-I\-N\-G\-U\-L\-A\-R@{S\-I\-N\-G\-U\-L\-A\-R}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{S\-I\-N\-G\-U\-L\-A\-R}]{\setlength{\rightskip}{0pt plus 5cm}const int I\-Arm\-Configuration\-::\-S\-I\-N\-G\-U\-L\-A\-R = -\/1\hspace{0.3cm}{\ttfamily [static]}}}\label{classIArmConfiguration_a02c7db5fe651e5e14928c214dfe53da6}
+\hypertarget{classIArmConfiguration_a80649ead98210dbc5fe8d9c28f1f4f98}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!W\-R\-I\-S\-T\-\_\-\-F\-L\-I\-P@{W\-R\-I\-S\-T\-\_\-\-F\-L\-I\-P}}
+\index{W\-R\-I\-S\-T\-\_\-\-F\-L\-I\-P@{W\-R\-I\-S\-T\-\_\-\-F\-L\-I\-P}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{W\-R\-I\-S\-T\-\_\-\-F\-L\-I\-P}]{\setlength{\rightskip}{0pt plus 5cm}const int I\-Arm\-Configuration\-::\-W\-R\-I\-S\-T\-\_\-\-F\-L\-I\-P = 0x400\hspace{0.3cm}{\ttfamily [static]}}}\label{classIArmConfiguration_a80649ead98210dbc5fe8d9c28f1f4f98}
+\hypertarget{classIArmConfiguration_ae2cf37e0ff2e11888bcf97a5bf9ca824}{\index{I\-Arm\-Configuration@{I\-Arm\-Configuration}!W\-R\-I\-S\-T\-\_\-\-N\-O\-R\-M\-A\-L@{W\-R\-I\-S\-T\-\_\-\-N\-O\-R\-M\-A\-L}}
+\index{W\-R\-I\-S\-T\-\_\-\-N\-O\-R\-M\-A\-L@{W\-R\-I\-S\-T\-\_\-\-N\-O\-R\-M\-A\-L}!IArmConfiguration@{I\-Arm\-Configuration}}
+\subsubsection[{W\-R\-I\-S\-T\-\_\-\-N\-O\-R\-M\-A\-L}]{\setlength{\rightskip}{0pt plus 5cm}const int I\-Arm\-Configuration\-::\-W\-R\-I\-S\-T\-\_\-\-N\-O\-R\-M\-A\-L = 0x200\hspace{0.3cm}{\ttfamily [static]}}}\label{classIArmConfiguration_ae2cf37e0ff2e11888bcf97a5bf9ca824}
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\hyperlink{Kinematics_8h}{Kinematics.\-h}\end{DoxyCompactItemize}

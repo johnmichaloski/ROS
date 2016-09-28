@@ -1,0 +1,56 @@
+.TH "RCS::CanonReturn" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+RCS::CanonReturn \- 
+.PP
+enumeration of return type from Crcl intepretation\&. If statusreply, requires status sent to Crcl client\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <RCS\&.h>\fP
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const int \fBCANON_REJECT\fP = -2"
+.br
+.ti -1c
+.RI "static const int \fBCANON_FAILURE\fP = -1"
+.br
+.ti -1c
+.RI "static const int \fBCANON_SUCCESS\fP = 0"
+.br
+.ti -1c
+.RI "static const int \fBCANON_STATUSREPLY\fP = 1"
+.br
+.ti -1c
+.RI "static const int \fBCANON_MOTION\fP = 2"
+.br
+.ti -1c
+.RI "static const int \fBCANON_RUNNING\fP = 3"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+enumeration of return type from Crcl intepretation\&. If statusreply, requires status sent to Crcl client\&. 
+.SH "Member Data Documentation"
+.PP 
+.SS "const int RCS::CanonReturn::CANON_FAILURE = -1\fC [static]\fP"
+
+.SS "const int RCS::CanonReturn::CANON_MOTION = 2\fC [static]\fP"
+
+.SS "const int RCS::CanonReturn::CANON_REJECT = -2\fC [static]\fP"
+
+.SS "const int RCS::CanonReturn::CANON_RUNNING = 3\fC [static]\fP"
+
+.SS "const int RCS::CanonReturn::CANON_STATUSREPLY = 1\fC [static]\fP"
+
+.SS "const int RCS::CanonReturn::CANON_SUCCESS = 0\fC [static]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CRCL FANUC from the source code\&.

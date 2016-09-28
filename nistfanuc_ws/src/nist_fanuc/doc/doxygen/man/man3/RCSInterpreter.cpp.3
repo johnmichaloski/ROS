@@ -1,12 +1,16 @@
-.TH "/usr/local/michalos/github/usnistgov/el-robotics-core/nist_fanuc/src/RCSInterpreter.cpp" 3 "Fri Apr 15 2016" "CRCL FANUC" \" -*- nroff -*-
+.TH "/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/src/RCSInterpreter.cpp" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/usr/local/michalos/github/usnistgov/el-robotics-core/nist_fanuc/src/RCSInterpreter.cpp \- 
+/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/src/RCSInterpreter.cpp \- 
 .SH SYNOPSIS
 .br
 .PP
-\fC#include 'CrclConfig\&.h'\fP
+\fC#include <algorithm>\fP
+.br
+\fC#include <tf/transform_datatypes\&.h>\fP
+.br
+\fC#include <boost/ref\&.hpp>\fP
 .br
 \fC#include 'RCSInterpreter\&.h'\fP
 .br
@@ -14,11 +18,11 @@
 .br
 \fC#include 'Globals\&.h'\fP
 .br
-\fC#include <algorithm>\fP
+\fC#include 'trajectoryMaker\&.h'\fP
 .br
 \fC#include 'Conversions\&.h'\fP
 .br
-\fC#include 'trajectoryMaker\&.h'\fP
+\fC#include 'Debug\&.h'\fP
 .br
 
 .SH "Author"

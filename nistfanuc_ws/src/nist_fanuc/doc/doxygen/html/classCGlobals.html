@@ -77,37 +77,23 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab08bfe830833f153fcd15e1eadb05287"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#ab08bfe830833f153fcd15e1eadb05287">StrFormat</a> (const char *fmt,...)</td></tr>
 <tr class="memdesc:ab08bfe830833f153fcd15e1eadb05287"><td class="mdescLeft">&#160;</td><td class="mdescRight">StrFormat accepts a traditional C format string and expects parameter to follow on calling stack and will produce a string from it.  <a href="#ab08bfe830833f153fcd15e1eadb05287">More...</a><br/></td></tr>
 <tr class="separator:ab08bfe830833f153fcd15e1eadb05287"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7df69244ed592e7291bf9608fa54bfac"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#a7df69244ed592e7291bf9608fa54bfac">IsDebug</a> ()</td></tr>
-<tr class="separator:a7df69244ed592e7291bf9608fa54bfac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af14ced4c6f3b924d134894651f1afce0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#af14ced4c6f3b924d134894651f1afce0">Dump</a> ()</td></tr>
-<tr class="memdesc:af14ced4c6f3b924d134894651f1afce0"><td class="mdescLeft">&#160;</td><td class="mdescRight">dumps to std out global parameters set at runtime parameters.  <a href="#af14ced4c6f3b924d134894651f1afce0">More...</a><br/></td></tr>
-<tr class="separator:af14ced4c6f3b924d134894651f1afce0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d120cec7b57ee16fca7fc9398c67d61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#a5d120cec7b57ee16fca7fc9398c67d61">Sleep</a> (unsigned int ms)</td></tr>
 <tr class="memdesc:a5d120cec7b57ee16fca7fc9398c67d61"><td class="mdescLeft">&#160;</td><td class="mdescRight">sleep milliseconds. Equivalent to Sleep in windows.  <a href="#a5d120cec7b57ee16fca7fc9398c67d61">More...</a><br/></td></tr>
 <tr class="separator:a5d120cec7b57ee16fca7fc9398c67d61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1722817e9b2e73b2daa73ef40179cef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#ac1722817e9b2e73b2daa73ef40179cef">ReadFile</a> (std::string filename, std::string &amp;<a class="el" href="SanityCheckTests_8cpp.html#aed76f8804515a6923e39ee3257c3fb52">contents</a>)</td></tr>
+<tr class="memitem:ac1722817e9b2e73b2daa73ef40179cef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#ac1722817e9b2e73b2daa73ef40179cef">ReadFile</a> (std::string filename, std::string &amp;contents)</td></tr>
 <tr class="memdesc:ac1722817e9b2e73b2daa73ef40179cef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads a file all at once into a string. Include file open, read, close. If fails, empty string is only diagnostic.  <a href="#ac1722817e9b2e73b2daa73ef40179cef">More...</a><br/></td></tr>
 <tr class="separator:ac1722817e9b2e73b2daa73ef40179cef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaba4dc868620e6714f96339f873db4d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#aaba4dc868620e6714f96339f873db4d6">WriteFile</a> (std::string filename, std::string &amp;<a class="el" href="SanityCheckTests_8cpp.html#aed76f8804515a6923e39ee3257c3fb52">contents</a>)</td></tr>
+<tr class="memitem:aaba4dc868620e6714f96339f873db4d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#aaba4dc868620e6714f96339f873db4d6">WriteFile</a> (std::string filename, std::string &amp;contents)</td></tr>
 <tr class="memdesc:aaba4dc868620e6714f96339f873db4d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes entire string contents to a file all at once. Include file open, write, close. No error messages.  <a href="#aaba4dc868620e6714f96339f873db4d6">More...</a><br/></td></tr>
 <tr class="separator:aaba4dc868620e6714f96339f873db4d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7876537cd390030c33daa30f43c2070c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#a7876537cd390030c33daa30f43c2070c">AppendFile</a> (std::string filename, std::string <a class="el" href="SanityCheckTests_8cpp.html#aed76f8804515a6923e39ee3257c3fb52">contents</a>)</td></tr>
+<tr class="memitem:a7876537cd390030c33daa30f43c2070c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#a7876537cd390030c33daa30f43c2070c">AppendFile</a> (std::string filename, std::string contents)</td></tr>
 <tr class="memdesc:a7876537cd390030c33daa30f43c2070c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends entire string contents to a file all at once. Include file open, write, close. No error messages.  <a href="#a7876537cd390030c33daa30f43c2070c">More...</a><br/></td></tr>
 <tr class="separator:a7876537cd390030c33daa30f43c2070c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba6226926f731d175e54efa0dec2833b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#aba6226926f731d175e54efa0dec2833b">Trim</a> (std::string s)</td></tr>
 <tr class="memdesc:aba6226926f731d175e54efa0dec2833b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trim cleans blank characters from the front and back of a string. Blank chars are white space, tab, carriage return.  <a href="#aba6226926f731d175e54efa0dec2833b">More...</a><br/></td></tr>
 <tr class="separator:aba6226926f731d175e54efa0dec2833b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8125cf019b0b2fec19a53b76bb9d57e"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#af8125cf019b0b2fec19a53b76bb9d57e">DebugMessage</a> (std::string errmsg)</td></tr>
-<tr class="memdesc:af8125cf019b0b2fec19a53b76bb9d57e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints an diagnostic message to the debug reporting mechanism. (cout or OutputDebugString)  <a href="#af8125cf019b0b2fec19a53b76bb9d57e">More...</a><br/></td></tr>
-<tr class="separator:af8125cf019b0b2fec19a53b76bb9d57e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e5323745d12ff5eab9b12e0e42bd1dc"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#a4e5323745d12ff5eab9b12e0e42bd1dc">ErrorMessage</a> (std::string errmsg)</td></tr>
-<tr class="memdesc:a4e5323745d12ff5eab9b12e0e42bd1dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints an error message to the error reporting mechanism.  <a href="#a4e5323745d12ff5eab9b12e0e42bd1dc">More...</a><br/></td></tr>
-<tr class="separator:a4e5323745d12ff5eab9b12e0e42bd1dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ee96ec24bdb9d8606b540e684384649"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#a9ee96ec24bdb9d8606b540e684384649">DebugStrFormat</a> (const char *fmt,...)</td></tr>
-<tr class="memdesc:a9ee96ec24bdb9d8606b540e684384649"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints a format string and arguments as a diagnostic message to the debug reporting mechanism. (cout or OutputDebugString)  <a href="#a9ee96ec24bdb9d8606b540e684384649">More...</a><br/></td></tr>
-<tr class="separator:a9ee96ec24bdb9d8606b540e684384649"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd6bdad8865f80e6a084c6f02a1cd047"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#abd6bdad8865f80e6a084c6f02a1cd047">GetTimeStamp</a> (<a class="el" href="classCGlobals.html#a32f8f289bca445b5a2f6d1c68b6cbbb2">TimeFormat</a> format=<a class="el" href="classCGlobals.html#a32f8f289bca445b5a2f6d1c68b6cbbb2ab0c064ba74b13a541bb4b8379bca2ae7">GMT_UV_SEC</a>)</td></tr>
-<tr class="memdesc:abd6bdad8865f80e6a084c6f02a1cd047"><td class="mdescLeft">&#160;</td><td class="mdescRight">GetTimeStamp returns a timestamp string depending on the input format.  <a href="#abd6bdad8865f80e6a084c6f02a1cd047">More...</a><br/></td></tr>
+<tr class="memdesc:abd6bdad8865f80e6a084c6f02a1cd047"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints a format string and arguments as a diagnostic message to the debug reporting mechanism. (cout or OutputDebugString)  <a href="#abd6bdad8865f80e6a084c6f02a1cd047">More...</a><br/></td></tr>
 <tr class="separator:abd6bdad8865f80e6a084c6f02a1cd047"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -115,8 +101,6 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a66ffe804a7f6a8d41803482f5dc121e6"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, <br class="typebreak"/>
 std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#a66ffe804a7f6a8d41803482f5dc121e6">_appproperties</a></td></tr>
 <tr class="separator:a66ffe804a7f6a8d41803482f5dc121e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0446ab6c8959e553bd9e2cae4e3f5f3"><td class="memItemLeft" align="right" valign="top">int &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#ac0446ab6c8959e553bd9e2cae4e3f5f3">Debug</a></td></tr>
-<tr class="separator:ac0446ab6c8959e553bd9e2cae4e3f5f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a366c33d78a09a99d5eb0e902facf4624"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#a366c33d78a09a99d5eb0e902facf4624">ExeDirectory</a></td></tr>
 <tr class="separator:a366c33d78a09a99d5eb0e902facf4624"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ded9605f21a03f651f6097f1b0ef42c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCGlobals.html#a5ded9605f21a03f651f6097f1b0ef42c">inifile</a></td></tr>
@@ -211,116 +195,6 @@ std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el
 
 </div>
 </div>
-<a class="anchor" id="af8125cf019b0b2fec19a53b76bb9d57e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned int CGlobals::DebugMessage </td>
-          <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>errmsg</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Prints an diagnostic message to the debug reporting mechanism. (cout or OutputDebugString) </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">str</td><td>errmsg is the error message that is posted to the debug reporting mechanism. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>a error result integer. (e.g., E_FAIL or -1). </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a9ee96ec24bdb9d8606b540e684384649"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned int CGlobals::DebugStrFormat </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>fmt</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>...</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Prints a format string and arguments as a diagnostic message to the debug reporting mechanism. (cout or OutputDebugString) </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">fmt</td><td>is the error format statement that uses parameters that follow and is posted to the debug reporting mechanism. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>a error result integer. (e.g., E_FAIL or -1). </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="af14ced4c6f3b924d134894651f1afce0"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void CGlobals::Dump </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>dumps to std out global parameters set at runtime parameters. </p>
-
-</div>
-</div>
-<a class="anchor" id="a4e5323745d12ff5eab9b12e0e42bd1dc"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned int CGlobals::ErrorMessage </td>
-          <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>errmsg</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Prints an error message to the error reporting mechanism. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">str</td><td>errmsg is the error message that is posted to the error reporting mechanism. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>a error result integer. (e.g., E_FAIL or -1). </dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="abd6bdad8865f80e6a084c6f02a1cd047"></a>
 <div class="memitem">
 <div class="memproto">
@@ -335,6 +209,14 @@ std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el
       </table>
 </div><div class="memdoc">
 
+<p>Prints a format string and arguments as a diagnostic message to the debug reporting mechanism. (cout or OutputDebugString) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fmt</td><td>is the error format statement that uses parameters that follow and is posted to the debug reporting mechanism. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a error result integer. (e.g., E_FAIL or -1).</dd></dl>
 <p>GetTimeStamp returns a timestamp string depending on the input format. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -343,29 +225,6 @@ std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a formated timestamp string. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a7df69244ed592e7291bf9608fa54bfac"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool CGlobals::IsDebug </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>
@@ -552,18 +411,6 @@ std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el
 
 </div>
 </div>
-<a class="anchor" id="ac0446ab6c8959e553bd9e2cae4e3f5f3"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int&amp; CGlobals::Debug</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a366c33d78a09a99d5eb0e902facf4624"></a>
 <div class="memitem">
 <div class="memproto">
@@ -599,18 +446,18 @@ std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el
         </tr>
       </table>
 </div><div class="memdoc">
-<p>socket port to listen for <a class="el" href="namespaceCrcl.html">Crcl</a> clients </p>
+<p>socket port to listen for Crcl clients </p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/usr/local/michalos/github/usnistgov/el-robotics-core/nist_fanuc/include/nist_fanuc/<a class="el" href="Globals_8h_source.html">Globals.h</a></li>
-<li>/usr/local/michalos/github/usnistgov/el-robotics-core/nist_fanuc/src/<a class="el" href="Globals_8cpp.html">Globals.cpp</a></li>
+<li>/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/include/nist_fanuc/<a class="el" href="Globals_8h_source.html">Globals.h</a></li>
+<li>/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/src/<a class="el" href="Globals_8cpp.html">Globals.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 15 2016 14:48:00 for CRCL FANUC by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Sep 28 2016 15:13:34 for CRCL FANUC by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

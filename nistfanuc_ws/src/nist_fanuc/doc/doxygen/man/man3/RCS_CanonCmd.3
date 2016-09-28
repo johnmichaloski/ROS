@@ -1,4 +1,4 @@
-.TH "RCS::CanonCmd" 3 "Fri Apr 15 2016" "CRCL FANUC" \" -*- nroff -*-
+.TH "RCS::CanonCmd" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -11,6 +11,8 @@ RCS::CanonCmd \-
 .PP
 .PP
 \fC#include <RCS\&.h>\fP
+.PP
+Inherits CrclCommandMsg\&.
 .SS "Public Member Functions"
 
 .in +1c
@@ -18,6 +20,9 @@ RCS::CanonCmd \-
 .RI "\fBCanonCmd\fP ()"
 .br
 .RI "\fI\fBCanonCmd\fP constructor\&. \fP"
+.ti -1c
+.RI "void \fBSet\fP (nistcrcl::CrclCommandMsg &msg)"
+.br
 .ti -1c
 .RI "void \fBInit\fP ()"
 .br
@@ -34,6 +39,12 @@ RCS::CanonCmd \-
 .RI "\fBVAR\fP (Rates, \fBIRate\fP)"
 .br
 .ti -1c
+.RI "\fBVAR\fP (ConfigMin, std::vector< double >)"
+.br
+.ti -1c
+.RI "\fBVAR\fP (ConfigMax, std::vector< double >)"
+.br
+.ti -1c
 .RI "bool \fBIsMotionCmd\fP ()"
 .br
 .in -1c
@@ -41,22 +52,16 @@ RCS::CanonCmd \-
 
 .in +1c
 .ti -1c
-.RI "\fBCanonCmdType\fP \fBcmd\fP"
+.RI "int \fBstatus\fP"
 .br
 .ti -1c
-.RI "\fBCanonStatusType\fP \fBstatus\fP"
+.RI "int \fBtype\fP"
 .br
 .ti -1c
-.RI "\fBTrajPointType\fP \fBtype\fP"
+.RI "int \fBstoptype\fP"
 .br
 .ti -1c
-.RI "\fBCanonStopMotionType\fP \fBstoptype\fP"
-.br
-.ti -1c
-.RI "bool \fBbCoordinated\fP"
-.br
-.ti -1c
-.RI "bool \fBbStraight\fP"
+.RI "int \fBaccprofile\fP"
 .br
 .ti -1c
 .RI "double \fBabsTransAcc\fP"
@@ -77,40 +82,16 @@ RCS::CanonCmd \-
 .RI "double \fBabsJointSpeed\fP"
 .br
 .ti -1c
-.RI "double \fBdwell\fP"
-.br
-.ti -1c
-.RI "double \fBgripperPos\fP"
-.br
-.ti -1c
-.RI "\fBCanonAccProfile\fP \fBaccprofile\fP"
-.br
-.ti -1c
 .RI "std::vector< double > \fBspeed\fP"
 .br
 .ti -1c
-.RI "std::vector< int > \fBjointnum\fP"
+.RI "\fBRCS::PoseTolerance\fP \fBendPoseTol\fP"
 .br
 .ti -1c
-.RI "\fBJointState\fP \fBjoints\fP"
+.RI "\fBRCS::PoseTolerance\fP \fBintermediatePtTol\fP"
 .br
 .ti -1c
-.RI "\fBJointState\fP \fBseed\fP"
-.br
-.ti -1c
-.RI "\fBRCS::Pose\fP \fBpose\fP"
-.br
-.ti -1c
-.RI "\fBRCS::Pose\fP \fBendPoseTol\fP"
-.br
-.ti -1c
-.RI "std::vector< \fBRCS::Pose\fP > \fBwaypoints\fP"
-.br
-.ti -1c
-.RI "\fBRCS::Pose\fP \fBintermediatePtTol\fP"
-.br
-.ti -1c
-.RI "\fBRCS::Pose\fP \fBgripperTol\fP"
+.RI "\fBRCS::PoseTolerance\fP \fBgripperTol\fP"
 .br
 .in -1c
 .SS "Static Public Attributes"
@@ -123,6 +104,16 @@ RCS::CanonCmd \-
 .SH "Detailed Description"
 .PP 
 \fBCanonCmd\fP is the controller command structure\&. 
+
+int64 crclcommand crclcommandnum 
+.SH "https://github.com/ros/common_msgs"
+.PP
+.PP
+geometry_msgs/Pose finalpose geometry_msgs/Pose[] waypoints 
+.SH "Below joint info could be trajectory_msgs/JointTrajectoryPoint"
+.PP
+.PP
+sensor_msgs/JointState joints bool bStraight float64 dwell_seconds string opmessage bool bCoordinated float64 eepercent CrclMaxProfileMsg[] profile # maximum profile 
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "RCS::CanonCmd::CanonCmd ()\fC [inline]\fP"
@@ -135,6 +126,8 @@ RCS::CanonCmd \-
 
 .SS "bool RCS::CanonCmd::IsMotionCmd ()"
 
+.SS "void RCS::CanonCmd::Set (nistcrcl::CrclCommandMsg &msg)\fC [inline]\fP"
+
 .SS "RCS::CanonCmd::VAR (CommandID, unsigned longlong)"
 
 .SS "RCS::CanonCmd::VAR (ParentCommandID, unsigned longlong)"
@@ -142,6 +135,10 @@ RCS::CanonCmd \-
 .SS "RCS::CanonCmd::VAR (StatusID, unsigned longlong)"
 
 .SS "RCS::CanonCmd::VAR (Rates, \fBIRate\fP)"
+
+.SS "RCS::CanonCmd::VAR (ConfigMin, std::vector< double >)"
+
+.SS "RCS::CanonCmd::VAR (ConfigMax, std::vector< double >)"
 
 .SH "Member Data Documentation"
 .PP 
@@ -159,42 +156,22 @@ cartesian rotation velocity
 cartesian translational acceleration 
 .SS "double RCS::CanonCmd::absTransSpeed"
 cartesian translational velocity 
-.SS "\fBCanonAccProfile\fP RCS::CanonCmd::accprofile"
+.SS "int RCS::CanonCmd::accprofile"
 current trajectory acceleration profile 
-.SS "bool RCS::CanonCmd::bCoordinated"
-coordinated joint trajectory motion boolean 
-.SS "bool RCS::CanonCmd::bStraight"
-straigth cartesian trajectory motion boolean 
-.SS "\fBCanonCmdType\fP RCS::CanonCmd::cmd"
-command type 
-.SS "double RCS::CanonCmd::dwell"
-time for dwelling in seconds 
-.SS "\fBRCS::Pose\fP RCS::CanonCmd::endPoseTol"
+.SS "\fBRCS::PoseTolerance\fP RCS::CanonCmd::endPoseTol"
 commanded tolerance 
-.SS "double RCS::CanonCmd::gripperPos"
-gripper position 0 to 1 
-.SS "\fBRCS::Pose\fP RCS::CanonCmd::gripperTol"
+.SS "\fBRCS::PoseTolerance\fP RCS::CanonCmd::gripperTol"
+gripper trajectory 
+.SS "\fBRCS::PoseTolerance\fP RCS::CanonCmd::intermediatePtTol"
 commanded cartesian waypoints in trajectory 
-.SS "\fBRCS::Pose\fP RCS::CanonCmd::intermediatePtTol"
-commanded cartesian waypoints in trajectory 
-.SS "std::vector<int> RCS::CanonCmd::jointnum"
-vector of joint numbers used by command 
-.SS "\fBJointState\fP RCS::CanonCmd::joints"
-commanded joint state 
-.SS "\fBRCS::Pose\fP RCS::CanonCmd::pose"
-commanded pose state 
-.SS "\fBJointState\fP RCS::CanonCmd::seed"
-near pose joint state 
 .SS "std::vector<double> RCS::CanonCmd::speed"
 vector of joint velocities 
-.SS "\fBCanonStatusType\fP RCS::CanonCmd::status"
+.SS "int RCS::CanonCmd::status"
 status type 
-.SS "\fBCanonStopMotionType\fP RCS::CanonCmd::stoptype"
+.SS "int RCS::CanonCmd::stoptype"
 stop trajectory choice 
-.SS "\fBTrajPointType\fP RCS::CanonCmd::type"
+.SS "int RCS::CanonCmd::type"
 trajectory points type 
-.SS "std::vector<\fBRCS::Pose\fP> RCS::CanonCmd::waypoints"
-commanded cartesian waypoints in trajectory 
 
 .SH "Author"
 .PP 

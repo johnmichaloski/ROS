@@ -1,0 +1,24 @@
+\hypertarget{StackTrace_8h}{\section{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\-Stack\-Trace.h File Reference}
+\label{StackTrace_8h}\index{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\-Stack\-Trace.\-h@{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\-Stack\-Trace.\-h}}
+}
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$execinfo.\-h$>$}\\*
+{\ttfamily \#include $<$signal.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$unistd.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{StackTrace_8h_a3c2348f39cf58c5c0f48742b32b15d83}{handler} (int sig)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{StackTrace_8h_a3c2348f39cf58c5c0f48742b32b15d83}{\index{Stack\-Trace.\-h@{Stack\-Trace.\-h}!handler@{handler}}
+\index{handler@{handler}!StackTrace.h@{Stack\-Trace.\-h}}
+\subsubsection[{handler}]{\setlength{\rightskip}{0pt plus 5cm}void handler (
+\begin{DoxyParamCaption}
+\item[{int}]{sig}
+\end{DoxyParamCaption}
+)}}\label{StackTrace_8h_a3c2348f39cf58c5c0f48742b32b15d83}
+int \hyperlink{nist__fanuc_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{main(int argc, char $\ast$$\ast$argv)} \{ signal(\-S\-I\-G\-S\-E\-G\-V, handler); // install our handler foo(); // this will call foo, bar, and baz. baz segfaults. \} 

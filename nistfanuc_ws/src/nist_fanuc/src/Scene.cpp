@@ -21,7 +21,6 @@ using namespace boost::assign;
 #include "Debug.h"
 using namespace rviz_visual_tools;
 
-Eigen::Affine3d fanucoffset00 = Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, -0.5, 0.0);
 
 std::map<std::string, std::string> ObjectDB::_typemapping =
         map_list_of("bolt", "mesh")

@@ -108,7 +108,8 @@ protected:
     std::vector< double> hint;
     size_t num_joints;
     std::string _groupname;
-    std::string _eelinkname;
+    std::string _tiplinkname;
+    std::string _rootlinkname;
     std::string prefix;
     tf::Pose baseoffset;
 public:
@@ -214,9 +215,11 @@ public:
 
     virtual void Init(
             std::string groupname,
-            std::string eelinkname) {
+            std::string tiplinkname,
+            std::string rootlinkname) {
         _groupname = groupname;
-        _eelinkname = eelinkname;
+        _tiplinkname = tiplinkname;
+        _rootlinkname = rootlinkname;
     }
 
     /*!
@@ -230,8 +233,7 @@ public:
 
     /*!
      * \brief Initialize kinematics using robot_description to fill parameters .
-     * \param  groupname name of  chained joints in robot model.
-     * \param  eelinkname name of end effector joint in robot model.
+     * \param  nh ros node handle of node.
      */
     virtual void Init(ros::NodeHandle & nh) {
     }
@@ -289,11 +291,11 @@ public:
         this->prefix = prefix;
         this->baseoffset=baseoffset;
        
-#ifdef FANUCPREFIX
-         prefix = "fanuc_";
-#else
-         prefix = "";
-#endif
+//#ifdef FANUCPREFIX
+//         prefix = "fanuc_";
+//#else
+//         prefix = "";
+//#endif
        
     }
     virtual RCS::Pose FK(std::vector<double> jv) {
@@ -317,7 +319,7 @@ public:
         moveit_msgs::GetPositionIK::Response response;
         moveit_msgs::GetPositionIK::Request request;
         request.ik_request.pose_stamped.header.stamp = ros::Time::now();
-        request.ik_request.ik_link_name = _eelinkname;
+        request.ik_request.ik_link_name = _tiplinkname;
         request.ik_request.group_name = "manipulator";
         request.ik_request.robot_state.joint_state.name = joint_names;
         request.ik_request.ik_link_names = link_names;
@@ -343,12 +345,6 @@ public:
         return std::vector<double>();
     }
 
-    virtual void Init(
-            std::string groupname,
-            std::string eelinkname) {
-        _groupname = groupname;
-        _eelinkname = eelinkname;
-    }
 
     virtual bool IsSingular(RCS::Pose & pose, double threshold) {
         return false;
@@ -356,7 +352,7 @@ public:
 
     virtual void Init(ros::NodeHandle &nh) {
         armkin = boost::shared_ptr<::Kinematics>(new ::Kinematics());
-        armkin->init(nh);
+        armkin->init(nh, _tiplinkname, _rootlinkname);
         moveit_msgs::GetKinematicSolverInfo::Request request;
         moveit_msgs::GetKinematicSolverInfo::Response response;
         armkin->getFKSolverInfo(request, response);
@@ -607,12 +603,6 @@ public:
         return allsolutions[n];
     }
 
-    virtual void Init(
-            std::string groupname,
-            std::string eelinkname) {
-        _groupname = groupname;
-        _eelinkname = eelinkname;
-    }
 
     virtual bool IsSingular(RCS::Pose & pose, double threshold) {
         return false;
@@ -620,7 +610,7 @@ public:
 
     virtual void Init(ros::NodeHandle &nh) {
         armkin = boost::shared_ptr<::Kinematics>(new ::Kinematics());
-        armkin->init(nh);
+        armkin->init(nh, _tiplinkname, _rootlinkname);
         moveit_msgs::GetKinematicSolverInfo::Request request;
         moveit_msgs::GetKinematicSolverInfo::Response response;
         armkin->getFKSolverInfo(request, response);
@@ -692,7 +682,7 @@ public:
 
     virtual void Init(ros::NodeHandle &nh) {
         armkin = boost::shared_ptr<::Kinematics>(new ::Kinematics());
-        armkin->init(nh);
+        armkin->init(nh, _tiplinkname, _rootlinkname);
         moveit_msgs::GetKinematicSolverInfo::Request request;
         moveit_msgs::GetKinematicSolverInfo::Response response;
         armkin->getFKSolverInfo(request, response);

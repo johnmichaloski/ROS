@@ -1,4 +1,4 @@
-.TH "md_markdown_catkin" 3 "Fri Apr 15 2016" "CRCL FANUC" \" -*- nroff -*-
+.TH "md_markdown_catkin" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -88,6 +88,18 @@ To disable the job server, you can use the --no-jobserver option\&.
 .PP
 .nf
 catkin build PKG --no-deps -p 7 # Build PKG only, and use only 7 or 8 cores
+
 .fi
 .PP
- 
+.PP
+.SS "Building With Warnings "
+.PP
+It can sometimes be useful to compile with additional warnings enabled across your whole catkin workspace\&. To achieve this, use a command similar to this: 
+.PP
+.nf
+$ catkin build -v --cmake-args -DCMAKE_C_FLAGS="-Wall -W -Wno-unused-parameter"
+
+.fi
+.PP
+.PP
+This command passes the \fC-DCMAKE_C_FLAGS=\fP\&.\&.\&. argument to all invocations of cmake\&. 

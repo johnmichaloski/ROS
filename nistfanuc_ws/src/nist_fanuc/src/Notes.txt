@@ -1,3 +1,12 @@
+//        LOG_DEBUG << ExecuteShellCommand("env|sort\n");
+
+        // This is useful for rosbag i suppose
+        //        std::string run_id;
+        //        nh.getParam("run_id", run_id);
+        //        std::cout << run_id.c_str() << std::endl;
+
+
+
 
 lrmate200id_macro.xacro
 

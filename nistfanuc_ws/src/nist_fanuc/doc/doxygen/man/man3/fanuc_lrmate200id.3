@@ -1,0 +1,58 @@
+.TH "fanuc_lrmate200id" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+fanuc_lrmate200id \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <fanuc_lrmate200id\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBfanuc_lrmate200id\fP (void)"
+.br
+.ti -1c
+.RI "\fB~fanuc_lrmate200id\fP (void)"
+.br
+.ti -1c
+.RI "tf::Pose \fBfanuc_lrmate200id_kin_fwd\fP (const double *motors)"
+.br
+.ti -1c
+.RI "std::vector< double > \fBfanuc_lrmate200id_kin_inv\fP (const tf::Pose &pos)"
+.br
+.ti -1c
+.RI "std::vector< double > \fBadd_fkgearing\fP (std::vector< double > motors)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBfanuc_lrmate200id_kin_struct\fP \fBkins\fP"
+.br
+.in -1c
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "fanuc_lrmate200id::fanuc_lrmate200id (void)"
+
+.SS "fanuc_lrmate200id::~fanuc_lrmate200id (void)"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "std::vector<double> fanuc_lrmate200id::add_fkgearing (std::vector< double >motors)\fC [inline]\fP"
+
+.SS "tf::Pose fanuc_lrmate200id::fanuc_lrmate200id_kin_fwd (const double *motors)"
+
+.SS "std::vector< double > fanuc_lrmate200id::fanuc_lrmate200id_kin_inv (const tf::Pose &pos)"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBfanuc_lrmate200id_kin_struct\fP fanuc_lrmate200id::kins"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CRCL FANUC from the source code\&.

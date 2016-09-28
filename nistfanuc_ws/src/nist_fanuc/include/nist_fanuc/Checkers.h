@@ -209,17 +209,6 @@ namespace Checkers {
             return ('?');
         }
 
-        int symbol2value(char c) {
-            switch (c) {
-                case ' ': return 0;
-                case 'r': return RED;
-                case 'b': return BLACK;
-                case 'R': return RED + KING;
-                case 'B': return BLACK + KING;
-            }
-            return 0;
-        }
-
         std::string printDisplayFancy(BoardType inboard) {
             std::stringstream str;
             int rr, cc;
@@ -232,8 +221,35 @@ namespace Checkers {
                 str << "\n";
                 str << "  +---+---+---+---+---+---+---+---+\n";
             }
-           str << "    0   1   2   3   4   5   6   7\n";
-           return str.str();
+            str << "    0   1   2   3   4   5   6   7\n";
+            return str.str();
+        }
+
+        void ReplaceAll(std::string& tInput, std::string tFind, std::string tReplace) {
+            size_t uPos = 0;
+            size_t uFindLen = tFind.length();
+            size_t uReplaceLen = tReplace.length();
+            if (uFindLen == 0) {
+                return;
+            }
+
+            for (; (uPos = tInput.find(tFind, uPos)) != std::string::npos;) {
+                tInput.replace(uPos, uFindLen, tReplace);
+                uPos += uReplaceLen;
+            }
+
+        }
+
+        int symbol2value(char c) {
+            switch (c) {
+                case ' ': return 1;
+                case '@': return 1;
+                case 'r': return RED;
+                case 'b': return BLACK;
+                case 'R': return RED + KING;
+                case 'B': return BLACK + KING;
+            }
+            return 0;
         }
 
         void Deserialize(std::istream& s_in, BoardType &board_out) {
@@ -242,25 +258,38 @@ namespace Checkers {
             char dummyc;
             char piece;
             char str[256];
+            std::string line;
+            s_in >> line;
 
-            s_in.get(str, sizeof ("  +---+---+---+---+---+---+---+---+\n"));
-#if 1
-            for (rr = 0; rr < ROWS; ++rr) {
-                s_in.get(str, 3);
-               // s_in >> dummy; //StrFormat("%d |", rr).c_str();
-                //s_in >> dummyc; // | char
-                for (cc = 0; cc < COLS; ++cc) {
-                    memset(&str[0], 0, 256);
-                    s_in.get(str, sizeof (" X |"));
-                    sscanf(str, " %c |", &piece);
-                    board_out[rr][cc] = symbol2value(piece);
+            // This will not parse the \n
+            //s_in.get(str, sizeof ("    +---+---+---+---+---+---+---+---+\n"));
+            int row = 0;
+            while (row < ROWS && !s_in.eof()) {
+                int col = 0;
+                char checker[4] = {' ', ' ', ' ', ' '};
+                std::getline(s_in, line);
+                if (line.size() < 1)
+                    continue;
+                ReplaceAll(line, "   ", " @ ");
+                std::cout << line << "\n";
+                // blank characters are skipped if leading space in front of %c
+                // maybe replace all blank space blank with blank@blank and treat @ as 0
+                if (row % 2 == 0) {
+                    col++;
+                    sscanf(line.c_str(), "%d | @  | %c | @ | %c | @ | %c | @ | %c |",
+                            &dummy, &checker[0], &checker[1], &checker[2], &checker[3]);
+                } else {
+                    sscanf(line.c_str(), "%d | %c | @ | %c | @ | %c | @ | %c |",
+                            &dummy, &checker[0], &checker[1], &checker[2], &checker[3]);
                 }
-                s_in >> dummyc; // eat \n
-                s_in.get(str, sizeof ("  +---+---+---+---+---+---+---+---+\n"));
+                std::cout << dummy << checker[0] << checker[1] << checker[2] << &checker[3] << "\n";
+                board_out[row][col] = symbol2value(checker[0]);
+                board_out[row][col + 2] = symbol2value(checker[1]);
+                board_out[row][col + 4] = symbol2value(checker[2]);
+                board_out[row][col + 6] = symbol2value(checker[3]);
+                row++;
+                std::getline(s_in, line);
             }
-            s_in.get (str,sizeof("    0   1   2   3   4   5   6   7\n")); // eat \n
- #endif
-
         }
 
         void KingMe(BoardType & inboard) {

@@ -1,0 +1,42 @@
+\hypertarget{BLogging_8cpp}{\section{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/src/\-B\-Logging.cpp File Reference}
+\label{BLogging_8cpp}\index{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/src/\-B\-Logging.\-cpp@{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/src/\-B\-Logging.\-cpp}}
+}
+{\ttfamily \#include \char`\"{}B\-Logging.\-h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{BLogging_8cpp_a7293554dd936e3e71cceb0515c505786}{B\-O\-O\-S\-T\-\_\-\-L\-O\-G\-\_\-\-G\-L\-O\-B\-A\-L\-\_\-\-L\-O\-G\-G\-E\-R\-\_\-\-I\-N\-I\-T} (my\-\_\-logger, \hyperlink{BLogging_8h_abcdd32bb9fff6a67c0bb1ddbab7aaedb}{logger\-\_\-t})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+std\-::string \hyperlink{BLogging_8cpp_a2e7c7e60e2dd7c2c55c9c64248ee6ce2}{boostlogfile} = \char`\"{}/var/log/example.\-log\char`\"{}
+\item 
+boost\-::log\-::trivial\-::severity\-\_\-level \hyperlink{BLogging_8cpp_acd0397428d7c84624e230252420f3167}{boostloglevel} =logging\-::trivial\-::info
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{BLogging_8cpp_a7293554dd936e3e71cceb0515c505786}{\index{B\-Logging.\-cpp@{B\-Logging.\-cpp}!B\-O\-O\-S\-T\-\_\-\-L\-O\-G\-\_\-\-G\-L\-O\-B\-A\-L\-\_\-\-L\-O\-G\-G\-E\-R\-\_\-\-I\-N\-I\-T@{B\-O\-O\-S\-T\-\_\-\-L\-O\-G\-\_\-\-G\-L\-O\-B\-A\-L\-\_\-\-L\-O\-G\-G\-E\-R\-\_\-\-I\-N\-I\-T}}
+\index{B\-O\-O\-S\-T\-\_\-\-L\-O\-G\-\_\-\-G\-L\-O\-B\-A\-L\-\_\-\-L\-O\-G\-G\-E\-R\-\_\-\-I\-N\-I\-T@{B\-O\-O\-S\-T\-\_\-\-L\-O\-G\-\_\-\-G\-L\-O\-B\-A\-L\-\_\-\-L\-O\-G\-G\-E\-R\-\_\-\-I\-N\-I\-T}!BLogging.cpp@{B\-Logging.\-cpp}}
+\subsubsection[{B\-O\-O\-S\-T\-\_\-\-L\-O\-G\-\_\-\-G\-L\-O\-B\-A\-L\-\_\-\-L\-O\-G\-G\-E\-R\-\_\-\-I\-N\-I\-T}]{\setlength{\rightskip}{0pt plus 5cm}B\-O\-O\-S\-T\-\_\-\-L\-O\-G\-\_\-\-G\-L\-O\-B\-A\-L\-\_\-\-L\-O\-G\-G\-E\-R\-\_\-\-I\-N\-I\-T (
+\begin{DoxyParamCaption}
+\item[{my\-\_\-logger}]{, }
+\item[{{\bf logger\-\_\-t}}]{}
+\end{DoxyParamCaption}
+)}}\label{BLogging_8cpp_a7293554dd936e3e71cceb0515c505786}
+
+
+\subsection{Variable Documentation}
+\hypertarget{BLogging_8cpp_a2e7c7e60e2dd7c2c55c9c64248ee6ce2}{\index{B\-Logging.\-cpp@{B\-Logging.\-cpp}!boostlogfile@{boostlogfile}}
+\index{boostlogfile@{boostlogfile}!BLogging.cpp@{B\-Logging.\-cpp}}
+\subsubsection[{boostlogfile}]{\setlength{\rightskip}{0pt plus 5cm}std\-::string boostlogfile = \char`\"{}/var/log/example.\-log\char`\"{}}}\label{BLogging_8cpp_a2e7c7e60e2dd7c2c55c9c64248ee6ce2}
+\href{http://stackoverflow.com/questions/20086754/how-to-use-boost-log-from-multiple-files-with-gloa}{\tt http\-://stackoverflow.\-com/questions/20086754/how-\/to-\/use-\/boost-\/log-\/from-\/multiple-\/files-\/with-\/gloa} \#include \char`\"{}\-Logging.\-h\char`\"{}
+
+int \hyperlink{nist__fanuc_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{main(int argc, char $\ast$$\ast$argv)} \{ I\-N\-F\-O $<$$<$ \char`\"{}\-Program started\char`\"{};
+
+return 0; \} My build settings
+
+A\-M\-\_\-\-L\-D\-F\-L\-A\-G\-S += -\/lboost\-\_\-system -\/lboost\-\_\-thread -\/lpthread A\-M\-\_\-\-L\-D\-F\-L\-A\-G\-S += -\/\-D\-B\-O\-O\-S\-T\-\_\-\-L\-O\-G\-\_\-\-D\-Y\-N\-\_\-\-L\-I\-N\-K -\/lboost\-\_\-log\-\_\-setup -\/lboost\-\_\-log A\-M\-\_\-\-C\-X\-X\-F\-L\-A\-G\-S += -\/std=c++11 -\/\-D\-B\-O\-O\-S\-T\-\_\-\-L\-O\-G\-\_\-\-D\-Y\-N\-\_\-\-L\-I\-N\-K \hypertarget{BLogging_8cpp_acd0397428d7c84624e230252420f3167}{\index{B\-Logging.\-cpp@{B\-Logging.\-cpp}!boostloglevel@{boostloglevel}}
+\index{boostloglevel@{boostloglevel}!BLogging.cpp@{B\-Logging.\-cpp}}
+\subsubsection[{boostloglevel}]{\setlength{\rightskip}{0pt plus 5cm}boost\-::log\-::trivial\-::severity\-\_\-level boostloglevel =logging\-::trivial\-::info}}\label{BLogging_8cpp_acd0397428d7c84624e230252420f3167}

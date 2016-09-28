@@ -1,17 +1,19 @@
-\hypertarget{Globals_8h}{\section{/usr/local/michalos/github/usnistgov/el-\/robotics-\/core/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\-Globals.h File Reference}
-\label{Globals_8h}\index{/usr/local/michalos/github/usnistgov/el-\/robotics-\/core/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\-Globals.\-h@{/usr/local/michalos/github/usnistgov/el-\/robotics-\/core/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\-Globals.\-h}}
+\hypertarget{Globals_8h}{\section{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\-Globals.h File Reference}
+\label{Globals_8h}\index{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\-Globals.\-h@{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\-Globals.\-h}}
 }
 {\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdarg.\-h$>$}\\*
+{\ttfamily \#include $<$time.\-h$>$}\\*
 {\ttfamily \#include $<$vector$>$}\\*
 {\ttfamily \#include $<$map$>$}\\*
 {\ttfamily \#include $<$string$>$}\\*
 {\ttfamily \#include $<$fstream$>$}\\*
-{\ttfamily \#include $<$boost/thread.\-hpp$>$}\\*
-{\ttfamily \#include $<$ctime$>$}\\*
-{\ttfamily \#include $<$stdarg.\-h$>$}\\*
 {\ttfamily \#include $<$sstream$>$}\\*
-{\ttfamily \#include $<$time.\-h$>$}\\*
-{\ttfamily \#include \char`\"{}Logging.\-h\char`\"{}}\\*
+{\ttfamily \#include $<$ctime$>$}\\*
+{\ttfamily \#include $<$boost/thread.\-hpp$>$}\\*
+{\ttfamily \#include $<$boost/preprocessor.\-hpp$>$}\\*
+{\ttfamily \#include $<$stdexcept$>$}\\*
+{\ttfamily \#include $<$iostream$>$}\\*
 \subsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
@@ -21,12 +23,16 @@ class \hyperlink{classCGlobals}{C\-Globals}
 \begin{DoxyCompactItemize}
 \item 
 \#define \hyperlink{Globals_8h_a5fd3d8f28a97319e5898e5b661f27fc0}{If\-Debug}(arg)
-\item 
+\begin{DoxyCompactList}\small\item\em \#include \char`\"{}\-Logging.\-h\char`\"{} \end{DoxyCompactList}\item 
 \#define \hyperlink{Globals_8h_a42699448fc3b3acbdf9f7bd1f194e9dd}{\-\_\-strnicmp}~strncasecmp
 \item 
 \#define \hyperlink{Globals_8h_a14bc2dfa42241600d567369cd25ddc70}{S\-\_\-\-O\-K}~0
 \item 
 \#define \hyperlink{Globals_8h_a8f0547e641e1efc8110437fa85aa722e}{E\-\_\-\-F\-A\-I\-L}~-\/1
+\item 
+\#define \hyperlink{Globals_8h_a9c15fe1e91b07ea3280f5239f9841b67}{\-\_\-\-\_\-\-P\-R\-E\-T\-T\-Y\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-}~\-\_\-\-\_\-func\-\_\-\-\_\-
+\item 
+\#define \hyperlink{Globals_8h_af4e88f631e5a9381055a48fc90f3a633}{I\-K\-F\-A\-S\-T\-\_\-\-A\-S\-S\-E\-R\-T}(b)~\{ if( !(b) ) \{ std\-::stringstream ss; ss $<$$<$ \char`\"{}ikfast exception\-: \char`\"{} $<$$<$ \-\_\-\-\_\-\-F\-I\-L\-E\-\_\-\-\_\- $<$$<$ \char`\"{}\-:\char`\"{} $<$$<$ \-\_\-\-\_\-\-L\-I\-N\-E\-\_\-\-\_\- $<$$<$ \char`\"{}\-: \char`\"{} $<$$<$\hyperlink{Globals_8h_a9c15fe1e91b07ea3280f5239f9841b67}{\-\_\-\-\_\-\-P\-R\-E\-T\-T\-Y\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-} $<$$<$ \char`\"{}\-: Assertion '\char`\"{} $<$$<$ \#b $<$$<$ \char`\"{}' failed\char`\"{}; throw std\-::runtime\-\_\-error(ss.\-str()); \} \}
 \item 
 \#define \hyperlink{Globals_8h_a2fec1a914357426aecdfc4c865595a9d}{C\-L\-E\-A\-N\-S\-T\-O\-R\-E}(Y, X, Z)
 \item 
@@ -37,26 +43,27 @@ class \hyperlink{classCGlobals}{C\-Globals}
 \#define \hyperlink{Globals_8h_a54627d43f714cfa5d69b142979fe91a0}{N\-V\-A\-R}(X, Y, Z)
 \item 
 \#define \hyperlink{Globals_8h_a2cb1b3946754d725b4e77fce425b4b68}{F\-O\-R\-E\-A\-C\-H}(it, v)~for(typeof((v).begin()) it = (v).begin(); it != (v).end(); it++)
+\item 
+\#define \hyperlink{Globals_8h_a6522e843a4146cab1c24d2b1678f139a}{X\-\_\-\-D\-E\-F\-I\-N\-E\-\_\-\-E\-N\-U\-M\-\_\-\-W\-I\-T\-H\-\_\-\-S\-T\-R\-I\-N\-G\-\_\-\-C\-O\-N\-V\-E\-R\-S\-I\-O\-N\-S\-\_\-\-T\-O\-S\-T\-R\-I\-N\-G\-\_\-\-C\-A\-S\-E}(r, data, elem)~case elem \-: return B\-O\-O\-S\-T\-\_\-\-P\-P\-\_\-\-S\-T\-R\-I\-N\-G\-I\-Z\-E(elem);
+\item 
+\#define \hyperlink{Globals_8h_a07ae7d3983b1108d4d8f59fadcc716a2}{D\-E\-F\-I\-N\-E\-\_\-\-E\-N\-U\-M\-\_\-\-W\-I\-T\-H\-\_\-\-S\-T\-R\-I\-N\-G\-\_\-\-C\-O\-N\-V\-E\-R\-S\-I\-O\-N\-S}(name, enumerators)
 \end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
 void \hyperlink{Globals_8h_aedac882e1f21e19ef4a15ef77cd22a3a}{Debug\-Break} ()
-\item 
-{\footnotesize template$<$typename T $>$ }\\std\-::string \hyperlink{Globals_8h_a1263114fe44da940e2d6536e0d1c69e0}{Vector\-Dump} (std\-::vector$<$ T $>$ v)
-\item 
-{\footnotesize template$<$typename T $>$ }\\std\-::vector$<$ T $>$ \hyperlink{Globals_8h_afe12749d85a89b8b8b2aaca821330357}{To\-Vector} (int n,...)
 \end{DoxyCompactItemize}
 \subsection*{Variables}
 \begin{DoxyCompactItemize}
-\item 
-\hyperlink{classALogger}{A\-Logger} \hyperlink{Globals_8h_a685b49fc3cee647726129b434acfd164}{Log\-File}
 \item 
 \hyperlink{classCGlobals}{C\-Globals} \hyperlink{Globals_8h_adb8dc75afa8d66a2da2aa8826d68666b}{Globals}
 \end{DoxyCompactItemize}
 
 
 \subsection{Macro Definition Documentation}
+\hypertarget{Globals_8h_a9c15fe1e91b07ea3280f5239f9841b67}{\index{Globals.\-h@{Globals.\-h}!\-\_\-\-\_\-\-P\-R\-E\-T\-T\-Y\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-@{\-\_\-\-\_\-\-P\-R\-E\-T\-T\-Y\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-}}
+\index{\-\_\-\-\_\-\-P\-R\-E\-T\-T\-Y\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-@{\-\_\-\-\_\-\-P\-R\-E\-T\-T\-Y\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-}!Globals.h@{Globals.\-h}}
+\subsubsection[{\-\_\-\-\_\-\-P\-R\-E\-T\-T\-Y\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}\#define \-\_\-\-\_\-\-P\-R\-E\-T\-T\-Y\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-~\-\_\-\-\_\-func\-\_\-\-\_\-}}\label{Globals_8h_a9c15fe1e91b07ea3280f5239f9841b67}
 \hypertarget{Globals_8h_a42699448fc3b3acbdf9f7bd1f194e9dd}{\index{Globals.\-h@{Globals.\-h}!\-\_\-strnicmp@{\-\_\-strnicmp}}
 \index{\-\_\-strnicmp@{\-\_\-strnicmp}!Globals.h@{Globals.\-h}}
 \subsubsection[{\-\_\-strnicmp}]{\setlength{\rightskip}{0pt plus 5cm}\#define \-\_\-strnicmp~strncasecmp}}\label{Globals_8h_a42699448fc3b3acbdf9f7bd1f194e9dd}
@@ -73,6 +80,34 @@ void \hyperlink{Globals_8h_aedac882e1f21e19ef4a15ef77cd22a3a}{Debug\-Break} ()
 \begin{DoxyCode}
 \textcolor{keywordflow}{try}\{ Y = X; \}           \(\backslash\)
     catch ( ... ) \{ Y = Z; \}
+\end{DoxyCode}
+\hypertarget{Globals_8h_a07ae7d3983b1108d4d8f59fadcc716a2}{\index{Globals.\-h@{Globals.\-h}!D\-E\-F\-I\-N\-E\-\_\-\-E\-N\-U\-M\-\_\-\-W\-I\-T\-H\-\_\-\-S\-T\-R\-I\-N\-G\-\_\-\-C\-O\-N\-V\-E\-R\-S\-I\-O\-N\-S@{D\-E\-F\-I\-N\-E\-\_\-\-E\-N\-U\-M\-\_\-\-W\-I\-T\-H\-\_\-\-S\-T\-R\-I\-N\-G\-\_\-\-C\-O\-N\-V\-E\-R\-S\-I\-O\-N\-S}}
+\index{D\-E\-F\-I\-N\-E\-\_\-\-E\-N\-U\-M\-\_\-\-W\-I\-T\-H\-\_\-\-S\-T\-R\-I\-N\-G\-\_\-\-C\-O\-N\-V\-E\-R\-S\-I\-O\-N\-S@{D\-E\-F\-I\-N\-E\-\_\-\-E\-N\-U\-M\-\_\-\-W\-I\-T\-H\-\_\-\-S\-T\-R\-I\-N\-G\-\_\-\-C\-O\-N\-V\-E\-R\-S\-I\-O\-N\-S}!Globals.h@{Globals.\-h}}
+\subsubsection[{D\-E\-F\-I\-N\-E\-\_\-\-E\-N\-U\-M\-\_\-\-W\-I\-T\-H\-\_\-\-S\-T\-R\-I\-N\-G\-\_\-\-C\-O\-N\-V\-E\-R\-S\-I\-O\-N\-S}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\-E\-F\-I\-N\-E\-\_\-\-E\-N\-U\-M\-\_\-\-W\-I\-T\-H\-\_\-\-S\-T\-R\-I\-N\-G\-\_\-\-C\-O\-N\-V\-E\-R\-S\-I\-O\-N\-S(
+\begin{DoxyParamCaption}
+\item[{}]{name, }
+\item[{}]{enumerators}
+\end{DoxyParamCaption}
+)}}\label{Globals_8h_a07ae7d3983b1108d4d8f59fadcc716a2}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+\textcolor{keyword}{enum} name \{                                                               \(\backslash\)
+        BOOST\_PP\_SEQ\_ENUM(enumerators)                                        \(\backslash\)
+    \};                                                                        \(\backslash\)
+                                                                              \(\backslash\)
+    inline \textcolor{keyword}{const} \textcolor{keywordtype}{char}* ToString(name v)                                       \(\backslash\)
+    \{                                                                         \(\backslash\)
+        switch (v)                                                            \(\backslash\)
+        \{                                                                     \(\backslash\)
+            BOOST\_PP\_SEQ\_FOR\_EACH(                                            \(\backslash\)
+                \hyperlink{Globals_8h_a6522e843a4146cab1c24d2b1678f139a}{X\_DEFINE\_ENUM\_WITH\_STRING\_CONVERSIONS\_TOSTRING\_CASE}
+      ,          \(\backslash\)
+                name,                                                         \(\backslash\)
+                enumerators                                                   \(\backslash\)
+            )                                                                 \(\backslash\)
+            default: \textcolor{keywordflow}{return} \textcolor{stringliteral}{"[Unknown "} BOOST\_PP\_STRINGIZE(name) \textcolor{stringliteral}{"]"};         \(\backslash\)
+        \}                                                                     \(\backslash\)
+    \}
 \end{DoxyCode}
 \hypertarget{Globals_8h_a8f0547e641e1efc8110437fa85aa722e}{\index{Globals.\-h@{Globals.\-h}!E\-\_\-\-F\-A\-I\-L@{E\-\_\-\-F\-A\-I\-L}}
 \index{E\-\_\-\-F\-A\-I\-L@{E\-\_\-\-F\-A\-I\-L}!Globals.h@{Globals.\-h}}
@@ -92,6 +127,17 @@ void \hyperlink{Globals_8h_aedac882e1f21e19ef4a15ef77cd22a3a}{Debug\-Break} ()
 \item[{}]{arg}
 \end{DoxyParamCaption}
 )}}\label{Globals_8h_a5fd3d8f28a97319e5898e5b661f27fc0}
+
+
+\#include \char`\"{}\-Logging.\-h\char`\"{} 
+
+\hypertarget{Globals_8h_af4e88f631e5a9381055a48fc90f3a633}{\index{Globals.\-h@{Globals.\-h}!I\-K\-F\-A\-S\-T\-\_\-\-A\-S\-S\-E\-R\-T@{I\-K\-F\-A\-S\-T\-\_\-\-A\-S\-S\-E\-R\-T}}
+\index{I\-K\-F\-A\-S\-T\-\_\-\-A\-S\-S\-E\-R\-T@{I\-K\-F\-A\-S\-T\-\_\-\-A\-S\-S\-E\-R\-T}!Globals.h@{Globals.\-h}}
+\subsubsection[{I\-K\-F\-A\-S\-T\-\_\-\-A\-S\-S\-E\-R\-T}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-K\-F\-A\-S\-T\-\_\-\-A\-S\-S\-E\-R\-T(
+\begin{DoxyParamCaption}
+\item[{}]{b}
+\end{DoxyParamCaption}
+)~\{ if( !(b) ) \{ std\-::stringstream ss; ss $<$$<$ \char`\"{}ikfast exception\-: \char`\"{} $<$$<$ \-\_\-\-\_\-\-F\-I\-L\-E\-\_\-\-\_\- $<$$<$ \char`\"{}\-:\char`\"{} $<$$<$ \-\_\-\-\_\-\-L\-I\-N\-E\-\_\-\-\_\- $<$$<$ \char`\"{}\-: \char`\"{} $<$$<${\bf \-\_\-\-\_\-\-P\-R\-E\-T\-T\-Y\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-} $<$$<$ \char`\"{}\-: Assertion '\char`\"{} $<$$<$ \#b $<$$<$ \char`\"{}' failed\char`\"{}; throw std\-::runtime\-\_\-error(ss.\-str()); \} \}}}\label{Globals_8h_af4e88f631e5a9381055a48fc90f3a633}
 \hypertarget{Globals_8h_a54627d43f714cfa5d69b142979fe91a0}{\index{Globals.\-h@{Globals.\-h}!N\-V\-A\-R@{N\-V\-A\-R}}
 \index{N\-V\-A\-R@{N\-V\-A\-R}!Globals.h@{Globals.\-h}}
 \subsubsection[{N\-V\-A\-R}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\-V\-A\-R(
@@ -135,6 +181,15 @@ public: Y & X( ) \{ \textcolor{keywordflow}{return} Z; \}
 \textcolor{keyword}{protected}: Y \_ ## X; \(\backslash\)
 public: Y & X( ) \{ \textcolor{keywordflow}{return} \_ ## X; \}
 \end{DoxyCode}
+\hypertarget{Globals_8h_a6522e843a4146cab1c24d2b1678f139a}{\index{Globals.\-h@{Globals.\-h}!X\-\_\-\-D\-E\-F\-I\-N\-E\-\_\-\-E\-N\-U\-M\-\_\-\-W\-I\-T\-H\-\_\-\-S\-T\-R\-I\-N\-G\-\_\-\-C\-O\-N\-V\-E\-R\-S\-I\-O\-N\-S\-\_\-\-T\-O\-S\-T\-R\-I\-N\-G\-\_\-\-C\-A\-S\-E@{X\-\_\-\-D\-E\-F\-I\-N\-E\-\_\-\-E\-N\-U\-M\-\_\-\-W\-I\-T\-H\-\_\-\-S\-T\-R\-I\-N\-G\-\_\-\-C\-O\-N\-V\-E\-R\-S\-I\-O\-N\-S\-\_\-\-T\-O\-S\-T\-R\-I\-N\-G\-\_\-\-C\-A\-S\-E}}
+\index{X\-\_\-\-D\-E\-F\-I\-N\-E\-\_\-\-E\-N\-U\-M\-\_\-\-W\-I\-T\-H\-\_\-\-S\-T\-R\-I\-N\-G\-\_\-\-C\-O\-N\-V\-E\-R\-S\-I\-O\-N\-S\-\_\-\-T\-O\-S\-T\-R\-I\-N\-G\-\_\-\-C\-A\-S\-E@{X\-\_\-\-D\-E\-F\-I\-N\-E\-\_\-\-E\-N\-U\-M\-\_\-\-W\-I\-T\-H\-\_\-\-S\-T\-R\-I\-N\-G\-\_\-\-C\-O\-N\-V\-E\-R\-S\-I\-O\-N\-S\-\_\-\-T\-O\-S\-T\-R\-I\-N\-G\-\_\-\-C\-A\-S\-E}!Globals.h@{Globals.\-h}}
+\subsubsection[{X\-\_\-\-D\-E\-F\-I\-N\-E\-\_\-\-E\-N\-U\-M\-\_\-\-W\-I\-T\-H\-\_\-\-S\-T\-R\-I\-N\-G\-\_\-\-C\-O\-N\-V\-E\-R\-S\-I\-O\-N\-S\-\_\-\-T\-O\-S\-T\-R\-I\-N\-G\-\_\-\-C\-A\-S\-E}]{\setlength{\rightskip}{0pt plus 5cm}\#define X\-\_\-\-D\-E\-F\-I\-N\-E\-\_\-\-E\-N\-U\-M\-\_\-\-W\-I\-T\-H\-\_\-\-S\-T\-R\-I\-N\-G\-\_\-\-C\-O\-N\-V\-E\-R\-S\-I\-O\-N\-S\-\_\-\-T\-O\-S\-T\-R\-I\-N\-G\-\_\-\-C\-A\-S\-E(
+\begin{DoxyParamCaption}
+\item[{}]{r, }
+\item[{}]{data, }
+\item[{}]{elem}
+\end{DoxyParamCaption}
+)~case elem \-: return B\-O\-O\-S\-T\-\_\-\-P\-P\-\_\-\-S\-T\-R\-I\-N\-G\-I\-Z\-E(elem);}}\label{Globals_8h_a6522e843a4146cab1c24d2b1678f139a}
 
 
 \subsection{Function Documentation}
@@ -145,27 +200,10 @@ public: Y & X( ) \{ \textcolor{keywordflow}{return} \_ ## X; \}
 {}
 \end{DoxyParamCaption}
 )}}\label{Globals_8h_aedac882e1f21e19ef4a15ef77cd22a3a}
-global definition of windows Debug\-Break equivalent. \hypertarget{Globals_8h_afe12749d85a89b8b8b2aaca821330357}{\index{Globals.\-h@{Globals.\-h}!To\-Vector@{To\-Vector}}
-\index{To\-Vector@{To\-Vector}!Globals.h@{Globals.\-h}}
-\subsubsection[{To\-Vector}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ std\-::vector$<$T$>$ To\-Vector (
-\begin{DoxyParamCaption}
-\item[{int}]{n, }
-\item[{}]{...}
-\end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}}}\label{Globals_8h_afe12749d85a89b8b8b2aaca821330357}
-\hypertarget{Globals_8h_a1263114fe44da940e2d6536e0d1c69e0}{\index{Globals.\-h@{Globals.\-h}!Vector\-Dump@{Vector\-Dump}}
-\index{Vector\-Dump@{Vector\-Dump}!Globals.h@{Globals.\-h}}
-\subsubsection[{Vector\-Dump}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ std\-::string Vector\-Dump (
-\begin{DoxyParamCaption}
-\item[{std\-::vector$<$ T $>$}]{v}
-\end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}}}\label{Globals_8h_a1263114fe44da940e2d6536e0d1c69e0}
-
+global definition of windows Debug\-Break equivalent. 
 
 \subsection{Variable Documentation}
 \hypertarget{Globals_8h_adb8dc75afa8d66a2da2aa8826d68666b}{\index{Globals.\-h@{Globals.\-h}!Globals@{Globals}}
 \index{Globals@{Globals}!Globals.h@{Globals.\-h}}
 \subsubsection[{Globals}]{\setlength{\rightskip}{0pt plus 5cm}{\bf C\-Globals} Globals}}\label{Globals_8h_adb8dc75afa8d66a2da2aa8826d68666b}
-global definition of globals \hypertarget{Globals_8h_a685b49fc3cee647726129b434acfd164}{\index{Globals.\-h@{Globals.\-h}!Log\-File@{Log\-File}}
-\index{Log\-File@{Log\-File}!Globals.h@{Globals.\-h}}
-\subsubsection[{Log\-File}]{\setlength{\rightskip}{0pt plus 5cm}{\bf A\-Logger} Log\-File}}\label{Globals_8h_a685b49fc3cee647726129b434acfd164}
+global definition of globals 

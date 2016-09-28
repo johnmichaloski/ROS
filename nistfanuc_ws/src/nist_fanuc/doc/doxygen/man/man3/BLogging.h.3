@@ -1,0 +1,100 @@
+.TH "/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/include/nist_fanuc/NIST/BLogging.h" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/include/nist_fanuc/NIST/BLogging.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <boost/log/expressions\&.hpp>\fP
+.br
+\fC#include <boost/log/sources/global_logger_storage\&.hpp>\fP
+.br
+\fC#include <boost/log/support/date_time\&.hpp>\fP
+.br
+\fC#include <boost/log/trivial\&.hpp>\fP
+.br
+\fC#include <boost/log/utility/setup\&.hpp>\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBBOOST_LOG_DYN_LINK\fP   1"
+.br
+.ti -1c
+.RI "#define \fBLOG_TRACE\fP   BOOST_LOG_SEV(my_logger::get(), boost::log::trivial::trace)"
+.br
+.ti -1c
+.RI "#define \fBLOG_DEBUG\fP   BOOST_LOG_SEV(my_logger::get(), boost::log::trivial::debug)"
+.br
+.ti -1c
+.RI "#define \fBLOG_INFO\fP   BOOST_LOG_SEV(my_logger::get(), boost::log::trivial::info)"
+.br
+.ti -1c
+.RI "#define \fBLOG_WARN\fP   BOOST_LOG_SEV(my_logger::get(), boost::log::trivial::warning)"
+.br
+.ti -1c
+.RI "#define \fBLOG_ERROR\fP   BOOST_LOG_SEV(my_logger::get(), boost::log::trivial::error)"
+.br
+.ti -1c
+.RI "#define \fBLOG_FATAL\fP   BOOST_LOG_SEV(my_logger::get(), boost::log::trivial::fatal)"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef 
+.br
+boost::log::sources::severity_logger_mt
+.br
+< boost::log::trivial::severity_level > \fBlogger_t\fP"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "std::string \fBboostlogfile\fP"
+.br
+.ti -1c
+.RI "boost::log::trivial::severity_level \fBboostloglevel\fP"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define BOOST_LOG_DYN_LINK   1"
+
+.SS "#define LOG_DEBUG   BOOST_LOG_SEV(my_logger::get(), boost::log::trivial::debug)"
+
+.SS "#define LOG_ERROR   BOOST_LOG_SEV(my_logger::get(), boost::log::trivial::error)"
+
+.SS "#define LOG_FATAL   BOOST_LOG_SEV(my_logger::get(), boost::log::trivial::fatal)"
+
+.SS "#define LOG_INFO   BOOST_LOG_SEV(my_logger::get(), boost::log::trivial::info)"
+
+.SS "#define LOG_TRACE   BOOST_LOG_SEV(my_logger::get(), boost::log::trivial::trace)"
+
+.SS "#define LOG_WARN   BOOST_LOG_SEV(my_logger::get(), boost::log::trivial::warning)"
+
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef boost::log::sources::severity_logger_mt<boost::log::trivial::severity_level> \fBlogger_t\fP"
+
+.SH "Variable Documentation"
+.PP 
+.SS "std::string boostlogfile"
+http://stackoverflow.com/questions/20086754/how-to-use-boost-log-from-multiple-files-with-gloa #include 'Logging\&.h'
+.PP
+int \fBmain(int argc, char **argv)\fP { INFO << 'Program started';
+.PP
+return 0; } My build settings
+.PP
+AM_LDFLAGS += -lboost_system -lboost_thread -lpthread AM_LDFLAGS += -DBOOST_LOG_DYN_LINK -lboost_log_setup -lboost_log AM_CXXFLAGS += -std=c++11 -DBOOST_LOG_DYN_LINK 
+.SS "boost::log::trivial::severity_level boostloglevel"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CRCL FANUC from the source code\&.

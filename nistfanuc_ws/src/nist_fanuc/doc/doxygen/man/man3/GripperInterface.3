@@ -1,0 +1,98 @@
+.TH "GripperInterface" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GripperInterface \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <Gripper\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGripperInterface\fP ()"
+.br
+.ti -1c
+.RI "void \fBinit\fP (ros::NodeHandle &nh, std::string \fBprefix\fP, bool bPublish=false)"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBJointNames\fP ()"
+.br
+.ti -1c
+.RI "\fBsensor_msgs::JointState\fP \fBcloseSetup\fP ()"
+.br
+.ti -1c
+.RI "void \fBclose\fP ()"
+.br
+.ti -1c
+.RI "void \fBpublish_jointstate\fP ()"
+.br
+.ti -1c
+.RI "\fBsensor_msgs::JointState\fP \fBopenSetup\fP ()"
+.br
+.ti -1c
+.RI "void \fBopen\fP ()"
+.br
+.ti -1c
+.RI "\fBsensor_msgs::JointState\fP \fBsetPosition\fP (double position)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "ros::Publisher \fBjoint_pub\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBjoint_names\fP"
+.br
+.ti -1c
+.RI "const double \fBdegree\fP = M_PI / 180"
+.br
+.ti -1c
+.RI "\fBsensor_msgs::JointState\fP \fBjoint_state\fP"
+.br
+.ti -1c
+.RI "std::string \fBprefix\fP"
+.br
+.in -1c
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "GripperInterface::GripperInterface ()\fC [inline]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void GripperInterface::close ()\fC [inline]\fP"
+
+.SS "\fBsensor_msgs::JointState\fP GripperInterface::closeSetup ()\fC [inline]\fP"
+
+.SS "void GripperInterface::init (ros::NodeHandle &nh, std::stringprefix, boolbPublish = \fCfalse\fP)\fC [inline]\fP"
+
+.SS "std::vector<std::string> GripperInterface::JointNames ()\fC [inline]\fP"
+
+.SS "void GripperInterface::open ()\fC [inline]\fP"
+
+.SS "\fBsensor_msgs::JointState\fP GripperInterface::openSetup ()\fC [inline]\fP"
+
+.SS "void GripperInterface::publish_jointstate ()\fC [inline]\fP"
+
+.SS "\fBsensor_msgs::JointState\fP GripperInterface::setPosition (doubleposition)\fC [inline]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "const double GripperInterface::degree = M_PI / 180"
+
+.SS "std::vector<std::string> GripperInterface::joint_names"
+
+.SS "ros::Publisher GripperInterface::joint_pub"
+
+.SS "\fBsensor_msgs::JointState\fP GripperInterface::joint_state"
+
+.SS "std::string GripperInterface::prefix"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CRCL FANUC from the source code\&.

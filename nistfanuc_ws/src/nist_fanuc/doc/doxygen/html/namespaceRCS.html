@@ -46,7 +46,6 @@
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
-<a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
@@ -56,21 +55,17 @@
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRCS_1_1RdfJoint.html">RdfJoint</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRCS_1_1ChainRobotModel.html">ChainRobotModel</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRCS_1_1CController.html">CController</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="structRCS_1_1CController.html" title="The CController provides a collection for all the relevant controller pieces. The CController is the ...">CController</a> provides a collection for all the relevant controller pieces. The <a class="el" href="structRCS_1_1CController.html" title="The CController provides a collection for all the relevant controller pieces. The CController is the ...">CController</a> is the main controller class to collect all the references/pointers to instances in the project. A global instance of this class, called "Controller", is created and is used throughout the code to reference various instances of control objects (e.g., kinematics, joint writer, joint reader, etc.)  <a href="structRCS_1_1CController.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRCS_1_1RobotStatus.html">RobotStatus</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classRCS_1_1RobotStatus.html" title="The RobotStatus is a thread that reads the status of the robot and updates the world model...">RobotStatus</a> is a thread that reads the status of the robot and updates the world model. The <a class="el" href="classRCS_1_1RobotStatus.html" title="The RobotStatus is a thread that reads the status of the robot and updates the world model...">RobotStatus</a> is a separate thread that reads the robot status using ROS communication mechanisms and updates the controller world model based on these values. Currently, it uses an instance of the class JointReader to read joint values from the controller. It uses a Kinematics pointer reference to compute the current robot pose using the forward kinematics (FK) routine. It also uses a CrclDelegate pointer reference to update the status reported by CRCL.  <a href="classRCS_1_1RobotStatus.html#details">More...</a><br/></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRCS_1_1RobotProgram.html">RobotProgram</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classRCS_1_1RobotProgram.html" title="The RobotProgram is a thread to handle crcl programs. Crcl programs are not in fact legitimate...">RobotProgram</a> is a thread to handle crcl programs. <a class="el" href="namespaceCrcl.html">Crcl</a> programs are not in fact legitimate, however, debugging and verification are assisted by programs. However, program as in the <a class="el" href="namespaceCrcl.html">Crcl</a> XSD specification, so it doesn't hurt to handle. They require special handling as only one command should be done at a time. Uses codesynthesis to parse <a class="el" href="namespaceCrcl.html">Crcl</a> xml into C++ data structures.  <a href="classRCS_1_1RobotProgram.html#details">More...</a><br/></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRCS_1_1CsvLogging.html">CsvLogging</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRCS_1_1CMessageQueue.html">CMessageQueue</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classRCS_1_1CMessageQueue.html" title="The CMessageQueue offers a mutexed front to a STL/std deque. The queue is a LIFO data structure...">CMessageQueue</a> offers a mutexed front to a STL/std deque. The queue is a LIFO data structure. Useful for safely sharing data between multiple threads.  <a href="classRCS_1_1CMessageQueue.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRCS_1_1CMsgQueueThread.html">CMsgQueueThread</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classRCS_1_1CMsgQueueThread.html" title="CMsgQueueThread is a message queued thread. It is activated when a message is received.   Notes: http://stackoverflow.com/questions/768351/complete-example-using-boostsignals-for-c-eventing. ">CMsgQueueThread</a> is a message queued thread. It is activated when a message is received. <br/>
+ Notes: <a href="http://stackoverflow.com/questions/768351/complete-example-using-boostsignals-for-c-eventing">http://stackoverflow.com/questions/768351/complete-example-using-boostsignals-for-c-eventing</a>.  <a href="classRCS_1_1CMsgQueueThread.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRCS_1_1Thread.html">Thread</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classRCS_1_1Thread.html" title="Thread is an RCS ulapi equivalent for a timed thread. Given a cycle time, the thread provides a wait ...">Thread</a> is an <a class="el" href="namespaceRCS.html">RCS</a> ulapi equivalent for a timed thread. Given a cycle time, the thread provides a wait function to sleep to exactly the amount of the thread cycle time. It keeps track of busy/idle time for diagnostic purposes. <br/>
@@ -78,6 +73,41 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRCS_1_1Timer.html">Timer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classRCS_1_1Timer.html" title="Timer is a general-purpose timer. The Timer is a general-purpose timer, which can be used for waiting...">Timer</a> is a general-purpose timer. The <a class="el" href="classRCS_1_1Timer.html" title="Timer is a general-purpose timer. The Timer is a general-purpose timer, which can be used for waiting...">Timer</a> is a general-purpose timer, which can be used for waiting until a synchronous time tick, sleep for any period at all, or to obtain a time in system clock ticks from creation of the timer.  <a href="classRCS_1_1Timer.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRCS_1_1PoseTolerance.html">PoseTolerance</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRCS_1_1CanonLengthUnit.html">CanonLengthUnit</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of length units. <a class="el" href="namespaceConversion.html">Conversion</a> into ROS compatible meters.  <a href="structRCS_1_1CanonLengthUnit.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRCS_1_1TrajPointType.html">TrajPointType</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of trajectory pose points.  <a href="structRCS_1_1TrajPointType.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRCS_1_1CanonAngleUnit.html">CanonAngleUnit</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of angle units. <a class="el" href="namespaceConversion.html">Conversion</a> into ROS compatible radians.  <a href="structRCS_1_1CanonAngleUnit.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRCS_1_1CanonForceUnit.html">CanonForceUnit</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of force units.  <a href="structRCS_1_1CanonForceUnit.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRCS_1_1CanonTorqueUnit.html">CanonTorqueUnit</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of torque units.  <a href="structRCS_1_1CanonTorqueUnit.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRCS_1_1CanonReturn.html">CanonReturn</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of return type from Crcl intepretation. If statusreply, requires status sent to Crcl client.  <a href="structRCS_1_1CanonReturn.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRCS_1_1CanonCmdType.html">CanonCmdType</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of Crcl commands. Many Crcl commands are wm parameter setting and require no motion component.  <a href="structRCS_1_1CanonCmdType.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRCS_1_1CanonStopMotionType.html">CanonStopMotionType</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of stopping motion, e.g., estop equivalent to immediate.  <a href="structRCS_1_1CanonStopMotionType.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRCS_1_1CanonAccProfile.html">CanonAccProfile</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of trajectory acceleration profile.  <a href="structRCS_1_1CanonAccProfile.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRCS_1_1MovementType.html">MovementType</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of trajectory motion type, joint or cartesian.  <a href="structRCS_1_1MovementType.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRCS_1_1CanonStatusType.html">CanonStatusType</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of controller status types for individual commands. Note, even though command types are listed, not all used or supported.  <a href="structRCS_1_1CanonStatusType.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRCS_1_1IRate.html">IRate</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classRCS_1_1IRate.html" title="IRate is an interface class for defining the allowed motion rates. ">IRate</a> is an interface class for defining the allowed motion rates.  <a href="classRCS_1_1IRate.html#details">More...</a><br/></td></tr>
@@ -87,6 +117,11 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRCS_1_1CanonWorldModel.html">CanonWorldModel</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structRCS_1_1CanonWorldModel.html" title="CanonWorldModel describes the controller state. Includes reference to robot model. ">CanonWorldModel</a> describes the controller state. Includes reference to robot model.  <a href="structRCS_1_1CanonWorldModel.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRCS_1_1IRCSInterpreter.html">IRCSInterpreter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">IInterpreter parses a <a class="el" href="namespaceRCS.html">RCS</a> command and generates robot motion commands.  <a href="classRCS_1_1IRCSInterpreter.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRCS_1_1BangBangInterpreter.html">BangBangInterpreter</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
@@ -110,127 +145,20 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a3185cefb4d61f5c6f364aaf5624a3ee4"><td class="memItemLeft" align="right" valign="top">typedef std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a3185cefb4d61f5c6f364aaf5624a3ee4">robotAxes</a></td></tr>
 <tr class="separator:a3185cefb4d61f5c6f364aaf5624a3ee4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
-Enumerations</h2></td></tr>
-<tr class="memitem:a768c9d3a7f0e5850bc61ebede4b85b23"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a768c9d3a7f0e5850bc61ebede4b85b23">CanonLengthUnit</a> { <a class="el" href="namespaceRCS.html#a768c9d3a7f0e5850bc61ebede4b85b23ae6d96128754284c45e005b02fe54b79d">METER</a> = 0, 
-<a class="el" href="namespaceRCS.html#a768c9d3a7f0e5850bc61ebede4b85b23ab9e0fafa9c10ccca32bcdcd1eb9813c1">MM</a>, 
-<a class="el" href="namespaceRCS.html#a768c9d3a7f0e5850bc61ebede4b85b23a0b9c2e89e6353c26a8bab5661da20f6d">INCH</a>
- }</td></tr>
-<tr class="memdesc:a768c9d3a7f0e5850bc61ebede4b85b23"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of length units. Conversion into ROS compatible meters.  <a href="namespaceRCS.html#a768c9d3a7f0e5850bc61ebede4b85b23">More...</a><br/></td></tr>
-<tr class="separator:a768c9d3a7f0e5850bc61ebede4b85b23"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae705dbb4b887b18fef40316b6d5ca2c9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#ae705dbb4b887b18fef40316b6d5ca2c9">TrajPointType</a> { <a class="el" href="namespaceRCS.html#ae705dbb4b887b18fef40316b6d5ca2c9a255760a7e92a5d130681fc75e280cb61">WAYPOINT</a> = 1, 
-<a class="el" href="namespaceRCS.html#ae705dbb4b887b18fef40316b6d5ca2c9ab5c3606954a689ebe5425f6c2c09b970">GOAL</a>
- }</td></tr>
-<tr class="memdesc:ae705dbb4b887b18fef40316b6d5ca2c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of trajector pose points.  <a href="namespaceRCS.html#ae705dbb4b887b18fef40316b6d5ca2c9">More...</a><br/></td></tr>
-<tr class="separator:ae705dbb4b887b18fef40316b6d5ca2c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad07ee9a15612cae458796cf946e36410"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#ad07ee9a15612cae458796cf946e36410">CanonAngleUnit</a> { <a class="el" href="namespaceRCS.html#ad07ee9a15612cae458796cf946e36410ad82b65c17877cfe8789becb230386fe5">RADIAN</a> = 0, 
-<a class="el" href="namespaceRCS.html#ad07ee9a15612cae458796cf946e36410aa2c86ef15e4232944a9f2085f3f68661">DEGREE</a>
- }</td></tr>
-<tr class="memdesc:ad07ee9a15612cae458796cf946e36410"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of angle units. Conversion into ROS compatible radians.  <a href="namespaceRCS.html#ad07ee9a15612cae458796cf946e36410">More...</a><br/></td></tr>
-<tr class="separator:ad07ee9a15612cae458796cf946e36410"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ab3ac05af337215785442dc8570c00f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a7ab3ac05af337215785442dc8570c00f">CanonForceUnit</a> { <a class="el" href="namespaceRCS.html#a7ab3ac05af337215785442dc8570c00fadefb2cf80f2a6761a24dc6ffc2f15bbd">NEWTON</a> = 0, 
-<a class="el" href="namespaceRCS.html#a7ab3ac05af337215785442dc8570c00fa50e031587d5ce89d8b76aa114d5516c0">POUND</a>, 
-<a class="el" href="namespaceRCS.html#a7ab3ac05af337215785442dc8570c00fa525cee8c6112d4cb86dec3aa0e6caba0">OUNCE</a>
- }</td></tr>
-<tr class="memdesc:a7ab3ac05af337215785442dc8570c00f"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of force units.  <a href="namespaceRCS.html#a7ab3ac05af337215785442dc8570c00f">More...</a><br/></td></tr>
-<tr class="separator:a7ab3ac05af337215785442dc8570c00f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad43ee626dc2b93364a9276cd0190b38"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#aad43ee626dc2b93364a9276cd0190b38">CanonTorqueUnit</a> { <a class="el" href="namespaceRCS.html#aad43ee626dc2b93364a9276cd0190b38a8455a50078c65f9939ae9093d87df9ce">NEWTONMETER</a> = 0, 
-<a class="el" href="namespaceRCS.html#aad43ee626dc2b93364a9276cd0190b38a90a01e4c469158168e9bbfed53909fa4">FOOTPOUND</a>
- }</td></tr>
-<tr class="memdesc:aad43ee626dc2b93364a9276cd0190b38"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of torque units.  <a href="namespaceRCS.html#aad43ee626dc2b93364a9276cd0190b38">More...</a><br/></td></tr>
-<tr class="separator:aad43ee626dc2b93364a9276cd0190b38"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a604ddc76f1c860e79ec060339a68dc79"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a604ddc76f1c860e79ec060339a68dc79">CanonReturn</a> { <br/>
-&#160;&#160;<a class="el" href="namespaceRCS.html#a604ddc76f1c860e79ec060339a68dc79ae784c3b29210b49f3548ad8ccbe35688">CANON_REJECT</a> = -2, 
-<a class="el" href="namespaceRCS.html#a604ddc76f1c860e79ec060339a68dc79a8046a92ede63076a4b9c98aa4099e3ea">CANON_FAILURE</a> = -1, 
-<a class="el" href="namespaceRCS.html#a604ddc76f1c860e79ec060339a68dc79a45f0039600f4e6b521a58e021609ea22">CANON_SUCCESS</a> = 0, 
-<a class="el" href="namespaceRCS.html#a604ddc76f1c860e79ec060339a68dc79ae5d8cf70f462c3e4aee8050f308132fb">CANON_STATUSREPLY</a> = 1, 
-<br/>
-&#160;&#160;<a class="el" href="namespaceRCS.html#a604ddc76f1c860e79ec060339a68dc79a5eb43a35f73ab11edc5d5a28b908257e">CANON_MOTION</a> = 2, 
-<a class="el" href="namespaceRCS.html#a604ddc76f1c860e79ec060339a68dc79a01dce2ee696426c95a68ffe191ccd643">CANON_RUNNING</a>
-<br/>
- }</td></tr>
-<tr class="memdesc:a604ddc76f1c860e79ec060339a68dc79"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of return type from <a class="el" href="namespaceCrcl.html">Crcl</a> intepretation. If statusreply, requires status sent to <a class="el" href="namespaceCrcl.html">Crcl</a> client.  <a href="namespaceRCS.html#a604ddc76f1c860e79ec060339a68dc79">More...</a><br/></td></tr>
-<tr class="separator:a604ddc76f1c860e79ec060339a68dc79"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55bbd74afb87a330de1b95af65f4cb75"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75">CanonCmdType</a> { <br/>
-&#160;&#160;<a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75aec778933c8e1af18ea16550268eebaaa">CANON_NOOP</a> = 0, 
-<a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75a39055f1d78c4ea71a7eb300b059dc330">CANON_DWELL</a>, 
-<a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75afe807fccfca39c61a14d5c1a454b216d">CANON_END_CANON</a>, 
-<a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75acce93027306fc36aeccc8d40dc4e7d62">CANON_INIT_CANON</a>, 
-<br/>
-&#160;&#160;<a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75a24901ab5e41ab6e4cc5a2ab97de92f06">CANON_MOVE_JOINT</a>, 
-<a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75ae64ab69bfbfa2932859ab153701de029">CANON_MOVE_TO</a>, 
-<a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75a312d738989bea16a5eb8b9a3c99e72d2">CANON_MOVE_THRU</a>, 
-<a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75a8f4e35036d5f034ec1d7eef1649f3acc">CANON_SET_MAX_CART_ACC</a>, 
-<br/>
-&#160;&#160;<a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75a6b3163b9c7d5ec2b1f1933b6c9df9523">CANON_SET_MAX_CART_SPEED</a>, 
-<a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75a67a51ba452c9d8a4a8d64232cce7922d">CANON_SET_MAX_JOINT_ACC</a>, 
-<a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75adda3bf1c656804e5d07912149ceb9760">CANON_SET_MAX_JOINT_SPEED</a>, 
-<a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75af7ae40ad1b0525a4cb8888af76db4acc">CANON_SET_GRIPPER</a>, 
-<br/>
-&#160;&#160;<a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75ab3c4fe7af4d06fbd188e53f4825a9425">CANON_SET_TOLERANCE</a>, 
-<a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75a44fe36cdba5ffcfed81e2fd1eb795c2d">CANON_STOP_MOTION</a>, 
-<a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75a0e32d7c80f9f5b064f660aab9b9392e6">CANON_DO_MOTION</a>, 
-<a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75a92eaf4448ef32e4819df8b0eea8469f9">CANON_OTHER</a>, 
-<br/>
-&#160;&#160;<a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75aa3f496c02395826be6f0b84974fff57f">CANON_UNKNOWN</a>
-<br/>
- }</td></tr>
-<tr class="memdesc:a55bbd74afb87a330de1b95af65f4cb75"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of <a class="el" href="namespaceCrcl.html">Crcl</a> commands. Many <a class="el" href="namespaceCrcl.html">Crcl</a> commands are wm parameter setting and require no motion component.  <a href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75">More...</a><br/></td></tr>
-<tr class="separator:a55bbd74afb87a330de1b95af65f4cb75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a39ae96212f304024b5f91fe8d63a40c0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a39ae96212f304024b5f91fe8d63a40c0">CanonStopMotionType</a> { <a class="el" href="namespaceRCS.html#a39ae96212f304024b5f91fe8d63a40c0aa70f9618bf9470bf8dad4cf7c82f676a">UNSET</a> = -1, 
-<a class="el" href="namespaceRCS.html#a39ae96212f304024b5f91fe8d63a40c0abdc21ede32cc83eb939faea7e4dd4641">IMMEDIATE</a> = 0, 
-<a class="el" href="namespaceRCS.html#a39ae96212f304024b5f91fe8d63a40c0a332e4c404e6b8aa0a64e1970e0e8e793">FAST</a>, 
-<a class="el" href="namespaceRCS.html#a39ae96212f304024b5f91fe8d63a40c0ab9652e079b6284ddf30eb812539260cd">NORMAL</a>
- }</td></tr>
-<tr class="memdesc:a39ae96212f304024b5f91fe8d63a40c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of stopping motion, e.g., estop equivalent to immediate.  <a href="namespaceRCS.html#a39ae96212f304024b5f91fe8d63a40c0">More...</a><br/></td></tr>
-<tr class="separator:a39ae96212f304024b5f91fe8d63a40c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a452a9217023e577031dcdf7e533b2ead"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a452a9217023e577031dcdf7e533b2ead">CanonAccProfile</a> { <br/>
-&#160;&#160;<a class="el" href="namespaceRCS.html#a452a9217023e577031dcdf7e533b2eada2315e4dd1ff60cc3c544074b3cf68aca">MS_IS_UNSET</a> = 0, 
-<a class="el" href="namespaceRCS.html#a452a9217023e577031dcdf7e533b2eada5e3a369ff66b61df6181d0dc65c428b8">MS_IS_DONE</a> = 1, 
-<a class="el" href="namespaceRCS.html#a452a9217023e577031dcdf7e533b2eada34d1aa9bce420946f968a49604b118c4">MS_IS_ACCEL</a> = 2, 
-<a class="el" href="namespaceRCS.html#a452a9217023e577031dcdf7e533b2eada7bf5f12a075b086d878fa4e1f7b795ac">MS_IS_CONST</a> = 3, 
-<br/>
-&#160;&#160;<a class="el" href="namespaceRCS.html#a452a9217023e577031dcdf7e533b2eadabe3f296a699b654071dfed0d62f0707e">MS_IS_DECEL</a> = 4, 
-<a class="el" href="namespaceRCS.html#a452a9217023e577031dcdf7e533b2eadab136562b5efb4a27c513ce457d7b7cbc">MS_IS_ESTOPPING</a> = 5, 
-<a class="el" href="namespaceRCS.html#a452a9217023e577031dcdf7e533b2eada092d58e8f17c61485c944eef747369f6">MS_IS_PAUSED</a> = 6
-<br/>
- }</td></tr>
-<tr class="memdesc:a452a9217023e577031dcdf7e533b2ead"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of trajectory acceleration profile.  <a href="namespaceRCS.html#a452a9217023e577031dcdf7e533b2ead">More...</a><br/></td></tr>
-<tr class="separator:a452a9217023e577031dcdf7e533b2ead"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab06a825aaa263c253e8100d626609ec4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#ab06a825aaa263c253e8100d626609ec4">MovementType</a> { <a class="el" href="namespaceRCS.html#ab06a825aaa263c253e8100d626609ec4ac969035de1d3dc48e8dd0951863bf23b">MOVE_DEFAULT</a> = 0, 
-<a class="el" href="namespaceRCS.html#ab06a825aaa263c253e8100d626609ec4a080a0390ae2de7ee0ca67d94506a9c79">MOVE_CARTESIAN</a>, 
-<a class="el" href="namespaceRCS.html#ab06a825aaa263c253e8100d626609ec4a275cc65ce33e5cfc57c57abb4a208223">MOVE_JOINT</a>
- }</td></tr>
-<tr class="memdesc:ab06a825aaa263c253e8100d626609ec4"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of trajectory motion type, joint or cartesian.  <a href="namespaceRCS.html#ab06a825aaa263c253e8100d626609ec4">More...</a><br/></td></tr>
-<tr class="separator:ab06a825aaa263c253e8100d626609ec4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e720341c250145b8a2bbf6a1afa777d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a0e720341c250145b8a2bbf6a1afa777d">CanonStatusType</a> { <br/>
-&#160;&#160;<a class="el" href="namespaceRCS.html#a0e720341c250145b8a2bbf6a1afa777daabf0ebc3e57ea212970f33430d917eae">CANON_DONE</a> = 0, 
-<a class="el" href="namespaceRCS.html#a0e720341c250145b8a2bbf6a1afa777da4a0ac89d145f0ac2ab9d2322ea4f3a08">CANON_WORKING</a>, 
-<a class="el" href="namespaceRCS.html#a0e720341c250145b8a2bbf6a1afa777da86acce9ac34e5ca0b0056b11810af584">CANON_PAUSED</a>, 
-<a class="el" href="namespaceRCS.html#a0e720341c250145b8a2bbf6a1afa777dac78240d093ffb8a630852bac1aa33905">CANON_ERROR</a>, 
-<br/>
-&#160;&#160;<a class="el" href="namespaceRCS.html#a0e720341c250145b8a2bbf6a1afa777da094244917abcd576f2118e80803279ee">CANON_ABORT</a>, 
-<a class="el" href="namespaceRCS.html#a0e720341c250145b8a2bbf6a1afa777da101acfc97dc944ffd40c3e8e0cf7c179">CANON_WAITING</a>
-<br/>
- }</td></tr>
-<tr class="memdesc:a0e720341c250145b8a2bbf6a1afa777d"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumeration of controller status types for individual commands. Note, even though command types are listed, not all used or supported.  <a href="namespaceRCS.html#a0e720341c250145b8a2bbf6a1afa777d">More...</a><br/></td></tr>
-<tr class="separator:a0e720341c250145b8a2bbf6a1afa777d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a0d81b5ae27814995884c1d25619db28a"><td class="memItemLeft" align="right" valign="top">::CRCLProgramType::MiddleCommand_sequence &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a0d81b5ae27814995884c1d25619db28a">DummyInit</a> ()</td></tr>
-<tr class="separator:a0d81b5ae27814995884c1d25619db28a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e911197b35a4857f179af61811d4b0a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a6e911197b35a4857f179af61811d4b0a">getRPY</a> (const <a class="el" href="namespaceRCS.html#aa07e45d8a50e30064283d2b38087f999">RCS::Pose</a> pose, double &amp;roll, double &amp;pitch, double &amp;yaw)</td></tr>
+<tr class="separator:a6e911197b35a4857f179af61811d4b0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1938bb64156e84a530fdfd58d5da45cd"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a1938bb64156e84a530fdfd58d5da45cd"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a1938bb64156e84a530fdfd58d5da45cd">VectorDump</a> (std::vector&lt; T &gt; v)</td></tr>
+<tr class="separator:a1938bb64156e84a530fdfd58d5da45cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a35eaff1f2c8ec5520f595d6f3b2d38b3"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a35eaff1f2c8ec5520f595d6f3b2d38b3">DumpPose</a> (<a class="el" href="namespaceRCS.html#aa07e45d8a50e30064283d2b38087f999">RCS::Pose</a> &amp;pose)</td></tr>
 <tr class="memdesc:a35eaff1f2c8ec5520f595d6f3b2d38b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">DumpPose takes a urdf pose and generates a string describing pose. Can be used as std::cout &lt;&lt; DumpPose(pose);.  <a href="#a35eaff1f2c8ec5520f595d6f3b2d38b3">More...</a><br/></td></tr>
 <tr class="separator:a35eaff1f2c8ec5520f595d6f3b2d38b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e911197b35a4857f179af61811d4b0a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a6e911197b35a4857f179af61811d4b0a">getRPY</a> (const <a class="el" href="namespaceRCS.html#aa07e45d8a50e30064283d2b38087f999">RCS::Pose</a> pose, double &amp;<a class="el" href="SanityCheckTests_8cpp.html#a1d3228afa3a1d6773954f40c1e519eb9">roll</a>, double &amp;<a class="el" href="SanityCheckTests_8cpp.html#a34c057a0378030db67bd6a129f37d938">pitch</a>, double &amp;<a class="el" href="SanityCheckTests_8cpp.html#a21cd490f6191f66678f55b4c242a10cf">yaw</a>)</td></tr>
-<tr class="separator:a6e911197b35a4857f179af61811d4b0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d588bfecc6b5d8e671ad9c57d18ecdc"><td class="memTemplParams" colspan="2">template&lt;class Rep , class Period &gt; </td></tr>
-<tr class="memitem:a1d588bfecc6b5d8e671ad9c57d18ecdc"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a1d588bfecc6b5d8e671ad9c57d18ecdc">ToNanoseconds</a> (boost::chrono::duration&lt; Rep, Period &gt; d)</td></tr>
-<tr class="separator:a1d588bfecc6b5d8e671ad9c57d18ecdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82f7cfa7edd613a454281ce5f5685b4d"><td class="memTemplParams" colspan="2">template&lt;class Rep , class Period &gt; </td></tr>
-<tr class="memitem:a82f7cfa7edd613a454281ce5f5685b4d"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a82f7cfa7edd613a454281ce5f5685b4d">ToSeconds</a> (boost::chrono::duration&lt; Rep, Period &gt; d)</td></tr>
-<tr class="separator:a82f7cfa7edd613a454281ce5f5685b4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a369d68374f2cf012c48cc0e4c3275762"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a369d68374f2cf012c48cc0e4c3275762">DumpEigenPose</a> (Eigen::Affine3d pose)</td></tr>
+<tr class="separator:a369d68374f2cf012c48cc0e4c3275762"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abaf9d2b5df201cc3bcaac13a362492f9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#abaf9d2b5df201cc3bcaac13a362492f9">DumpPoseSimple</a> (<a class="el" href="namespaceRCS.html#aa07e45d8a50e30064283d2b38087f999">RCS::Pose</a> pose)</td></tr>
+<tr class="separator:abaf9d2b5df201cc3bcaac13a362492f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad467dfc15b94a5e025af3e094ac21860"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#ad467dfc15b94a5e025af3e094ac21860">DumpJoints</a> (<a class="el" href="RCS_8h.html#aa4adb93a26caa4dacba9c9614e283245">JointState</a> joints)</td></tr>
 <tr class="memdesc:ad467dfc15b94a5e025af3e094ac21860"><td class="mdescLeft">&#160;</td><td class="mdescRight">DumpJoints takes a list of joints and generates a string describing pose. Can be used as std::cout &lt;&lt; DumpPose(pose);.  <a href="#ad467dfc15b94a5e025af3e094ac21860">More...</a><br/></td></tr>
 <tr class="separator:ad467dfc15b94a5e025af3e094ac21860"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -240,13 +168,29 @@ Functions</h2></td></tr>
 <tr class="memitem:a994378d2744371f1afac4b59a808fef2"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a994378d2744371f1afac4b59a808fef2">DumpQuaterion</a> (std::ostream &amp;os, const <a class="el" href="namespaceRCS.html#a3fd915276fdb632d217c560523c320e0">RCS::Rotation</a> &amp;rot)</td></tr>
 <tr class="memdesc:a994378d2744371f1afac4b59a808fef2"><td class="mdescLeft">&#160;</td><td class="mdescRight">DumpQuaterion takes a urdf quaterion and generates a string describing x,y,z,w coordinates. Can be used as std::cout &lt;&lt; DumpQuaterion(urdf::rotation);.  <a href="#a994378d2744371f1afac4b59a808fef2">More...</a><br/></td></tr>
 <tr class="separator:a994378d2744371f1afac4b59a808fef2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d588bfecc6b5d8e671ad9c57d18ecdc"><td class="memTemplParams" colspan="2">template&lt;class Rep , class Period &gt; </td></tr>
+<tr class="memitem:a1d588bfecc6b5d8e671ad9c57d18ecdc"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a1d588bfecc6b5d8e671ad9c57d18ecdc">ToNanoseconds</a> (boost::chrono::duration&lt; Rep, Period &gt; d)</td></tr>
+<tr class="separator:a1d588bfecc6b5d8e671ad9c57d18ecdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82f7cfa7edd613a454281ce5f5685b4d"><td class="memTemplParams" colspan="2">template&lt;class Rep , class Period &gt; </td></tr>
+<tr class="memitem:a82f7cfa7edd613a454281ce5f5685b4d"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a82f7cfa7edd613a454281ce5f5685b4d">ToSeconds</a> (boost::chrono::duration&lt; Rep, Period &gt; d)</td></tr>
+<tr class="separator:a82f7cfa7edd613a454281ce5f5685b4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41308a2a3e1a110ee397e99e88d355ff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="RCS_8h.html#aa4adb93a26caa4dacba9c9614e283245">JointState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a41308a2a3e1a110ee397e99e88d355ff">EmptyJointState</a> (size_t n)</td></tr>
+<tr class="separator:a41308a2a3e1a110ee397e99e88d355ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5cfe0b45d035674a7235c97757b670ff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="RCS_8h.html#aa4adb93a26caa4dacba9c9614e283245">JointState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a5cfe0b45d035674a7235c97757b670ff">Subset</a> (<a class="el" href="RCS_8h.html#aa4adb93a26caa4dacba9c9614e283245">JointState</a> js, size_t n)</td></tr>
+<tr class="separator:a5cfe0b45d035674a7235c97757b670ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af77528d0878b59af2a466a79bcd62983"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#af77528d0878b59af2a466a79bcd62983">Subset</a> (std::vector&lt; double &gt; position, size_t n)</td></tr>
+<tr class="separator:af77528d0878b59af2a466a79bcd62983"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8debd3f8ffa83ac05085e84bf814640f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="RCS_8h.html#aa4adb93a26caa4dacba9c9614e283245">JointState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a8debd3f8ffa83ac05085e84bf814640f">ZeroJointState</a> (size_t numjoints)</td></tr>
+<tr class="separator:a8debd3f8ffa83ac05085e84bf814640f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a021572a9d03c82d96029e82ea5691d60"><td class="memItemLeft" align="right" valign="top">boost::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a021572a9d03c82d96029e82ea5691d60">cncmutex</a></td></tr>
 <tr class="separator:a021572a9d03c82d96029e82ea5691d60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d517dc59f249be605546c3a36086b19"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structRCS_1_1CController.html">RCS::CController</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a9d517dc59f249be605546c3a36086b19">Controller</a> (<a class="el" href="RCS_8h.html#a226eb3a426e9df46b88c4ba34f217203">DEFAULT_LOOP_CYCLE</a>)</td></tr>
-<tr class="separator:a9d517dc59f249be605546c3a36086b19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e9552ea392162dd1bb9dcc89e6184fb"><td class="memItemLeft" align="right" valign="top">boost::shared_ptr&lt; <a class="el" href="structRCS_1_1CController.html">CController</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a7e9552ea392162dd1bb9dcc89e6184fb">Fnc</a> = boost::shared_ptr&lt;<a class="el" href="structRCS_1_1CController.html">CController</a>&gt;(new <a class="el" href="structRCS_1_1CController.html">RCS::CController</a>(<a class="el" href="RCS_8h.html#a226eb3a426e9df46b88c4ba34f217203">DEFAULT_LOOP_CYCLE</a>))</td></tr>
+<tr class="separator:a7e9552ea392162dd1bb9dcc89e6184fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7743d3581146fcdb467ee8cedaa5ebef"><td class="memItemLeft" align="right" valign="top">boost::shared_ptr&lt; <a class="el" href="structRCS_1_1CController.html">CController</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRCS.html#a7743d3581146fcdb467ee8cedaa5ebef">Mnc</a> = boost::shared_ptr&lt;<a class="el" href="structRCS_1_1CController.html">CController</a>&gt;( new <a class="el" href="structRCS_1_1CController.html">RCS::CController</a>(<a class="el" href="RCS_8h.html#a226eb3a426e9df46b88c4ba34f217203">DEFAULT_LOOP_CYCLE</a>))</td></tr>
+<tr class="separator:a7743d3581146fcdb467ee8cedaa5ebef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a class="anchor" id="a3ca212cf7a0c547f5496352e850372a9"></a>
@@ -357,305 +301,27 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<h2 class="groupheader">Enumeration Type Documentation</h2>
-<a class="anchor" id="a452a9217023e577031dcdf7e533b2ead"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="namespaceRCS.html#a452a9217023e577031dcdf7e533b2ead">RCS::CanonAccProfile</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>enumeration of trajectory acceleration profile. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a452a9217023e577031dcdf7e533b2eada2315e4dd1ff60cc3c544074b3cf68aca"></a>MS_IS_UNSET</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a452a9217023e577031dcdf7e533b2eada5e3a369ff66b61df6181d0dc65c428b8"></a>MS_IS_DONE</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a452a9217023e577031dcdf7e533b2eada34d1aa9bce420946f968a49604b118c4"></a>MS_IS_ACCEL</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a452a9217023e577031dcdf7e533b2eada7bf5f12a075b086d878fa4e1f7b795ac"></a>MS_IS_CONST</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a452a9217023e577031dcdf7e533b2eadabe3f296a699b654071dfed0d62f0707e"></a>MS_IS_DECEL</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a452a9217023e577031dcdf7e533b2eadab136562b5efb4a27c513ce457d7b7cbc"></a>MS_IS_ESTOPPING</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a452a9217023e577031dcdf7e533b2eada092d58e8f17c61485c944eef747369f6"></a>MS_IS_PAUSED</em>&#160;</td><td class="fielddoc">
-</td></tr>
-</table>
-
-</div>
-</div>
-<a class="anchor" id="ad07ee9a15612cae458796cf946e36410"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="namespaceRCS.html#ad07ee9a15612cae458796cf946e36410">RCS::CanonAngleUnit</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>enumeration of angle units. Conversion into ROS compatible radians. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ad07ee9a15612cae458796cf946e36410ad82b65c17877cfe8789becb230386fe5"></a>RADIAN</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="ad07ee9a15612cae458796cf946e36410aa2c86ef15e4232944a9f2085f3f68661"></a>DEGREE</em>&#160;</td><td class="fielddoc">
-</td></tr>
-</table>
-
-</div>
-</div>
-<a class="anchor" id="a55bbd74afb87a330de1b95af65f4cb75"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="namespaceRCS.html#a55bbd74afb87a330de1b95af65f4cb75">RCS::CanonCmdType</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>enumeration of <a class="el" href="namespaceCrcl.html">Crcl</a> commands. Many <a class="el" href="namespaceCrcl.html">Crcl</a> commands are wm parameter setting and require no motion component. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a55bbd74afb87a330de1b95af65f4cb75aec778933c8e1af18ea16550268eebaaa"></a>CANON_NOOP</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a55bbd74afb87a330de1b95af65f4cb75a39055f1d78c4ea71a7eb300b059dc330"></a>CANON_DWELL</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a55bbd74afb87a330de1b95af65f4cb75afe807fccfca39c61a14d5c1a454b216d"></a>CANON_END_CANON</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a55bbd74afb87a330de1b95af65f4cb75acce93027306fc36aeccc8d40dc4e7d62"></a>CANON_INIT_CANON</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a55bbd74afb87a330de1b95af65f4cb75a24901ab5e41ab6e4cc5a2ab97de92f06"></a>CANON_MOVE_JOINT</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a55bbd74afb87a330de1b95af65f4cb75ae64ab69bfbfa2932859ab153701de029"></a>CANON_MOVE_TO</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a55bbd74afb87a330de1b95af65f4cb75a312d738989bea16a5eb8b9a3c99e72d2"></a>CANON_MOVE_THRU</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a55bbd74afb87a330de1b95af65f4cb75a8f4e35036d5f034ec1d7eef1649f3acc"></a>CANON_SET_MAX_CART_ACC</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a55bbd74afb87a330de1b95af65f4cb75a6b3163b9c7d5ec2b1f1933b6c9df9523"></a>CANON_SET_MAX_CART_SPEED</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a55bbd74afb87a330de1b95af65f4cb75a67a51ba452c9d8a4a8d64232cce7922d"></a>CANON_SET_MAX_JOINT_ACC</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a55bbd74afb87a330de1b95af65f4cb75adda3bf1c656804e5d07912149ceb9760"></a>CANON_SET_MAX_JOINT_SPEED</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a55bbd74afb87a330de1b95af65f4cb75af7ae40ad1b0525a4cb8888af76db4acc"></a>CANON_SET_GRIPPER</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a55bbd74afb87a330de1b95af65f4cb75ab3c4fe7af4d06fbd188e53f4825a9425"></a>CANON_SET_TOLERANCE</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a55bbd74afb87a330de1b95af65f4cb75a44fe36cdba5ffcfed81e2fd1eb795c2d"></a>CANON_STOP_MOTION</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a55bbd74afb87a330de1b95af65f4cb75a0e32d7c80f9f5b064f660aab9b9392e6"></a>CANON_DO_MOTION</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a55bbd74afb87a330de1b95af65f4cb75a92eaf4448ef32e4819df8b0eea8469f9"></a>CANON_OTHER</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a55bbd74afb87a330de1b95af65f4cb75aa3f496c02395826be6f0b84974fff57f"></a>CANON_UNKNOWN</em>&#160;</td><td class="fielddoc">
-</td></tr>
-</table>
-
-</div>
-</div>
-<a class="anchor" id="a7ab3ac05af337215785442dc8570c00f"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="namespaceRCS.html#a7ab3ac05af337215785442dc8570c00f">RCS::CanonForceUnit</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>enumeration of force units. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a7ab3ac05af337215785442dc8570c00fadefb2cf80f2a6761a24dc6ffc2f15bbd"></a>NEWTON</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a7ab3ac05af337215785442dc8570c00fa50e031587d5ce89d8b76aa114d5516c0"></a>POUND</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a7ab3ac05af337215785442dc8570c00fa525cee8c6112d4cb86dec3aa0e6caba0"></a>OUNCE</em>&#160;</td><td class="fielddoc">
-</td></tr>
-</table>
-
-</div>
-</div>
-<a class="anchor" id="a768c9d3a7f0e5850bc61ebede4b85b23"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="namespaceRCS.html#a768c9d3a7f0e5850bc61ebede4b85b23">RCS::CanonLengthUnit</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>enumeration of length units. Conversion into ROS compatible meters. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a768c9d3a7f0e5850bc61ebede4b85b23ae6d96128754284c45e005b02fe54b79d"></a>METER</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a768c9d3a7f0e5850bc61ebede4b85b23ab9e0fafa9c10ccca32bcdcd1eb9813c1"></a>MM</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a768c9d3a7f0e5850bc61ebede4b85b23a0b9c2e89e6353c26a8bab5661da20f6d"></a>INCH</em>&#160;</td><td class="fielddoc">
-</td></tr>
-</table>
-
-</div>
-</div>
-<a class="anchor" id="a604ddc76f1c860e79ec060339a68dc79"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="namespaceRCS.html#a604ddc76f1c860e79ec060339a68dc79">RCS::CanonReturn</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>enumeration of return type from <a class="el" href="namespaceCrcl.html">Crcl</a> intepretation. If statusreply, requires status sent to <a class="el" href="namespaceCrcl.html">Crcl</a> client. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a604ddc76f1c860e79ec060339a68dc79ae784c3b29210b49f3548ad8ccbe35688"></a>CANON_REJECT</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a604ddc76f1c860e79ec060339a68dc79a8046a92ede63076a4b9c98aa4099e3ea"></a>CANON_FAILURE</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a604ddc76f1c860e79ec060339a68dc79a45f0039600f4e6b521a58e021609ea22"></a>CANON_SUCCESS</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a604ddc76f1c860e79ec060339a68dc79ae5d8cf70f462c3e4aee8050f308132fb"></a>CANON_STATUSREPLY</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a604ddc76f1c860e79ec060339a68dc79a5eb43a35f73ab11edc5d5a28b908257e"></a>CANON_MOTION</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a604ddc76f1c860e79ec060339a68dc79a01dce2ee696426c95a68ffe191ccd643"></a>CANON_RUNNING</em>&#160;</td><td class="fielddoc">
-</td></tr>
-</table>
-
-</div>
-</div>
-<a class="anchor" id="a0e720341c250145b8a2bbf6a1afa777d"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="namespaceRCS.html#a0e720341c250145b8a2bbf6a1afa777d">RCS::CanonStatusType</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>enumeration of controller status types for individual commands. Note, even though command types are listed, not all used or supported. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a0e720341c250145b8a2bbf6a1afa777daabf0ebc3e57ea212970f33430d917eae"></a>CANON_DONE</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a0e720341c250145b8a2bbf6a1afa777da4a0ac89d145f0ac2ab9d2322ea4f3a08"></a>CANON_WORKING</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a0e720341c250145b8a2bbf6a1afa777da86acce9ac34e5ca0b0056b11810af584"></a>CANON_PAUSED</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a0e720341c250145b8a2bbf6a1afa777dac78240d093ffb8a630852bac1aa33905"></a>CANON_ERROR</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a0e720341c250145b8a2bbf6a1afa777da094244917abcd576f2118e80803279ee"></a>CANON_ABORT</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a0e720341c250145b8a2bbf6a1afa777da101acfc97dc944ffd40c3e8e0cf7c179"></a>CANON_WAITING</em>&#160;</td><td class="fielddoc">
-</td></tr>
-</table>
-
-</div>
-</div>
-<a class="anchor" id="a39ae96212f304024b5f91fe8d63a40c0"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="namespaceRCS.html#a39ae96212f304024b5f91fe8d63a40c0">RCS::CanonStopMotionType</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>enumeration of stopping motion, e.g., estop equivalent to immediate. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a39ae96212f304024b5f91fe8d63a40c0aa70f9618bf9470bf8dad4cf7c82f676a"></a>UNSET</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a39ae96212f304024b5f91fe8d63a40c0abdc21ede32cc83eb939faea7e4dd4641"></a>IMMEDIATE</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a39ae96212f304024b5f91fe8d63a40c0a332e4c404e6b8aa0a64e1970e0e8e793"></a>FAST</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a39ae96212f304024b5f91fe8d63a40c0ab9652e079b6284ddf30eb812539260cd"></a>NORMAL</em>&#160;</td><td class="fielddoc">
-</td></tr>
-</table>
-
-</div>
-</div>
-<a class="anchor" id="aad43ee626dc2b93364a9276cd0190b38"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="namespaceRCS.html#aad43ee626dc2b93364a9276cd0190b38">RCS::CanonTorqueUnit</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>enumeration of torque units. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="aad43ee626dc2b93364a9276cd0190b38a8455a50078c65f9939ae9093d87df9ce"></a>NEWTONMETER</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="aad43ee626dc2b93364a9276cd0190b38a90a01e4c469158168e9bbfed53909fa4"></a>FOOTPOUND</em>&#160;</td><td class="fielddoc">
-</td></tr>
-</table>
-
-</div>
-</div>
-<a class="anchor" id="ab06a825aaa263c253e8100d626609ec4"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="namespaceRCS.html#ab06a825aaa263c253e8100d626609ec4">RCS::MovementType</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>enumeration of trajectory motion type, joint or cartesian. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ab06a825aaa263c253e8100d626609ec4ac969035de1d3dc48e8dd0951863bf23b"></a>MOVE_DEFAULT</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="ab06a825aaa263c253e8100d626609ec4a080a0390ae2de7ee0ca67d94506a9c79"></a>MOVE_CARTESIAN</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="ab06a825aaa263c253e8100d626609ec4a275cc65ce33e5cfc57c57abb4a208223"></a>MOVE_JOINT</em>&#160;</td><td class="fielddoc">
-</td></tr>
-</table>
-
-</div>
-</div>
-<a class="anchor" id="ae705dbb4b887b18fef40316b6d5ca2c9"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="namespaceRCS.html#ae705dbb4b887b18fef40316b6d5ca2c9">RCS::TrajPointType</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>enumeration of trajector pose points. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ae705dbb4b887b18fef40316b6d5ca2c9a255760a7e92a5d130681fc75e280cb61"></a>WAYPOINT</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="ae705dbb4b887b18fef40316b6d5ca2c9ab5c3606954a689ebe5425f6c2c09b970"></a>GOAL</em>&#160;</td><td class="fielddoc">
-</td></tr>
-</table>
-
-</div>
-</div>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a0d81b5ae27814995884c1d25619db28a"></a>
+<a class="anchor" id="a369d68374f2cf012c48cc0e4c3275762"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">::CRCLProgramType::MiddleCommand_sequence&amp; RCS::DummyInit </td>
+          <td class="memname">std::string RCS::DumpEigenPose </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">Eigen::Affine3d&#160;</td>
+          <td class="paramname"><em>pose</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -689,6 +355,9 @@ Variables</h2></td></tr>
 <a class="anchor" id="a35eaff1f2c8ec5520f595d6f3b2d38b3"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::string RCS::DumpPose </td>
@@ -698,9 +367,38 @@ Variables</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>DumpPose takes a urdf pose and generates a string describing pose. Can be used as std::cout &lt;&lt; DumpPose(pose);. </p>
+
+</div>
+</div>
+<a class="anchor" id="abaf9d2b5df201cc3bcaac13a362492f9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string RCS::DumpPoseSimple </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceRCS.html#aa07e45d8a50e30064283d2b38087f999">RCS::Pose</a>&#160;</td>
+          <td class="paramname"><em>pose</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -737,6 +435,30 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>DumpQuaterion takes a urdf quaterion and generates a string describing x,y,z,w coordinates. Can be used as std::cout &lt;&lt; DumpQuaterion(urdf::rotation);. </p>
+
+</div>
+</div>
+<a class="anchor" id="a41308a2a3e1a110ee397e99e88d355ff"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="RCS_8h.html#aa4adb93a26caa4dacba9c9614e283245">JointState</a> RCS::EmptyJointState </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -814,6 +536,74 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a5cfe0b45d035674a7235c97757b670ff"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="RCS_8h.html#aa4adb93a26caa4dacba9c9614e283245">JointState</a> RCS::Subset </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="RCS_8h.html#aa4adb93a26caa4dacba9c9614e283245">JointState</a>&#160;</td>
+          <td class="paramname"><em>js</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af77528d0878b59af2a466a79bcd62983"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; RCS::Subset </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; double &gt;&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a1d588bfecc6b5d8e671ad9c57d18ecdc"></a>
 <div class="memitem">
 <div class="memproto">
@@ -850,6 +640,56 @@ template&lt;class Rep , class Period &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a1938bb64156e84a530fdfd58d5da45cd"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string RCS::VectorDump </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; T &gt;&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8debd3f8ffa83ac05085e84bf814640f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="RCS_8h.html#aa4adb93a26caa4dacba9c9614e283245">JointState</a> RCS::ZeroJointState </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>numjoints</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Variable Documentation</h2>
 <a class="anchor" id="a021572a9d03c82d96029e82ea5691d60"></a>
 <div class="memitem">
@@ -863,23 +703,34 @@ template&lt;class Rep , class Period &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a9d517dc59f249be605546c3a36086b19"></a>
+<a class="anchor" id="a7e9552ea392162dd1bb9dcc89e6184fb"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structRCS_1_1CController.html">CController</a> RCS::Controller</td>
+          <td class="memname">boost::shared_ptr&lt; <a class="el" href="structRCS_1_1CController.html">CController</a> &gt; RCS::Fnc = boost::shared_ptr&lt;<a class="el" href="structRCS_1_1CController.html">CController</a>&gt;(new <a class="el" href="structRCS_1_1CController.html">RCS::CController</a>(<a class="el" href="RCS_8h.html#a226eb3a426e9df46b88c4ba34f217203">DEFAULT_LOOP_CYCLE</a>))</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>global declaration of ONE controller </p>
+
+</div>
+</div>
+<a class="anchor" id="a7743d3581146fcdb467ee8cedaa5ebef"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::shared_ptr&lt; <a class="el" href="structRCS_1_1CController.html">CController</a> &gt; RCS::Mnc = boost::shared_ptr&lt;<a class="el" href="structRCS_1_1CController.html">CController</a>&gt;( new <a class="el" href="structRCS_1_1CController.html">RCS::CController</a>(<a class="el" href="RCS_8h.html#a226eb3a426e9df46b88c4ba34f217203">DEFAULT_LOOP_CYCLE</a>))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 15 2016 14:48:00 for CRCL FANUC by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Sep 28 2016 15:13:34 for CRCL FANUC by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

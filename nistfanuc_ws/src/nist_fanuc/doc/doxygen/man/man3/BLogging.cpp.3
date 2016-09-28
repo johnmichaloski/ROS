@@ -1,0 +1,47 @@
+.TH "/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/src/BLogging.cpp" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/src/BLogging.cpp \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'BLogging\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBOOST_LOG_GLOBAL_LOGGER_INIT\fP (my_logger, \fBlogger_t\fP)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "std::string \fBboostlogfile\fP = '/var/log/example\&.log'"
+.br
+.ti -1c
+.RI "boost::log::trivial::severity_level \fBboostloglevel\fP =logging::trivial::info"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "BOOST_LOG_GLOBAL_LOGGER_INIT (my_logger, \fBlogger_t\fP)"
+
+.SH "Variable Documentation"
+.PP 
+.SS "std::string boostlogfile = '/var/log/example\&.log'"
+http://stackoverflow.com/questions/20086754/how-to-use-boost-log-from-multiple-files-with-gloa #include 'Logging\&.h'
+.PP
+int \fBmain(int argc, char **argv)\fP { INFO << 'Program started';
+.PP
+return 0; } My build settings
+.PP
+AM_LDFLAGS += -lboost_system -lboost_thread -lpthread AM_LDFLAGS += -DBOOST_LOG_DYN_LINK -lboost_log_setup -lboost_log AM_CXXFLAGS += -std=c++11 -DBOOST_LOG_DYN_LINK 
+.SS "boost::log::trivial::severity_level boostloglevel =logging::trivial::info"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CRCL FANUC from the source code\&.

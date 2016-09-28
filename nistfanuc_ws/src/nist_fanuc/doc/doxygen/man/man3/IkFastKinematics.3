@@ -1,0 +1,51 @@
+.TH "IkFastKinematics" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+IkFastKinematics \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <Kinematics\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBIkFastKinematics\fP (void)"
+.br
+.ti -1c
+.RI "\fB~IkFastKinematics\fP (void)"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBRCS::Pose\fP \fBJointsToPose\fP (std::vector< double > &jv)"
+.br
+.ti -1c
+.RI "static size_t \fBPoseToJoints\fP (\fBRCS::Pose\fP &pose, std::vector< std::vector< double >> &newjoints)"
+.br
+.ti -1c
+.RI "static std::vector< double > \fBNearestJoints\fP (std::vector< double > oldjoints, std::vector< std::vector< double >> &newjoints)"
+.br
+.in -1c
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "IkFastKinematics::IkFastKinematics (void)"
+
+.SS "IkFastKinematics::~IkFastKinematics (void)"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBRCS::Pose\fP IkFastKinematics::JointsToPose (std::vector< double > &jv)\fC [static]\fP"
+
+.SS "std::vector< double > IkFastKinematics::NearestJoints (std::vector< double >oldjoints, std::vector< std::vector< double >> &newjoints)\fC [static]\fP"
+
+.SS "size_t IkFastKinematics::PoseToJoints (\fBRCS::Pose\fP &pose, std::vector< std::vector< double >> &newjoints)\fC [static]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CRCL FANUC from the source code\&.
