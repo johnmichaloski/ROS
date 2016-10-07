@@ -1,4 +1,4 @@
-.TH "RCS::CMessageQueue< T >" 3 "Fri Apr 15 2016" "CRCL FANUC" \" -*- nroff -*-
+.TH "RCS::CMessageQueue< T >" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -11,11 +11,16 @@ The \fBCMessageQueue\fP offers a mutexed front to a STL/std deque\&. The queue i
 .PP
 .PP
 \fC#include <RCSMsgQueue\&.h>\fP
+.PP
+Inherited by \fBRCS::CMsgQueueThread< T >\fP\&.
 .SS "Public Types"
 
 .in +1c
 .ti -1c
 .RI "typedef std::deque< T > \fBxml_message_queue\fP"
+.br
+.ti -1c
+.RI "typedef std::deque< T >::iterator \fBxml_message_queue_iterator\fP"
 .br
 .in -1c
 .SS "Public Member Functions"
@@ -37,6 +42,10 @@ The \fBCMessageQueue\fP offers a mutexed front to a STL/std deque\&. The queue i
 .br
 .RI "\fIPopFrontMsgQueue mutex pop of front item of message queue\&. \fP"
 .ti -1c
+.RI "T \fBPeekFrontMsgQueue\fP ()"
+.br
+.RI "\fIPeekFrontMsgQueue mutex peeks at front item of message queue\&. \fP"
+.ti -1c
 .RI "T \fBBackMsgQueue\fP ()"
 .br
 .RI "\fIBackMsgQueue mutex retrieves back item of message queue\&. Does not pop queue\&. \fP"
@@ -45,9 +54,23 @@ The \fBCMessageQueue\fP offers a mutexed front to a STL/std deque\&. The queue i
 .br
 .RI "\fIAddMsgQueue mutex push to back an item onto message queue\&. \fP"
 .ti -1c
+.RI "void \fBAddBackMsgQueue\fP (T t)"
+.br
+.RI "\fIAddMsgQueue mutex push to back an item onto message queue\&. \fP"
+.ti -1c
+.RI "void \fBAddFrontMsgQueue\fP (T t)"
+.br
+.RI "\fIAddMsgQueue mutex push to front an item onto message queue\&. \fP"
+.ti -1c
 .RI "void \fBInsertFrontMsgQueue\fP (T t)"
 .br
 .RI "\fIInsertFrontMsgQueue mutex push to front an item onto message queue\&. \fP"
+.ti -1c
+.RI "\fBxml_message_queue_iterator\fP \fBend\fP ()"
+.br
+.ti -1c
+.RI "\fBxml_message_queue_iterator\fP \fBbegin\fP ()"
+.br
 .in -1c
 .SS "Protected Attributes"
 
@@ -68,12 +91,36 @@ The \fBCMessageQueue\fP offers a mutexed front to a STL/std deque\&. The queue i
 .PP 
 .SS "template<typename T> typedef std::deque<T> \fBRCS::CMessageQueue\fP< T >::\fBxml_message_queue\fP"
 
+.SS "template<typename T> typedef std::deque<T>::iterator \fBRCS::CMessageQueue\fP< T >::\fBxml_message_queue_iterator\fP"
+
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "template<typename T> \fBRCS::CMessageQueue\fP< T >::\fBCMessageQueue\fP ()\fC [inline]\fP"
 
 .SH "Member Function Documentation"
 .PP 
+.SS "template<typename T> void \fBRCS::CMessageQueue\fP< T >::AddBackMsgQueue (Tt)\fC [inline]\fP"
+
+.PP
+AddMsgQueue mutex push to back an item onto message queue\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIT\fP item to place in back of message queue\&. 
+.RE
+.PP
+
+.SS "template<typename T> void \fBRCS::CMessageQueue\fP< T >::AddFrontMsgQueue (Tt)\fC [inline]\fP"
+
+.PP
+AddMsgQueue mutex push to front an item onto message queue\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIT\fP item to place in front of message queue\&. 
+.RE
+.PP
+
 .SS "template<typename T> void \fBRCS::CMessageQueue\fP< T >::AddMsgQueue (Tt)\fC [inline]\fP"
 
 .PP
@@ -96,10 +143,14 @@ T returns back item from message queue\&.
 .RE
 .PP
 
+.SS "template<typename T> \fBxml_message_queue_iterator\fP \fBRCS::CMessageQueue\fP< T >::begin ()\fC [inline]\fP"
+
 .SS "template<typename T> void \fBRCS::CMessageQueue\fP< T >::ClearMsgQueue ()\fC [inline]\fP"
 
 .PP
 ClearMsgQueue clears all contents in message queue\&. T\&. 
+.SS "template<typename T> \fBxml_message_queue_iterator\fP \fBRCS::CMessageQueue\fP< T >::end ()\fC [inline]\fP"
+
 .SS "template<typename T> void \fBRCS::CMessageQueue\fP< T >::InsertFrontMsgQueue (Tt)\fC [inline]\fP"
 
 .PP
@@ -108,6 +159,17 @@ InsertFrontMsgQueue mutex push to front an item onto message queue\&.
 \fBParameters:\fP
 .RS 4
 \fIT\fP item to place in front of message queue\&. 
+.RE
+.PP
+
+.SS "template<typename T> T \fBRCS::CMessageQueue\fP< T >::PeekFrontMsgQueue ()\fC [inline]\fP"
+
+.PP
+PeekFrontMsgQueue mutex peeks at front item of message queue\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+T returns front item from message queue\&. 
 .RE
 .PP
 

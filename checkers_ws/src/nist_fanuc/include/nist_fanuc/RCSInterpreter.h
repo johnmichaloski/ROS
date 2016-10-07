@@ -21,63 +21,22 @@
 //#include "Trajectory.h"
 #include "trajectoryMaker.h"
 #include "MotionControl.h"
-/*!
-* \brief RCSInterpreter parses a RCS command and generates robot motion commands.
-*/
-class RCSInterpreter
-{
-public:   
-    virtual int ParseCommand(RCS::CanonCmd cmd)=0;
-    virtual void SetRange(std::vector<double> minrange, std::vector<double> maxrange){}
-    IKinematicsSharedPtr _kinematics; /**<  kinematics pointer */
-};
-class BangBangInterpreter: public RCSInterpreter
-{
-public:
-    std::vector<double> minrange;
-    std::vector<double> maxrange;
-   
-    virtual int ParseCommand(RCS::CanonCmd cmd);
-    virtual void SetRange(std::vector<double> minrange, std::vector<double> maxrange);
-};
+#include "Controller.h"
+#include "Demo.h"
+namespace RCS {
 
-class SimpleMotionInterpreter: public RCSInterpreter
-{
-public:
-	/*!
-	* \brief RCSInterpreter constructor that optionally accepts pointer to kinematic instance.
-	\param k is the kinematics pointer
-	*/
-    SimpleMotionInterpreter(IKinematicsSharedPtr k = NULL);
-    ~SimpleMotionInterpreter(void);
-
-	/*!
-	* \brief ParseCommand parses a RCS command and queues robot motion commands.
-	\param cmd is the command to interpret
-	*/
-    virtual int ParseCommand(RCS::CanonCmd cmd);
-protected:
-	/*!
-	* \brief AddJointCommands  accepts vector of joint trajectories and adds to robot motion queue.
-	\param gotojoints is the vector of joint states describing the motion.
-	*/
-    void AddJointCommands(std::vector<JointState > gotojoints);
-
-	/*!
-	* \brief PlanCartesianMotion accepts vector of poses and generates a vector of joint trajectories.
-	* Can use a couple of planning algorithms to generate trajectory.
-	\param poses is the vector of cartesian motion.
-	\return vector of planned joint states
-	*/
-    std::vector<JointState> PlanCartesianMotion(std::vector<RCS::Pose> poses);
-
-    //////////////////////////////////////////////////
-public:
-#ifdef DESCARTES
-    TrajectoryVec results; /**< descartes motion planner results */
-#endif
-    std::vector<double> times;  /**< descartes times for  trajectory results */
-    IRate rates; /**< rates structure for simple motion planner  */
-    MotionControl motioncontrol; /**< instance of simple motion control object  */
- 
+    class BangBangInterpreter : public IRCSInterpreter {
+    protected:
+        IKinematicsSharedPtr _kinematics; /**<  kinematics pointer */
+        boost::shared_ptr<RCS::CController>_nc;
+        NearestJointsLookup &_hints;
+    public:
+        std::vector<double> minrange;
+        std::vector<double> maxrange;
+        BangBangInterpreter(boost::shared_ptr<RCS::CController> nc, 
+        IKinematicsSharedPtr k ,
+        NearestJointsLookup &hints);
+        virtual RCS::CanonCmd ParseCommand(RCS::CanonCmd cmd);
+        virtual void SetRange(std::vector<double> minrange, std::vector<double> maxrange);
+    };
 };

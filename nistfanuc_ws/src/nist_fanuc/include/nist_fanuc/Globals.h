@@ -79,6 +79,14 @@
 protected: Y _ ## X; \
 public: Y & X( ) { return _ ## X; }
 
+#define RVAR(X, Y)    \
+protected: Y _ ## X; \
+public: Y  X( ) { return _ ## X; }
+
+#define RWVAR(X, Y)    \
+protected: Y _ ## X; \
+public: Y & X( ) { return _ ## X; }
+
 #define NVAR(X, Y, Z) \
 protected: Y Z;       \
 public: Y & X( ) { return Z; }

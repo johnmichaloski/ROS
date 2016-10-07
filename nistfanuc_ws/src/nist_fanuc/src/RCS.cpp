@@ -23,7 +23,7 @@ namespace RCS {
 
     unsigned long long CanonCmd::_cmdid = 0;
 
-    void CanonWorldModel::Init() {
+    void CanonWorldModel::Init(CController * cnc) {
         _cycleTime = DEFAULT_LOOP_CYCLE;
 
         maxTransAccel = DEFAULT_CART_MAX_ACCEL;
@@ -34,7 +34,7 @@ namespace RCS {
         maxJointVel = DEFAULT_JOINT_MAX_VEL;
 
         //FIXME
-        for (size_t i = 0; i < RCS::Fnc->Kinematics()->NumJoints(); i++) {
+        for (size_t i = 0; i < cnc->Kinematics()->NumJoints(); i++) {
             currentjoints.position.push_back(0.0);
             currentjoints.velocity.push_back(0.0);
         }

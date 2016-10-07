@@ -1,0 +1,100 @@
+\hypertarget{Checkers_8h}{\section{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\-Checkers.h File Reference}
+\label{Checkers_8h}\index{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\-Checkers.\-h@{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\-Checkers.\-h}}
+}
+{\ttfamily \#include $<$string$>$}\\*
+{\ttfamily \#include $<$vector$>$}\\*
+{\ttfamily \#include $<$map$>$}\\*
+{\ttfamily \#include $<$algorithm$>$}\\*
+{\ttfamily \#include $<$stdarg.\-h$>$}\\*
+{\ttfamily \#include $<$iostream$>$}\\*
+{\ttfamily \#include $<$math.\-h$>$}\\*
+{\ttfamily \#include $<$assert.\-h$>$}\\*
+{\ttfamily \#include $<$iterator$>$}\\*
+{\ttfamily \#include $<$fstream$>$}\\*
+{\ttfamily \#include $<$iomanip$>$}\\*
+{\ttfamily \#include $<$sstream$>$}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structCheckers_1_1Move}{Checkers\-::\-Move}
+\item 
+struct \hyperlink{structCheckers_1_1BoardType}{Checkers\-::\-Board\-Type}
+\item 
+struct \hyperlink{structCheckers_1_1CheckersGame}{Checkers\-::\-Checkers\-Game}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{namespaceCheckers}{Checkers}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{Checkers_8h_a3cfd3aa62338d12609f6d65bce97e9cd}{R\-O\-W\-S}~8
+\item 
+\#define \hyperlink{Checkers_8h_ab59ad2ee1a48b83c2eef1f019ed8cc48}{C\-O\-L\-S}~8
+\item 
+\#define \hyperlink{Checkers_8h_a5db49eeef5c9bb774f02996f684df238}{M\-A\-X\-\_\-\-D\-E\-P\-T\-H}~50
+\item 
+\#define \hyperlink{Checkers_8h_ad1024aebea034ac47e6fb3a93dd151b6}{I\-S\-R\-E\-D}(c)~( (c \& Checkers\-::\-R\-E\-D) $>$0)
+\item 
+\#define \hyperlink{Checkers_8h_a2f30de2381fbce4acf5a4adc9d55034a}{I\-S\-B\-L\-A\-C\-K}(c)~((c \& Checkers\-::\-B\-L\-A\-C\-K) $>$0)
+\item 
+\#define \hyperlink{Checkers_8h_aaffef12b7448690fc1cc7de3cef389e8}{I\-S\-E\-M\-P\-T\-Y}(c)~(c == Checkers\-::\-E\-M\-P\-T\-Y)
+\item 
+\#define \hyperlink{Checkers_8h_a8d444c3e9667b8979b6875fcff7e4f4a}{I\-S\-K\-I\-N\-G}(c)~( (c \& Checkers\-::\-K\-I\-N\-G) $>$0)
+\item 
+\#define \hyperlink{Checkers_8h_a8c5ff70b6b28cd0157c50a22406f92c4}{S\-I\-G\-N}(x)~(x $<$ 0) ? -\/1 \-: (x $>$ 0)
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\-::string \hyperlink{namespaceCheckers_ad7418ecd14ea01ca5d691508e4bc5897}{Checkers\-::\-Str\-Format} (const char $\ast$fmt,...)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{Checkers_8h_ab59ad2ee1a48b83c2eef1f019ed8cc48}{\index{Checkers.\-h@{Checkers.\-h}!C\-O\-L\-S@{C\-O\-L\-S}}
+\index{C\-O\-L\-S@{C\-O\-L\-S}!Checkers.h@{Checkers.\-h}}
+\subsubsection[{C\-O\-L\-S}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\-O\-L\-S~8}}\label{Checkers_8h_ab59ad2ee1a48b83c2eef1f019ed8cc48}
+\hypertarget{Checkers_8h_a2f30de2381fbce4acf5a4adc9d55034a}{\index{Checkers.\-h@{Checkers.\-h}!I\-S\-B\-L\-A\-C\-K@{I\-S\-B\-L\-A\-C\-K}}
+\index{I\-S\-B\-L\-A\-C\-K@{I\-S\-B\-L\-A\-C\-K}!Checkers.h@{Checkers.\-h}}
+\subsubsection[{I\-S\-B\-L\-A\-C\-K}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-S\-B\-L\-A\-C\-K(
+\begin{DoxyParamCaption}
+\item[{}]{c}
+\end{DoxyParamCaption}
+)~((c \& Checkers\-::\-B\-L\-A\-C\-K) $>$0)}}\label{Checkers_8h_a2f30de2381fbce4acf5a4adc9d55034a}
+\hypertarget{Checkers_8h_aaffef12b7448690fc1cc7de3cef389e8}{\index{Checkers.\-h@{Checkers.\-h}!I\-S\-E\-M\-P\-T\-Y@{I\-S\-E\-M\-P\-T\-Y}}
+\index{I\-S\-E\-M\-P\-T\-Y@{I\-S\-E\-M\-P\-T\-Y}!Checkers.h@{Checkers.\-h}}
+\subsubsection[{I\-S\-E\-M\-P\-T\-Y}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-S\-E\-M\-P\-T\-Y(
+\begin{DoxyParamCaption}
+\item[{}]{c}
+\end{DoxyParamCaption}
+)~(c == Checkers\-::\-E\-M\-P\-T\-Y)}}\label{Checkers_8h_aaffef12b7448690fc1cc7de3cef389e8}
+\hypertarget{Checkers_8h_a8d444c3e9667b8979b6875fcff7e4f4a}{\index{Checkers.\-h@{Checkers.\-h}!I\-S\-K\-I\-N\-G@{I\-S\-K\-I\-N\-G}}
+\index{I\-S\-K\-I\-N\-G@{I\-S\-K\-I\-N\-G}!Checkers.h@{Checkers.\-h}}
+\subsubsection[{I\-S\-K\-I\-N\-G}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-S\-K\-I\-N\-G(
+\begin{DoxyParamCaption}
+\item[{}]{c}
+\end{DoxyParamCaption}
+)~( (c \& Checkers\-::\-K\-I\-N\-G) $>$0)}}\label{Checkers_8h_a8d444c3e9667b8979b6875fcff7e4f4a}
+\hypertarget{Checkers_8h_ad1024aebea034ac47e6fb3a93dd151b6}{\index{Checkers.\-h@{Checkers.\-h}!I\-S\-R\-E\-D@{I\-S\-R\-E\-D}}
+\index{I\-S\-R\-E\-D@{I\-S\-R\-E\-D}!Checkers.h@{Checkers.\-h}}
+\subsubsection[{I\-S\-R\-E\-D}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-S\-R\-E\-D(
+\begin{DoxyParamCaption}
+\item[{}]{c}
+\end{DoxyParamCaption}
+)~( (c \& Checkers\-::\-R\-E\-D) $>$0)}}\label{Checkers_8h_ad1024aebea034ac47e6fb3a93dd151b6}
+\hypertarget{Checkers_8h_a5db49eeef5c9bb774f02996f684df238}{\index{Checkers.\-h@{Checkers.\-h}!M\-A\-X\-\_\-\-D\-E\-P\-T\-H@{M\-A\-X\-\_\-\-D\-E\-P\-T\-H}}
+\index{M\-A\-X\-\_\-\-D\-E\-P\-T\-H@{M\-A\-X\-\_\-\-D\-E\-P\-T\-H}!Checkers.h@{Checkers.\-h}}
+\subsubsection[{M\-A\-X\-\_\-\-D\-E\-P\-T\-H}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\-A\-X\-\_\-\-D\-E\-P\-T\-H~50}}\label{Checkers_8h_a5db49eeef5c9bb774f02996f684df238}
+\hypertarget{Checkers_8h_a3cfd3aa62338d12609f6d65bce97e9cd}{\index{Checkers.\-h@{Checkers.\-h}!R\-O\-W\-S@{R\-O\-W\-S}}
+\index{R\-O\-W\-S@{R\-O\-W\-S}!Checkers.h@{Checkers.\-h}}
+\subsubsection[{R\-O\-W\-S}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\-O\-W\-S~8}}\label{Checkers_8h_a3cfd3aa62338d12609f6d65bce97e9cd}
+\hypertarget{Checkers_8h_a8c5ff70b6b28cd0157c50a22406f92c4}{\index{Checkers.\-h@{Checkers.\-h}!S\-I\-G\-N@{S\-I\-G\-N}}
+\index{S\-I\-G\-N@{S\-I\-G\-N}!Checkers.h@{Checkers.\-h}}
+\subsubsection[{S\-I\-G\-N}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\-I\-G\-N(
+\begin{DoxyParamCaption}
+\item[{}]{x}
+\end{DoxyParamCaption}
+)~(x $<$ 0) ? -\/1 \-: (x $>$ 0)}}\label{Checkers_8h_a8c5ff70b6b28cd0157c50a22406f92c4}

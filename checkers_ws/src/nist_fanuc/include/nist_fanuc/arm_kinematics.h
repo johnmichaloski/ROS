@@ -60,7 +60,7 @@ using std::string;
 class Kinematics {
     public:
         Kinematics();
-        bool init(ros::NodeHandle &nh);
+        bool init(ros::NodeHandle &nh, std::string tipname, std::string rootname);
         KDL::JntArray joint_min, joint_max;
         urdf::Model robot_model;
 

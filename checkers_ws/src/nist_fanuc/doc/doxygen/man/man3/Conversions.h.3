@@ -1,8 +1,8 @@
-.TH "/usr/local/michalos/github/usnistgov/el-robotics-core/nist_fanuc/include/nist_fanuc/Conversions.h" 3 "Fri Apr 15 2016" "CRCL FANUC" \" -*- nroff -*-
+.TH "/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/include/nist_fanuc/Conversions.h" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/usr/local/michalos/github/usnistgov/el-robotics-core/nist_fanuc/include/nist_fanuc/Conversions.h \- 
+/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/include/nist_fanuc/Conversions.h \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -10,99 +10,131 @@
 .br
 \fC#include <Eigen/Geometry>\fP
 .br
-\fC#include 'urdf_model/tfmath\&.h'\fP
+\fC#include 'geometry_msgs/PointStamped\&.h'\fP
+.br
+\fC#include 'geometry_msgs/Point32\&.h'\fP
 .br
 \fC#include 'geometry_msgs/PoseStamped\&.h'\fP
+.br
+\fC#include <tf_conversions/tf_eigen\&.h>\fP
+.br
+\fC#include <eigen_conversions/eigen_msg\&.h>\fP
 .br
 \fC#include 'RCS\&.h'\fP
 .br
 
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBConversion\fP"
+.br
+.in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "\fBRCS::Pose\fP \fBGeomMsgPose2UrdfPose\fP (const geometry_msgs::Pose &m)"
+.RI "template<typename T > tf::Vector3 \fBConversion::vectorEigenToTF\fP (T e)"
 .br
 .ti -1c
-.RI "geometry_msgs::Pose \fBUrdfPose2GeomMsgPose\fP (const \fBRCS::Pose\fP &m)"
+.RI "template<typename T > tf::Vector3 \fBConversion::matrixEigenToTfVector\fP (T e)"
 .br
 .ti -1c
-.RI "Eigen::Affine3d \fBGeomMsgPose2Affine3d\fP (const geometry_msgs::Pose &m)"
+.RI "tf::Pose \fBConversion::Identity\fP ()"
 .br
 .ti -1c
-.RI "geometry_msgs::Pose \fBPoseAffineToGeomMsg\fP (const Eigen::Affine3d &e)"
+.RI "tf::Pose \fBConversion::Affine3d2RcsPose\fP (const Eigen::Affine3d &pose)"
+.br
+.RI "\fIaffine3d2RcsPose converts an Eigen affine 4x4 matrix o represent the pose into a urdf pose vparam pose eigen Affine3d pose \fP"
+.ti -1c
+.RI "tf::Pose & \fBConversion::GeometryPose2TfPose\fP (const geometry_msgs::Pose &m, tf::Pose &p)"
 .br
 .ti -1c
-.RI "\fBRCS::Pose\fP \fBAffine3d2UrdfPose\fP (const Eigen::Affine3d &pose)"
+.RI "tf::Quaternion \fBConversion::quaternionEigenToTF\fP (const Eigen::Quaterniond &e)"
 .br
-.RI "\fIaffine3d2UrdfPose converts an Eigen affine 4x4 matrix o represent the pose into a urdf pose vparam pose eigen Affine3d pose \fP"
 .ti -1c
-.RI "Eigen::Affine3d \fBUrdfPose2Affine3d\fP (const \fBRCS::Pose\fP &pose)"
+.RI "tf::Pose \fBConversion::GeomMsgPose2RcsPose\fP (const geometry_msgs::Pose &m)"
+.br
+.ti -1c
+.RI "tf::Quaternion \fBConversion::RPYRadians\fP (double roll, double pitch, double yaw)"
+.br
+.ti -1c
+.RI "tf::Quaternion \fBConversion::RPYDegrees\fP (double roll, double pitch, double yaw)"
+.br
+.ti -1c
+.RI "geometry_msgs::Pose \fBConversion::convertPointToPose\fP (const geometry_msgs::Point &point)"
+.br
+.ti -1c
+.RI "geometry_msgs::Point \fBConversion::convertPoint\fP (const geometry_msgs::Vector3 &point)"
+.br
+.ti -1c
+.RI "geometry_msgs::Pose \fBConversion::convertPose\fP (const Eigen::Affine3d &pose)"
+.br
+.ti -1c
+.RI "geometry_msgs::Point \fBConversion::convertPoseToPoint\fP (const Eigen::Affine3d &pose)"
+.br
+.ti -1c
+.RI "geometry_msgs::Point32 \fBConversion::convertPoint32\fP (const Eigen::Vector3d &point)"
+.br
+.ti -1c
+.RI "geometry_msgs::Point \fBConversion::convertPoint\fP (const Eigen::Vector3d &point)"
+.br
+.ti -1c
+.RI "geometry_msgs::Pose \fBConversion::PoseAffineToGeomMsg\fP (const Eigen::Affine3d &e)"
+.br
+.ti -1c
+.RI "geometry_msgs::Pose \fBConversion::RcsPose2GeomMsgPose\fP (const tf::Pose &m)"
+.br
+.ti -1c
+.RI "geometry_msgs::Pose & \fBConversion::TfPose2GeometryPose\fP (tf::Pose &m, geometry_msgs::Pose &p)"
+.br
+.ti -1c
+.RI "Eigen::Affine3d \fBConversion::GeomMsgPose2Affine3d\fP (const geometry_msgs::Pose &m)"
+.br
+.ti -1c
+.RI "Eigen::Affine3d \fBConversion::convertPose\fP (const geometry_msgs::Pose &pose)"
+.br
+.ti -1c
+.RI "Eigen::Affine3d \fBConversion::convertPoint32ToPose\fP (const geometry_msgs::Point32 &point)"
+.br
+.ti -1c
+.RI "Eigen::Affine3d \fBConversion::convertPointToPose\fP (const Eigen::Vector3d &point)"
+.br
+.ti -1c
+.RI "Eigen::Vector3d \fBConversion::convertPoint\fP (const geometry_msgs::Point &point)"
+.br
+.ti -1c
+.RI "Eigen::Vector3d \fBConversion::convertPoint32\fP (const geometry_msgs::Point32 &point)"
+.br
+.ti -1c
+.RI "Eigen::Affine3d \fBConversion::RcsPose2Affine3d\fP (const tf::Pose &pose)"
 .br
 .RI "\fIurdfPose2Affine3d converts urdf pose into an Eigen affine 4x4 matrix o represent the pose \fP"
 .ti -1c
-.RI "std::vector< geometry_msgs::Pose > \fBUrdfPoses2PoseMsgs\fP (const std::vector< \fBRCS::Pose\fP > &src)"
+.RI "Eigen::Translation3d \fBConversion::RcsPose2EigenPosition\fP (const geometry_msgs::Pose &pose)"
 .br
 .ti -1c
-.RI "std::vector< \fBRCS::Pose\fP > \fBPoseMsgs2UrdfPoses\fP (const std::vector< geometry_msgs::Pose > &src)"
+.RI "Eigen::Affine3d \fBConversion::EigenPosition2EigenAffine3d\fP (const Eigen::Translation3d &trans)"
 .br
 .ti -1c
-.RI "std::vector< Eigen::Affine3d > \fBPoseMsgs2AffEigenPoses\fP (const std::vector< geometry_msgs::Pose > &src)"
+.RI "Eigen::Vector3d \fBConversion::vectorTFToEigen\fP (tf::Vector3 t)"
 .br
 .ti -1c
-.RI "std::vector< geometry_msgs::Pose > \fBAffEigenPoses2PoseMsgs\fP (const std::vector< Eigen::Affine3d > &src)"
+.RI "\fBJointState\fP \fBConversion::JntPosVector2JointState\fP (const std::vector< double > &src)"
 .br
 .ti -1c
-.RI "\fBJointState\fP \fBJntPosVector2JointState\fP (const std::vector< double > &src)"
+.RI "std::vector< geometry_msgs::Pose > \fBConversion::RcsPoses2PoseMsgs\fP (const std::vector< tf::Pose > &src)"
+.br
+.ti -1c
+.RI "std::vector< tf::Pose > \fBConversion::PoseMsgs2RcsPoses\fP (const std::vector< geometry_msgs::Pose > &src)"
+.br
+.ti -1c
+.RI "std::vector< Eigen::Affine3d > \fBConversion::PoseMsgs2AffEigenPoses\fP (const std::vector< geometry_msgs::Pose > &src)"
+.br
+.ti -1c
+.RI "std::vector< geometry_msgs::Pose > \fBConversion::AffEigenPoses2PoseMsgs\fP (const std::vector< Eigen::Affine3d > &src)"
 .br
 .in -1c
-.SH "Function Documentation"
-.PP 
-.SS "std::vector<geometry_msgs::Pose> AffEigenPoses2PoseMsgs (const std::vector< Eigen::Affine3d > &src)"
-
-.SS "\fBRCS::Pose\fP Affine3d2UrdfPose (const Eigen::Affine3d &pose)"
-
-.PP
-affine3d2UrdfPose converts an Eigen affine 4x4 matrix o represent the pose into a urdf pose vparam pose eigen Affine3d pose 
-.PP
-\fBReturns:\fP
-.RS 4
-urdf pose with position and rotation\&. 
-.RE
-.PP
-
-.SS "Eigen::Affine3d GeomMsgPose2Affine3d (const geometry_msgs::Pose &m)"
-
-.SS "\fBRCS::Pose\fP GeomMsgPose2UrdfPose (const geometry_msgs::Pose &m)"
-
-.SS "\fBJointState\fP JntPosVector2JointState (const std::vector< double > &src)\fC [inline]\fP"
-
-.SS "geometry_msgs::Pose PoseAffineToGeomMsg (const Eigen::Affine3d &e)"
-
-.SS "std::vector<Eigen::Affine3d> PoseMsgs2AffEigenPoses (const std::vector< geometry_msgs::Pose > &src)"
-
-.SS "std::vector<\fBRCS::Pose\fP> PoseMsgs2UrdfPoses (const std::vector< geometry_msgs::Pose > &src)"
-
-.SS "Eigen::Affine3d UrdfPose2Affine3d (const \fBRCS::Pose\fP &pose)"
-
-.PP
-urdfPose2Affine3d converts urdf pose into an Eigen affine 4x4 matrix o represent the pose 
-.PP
-\fBParameters:\fP
-.RS 4
-\fIpose\fP is the urdf pose with position and rotation\&. 
-.RE
-.PP
-\fBReturns:\fP
-.RS 4
-eigen Affine3d pose 
-.RE
-.PP
-
-.SS "geometry_msgs::Pose UrdfPose2GeomMsgPose (const \fBRCS::Pose\fP &m)"
-
-.SS "std::vector<geometry_msgs::Pose> UrdfPoses2PoseMsgs (const std::vector< \fBRCS::Pose\fP > &src)"
-
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for CRCL FANUC from the source code\&.

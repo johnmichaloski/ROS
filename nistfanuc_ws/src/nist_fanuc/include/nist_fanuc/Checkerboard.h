@@ -124,7 +124,7 @@ Eigen::Affine3d GetPose(int row, int col) {
 
         for (size_t row = 0; row < ROWS; row++) {
             double rowoffset = RowOffset(row);
-            for (size_t i = 0; i <= cols; i = i + 2) {
+            for (size_t i = 0; i < COLS; i = i + 2) {
                 double coloffset = ColOffset(i);
                 if (row % 2 == 0) coloffset = coloffset + offset; // red offset at zero
 #ifdef LEFTRIGHT
@@ -211,7 +211,11 @@ Eigen::Affine3d GetPose(int row, int col) {
         return ISKING(game.Board()[m.row][m.col]);
     }
 
-    void PhysicalMove(InlineRobotCommands &robot, int player, int i, int j, Checkers::Move m) {
+    void PhysicalMove(InlineRobotCommands &robot,
+            int player,
+            int i, int j,
+            Checkers::Move m,
+            bool doublejump=false) {
         std::string errmsg;
         std::string typemove("move");
         //SetCheckerColor(Checkers::Move(i, j), rviz_visual_tools::CLEAR);
@@ -236,13 +240,10 @@ Eigen::Affine3d GetPose(int row, int col) {
         robot.Pick(Conversion::Affine3d2RcsPose(obj-> pose), checkername1);
         robot.Place(Conversion::Affine3d2RcsPose(pose), checkername1);
         //MoveObject(checkername1, Conversion::Affine3d2RcsPose(pose), checkercolor);
-
-        // wait till move  done...
-        while (robot.cnc()->crclcmds.SizeMsgQueue() > 0) // wait till nothing left or messes up timing
-            ros::Duration(0.01).sleep();
-        while (robot.cnc()->robotcmds.SizeMsgQueue() > 0) // canon cmds are translated into robot cmds
-            ros::Duration(0.01).sleep();
-
+  
+        while(robot.cnc()->IsBusy())
+                ros::Duration(0.01).sleep();
+        
         if (m.bJump) {
             typemove = "jump";
             Checkers::Move jumped = m.Diff(Checkers::Move(i, j));
@@ -251,8 +252,13 @@ Eigen::Affine3d GetPose(int row, int col) {
         }
         if (IsKing(m)) {
             // Double checker height - for now 
-            obj->height = 2 * height;
+            // May need to delete and then create?
+            obj->height *= 2 ;
             obj->pose = Eigen::Translation3d(Eigen::Vector3d(0, 0, 0.01)) * obj->pose;
+            robot.MoveObject(obj->name, Conversion::Affine3d2RcsPose(obj->pose), checkercolor);
+            ros::spinOnce();
+            ros::spinOnce();
+            ros::spinOnce();
         }
 #if 0
         UpdateScene(checkername1, pose, obj->color);
@@ -260,9 +266,20 @@ Eigen::Affine3d GetPose(int row, int col) {
         ros::spinOnce();
         obj->name = checkername2; // change checker name 
         if (m.doublejumps.size() > 0) {
-            PhysicalMove(robot, player, m.row, m.col, m.doublejumps[0]);
+            PhysicalMove(robot, player, m.row, m.col, m.doublejumps[0],true);
         }
 
+        // Done - move to safe non-collisioin position - skip if double jump
+        if (!doublejump) {
+            std::vector<unsigned long> jointnum(robot.cnc()->Kinematics()->NumJoints());
+            std::iota(jointnum.begin(), jointnum.end(), 0); // adjusted already to 0..n-1
+            robot.MoveJoints(jointnum, robot.cnc()->NamedJointMove["Safe"]);
+            while (robot.cnc()->IsBusy()) {
+                ros::spinOnce();
+                ros::Duration(0.01).sleep();
+            }
+        }
+            
     }
 
     int Player() {

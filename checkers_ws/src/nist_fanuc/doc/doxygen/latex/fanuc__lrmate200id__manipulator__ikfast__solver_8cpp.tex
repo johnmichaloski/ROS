@@ -1,0 +1,548 @@
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp}{\section{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/src/fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.cpp File Reference}
+\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp}\index{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/src/fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/src/fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+}
+{\ttfamily \#include \char`\"{}ikfast.\-h\char`\"{}}\\*
+{\ttfamily \#include $<$cmath$>$}\\*
+{\ttfamily \#include $<$vector$>$}\\*
+{\ttfamily \#include $<$limits$>$}\\*
+{\ttfamily \#include $<$algorithm$>$}\\*
+{\ttfamily \#include $<$complex$>$}\\*
+{\ttfamily \#include $<$stdexcept$>$}\\*
+{\ttfamily \#include $<$sstream$>$}\\*
+{\ttfamily \#include $<$iostream$>$}\\*
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classIKSolver}{I\-K\-Solver}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a14ff3dec1d7bf1b6f8bc3a7dcc0ed883}{I\-K\-F\-A\-S\-T\-\_\-\-C\-O\-M\-P\-I\-L\-E\-\_\-\-A\-S\-S\-E\-R\-T}(x)~extern int \-\_\-\-\_\-dummy\mbox{[}(int)x\mbox{]}
+\item 
+\#define \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ad6f886b3f30a68be92f3477f4e61da9d}{I\-K\-F\-A\-S\-T\-\_\-\-S\-T\-R\-I\-N\-G\-I\-Z\-E2}(s)~\#s
+\item 
+\#define \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_af0758e12dac3c9aadf615fe07e5dbd9d}{I\-K\-F\-A\-S\-T\-\_\-\-S\-T\-R\-I\-N\-G\-I\-Z\-E}(s)~\hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ad6f886b3f30a68be92f3477f4e61da9d}{I\-K\-F\-A\-S\-T\-\_\-\-S\-T\-R\-I\-N\-G\-I\-Z\-E2}(s)
+\item 
+\#define \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a9c15fe1e91b07ea3280f5239f9841b67}{\-\_\-\-\_\-\-P\-R\-E\-T\-T\-Y\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-}~\-\_\-\-\_\-func\-\_\-\-\_\-
+\item 
+\#define \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_af4e88f631e5a9381055a48fc90f3a633}{I\-K\-F\-A\-S\-T\-\_\-\-A\-S\-S\-E\-R\-T}(b)~\{ if( !(b) ) \{ std\-::stringstream ss; ss $<$$<$ \char`\"{}ikfast exception\-: \char`\"{} $<$$<$ \-\_\-\-\_\-\-F\-I\-L\-E\-\_\-\-\_\- $<$$<$ \char`\"{}\-:\char`\"{} $<$$<$ \-\_\-\-\_\-\-L\-I\-N\-E\-\_\-\-\_\- $<$$<$ \char`\"{}\-: \char`\"{} $<$$<$\hyperlink{Globals_8h_a9c15fe1e91b07ea3280f5239f9841b67}{\-\_\-\-\_\-\-P\-R\-E\-T\-T\-Y\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-} $<$$<$ \char`\"{}\-: Assertion '\char`\"{} $<$$<$ \#b $<$$<$ \char`\"{}' failed\char`\"{}; throw std\-::runtime\-\_\-error(ss.\-str()); \} \}
+\item 
+\#define \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a3940302e120211bb7af8a8a8290bb9e8}{I\-K\-F\-A\-S\-T\-\_\-\-A\-L\-I\-G\-N\-E\-D16}(x)~x \-\_\-\-\_\-attribute((aligned(16)))
+\item 
+\#define \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ad6a7e3ecef3983ec46a211ee00f30364}{I\-K2\-P\-I}~((\hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real})6.\-28318530717959)
+\item 
+\#define \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a0975daf07554eaa98742b83ae89344e6}{I\-K\-P\-I}~((\hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real})3.\-14159265358979)
+\item 
+\#define \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a45ed2f0e7e8e411264ebad95010986a7}{I\-K\-P\-I\-\_\-2}~((\hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real})1.\-57079632679490)
+\item 
+\#define \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a66d4d0ad56673a9555ebafe898d1e2c6}{I\-K\-F\-A\-S\-T\-\_\-\-S\-I\-N\-C\-O\-S\-\_\-\-T\-H\-R\-E\-S\-H}~((\hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real})0.\-000001)
+\item 
+\#define \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a0b03d83cf16b77e025d2100621f1f321}{I\-K\-F\-A\-S\-T\-\_\-\-A\-T\-A\-N2\-\_\-\-M\-A\-G\-T\-H\-R\-E\-S\-H}~((\hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real})2e-\/6)
+\item 
+\#define \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_adac93ad3ac22e016e6d690887e8688ba}{I\-K\-F\-A\-S\-T\-\_\-\-S\-O\-L\-U\-T\-I\-O\-N\-\_\-\-T\-H\-R\-E\-S\-H}~((\hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real})1e-\/6)
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_adf4b4c56fd2ff1b505933aef3f73caab}{I\-K\-F\-A\-S\-T\-\_\-\-C\-O\-M\-P\-I\-L\-E\-\_\-\-A\-S\-S\-E\-R\-T} (\hyperlink{ikfast_8h_afb507c47cee8d15d0241aa894bef5a67}{I\-K\-F\-A\-S\-T\-\_\-\-V\-E\-R\-S\-I\-O\-N}==61)
+\item 
+void \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a1173528e396c678a5482bae5e7f6e43e}{dgetrf\-\_\-} (const int $\ast$m, const int $\ast$n, double $\ast$a, const int $\ast$lda, int $\ast$ipiv, int $\ast$info)
+\item 
+void \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a6993bc2ff3751954630153bfd08bdd0b}{zgetrf\-\_\-} (const int $\ast$m, const int $\ast$n, std\-::complex$<$ double $>$ $\ast$a, const int $\ast$lda, int $\ast$ipiv, int $\ast$info)
+\item 
+void \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a8a0a23abeb2b5f4d136f544560421d68}{dgetri\-\_\-} (const int $\ast$n, const double $\ast$a, const int $\ast$lda, int $\ast$ipiv, double $\ast$work, const int $\ast$lwork, int $\ast$info)
+\item 
+void \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a8a0c34faf9ee31a4d83412a2b5d58125}{dgesv\-\_\-} (const int $\ast$n, const int $\ast$nrhs, double $\ast$a, const int $\ast$lda, int $\ast$ipiv, double $\ast$b, const int $\ast$ldb, int $\ast$info)
+\item 
+void \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a1a2d74eb3410ef5bee213fce4b1f6443}{dgetrs\-\_\-} (const char $\ast$trans, const int $\ast$n, const int $\ast$nrhs, double $\ast$a, const int $\ast$lda, int $\ast$ipiv, double $\ast$b, const int $\ast$ldb, int $\ast$info)
+\item 
+void \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ae833a06f7ce2542df24b072e9c61d4e6}{dgeev\-\_\-} (const char $\ast$jobvl, const char $\ast$jobvr, const int $\ast$n, double $\ast$a, const int $\ast$lda, double $\ast$wr, double $\ast$wi, double $\ast$vl, const int $\ast$ldvl, double $\ast$vr, const int $\ast$ldvr, double $\ast$work, const int $\ast$lwork, int $\ast$info)
+\item 
+float \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_af50774e991c9af3d423e2f15a1864fcd}{I\-Kabs} (float f)
+\item 
+double \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a95e1896df0cdeedf37f08dcb341b3918}{I\-Kabs} (double f)
+\item 
+float \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ab527b2a76479c7f6ef9545b3c41a3b37}{I\-Ksqr} (float f)
+\item 
+double \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a95d600e8b1f9ee1b1f0d8919b31f1ce0}{I\-Ksqr} (double f)
+\item 
+float \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ae5812d083cf95d2945bbd8b75c38d7cd}{I\-Klog} (float f)
+\item 
+double \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a429184284f7e6da54369a2290d8da22d}{I\-Klog} (double f)
+\item 
+float \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a159f6680a5e7eb9da0d76bfce5461050}{I\-Kasin} (float f)
+\item 
+double \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_abb5416a593fd7617f75130836a9f5491}{I\-Kasin} (double f)
+\item 
+float \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a8af0ce9307f58d1e64bb413077478244}{I\-Kfmod} (float x, float y)
+\item 
+double \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a1ec8174f881fb22cf1a7cdf19b9a84ad}{I\-Kfmod} (double x, double y)
+\item 
+float \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a6985b623469662633075c50b708b5a97}{I\-Kacos} (float f)
+\item 
+double \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a10d86f8d485d2f30ce2638cb94b1e20e}{I\-Kacos} (double f)
+\item 
+float \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a7b5e881d13d85a4bc1020963f9e605b5}{I\-Ksin} (float f)
+\item 
+double \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a8a11e6f22a19bd8f4ac73c3645c93c81}{I\-Ksin} (double f)
+\item 
+float \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a8d241417f26868995cfb5a5648816e63}{I\-Kcos} (float f)
+\item 
+double \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ac925942daf5e1b7df0c38f2a7a501ac0}{I\-Kcos} (double f)
+\item 
+float \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ad2361d774d694b5935519a1b3c1075f9}{I\-Ktan} (float f)
+\item 
+double \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_acd8f1e5b83501cc42ffef27bd6458f9a}{I\-Ktan} (double f)
+\item 
+float \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a6f476874d10b265f6b0e6409104126b7}{I\-Ksqrt} (float f)
+\item 
+double \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_abb830ca15935c1c9b95a2ede5b2d43cc}{I\-Ksqrt} (double f)
+\item 
+float \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a5e00463327d5e1acfd4e8eb788bbd6ac}{I\-Katan2} (float fy, float fx)
+\item 
+double \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a82c3e90527cb705afd35438841994aa2}{I\-Katan2} (double fy, double fx)
+\item 
+float \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a845afc8ffdb8c068f0e75abac0d78b15}{I\-Ksign} (float f)
+\item 
+double \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a903ab9632f6846449bbb3a8bba65ad8e}{I\-Ksign} (double f)
+\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} void \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ac5b257dc48deeb1c904d40b5dbf4a5a4}{Compute\-Fk} (const \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real} $\ast$j, \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real} $\ast$eetrans, \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real} $\ast$eerot)
+\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_af0cf03d3ad69d099a9a2eb6db5e5b352}{Get\-Num\-Free\-Parameters} ()
+\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int $\ast$ \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a17f253d85cd4ac00e8840c417eef2487}{Get\-Free\-Parameters} ()
+\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a3e9541dde410904e043fe18701061b62}{Get\-Num\-Joints} ()
+\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a6709f20b26f0903f0aa58a26934c853c}{Get\-Ik\-Real\-Size} ()
+\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_abc401850b948d5a0402e9dbb77d3846f}{Get\-Ik\-Type} ()
+\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} bool \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ad6e97fc303efda1a956b9a044f8424fc}{Compute\-Ik} (const \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real} $\ast$eetrans, const \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real} $\ast$eerot, const \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real} $\ast$pfree, \hyperlink{classikfast_1_1IkSolutionListBase}{Ik\-Solution\-List\-Base}$<$ \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real} $>$ \&solutions)
+\begin{DoxyCompactList}\small\item\em Computes all I\-K solutions given a end effector coordinates and the free joints. \end{DoxyCompactList}\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} const char $\ast$ \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_afb700ffecf29c92e7b86762777659d85}{Get\-Kinematics\-Hash} ()
+\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} const char $\ast$ \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_aeb290d53b240a4d54cae3caaf43d19d7}{Get\-Ik\-Fast\-Version} ()
+\item 
+int \hyperlink{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a9c15fe1e91b07ea3280f5239f9841b67}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!\-\_\-\-\_\-\-P\-R\-E\-T\-T\-Y\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-@{\-\_\-\-\_\-\-P\-R\-E\-T\-T\-Y\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-}}
+\index{\-\_\-\-\_\-\-P\-R\-E\-T\-T\-Y\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-@{\-\_\-\-\_\-\-P\-R\-E\-T\-T\-Y\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{\-\_\-\-\_\-\-P\-R\-E\-T\-T\-Y\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}\#define \-\_\-\-\_\-\-P\-R\-E\-T\-T\-Y\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-~\-\_\-\-\_\-func\-\_\-\-\_\-}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a9c15fe1e91b07ea3280f5239f9841b67}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ad6a7e3ecef3983ec46a211ee00f30364}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-K2\-P\-I@{I\-K2\-P\-I}}
+\index{I\-K2\-P\-I@{I\-K2\-P\-I}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-K2\-P\-I}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-K2\-P\-I~(({\bf Ik\-Real})6.\-28318530717959)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ad6a7e3ecef3983ec46a211ee00f30364}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a3940302e120211bb7af8a8a8290bb9e8}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-K\-F\-A\-S\-T\-\_\-\-A\-L\-I\-G\-N\-E\-D16@{I\-K\-F\-A\-S\-T\-\_\-\-A\-L\-I\-G\-N\-E\-D16}}
+\index{I\-K\-F\-A\-S\-T\-\_\-\-A\-L\-I\-G\-N\-E\-D16@{I\-K\-F\-A\-S\-T\-\_\-\-A\-L\-I\-G\-N\-E\-D16}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-K\-F\-A\-S\-T\-\_\-\-A\-L\-I\-G\-N\-E\-D16}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-K\-F\-A\-S\-T\-\_\-\-A\-L\-I\-G\-N\-E\-D16(
+\begin{DoxyParamCaption}
+\item[{}]{x}
+\end{DoxyParamCaption}
+)~x \-\_\-\-\_\-attribute((aligned(16)))}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a3940302e120211bb7af8a8a8290bb9e8}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_af4e88f631e5a9381055a48fc90f3a633}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-K\-F\-A\-S\-T\-\_\-\-A\-S\-S\-E\-R\-T@{I\-K\-F\-A\-S\-T\-\_\-\-A\-S\-S\-E\-R\-T}}
+\index{I\-K\-F\-A\-S\-T\-\_\-\-A\-S\-S\-E\-R\-T@{I\-K\-F\-A\-S\-T\-\_\-\-A\-S\-S\-E\-R\-T}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-K\-F\-A\-S\-T\-\_\-\-A\-S\-S\-E\-R\-T}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-K\-F\-A\-S\-T\-\_\-\-A\-S\-S\-E\-R\-T(
+\begin{DoxyParamCaption}
+\item[{}]{b}
+\end{DoxyParamCaption}
+)~\{ if( !(b) ) \{ std\-::stringstream ss; ss $<$$<$ \char`\"{}ikfast exception\-: \char`\"{} $<$$<$ \-\_\-\-\_\-\-F\-I\-L\-E\-\_\-\-\_\- $<$$<$ \char`\"{}\-:\char`\"{} $<$$<$ \-\_\-\-\_\-\-L\-I\-N\-E\-\_\-\-\_\- $<$$<$ \char`\"{}\-: \char`\"{} $<$$<${\bf \-\_\-\-\_\-\-P\-R\-E\-T\-T\-Y\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-} $<$$<$ \char`\"{}\-: Assertion '\char`\"{} $<$$<$ \#b $<$$<$ \char`\"{}' failed\char`\"{}; throw std\-::runtime\-\_\-error(ss.\-str()); \} \}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_af4e88f631e5a9381055a48fc90f3a633}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a0b03d83cf16b77e025d2100621f1f321}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-K\-F\-A\-S\-T\-\_\-\-A\-T\-A\-N2\-\_\-\-M\-A\-G\-T\-H\-R\-E\-S\-H@{I\-K\-F\-A\-S\-T\-\_\-\-A\-T\-A\-N2\-\_\-\-M\-A\-G\-T\-H\-R\-E\-S\-H}}
+\index{I\-K\-F\-A\-S\-T\-\_\-\-A\-T\-A\-N2\-\_\-\-M\-A\-G\-T\-H\-R\-E\-S\-H@{I\-K\-F\-A\-S\-T\-\_\-\-A\-T\-A\-N2\-\_\-\-M\-A\-G\-T\-H\-R\-E\-S\-H}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-K\-F\-A\-S\-T\-\_\-\-A\-T\-A\-N2\-\_\-\-M\-A\-G\-T\-H\-R\-E\-S\-H}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-K\-F\-A\-S\-T\-\_\-\-A\-T\-A\-N2\-\_\-\-M\-A\-G\-T\-H\-R\-E\-S\-H~(({\bf Ik\-Real})2e-\/6)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a0b03d83cf16b77e025d2100621f1f321}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a14ff3dec1d7bf1b6f8bc3a7dcc0ed883}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-K\-F\-A\-S\-T\-\_\-\-C\-O\-M\-P\-I\-L\-E\-\_\-\-A\-S\-S\-E\-R\-T@{I\-K\-F\-A\-S\-T\-\_\-\-C\-O\-M\-P\-I\-L\-E\-\_\-\-A\-S\-S\-E\-R\-T}}
+\index{I\-K\-F\-A\-S\-T\-\_\-\-C\-O\-M\-P\-I\-L\-E\-\_\-\-A\-S\-S\-E\-R\-T@{I\-K\-F\-A\-S\-T\-\_\-\-C\-O\-M\-P\-I\-L\-E\-\_\-\-A\-S\-S\-E\-R\-T}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-K\-F\-A\-S\-T\-\_\-\-C\-O\-M\-P\-I\-L\-E\-\_\-\-A\-S\-S\-E\-R\-T}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-K\-F\-A\-S\-T\-\_\-\-C\-O\-M\-P\-I\-L\-E\-\_\-\-A\-S\-S\-E\-R\-T(
+\begin{DoxyParamCaption}
+\item[{}]{x}
+\end{DoxyParamCaption}
+)~extern int \-\_\-\-\_\-dummy\mbox{[}(int)x\mbox{]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a14ff3dec1d7bf1b6f8bc3a7dcc0ed883}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a66d4d0ad56673a9555ebafe898d1e2c6}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-K\-F\-A\-S\-T\-\_\-\-S\-I\-N\-C\-O\-S\-\_\-\-T\-H\-R\-E\-S\-H@{I\-K\-F\-A\-S\-T\-\_\-\-S\-I\-N\-C\-O\-S\-\_\-\-T\-H\-R\-E\-S\-H}}
+\index{I\-K\-F\-A\-S\-T\-\_\-\-S\-I\-N\-C\-O\-S\-\_\-\-T\-H\-R\-E\-S\-H@{I\-K\-F\-A\-S\-T\-\_\-\-S\-I\-N\-C\-O\-S\-\_\-\-T\-H\-R\-E\-S\-H}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-K\-F\-A\-S\-T\-\_\-\-S\-I\-N\-C\-O\-S\-\_\-\-T\-H\-R\-E\-S\-H}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-K\-F\-A\-S\-T\-\_\-\-S\-I\-N\-C\-O\-S\-\_\-\-T\-H\-R\-E\-S\-H~(({\bf Ik\-Real})0.\-000001)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a66d4d0ad56673a9555ebafe898d1e2c6}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_adac93ad3ac22e016e6d690887e8688ba}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-K\-F\-A\-S\-T\-\_\-\-S\-O\-L\-U\-T\-I\-O\-N\-\_\-\-T\-H\-R\-E\-S\-H@{I\-K\-F\-A\-S\-T\-\_\-\-S\-O\-L\-U\-T\-I\-O\-N\-\_\-\-T\-H\-R\-E\-S\-H}}
+\index{I\-K\-F\-A\-S\-T\-\_\-\-S\-O\-L\-U\-T\-I\-O\-N\-\_\-\-T\-H\-R\-E\-S\-H@{I\-K\-F\-A\-S\-T\-\_\-\-S\-O\-L\-U\-T\-I\-O\-N\-\_\-\-T\-H\-R\-E\-S\-H}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-K\-F\-A\-S\-T\-\_\-\-S\-O\-L\-U\-T\-I\-O\-N\-\_\-\-T\-H\-R\-E\-S\-H}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-K\-F\-A\-S\-T\-\_\-\-S\-O\-L\-U\-T\-I\-O\-N\-\_\-\-T\-H\-R\-E\-S\-H~(({\bf Ik\-Real})1e-\/6)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_adac93ad3ac22e016e6d690887e8688ba}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_af0758e12dac3c9aadf615fe07e5dbd9d}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-K\-F\-A\-S\-T\-\_\-\-S\-T\-R\-I\-N\-G\-I\-Z\-E@{I\-K\-F\-A\-S\-T\-\_\-\-S\-T\-R\-I\-N\-G\-I\-Z\-E}}
+\index{I\-K\-F\-A\-S\-T\-\_\-\-S\-T\-R\-I\-N\-G\-I\-Z\-E@{I\-K\-F\-A\-S\-T\-\_\-\-S\-T\-R\-I\-N\-G\-I\-Z\-E}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-K\-F\-A\-S\-T\-\_\-\-S\-T\-R\-I\-N\-G\-I\-Z\-E}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-K\-F\-A\-S\-T\-\_\-\-S\-T\-R\-I\-N\-G\-I\-Z\-E(
+\begin{DoxyParamCaption}
+\item[{}]{s}
+\end{DoxyParamCaption}
+)~{\bf I\-K\-F\-A\-S\-T\-\_\-\-S\-T\-R\-I\-N\-G\-I\-Z\-E2}(s)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_af0758e12dac3c9aadf615fe07e5dbd9d}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ad6f886b3f30a68be92f3477f4e61da9d}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-K\-F\-A\-S\-T\-\_\-\-S\-T\-R\-I\-N\-G\-I\-Z\-E2@{I\-K\-F\-A\-S\-T\-\_\-\-S\-T\-R\-I\-N\-G\-I\-Z\-E2}}
+\index{I\-K\-F\-A\-S\-T\-\_\-\-S\-T\-R\-I\-N\-G\-I\-Z\-E2@{I\-K\-F\-A\-S\-T\-\_\-\-S\-T\-R\-I\-N\-G\-I\-Z\-E2}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-K\-F\-A\-S\-T\-\_\-\-S\-T\-R\-I\-N\-G\-I\-Z\-E2}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-K\-F\-A\-S\-T\-\_\-\-S\-T\-R\-I\-N\-G\-I\-Z\-E2(
+\begin{DoxyParamCaption}
+\item[{}]{s}
+\end{DoxyParamCaption}
+)~\#s}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ad6f886b3f30a68be92f3477f4e61da9d}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a0975daf07554eaa98742b83ae89344e6}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-K\-P\-I@{I\-K\-P\-I}}
+\index{I\-K\-P\-I@{I\-K\-P\-I}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-K\-P\-I}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-K\-P\-I~(({\bf Ik\-Real})3.\-14159265358979)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a0975daf07554eaa98742b83ae89344e6}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a45ed2f0e7e8e411264ebad95010986a7}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-K\-P\-I\-\_\-2@{I\-K\-P\-I\-\_\-2}}
+\index{I\-K\-P\-I\-\_\-2@{I\-K\-P\-I\-\_\-2}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-K\-P\-I\-\_\-2}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-K\-P\-I\-\_\-2~(({\bf Ik\-Real})1.\-57079632679490)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a45ed2f0e7e8e411264ebad95010986a7}
+
+
+\subsection{Function Documentation}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ac5b257dc48deeb1c904d40b5dbf4a5a4}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!Compute\-Fk@{Compute\-Fk}}
+\index{Compute\-Fk@{Compute\-Fk}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{Compute\-Fk}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} void Compute\-Fk (
+\begin{DoxyParamCaption}
+\item[{const {\bf Ik\-Real} $\ast$}]{j, }
+\item[{{\bf Ik\-Real} $\ast$}]{eetrans, }
+\item[{{\bf Ik\-Real} $\ast$}]{eerot}
+\end{DoxyParamCaption}
+)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ac5b257dc48deeb1c904d40b5dbf4a5a4}
+solves the forward kinematics equations. 
+\begin{DoxyParams}{Parameters}
+{\em pfree} & is an array specifying the free joints of the chain. \\
+\hline
+\end{DoxyParams}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ad6e97fc303efda1a956b9a044f8424fc}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!Compute\-Ik@{Compute\-Ik}}
+\index{Compute\-Ik@{Compute\-Ik}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{Compute\-Ik}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} bool Compute\-Ik (
+\begin{DoxyParamCaption}
+\item[{const {\bf Ik\-Real} $\ast$}]{eetrans, }
+\item[{const {\bf Ik\-Real} $\ast$}]{eerot, }
+\item[{const {\bf Ik\-Real} $\ast$}]{pfree, }
+\item[{{\bf Ik\-Solution\-List\-Base}$<$ {\bf Ik\-Real} $>$ \&}]{solutions}
+\end{DoxyParamCaption}
+)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ad6e97fc303efda1a956b9a044f8424fc}
+
+
+Computes all I\-K solutions given a end effector coordinates and the free joints. 
+
+solves the inverse kinematics equations. 
+\begin{DoxyParams}{Parameters}
+{\em pfree} & is an array specifying the free joints of the chain. \\
+\hline
+\end{DoxyParams}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ae833a06f7ce2542df24b072e9c61d4e6}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!dgeev\-\_\-@{dgeev\-\_\-}}
+\index{dgeev\-\_\-@{dgeev\-\_\-}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{dgeev\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}void dgeev\-\_\- (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{jobvl, }
+\item[{const char $\ast$}]{jobvr, }
+\item[{const int $\ast$}]{n, }
+\item[{double $\ast$}]{a, }
+\item[{const int $\ast$}]{lda, }
+\item[{double $\ast$}]{wr, }
+\item[{double $\ast$}]{wi, }
+\item[{double $\ast$}]{vl, }
+\item[{const int $\ast$}]{ldvl, }
+\item[{double $\ast$}]{vr, }
+\item[{const int $\ast$}]{ldvr, }
+\item[{double $\ast$}]{work, }
+\item[{const int $\ast$}]{lwork, }
+\item[{int $\ast$}]{info}
+\end{DoxyParamCaption}
+)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ae833a06f7ce2542df24b072e9c61d4e6}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a8a0c34faf9ee31a4d83412a2b5d58125}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!dgesv\-\_\-@{dgesv\-\_\-}}
+\index{dgesv\-\_\-@{dgesv\-\_\-}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{dgesv\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}void dgesv\-\_\- (
+\begin{DoxyParamCaption}
+\item[{const int $\ast$}]{n, }
+\item[{const int $\ast$}]{nrhs, }
+\item[{double $\ast$}]{a, }
+\item[{const int $\ast$}]{lda, }
+\item[{int $\ast$}]{ipiv, }
+\item[{double $\ast$}]{b, }
+\item[{const int $\ast$}]{ldb, }
+\item[{int $\ast$}]{info}
+\end{DoxyParamCaption}
+)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a8a0c34faf9ee31a4d83412a2b5d58125}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a1173528e396c678a5482bae5e7f6e43e}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!dgetrf\-\_\-@{dgetrf\-\_\-}}
+\index{dgetrf\-\_\-@{dgetrf\-\_\-}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{dgetrf\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}void dgetrf\-\_\- (
+\begin{DoxyParamCaption}
+\item[{const int $\ast$}]{m, }
+\item[{const int $\ast$}]{n, }
+\item[{double $\ast$}]{a, }
+\item[{const int $\ast$}]{lda, }
+\item[{int $\ast$}]{ipiv, }
+\item[{int $\ast$}]{info}
+\end{DoxyParamCaption}
+)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a1173528e396c678a5482bae5e7f6e43e}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a8a0a23abeb2b5f4d136f544560421d68}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!dgetri\-\_\-@{dgetri\-\_\-}}
+\index{dgetri\-\_\-@{dgetri\-\_\-}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{dgetri\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}void dgetri\-\_\- (
+\begin{DoxyParamCaption}
+\item[{const int $\ast$}]{n, }
+\item[{const double $\ast$}]{a, }
+\item[{const int $\ast$}]{lda, }
+\item[{int $\ast$}]{ipiv, }
+\item[{double $\ast$}]{work, }
+\item[{const int $\ast$}]{lwork, }
+\item[{int $\ast$}]{info}
+\end{DoxyParamCaption}
+)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a8a0a23abeb2b5f4d136f544560421d68}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a1a2d74eb3410ef5bee213fce4b1f6443}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!dgetrs\-\_\-@{dgetrs\-\_\-}}
+\index{dgetrs\-\_\-@{dgetrs\-\_\-}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{dgetrs\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}void dgetrs\-\_\- (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{trans, }
+\item[{const int $\ast$}]{n, }
+\item[{const int $\ast$}]{nrhs, }
+\item[{double $\ast$}]{a, }
+\item[{const int $\ast$}]{lda, }
+\item[{int $\ast$}]{ipiv, }
+\item[{double $\ast$}]{b, }
+\item[{const int $\ast$}]{ldb, }
+\item[{int $\ast$}]{info}
+\end{DoxyParamCaption}
+)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a1a2d74eb3410ef5bee213fce4b1f6443}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a17f253d85cd4ac00e8840c417eef2487}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!Get\-Free\-Parameters@{Get\-Free\-Parameters}}
+\index{Get\-Free\-Parameters@{Get\-Free\-Parameters}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{Get\-Free\-Parameters}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int$\ast$ Get\-Free\-Parameters (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a17f253d85cd4ac00e8840c417eef2487}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_aeb290d53b240a4d54cae3caaf43d19d7}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!Get\-Ik\-Fast\-Version@{Get\-Ik\-Fast\-Version}}
+\index{Get\-Ik\-Fast\-Version@{Get\-Ik\-Fast\-Version}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{Get\-Ik\-Fast\-Version}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} const char$\ast$ Get\-Ik\-Fast\-Version (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_aeb290d53b240a4d54cae3caaf43d19d7}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a6709f20b26f0903f0aa58a26934c853c}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!Get\-Ik\-Real\-Size@{Get\-Ik\-Real\-Size}}
+\index{Get\-Ik\-Real\-Size@{Get\-Ik\-Real\-Size}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{Get\-Ik\-Real\-Size}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int Get\-Ik\-Real\-Size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a6709f20b26f0903f0aa58a26934c853c}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_abc401850b948d5a0402e9dbb77d3846f}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!Get\-Ik\-Type@{Get\-Ik\-Type}}
+\index{Get\-Ik\-Type@{Get\-Ik\-Type}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{Get\-Ik\-Type}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int Get\-Ik\-Type (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_abc401850b948d5a0402e9dbb77d3846f}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_afb700ffecf29c92e7b86762777659d85}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!Get\-Kinematics\-Hash@{Get\-Kinematics\-Hash}}
+\index{Get\-Kinematics\-Hash@{Get\-Kinematics\-Hash}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{Get\-Kinematics\-Hash}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} const char$\ast$ Get\-Kinematics\-Hash (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_afb700ffecf29c92e7b86762777659d85}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_af0cf03d3ad69d099a9a2eb6db5e5b352}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!Get\-Num\-Free\-Parameters@{Get\-Num\-Free\-Parameters}}
+\index{Get\-Num\-Free\-Parameters@{Get\-Num\-Free\-Parameters}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{Get\-Num\-Free\-Parameters}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int Get\-Num\-Free\-Parameters (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_af0cf03d3ad69d099a9a2eb6db5e5b352}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a3e9541dde410904e043fe18701061b62}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!Get\-Num\-Joints@{Get\-Num\-Joints}}
+\index{Get\-Num\-Joints@{Get\-Num\-Joints}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{Get\-Num\-Joints}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int Get\-Num\-Joints (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a3e9541dde410904e043fe18701061b62}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_af50774e991c9af3d423e2f15a1864fcd}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Kabs@{I\-Kabs}}
+\index{I\-Kabs@{I\-Kabs}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Kabs}]{\setlength{\rightskip}{0pt plus 5cm}float I\-Kabs (
+\begin{DoxyParamCaption}
+\item[{float}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_af50774e991c9af3d423e2f15a1864fcd}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a95e1896df0cdeedf37f08dcb341b3918}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Kabs@{I\-Kabs}}
+\index{I\-Kabs@{I\-Kabs}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Kabs}]{\setlength{\rightskip}{0pt plus 5cm}double I\-Kabs (
+\begin{DoxyParamCaption}
+\item[{double}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a95e1896df0cdeedf37f08dcb341b3918}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a6985b623469662633075c50b708b5a97}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Kacos@{I\-Kacos}}
+\index{I\-Kacos@{I\-Kacos}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Kacos}]{\setlength{\rightskip}{0pt plus 5cm}float I\-Kacos (
+\begin{DoxyParamCaption}
+\item[{float}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a6985b623469662633075c50b708b5a97}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a10d86f8d485d2f30ce2638cb94b1e20e}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Kacos@{I\-Kacos}}
+\index{I\-Kacos@{I\-Kacos}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Kacos}]{\setlength{\rightskip}{0pt plus 5cm}double I\-Kacos (
+\begin{DoxyParamCaption}
+\item[{double}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a10d86f8d485d2f30ce2638cb94b1e20e}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a159f6680a5e7eb9da0d76bfce5461050}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Kasin@{I\-Kasin}}
+\index{I\-Kasin@{I\-Kasin}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Kasin}]{\setlength{\rightskip}{0pt plus 5cm}float I\-Kasin (
+\begin{DoxyParamCaption}
+\item[{float}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a159f6680a5e7eb9da0d76bfce5461050}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_abb5416a593fd7617f75130836a9f5491}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Kasin@{I\-Kasin}}
+\index{I\-Kasin@{I\-Kasin}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Kasin}]{\setlength{\rightskip}{0pt plus 5cm}double I\-Kasin (
+\begin{DoxyParamCaption}
+\item[{double}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_abb5416a593fd7617f75130836a9f5491}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a5e00463327d5e1acfd4e8eb788bbd6ac}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Katan2@{I\-Katan2}}
+\index{I\-Katan2@{I\-Katan2}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Katan2}]{\setlength{\rightskip}{0pt plus 5cm}float I\-Katan2 (
+\begin{DoxyParamCaption}
+\item[{float}]{fy, }
+\item[{float}]{fx}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a5e00463327d5e1acfd4e8eb788bbd6ac}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a82c3e90527cb705afd35438841994aa2}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Katan2@{I\-Katan2}}
+\index{I\-Katan2@{I\-Katan2}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Katan2}]{\setlength{\rightskip}{0pt plus 5cm}double I\-Katan2 (
+\begin{DoxyParamCaption}
+\item[{double}]{fy, }
+\item[{double}]{fx}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a82c3e90527cb705afd35438841994aa2}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a8d241417f26868995cfb5a5648816e63}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Kcos@{I\-Kcos}}
+\index{I\-Kcos@{I\-Kcos}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Kcos}]{\setlength{\rightskip}{0pt plus 5cm}float I\-Kcos (
+\begin{DoxyParamCaption}
+\item[{float}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a8d241417f26868995cfb5a5648816e63}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ac925942daf5e1b7df0c38f2a7a501ac0}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Kcos@{I\-Kcos}}
+\index{I\-Kcos@{I\-Kcos}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Kcos}]{\setlength{\rightskip}{0pt plus 5cm}double I\-Kcos (
+\begin{DoxyParamCaption}
+\item[{double}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ac925942daf5e1b7df0c38f2a7a501ac0}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_adf4b4c56fd2ff1b505933aef3f73caab}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-K\-F\-A\-S\-T\-\_\-\-C\-O\-M\-P\-I\-L\-E\-\_\-\-A\-S\-S\-E\-R\-T@{I\-K\-F\-A\-S\-T\-\_\-\-C\-O\-M\-P\-I\-L\-E\-\_\-\-A\-S\-S\-E\-R\-T}}
+\index{I\-K\-F\-A\-S\-T\-\_\-\-C\-O\-M\-P\-I\-L\-E\-\_\-\-A\-S\-S\-E\-R\-T@{I\-K\-F\-A\-S\-T\-\_\-\-C\-O\-M\-P\-I\-L\-E\-\_\-\-A\-S\-S\-E\-R\-T}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-K\-F\-A\-S\-T\-\_\-\-C\-O\-M\-P\-I\-L\-E\-\_\-\-A\-S\-S\-E\-R\-T}]{\setlength{\rightskip}{0pt plus 5cm}I\-K\-F\-A\-S\-T\-\_\-\-C\-O\-M\-P\-I\-L\-E\-\_\-\-A\-S\-S\-E\-R\-T (
+\begin{DoxyParamCaption}
+\item[{{\bf I\-K\-F\-A\-S\-T\-\_\-\-V\-E\-R\-S\-I\-O\-N}}]{ = {\ttfamily =61}}
+\end{DoxyParamCaption}
+)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_adf4b4c56fd2ff1b505933aef3f73caab}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a8af0ce9307f58d1e64bb413077478244}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Kfmod@{I\-Kfmod}}
+\index{I\-Kfmod@{I\-Kfmod}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Kfmod}]{\setlength{\rightskip}{0pt plus 5cm}float I\-Kfmod (
+\begin{DoxyParamCaption}
+\item[{float}]{x, }
+\item[{float}]{y}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a8af0ce9307f58d1e64bb413077478244}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a1ec8174f881fb22cf1a7cdf19b9a84ad}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Kfmod@{I\-Kfmod}}
+\index{I\-Kfmod@{I\-Kfmod}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Kfmod}]{\setlength{\rightskip}{0pt plus 5cm}double I\-Kfmod (
+\begin{DoxyParamCaption}
+\item[{double}]{x, }
+\item[{double}]{y}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a1ec8174f881fb22cf1a7cdf19b9a84ad}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ae5812d083cf95d2945bbd8b75c38d7cd}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Klog@{I\-Klog}}
+\index{I\-Klog@{I\-Klog}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Klog}]{\setlength{\rightskip}{0pt plus 5cm}float I\-Klog (
+\begin{DoxyParamCaption}
+\item[{float}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ae5812d083cf95d2945bbd8b75c38d7cd}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a429184284f7e6da54369a2290d8da22d}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Klog@{I\-Klog}}
+\index{I\-Klog@{I\-Klog}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Klog}]{\setlength{\rightskip}{0pt plus 5cm}double I\-Klog (
+\begin{DoxyParamCaption}
+\item[{double}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a429184284f7e6da54369a2290d8da22d}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a845afc8ffdb8c068f0e75abac0d78b15}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Ksign@{I\-Ksign}}
+\index{I\-Ksign@{I\-Ksign}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Ksign}]{\setlength{\rightskip}{0pt plus 5cm}float I\-Ksign (
+\begin{DoxyParamCaption}
+\item[{float}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a845afc8ffdb8c068f0e75abac0d78b15}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a903ab9632f6846449bbb3a8bba65ad8e}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Ksign@{I\-Ksign}}
+\index{I\-Ksign@{I\-Ksign}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Ksign}]{\setlength{\rightskip}{0pt plus 5cm}double I\-Ksign (
+\begin{DoxyParamCaption}
+\item[{double}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a903ab9632f6846449bbb3a8bba65ad8e}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a7b5e881d13d85a4bc1020963f9e605b5}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Ksin@{I\-Ksin}}
+\index{I\-Ksin@{I\-Ksin}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Ksin}]{\setlength{\rightskip}{0pt plus 5cm}float I\-Ksin (
+\begin{DoxyParamCaption}
+\item[{float}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a7b5e881d13d85a4bc1020963f9e605b5}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a8a11e6f22a19bd8f4ac73c3645c93c81}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Ksin@{I\-Ksin}}
+\index{I\-Ksin@{I\-Ksin}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Ksin}]{\setlength{\rightskip}{0pt plus 5cm}double I\-Ksin (
+\begin{DoxyParamCaption}
+\item[{double}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a8a11e6f22a19bd8f4ac73c3645c93c81}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ab527b2a76479c7f6ef9545b3c41a3b37}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Ksqr@{I\-Ksqr}}
+\index{I\-Ksqr@{I\-Ksqr}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Ksqr}]{\setlength{\rightskip}{0pt plus 5cm}float I\-Ksqr (
+\begin{DoxyParamCaption}
+\item[{float}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ab527b2a76479c7f6ef9545b3c41a3b37}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a95d600e8b1f9ee1b1f0d8919b31f1ce0}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Ksqr@{I\-Ksqr}}
+\index{I\-Ksqr@{I\-Ksqr}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Ksqr}]{\setlength{\rightskip}{0pt plus 5cm}double I\-Ksqr (
+\begin{DoxyParamCaption}
+\item[{double}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a95d600e8b1f9ee1b1f0d8919b31f1ce0}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a6f476874d10b265f6b0e6409104126b7}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Ksqrt@{I\-Ksqrt}}
+\index{I\-Ksqrt@{I\-Ksqrt}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Ksqrt}]{\setlength{\rightskip}{0pt plus 5cm}float I\-Ksqrt (
+\begin{DoxyParamCaption}
+\item[{float}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a6f476874d10b265f6b0e6409104126b7}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_abb830ca15935c1c9b95a2ede5b2d43cc}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Ksqrt@{I\-Ksqrt}}
+\index{I\-Ksqrt@{I\-Ksqrt}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Ksqrt}]{\setlength{\rightskip}{0pt plus 5cm}double I\-Ksqrt (
+\begin{DoxyParamCaption}
+\item[{double}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_abb830ca15935c1c9b95a2ede5b2d43cc}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ad2361d774d694b5935519a1b3c1075f9}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Ktan@{I\-Ktan}}
+\index{I\-Ktan@{I\-Ktan}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Ktan}]{\setlength{\rightskip}{0pt plus 5cm}float I\-Ktan (
+\begin{DoxyParamCaption}
+\item[{float}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_ad2361d774d694b5935519a1b3c1075f9}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_acd8f1e5b83501cc42ffef27bd6458f9a}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!I\-Ktan@{I\-Ktan}}
+\index{I\-Ktan@{I\-Ktan}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{I\-Ktan}]{\setlength{\rightskip}{0pt plus 5cm}double I\-Ktan (
+\begin{DoxyParamCaption}
+\item[{double}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_acd8f1e5b83501cc42ffef27bd6458f9a}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!main@{main}}
+\index{main@{main}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{main}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+\item[{int}]{argc, }
+\item[{char $\ast$$\ast$}]{argv}
+\end{DoxyParamCaption}
+)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}
+\hypertarget{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a6993bc2ff3751954630153bfd08bdd0b}{\index{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}!zgetrf\-\_\-@{zgetrf\-\_\-}}
+\index{zgetrf\-\_\-@{zgetrf\-\_\-}!fanuc_lrmate200id_manipulator_ikfast_solver.cpp@{fanuc\-\_\-lrmate200id\-\_\-manipulator\-\_\-ikfast\-\_\-solver.\-cpp}}
+\subsubsection[{zgetrf\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}void zgetrf\-\_\- (
+\begin{DoxyParamCaption}
+\item[{const int $\ast$}]{m, }
+\item[{const int $\ast$}]{n, }
+\item[{std\-::complex$<$ double $>$ $\ast$}]{a, }
+\item[{const int $\ast$}]{lda, }
+\item[{int $\ast$}]{ipiv, }
+\item[{int $\ast$}]{info}
+\end{DoxyParamCaption}
+)}}\label{fanuc__lrmate200id__manipulator__ikfast__solver_8cpp_a6993bc2ff3751954630153bfd08bdd0b}

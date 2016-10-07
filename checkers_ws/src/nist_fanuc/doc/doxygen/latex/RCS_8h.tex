@@ -1,22 +1,52 @@
-\hypertarget{RCS_8h}{\section{/usr/local/michalos/github/usnistgov/el-\/robotics-\/core/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\-R\-C\-S.h File Reference}
-\label{RCS_8h}\index{/usr/local/michalos/github/usnistgov/el-\/robotics-\/core/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\-R\-C\-S.\-h@{/usr/local/michalos/github/usnistgov/el-\/robotics-\/core/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\-R\-C\-S.\-h}}
+\hypertarget{RCS_8h}{\section{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\-R\-C\-S.h File Reference}
+\label{RCS_8h}\index{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\-R\-C\-S.\-h@{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\-R\-C\-S.\-h}}
 }
 {\ttfamily \#include $<$math.\-h$>$}\\*
+{\ttfamily \#include $<$stdarg.\-h$>$}\\*
+{\ttfamily \#include $<$ros/ros.\-h$>$}\\*
 {\ttfamily \#include $<$moveit/robot\-\_\-model\-\_\-loader/robot\-\_\-model\-\_\-loader.\-h$>$}\\*
 {\ttfamily \#include $<$moveit/robot\-\_\-model/robot\-\_\-model.\-h$>$}\\*
 {\ttfamily \#include $<$tf/transform\-\_\-datatypes.\-h$>$}\\*
-{\ttfamily \#include \char`\"{}/opt/ros/indigo/include/sensor\-\_\-msgs/\-Joint\-State.\-h\char`\"{}}\\*
-{\ttfamily \#include $<$stdarg.\-h$>$}\\*
+{\ttfamily \#include $<$sensor\-\_\-msgs/\-Joint\-State.\-h$>$}\\*
+{\ttfamily \#include $<$nistcrcl/\-Crcl\-Command\-Msg.\-h$>$}\\*
+{\ttfamily \#include $<$nistcrcl/\-Crcl\-Status\-Msg.\-h$>$}\\*
+{\ttfamily \#include $<$nistcrcl/\-Crcl\-Max\-Profile\-Msg.\-h$>$}\\*
 {\ttfamily \#include \char`\"{}Globals.\-h\char`\"{}}\\*
 \subsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
+struct \hyperlink{structRCS_1_1PoseTolerance}{R\-C\-S\-::\-Pose\-Tolerance}
+\item 
+struct \hyperlink{structRCS_1_1CanonLengthUnit}{R\-C\-S\-::\-Canon\-Length\-Unit}
+\begin{DoxyCompactList}\small\item\em enumeration of length units. \hyperlink{namespaceConversion}{Conversion} into R\-O\-S compatible meters. \end{DoxyCompactList}\item 
+struct \hyperlink{structRCS_1_1TrajPointType}{R\-C\-S\-::\-Traj\-Point\-Type}
+\begin{DoxyCompactList}\small\item\em enumeration of trajectory pose points. \end{DoxyCompactList}\item 
+struct \hyperlink{structRCS_1_1CanonAngleUnit}{R\-C\-S\-::\-Canon\-Angle\-Unit}
+\begin{DoxyCompactList}\small\item\em enumeration of angle units. \hyperlink{namespaceConversion}{Conversion} into R\-O\-S compatible radians. \end{DoxyCompactList}\item 
+struct \hyperlink{structRCS_1_1CanonForceUnit}{R\-C\-S\-::\-Canon\-Force\-Unit}
+\begin{DoxyCompactList}\small\item\em enumeration of force units. \end{DoxyCompactList}\item 
+struct \hyperlink{structRCS_1_1CanonTorqueUnit}{R\-C\-S\-::\-Canon\-Torque\-Unit}
+\begin{DoxyCompactList}\small\item\em enumeration of torque units. \end{DoxyCompactList}\item 
+struct \hyperlink{structRCS_1_1CanonReturn}{R\-C\-S\-::\-Canon\-Return}
+\begin{DoxyCompactList}\small\item\em enumeration of return type from Crcl intepretation. If statusreply, requires status sent to Crcl client. \end{DoxyCompactList}\item 
+struct \hyperlink{structRCS_1_1CanonCmdType}{R\-C\-S\-::\-Canon\-Cmd\-Type}
+\begin{DoxyCompactList}\small\item\em enumeration of Crcl commands. Many Crcl commands are wm parameter setting and require no motion component. \end{DoxyCompactList}\item 
+struct \hyperlink{structRCS_1_1CanonStopMotionType}{R\-C\-S\-::\-Canon\-Stop\-Motion\-Type}
+\begin{DoxyCompactList}\small\item\em enumeration of stopping motion, e.\-g., estop equivalent to immediate. \end{DoxyCompactList}\item 
+struct \hyperlink{structRCS_1_1CanonAccProfile}{R\-C\-S\-::\-Canon\-Acc\-Profile}
+\begin{DoxyCompactList}\small\item\em enumeration of trajectory acceleration profile. \end{DoxyCompactList}\item 
+struct \hyperlink{structRCS_1_1MovementType}{R\-C\-S\-::\-Movement\-Type}
+\begin{DoxyCompactList}\small\item\em enumeration of trajectory motion type, joint or cartesian. \end{DoxyCompactList}\item 
+struct \hyperlink{structRCS_1_1CanonStatusType}{R\-C\-S\-::\-Canon\-Status\-Type}
+\begin{DoxyCompactList}\small\item\em enumeration of controller status types for individual commands. Note, even though command types are listed, not all used or supported. \end{DoxyCompactList}\item 
 class \hyperlink{classRCS_1_1IRate}{R\-C\-S\-::\-I\-Rate}
 \begin{DoxyCompactList}\small\item\em \hyperlink{classRCS_1_1IRate}{I\-Rate} is an interface class for defining the allowed motion rates. \end{DoxyCompactList}\item 
 struct \hyperlink{structRCS_1_1CanonCmd}{R\-C\-S\-::\-Canon\-Cmd}
 \begin{DoxyCompactList}\small\item\em \hyperlink{structRCS_1_1CanonCmd}{Canon\-Cmd} is the controller command structure. \end{DoxyCompactList}\item 
 struct \hyperlink{structRCS_1_1CanonWorldModel}{R\-C\-S\-::\-Canon\-World\-Model}
-\begin{DoxyCompactList}\small\item\em \hyperlink{structRCS_1_1CanonWorldModel}{Canon\-World\-Model} describes the controller state. Includes reference to robot model. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em \hyperlink{structRCS_1_1CanonWorldModel}{Canon\-World\-Model} describes the controller state. Includes reference to robot model. \end{DoxyCompactList}\item 
+class \hyperlink{classRCS_1_1IRCSInterpreter}{R\-C\-S\-::\-I\-R\-C\-S\-Interpreter}
+\begin{DoxyCompactList}\small\item\em I\-Interpreter parses a \hyperlink{namespaceRCS}{R\-C\-S} command and generates robot motion commands. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Namespaces}
 \begin{DoxyCompactItemize}
 \item 
@@ -77,113 +107,24 @@ typedef double \hyperlink{namespaceRCS_a3ca212cf7a0c547f5496352e850372a9}{R\-C\-
 \item 
 typedef std\-::vector$<$ double $>$ \hyperlink{namespaceRCS_a3185cefb4d61f5c6f364aaf5624a3ee4}{R\-C\-S\-::robot\-Axes}
 \end{DoxyCompactItemize}
-\subsection*{Enumerations}
-\begin{DoxyCompactItemize}
-\item 
-enum \hyperlink{namespaceRCS_a768c9d3a7f0e5850bc61ebede4b85b23}{R\-C\-S\-::\-Canon\-Length\-Unit} \{ \hyperlink{namespaceRCS_a768c9d3a7f0e5850bc61ebede4b85b23ae6d96128754284c45e005b02fe54b79d}{R\-C\-S\-::\-M\-E\-T\-E\-R} = 0, 
-\hyperlink{namespaceRCS_a768c9d3a7f0e5850bc61ebede4b85b23ab9e0fafa9c10ccca32bcdcd1eb9813c1}{R\-C\-S\-::\-M\-M}, 
-\hyperlink{namespaceRCS_a768c9d3a7f0e5850bc61ebede4b85b23a0b9c2e89e6353c26a8bab5661da20f6d}{R\-C\-S\-::\-I\-N\-C\-H}
- \}
-\begin{DoxyCompactList}\small\item\em enumeration of length units. Conversion into R\-O\-S compatible meters. \end{DoxyCompactList}\item 
-enum \hyperlink{namespaceRCS_ae705dbb4b887b18fef40316b6d5ca2c9}{R\-C\-S\-::\-Traj\-Point\-Type} \{ \hyperlink{namespaceRCS_ae705dbb4b887b18fef40316b6d5ca2c9a255760a7e92a5d130681fc75e280cb61}{R\-C\-S\-::\-W\-A\-Y\-P\-O\-I\-N\-T} = 1, 
-\hyperlink{namespaceRCS_ae705dbb4b887b18fef40316b6d5ca2c9ab5c3606954a689ebe5425f6c2c09b970}{R\-C\-S\-::\-G\-O\-A\-L}
- \}
-\begin{DoxyCompactList}\small\item\em enumeration of trajector pose points. \end{DoxyCompactList}\item 
-enum \hyperlink{namespaceRCS_ad07ee9a15612cae458796cf946e36410}{R\-C\-S\-::\-Canon\-Angle\-Unit} \{ \hyperlink{namespaceRCS_ad07ee9a15612cae458796cf946e36410ad82b65c17877cfe8789becb230386fe5}{R\-C\-S\-::\-R\-A\-D\-I\-A\-N} = 0, 
-\hyperlink{namespaceRCS_ad07ee9a15612cae458796cf946e36410aa2c86ef15e4232944a9f2085f3f68661}{R\-C\-S\-::\-D\-E\-G\-R\-E\-E}
- \}
-\begin{DoxyCompactList}\small\item\em enumeration of angle units. Conversion into R\-O\-S compatible radians. \end{DoxyCompactList}\item 
-enum \hyperlink{namespaceRCS_a7ab3ac05af337215785442dc8570c00f}{R\-C\-S\-::\-Canon\-Force\-Unit} \{ \hyperlink{namespaceRCS_a7ab3ac05af337215785442dc8570c00fadefb2cf80f2a6761a24dc6ffc2f15bbd}{R\-C\-S\-::\-N\-E\-W\-T\-O\-N} = 0, 
-\hyperlink{namespaceRCS_a7ab3ac05af337215785442dc8570c00fa50e031587d5ce89d8b76aa114d5516c0}{R\-C\-S\-::\-P\-O\-U\-N\-D}, 
-\hyperlink{namespaceRCS_a7ab3ac05af337215785442dc8570c00fa525cee8c6112d4cb86dec3aa0e6caba0}{R\-C\-S\-::\-O\-U\-N\-C\-E}
- \}
-\begin{DoxyCompactList}\small\item\em enumeration of force units. \end{DoxyCompactList}\item 
-enum \hyperlink{namespaceRCS_aad43ee626dc2b93364a9276cd0190b38}{R\-C\-S\-::\-Canon\-Torque\-Unit} \{ \hyperlink{namespaceRCS_aad43ee626dc2b93364a9276cd0190b38a8455a50078c65f9939ae9093d87df9ce}{R\-C\-S\-::\-N\-E\-W\-T\-O\-N\-M\-E\-T\-E\-R} = 0, 
-\hyperlink{namespaceRCS_aad43ee626dc2b93364a9276cd0190b38a90a01e4c469158168e9bbfed53909fa4}{R\-C\-S\-::\-F\-O\-O\-T\-P\-O\-U\-N\-D}
- \}
-\begin{DoxyCompactList}\small\item\em enumeration of torque units. \end{DoxyCompactList}\item 
-enum \hyperlink{namespaceRCS_a604ddc76f1c860e79ec060339a68dc79}{R\-C\-S\-::\-Canon\-Return} \{ \\*
-\hyperlink{namespaceRCS_a604ddc76f1c860e79ec060339a68dc79ae784c3b29210b49f3548ad8ccbe35688}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-R\-E\-J\-E\-C\-T} = -\/2, 
-\hyperlink{namespaceRCS_a604ddc76f1c860e79ec060339a68dc79a8046a92ede63076a4b9c98aa4099e3ea}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-F\-A\-I\-L\-U\-R\-E} = -\/1, 
-\hyperlink{namespaceRCS_a604ddc76f1c860e79ec060339a68dc79a45f0039600f4e6b521a58e021609ea22}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-S\-U\-C\-C\-E\-S\-S} = 0, 
-\hyperlink{namespaceRCS_a604ddc76f1c860e79ec060339a68dc79ae5d8cf70f462c3e4aee8050f308132fb}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-S\-T\-A\-T\-U\-S\-R\-E\-P\-L\-Y} = 1, 
-\\*
-\hyperlink{namespaceRCS_a604ddc76f1c860e79ec060339a68dc79a5eb43a35f73ab11edc5d5a28b908257e}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-M\-O\-T\-I\-O\-N} = 2, 
-\hyperlink{namespaceRCS_a604ddc76f1c860e79ec060339a68dc79a01dce2ee696426c95a68ffe191ccd643}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-R\-U\-N\-N\-I\-N\-G}
- \}
-\begin{DoxyCompactList}\small\item\em enumeration of return type from \hyperlink{namespaceCrcl}{Crcl} intepretation. If statusreply, requires status sent to \hyperlink{namespaceCrcl}{Crcl} client. \end{DoxyCompactList}\item 
-enum \hyperlink{namespaceRCS_a55bbd74afb87a330de1b95af65f4cb75}{R\-C\-S\-::\-Canon\-Cmd\-Type} \{ \\*
-\hyperlink{namespaceRCS_a55bbd74afb87a330de1b95af65f4cb75aec778933c8e1af18ea16550268eebaaa}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-N\-O\-O\-P} = 0, 
-\hyperlink{namespaceRCS_a55bbd74afb87a330de1b95af65f4cb75a39055f1d78c4ea71a7eb300b059dc330}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-D\-W\-E\-L\-L}, 
-\hyperlink{namespaceRCS_a55bbd74afb87a330de1b95af65f4cb75afe807fccfca39c61a14d5c1a454b216d}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-E\-N\-D\-\_\-\-C\-A\-N\-O\-N}, 
-\hyperlink{namespaceRCS_a55bbd74afb87a330de1b95af65f4cb75acce93027306fc36aeccc8d40dc4e7d62}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-I\-N\-I\-T\-\_\-\-C\-A\-N\-O\-N}, 
-\\*
-\hyperlink{namespaceRCS_a55bbd74afb87a330de1b95af65f4cb75a24901ab5e41ab6e4cc5a2ab97de92f06}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-M\-O\-V\-E\-\_\-\-J\-O\-I\-N\-T}, 
-\hyperlink{namespaceRCS_a55bbd74afb87a330de1b95af65f4cb75ae64ab69bfbfa2932859ab153701de029}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-M\-O\-V\-E\-\_\-\-T\-O}, 
-\hyperlink{namespaceRCS_a55bbd74afb87a330de1b95af65f4cb75a312d738989bea16a5eb8b9a3c99e72d2}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-M\-O\-V\-E\-\_\-\-T\-H\-R\-U}, 
-\hyperlink{namespaceRCS_a55bbd74afb87a330de1b95af65f4cb75a8f4e35036d5f034ec1d7eef1649f3acc}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-S\-E\-T\-\_\-\-M\-A\-X\-\_\-\-C\-A\-R\-T\-\_\-\-A\-C\-C}, 
-\\*
-\hyperlink{namespaceRCS_a55bbd74afb87a330de1b95af65f4cb75a6b3163b9c7d5ec2b1f1933b6c9df9523}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-S\-E\-T\-\_\-\-M\-A\-X\-\_\-\-C\-A\-R\-T\-\_\-\-S\-P\-E\-E\-D}, 
-\hyperlink{namespaceRCS_a55bbd74afb87a330de1b95af65f4cb75a67a51ba452c9d8a4a8d64232cce7922d}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-S\-E\-T\-\_\-\-M\-A\-X\-\_\-\-J\-O\-I\-N\-T\-\_\-\-A\-C\-C}, 
-\hyperlink{namespaceRCS_a55bbd74afb87a330de1b95af65f4cb75adda3bf1c656804e5d07912149ceb9760}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-S\-E\-T\-\_\-\-M\-A\-X\-\_\-\-J\-O\-I\-N\-T\-\_\-\-S\-P\-E\-E\-D}, 
-\hyperlink{namespaceRCS_a55bbd74afb87a330de1b95af65f4cb75af7ae40ad1b0525a4cb8888af76db4acc}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-S\-E\-T\-\_\-\-G\-R\-I\-P\-P\-E\-R}, 
-\\*
-\hyperlink{namespaceRCS_a55bbd74afb87a330de1b95af65f4cb75ab3c4fe7af4d06fbd188e53f4825a9425}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-S\-E\-T\-\_\-\-T\-O\-L\-E\-R\-A\-N\-C\-E}, 
-\hyperlink{namespaceRCS_a55bbd74afb87a330de1b95af65f4cb75a44fe36cdba5ffcfed81e2fd1eb795c2d}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-S\-T\-O\-P\-\_\-\-M\-O\-T\-I\-O\-N}, 
-\hyperlink{namespaceRCS_a55bbd74afb87a330de1b95af65f4cb75a0e32d7c80f9f5b064f660aab9b9392e6}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-D\-O\-\_\-\-M\-O\-T\-I\-O\-N}, 
-\hyperlink{namespaceRCS_a55bbd74afb87a330de1b95af65f4cb75a92eaf4448ef32e4819df8b0eea8469f9}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-O\-T\-H\-E\-R}, 
-\\*
-\hyperlink{namespaceRCS_a55bbd74afb87a330de1b95af65f4cb75aa3f496c02395826be6f0b84974fff57f}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-U\-N\-K\-N\-O\-W\-N}
- \}
-\begin{DoxyCompactList}\small\item\em enumeration of \hyperlink{namespaceCrcl}{Crcl} commands. Many \hyperlink{namespaceCrcl}{Crcl} commands are wm parameter setting and require no motion component. \end{DoxyCompactList}\item 
-enum \hyperlink{namespaceRCS_a39ae96212f304024b5f91fe8d63a40c0}{R\-C\-S\-::\-Canon\-Stop\-Motion\-Type} \{ \hyperlink{namespaceRCS_a39ae96212f304024b5f91fe8d63a40c0aa70f9618bf9470bf8dad4cf7c82f676a}{R\-C\-S\-::\-U\-N\-S\-E\-T} = -\/1, 
-\hyperlink{namespaceRCS_a39ae96212f304024b5f91fe8d63a40c0abdc21ede32cc83eb939faea7e4dd4641}{R\-C\-S\-::\-I\-M\-M\-E\-D\-I\-A\-T\-E} = 0, 
-\hyperlink{namespaceRCS_a39ae96212f304024b5f91fe8d63a40c0a332e4c404e6b8aa0a64e1970e0e8e793}{R\-C\-S\-::\-F\-A\-S\-T}, 
-\hyperlink{namespaceRCS_a39ae96212f304024b5f91fe8d63a40c0ab9652e079b6284ddf30eb812539260cd}{R\-C\-S\-::\-N\-O\-R\-M\-A\-L}
- \}
-\begin{DoxyCompactList}\small\item\em enumeration of stopping motion, e.\-g., estop equivalent to immediate. \end{DoxyCompactList}\item 
-enum \hyperlink{namespaceRCS_a452a9217023e577031dcdf7e533b2ead}{R\-C\-S\-::\-Canon\-Acc\-Profile} \{ \\*
-\hyperlink{namespaceRCS_a452a9217023e577031dcdf7e533b2eada2315e4dd1ff60cc3c544074b3cf68aca}{R\-C\-S\-::\-M\-S\-\_\-\-I\-S\-\_\-\-U\-N\-S\-E\-T} = 0, 
-\hyperlink{namespaceRCS_a452a9217023e577031dcdf7e533b2eada5e3a369ff66b61df6181d0dc65c428b8}{R\-C\-S\-::\-M\-S\-\_\-\-I\-S\-\_\-\-D\-O\-N\-E} = 1, 
-\hyperlink{namespaceRCS_a452a9217023e577031dcdf7e533b2eada34d1aa9bce420946f968a49604b118c4}{R\-C\-S\-::\-M\-S\-\_\-\-I\-S\-\_\-\-A\-C\-C\-E\-L} = 2, 
-\hyperlink{namespaceRCS_a452a9217023e577031dcdf7e533b2eada7bf5f12a075b086d878fa4e1f7b795ac}{R\-C\-S\-::\-M\-S\-\_\-\-I\-S\-\_\-\-C\-O\-N\-S\-T} = 3, 
-\\*
-\hyperlink{namespaceRCS_a452a9217023e577031dcdf7e533b2eadabe3f296a699b654071dfed0d62f0707e}{R\-C\-S\-::\-M\-S\-\_\-\-I\-S\-\_\-\-D\-E\-C\-E\-L} = 4, 
-\hyperlink{namespaceRCS_a452a9217023e577031dcdf7e533b2eadab136562b5efb4a27c513ce457d7b7cbc}{R\-C\-S\-::\-M\-S\-\_\-\-I\-S\-\_\-\-E\-S\-T\-O\-P\-P\-I\-N\-G} = 5, 
-\hyperlink{namespaceRCS_a452a9217023e577031dcdf7e533b2eada092d58e8f17c61485c944eef747369f6}{R\-C\-S\-::\-M\-S\-\_\-\-I\-S\-\_\-\-P\-A\-U\-S\-E\-D} = 6
- \}
-\begin{DoxyCompactList}\small\item\em enumeration of trajectory acceleration profile. \end{DoxyCompactList}\item 
-enum \hyperlink{namespaceRCS_ab06a825aaa263c253e8100d626609ec4}{R\-C\-S\-::\-Movement\-Type} \{ \hyperlink{namespaceRCS_ab06a825aaa263c253e8100d626609ec4ac969035de1d3dc48e8dd0951863bf23b}{R\-C\-S\-::\-M\-O\-V\-E\-\_\-\-D\-E\-F\-A\-U\-L\-T} = 0, 
-\hyperlink{namespaceRCS_ab06a825aaa263c253e8100d626609ec4a080a0390ae2de7ee0ca67d94506a9c79}{R\-C\-S\-::\-M\-O\-V\-E\-\_\-\-C\-A\-R\-T\-E\-S\-I\-A\-N}, 
-\hyperlink{namespaceRCS_ab06a825aaa263c253e8100d626609ec4a275cc65ce33e5cfc57c57abb4a208223}{R\-C\-S\-::\-M\-O\-V\-E\-\_\-\-J\-O\-I\-N\-T}
- \}
-\begin{DoxyCompactList}\small\item\em enumeration of trajectory motion type, joint or cartesian. \end{DoxyCompactList}\item 
-enum \hyperlink{namespaceRCS_a0e720341c250145b8a2bbf6a1afa777d}{R\-C\-S\-::\-Canon\-Status\-Type} \{ \\*
-\hyperlink{namespaceRCS_a0e720341c250145b8a2bbf6a1afa777daabf0ebc3e57ea212970f33430d917eae}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-D\-O\-N\-E} = 0, 
-\hyperlink{namespaceRCS_a0e720341c250145b8a2bbf6a1afa777da4a0ac89d145f0ac2ab9d2322ea4f3a08}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-W\-O\-R\-K\-I\-N\-G}, 
-\hyperlink{namespaceRCS_a0e720341c250145b8a2bbf6a1afa777da86acce9ac34e5ca0b0056b11810af584}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-P\-A\-U\-S\-E\-D}, 
-\hyperlink{namespaceRCS_a0e720341c250145b8a2bbf6a1afa777dac78240d093ffb8a630852bac1aa33905}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-E\-R\-R\-O\-R}, 
-\\*
-\hyperlink{namespaceRCS_a0e720341c250145b8a2bbf6a1afa777da094244917abcd576f2118e80803279ee}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-A\-B\-O\-R\-T}, 
-\hyperlink{namespaceRCS_a0e720341c250145b8a2bbf6a1afa777da101acfc97dc944ffd40c3e8e0cf7c179}{R\-C\-S\-::\-C\-A\-N\-O\-N\-\_\-\-W\-A\-I\-T\-I\-N\-G}
- \}
-\begin{DoxyCompactList}\small\item\em enumeration of controller status types for individual commands. Note, even though command types are listed, not all used or supported. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
 void \hyperlink{RCS_8h_a37ebbdda6b81fc9b7d355e372c2a0f50}{sincos} (double x, double $\ast$sx, double $\ast$cx)
 \item 
-void \hyperlink{namespaceRCS_a6e911197b35a4857f179af61811d4b0a}{R\-C\-S\-::get\-R\-P\-Y} (const \hyperlink{namespaceRCS_aa07e45d8a50e30064283d2b38087f999}{R\-C\-S\-::\-Pose} pose, double \&\hyperlink{SanityCheckTests_8cpp_a1d3228afa3a1d6773954f40c1e519eb9}{roll}, double \&\hyperlink{SanityCheckTests_8cpp_a34c057a0378030db67bd6a129f37d938}{pitch}, double \&\hyperlink{SanityCheckTests_8cpp_a21cd490f6191f66678f55b4c242a10cf}{yaw})
+{\footnotesize template$<$typename T $>$ }\\std\-::vector$<$ T $>$ \hyperlink{RCS_8h_afe12749d85a89b8b8b2aaca821330357}{To\-Vector} (int n,...)
 \item 
-std\-::string \hyperlink{namespaceRCS_ad467dfc15b94a5e025af3e094ac21860}{R\-C\-S\-::\-Dump\-Joints} (\hyperlink{RCS_8h_aa4adb93a26caa4dacba9c9614e283245}{Joint\-State} joints)
-\begin{DoxyCompactList}\small\item\em Dump\-Joints takes a list of joints and generates a string describing pose. Can be used as std\-::cout $<$$<$ Dump\-Pose(pose);. \end{DoxyCompactList}\item 
-std\-::string \hyperlink{namespaceRCS_a35eaff1f2c8ec5520f595d6f3b2d38b3}{R\-C\-S\-::\-Dump\-Pose} (\hyperlink{namespaceRCS_aa07e45d8a50e30064283d2b38087f999}{R\-C\-S\-::\-Pose} \&pose)
-\begin{DoxyCompactList}\small\item\em Dump\-Pose takes a urdf pose and generates a string describing pose. Can be used as std\-::cout $<$$<$ Dump\-Pose(pose);. \end{DoxyCompactList}\item 
-std\-::ostream \& \hyperlink{namespaceRCS_af0cfadb4002d5ba5ec3ffdf2c96839e0}{R\-C\-S\-::operator$<$$<$} (std\-::ostream \&os, \hyperlink{namespaceRCS_aa07e45d8a50e30064283d2b38087f999}{R\-C\-S\-::\-Pose} \&pose)
-\begin{DoxyCompactList}\small\item\em Dump\-Pose takes a urdf pose and generates a string describing pose. Can be used as std\-::cout $<$$<$ Dump\-Pose(pose);. \end{DoxyCompactList}\item 
-std\-::string \hyperlink{namespaceRCS_a994378d2744371f1afac4b59a808fef2}{R\-C\-S\-::\-Dump\-Quaterion} (std\-::ostream \&os, const \hyperlink{namespaceRCS_a3fd915276fdb632d217c560523c320e0}{R\-C\-S\-::\-Rotation} \&rot)
-\begin{DoxyCompactList}\small\item\em Dump\-Quaterion takes a urdf quaterion and generates a string describing x,y,z,w coordinates. Can be used as std\-::cout $<$$<$ Dump\-Quaterion(urdf\-::rotation);. \end{DoxyCompactList}\item 
-std\-::ostream \& \hyperlink{RCS_8h_a8e885cace21a754e8307a7579f304705}{operator$<$$<$} (std\-::ostream \&os, const \hyperlink{structRCS_1_1CanonCmd}{R\-C\-S\-::\-Canon\-Cmd} \&cc)
+{\footnotesize template$<$typename T $>$ }\\std\-::vector$<$ T $>$ \hyperlink{RCS_8h_a911781f998d2d2093f3ec1781a83fafe}{To\-Radian\-Vector} (std\-::vector$<$ T $>$ goaljts)
+\item 
+void \hyperlink{namespaceRCS_a6e911197b35a4857f179af61811d4b0a}{R\-C\-S\-::get\-R\-P\-Y} (const \hyperlink{namespaceRCS_aa07e45d8a50e30064283d2b38087f999}{R\-C\-S\-::\-Pose} pose, double \&roll, double \&pitch, double \&yaw)
+\item 
+\hyperlink{RCS_8h_aa4adb93a26caa4dacba9c9614e283245}{Joint\-State} \hyperlink{namespaceRCS_a41308a2a3e1a110ee397e99e88d355ff}{R\-C\-S\-::\-Empty\-Joint\-State} (size\-\_\-t n)
+\item 
+\hyperlink{RCS_8h_aa4adb93a26caa4dacba9c9614e283245}{Joint\-State} \hyperlink{namespaceRCS_a5cfe0b45d035674a7235c97757b670ff}{R\-C\-S\-::\-Subset} (\hyperlink{RCS_8h_aa4adb93a26caa4dacba9c9614e283245}{Joint\-State} js, size\-\_\-t n)
+\item 
+std\-::vector$<$ double $>$ \hyperlink{namespaceRCS_af77528d0878b59af2a466a79bcd62983}{R\-C\-S\-::\-Subset} (std\-::vector$<$ double $>$ position, size\-\_\-t n)
+\item 
+\hyperlink{RCS_8h_aa4adb93a26caa4dacba9c9614e283245}{Joint\-State} \hyperlink{namespaceRCS_a8debd3f8ffa83ac05085e84bf814640f}{R\-C\-S\-::\-Zero\-Joint\-State} (size\-\_\-t numjoints)
 \end{DoxyCompactItemize}
 
 
@@ -255,14 +196,6 @@ std\-::ostream \& \hyperlink{RCS_8h_a8e885cace21a754e8307a7579f304705}{operator$
 
 
 \subsection{Function Documentation}
-\hypertarget{RCS_8h_a8e885cace21a754e8307a7579f304705}{\index{R\-C\-S.\-h@{R\-C\-S.\-h}!operator$<$$<$@{operator$<$$<$}}
-\index{operator$<$$<$@{operator$<$$<$}!RCS.h@{R\-C\-S.\-h}}
-\subsubsection[{operator$<$$<$}]{\setlength{\rightskip}{0pt plus 5cm}std\-::ostream\& operator$<$$<$ (
-\begin{DoxyParamCaption}
-\item[{std\-::ostream \&}]{os, }
-\item[{const {\bf R\-C\-S\-::\-Canon\-Cmd} \&}]{cc}
-\end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}}}\label{RCS_8h_a8e885cace21a754e8307a7579f304705}
 \hypertarget{RCS_8h_a37ebbdda6b81fc9b7d355e372c2a0f50}{\index{R\-C\-S.\-h@{R\-C\-S.\-h}!sincos@{sincos}}
 \index{sincos@{sincos}!RCS.h@{R\-C\-S.\-h}}
 \subsubsection[{sincos}]{\setlength{\rightskip}{0pt plus 5cm}void sincos (
@@ -272,3 +205,18 @@ std\-::ostream \& \hyperlink{RCS_8h_a8e885cace21a754e8307a7579f304705}{operator$
 \item[{double $\ast$}]{cx}
 \end{DoxyParamCaption}
 )\hspace{0.3cm}{\ttfamily [inline]}}}\label{RCS_8h_a37ebbdda6b81fc9b7d355e372c2a0f50}
+\hypertarget{RCS_8h_a911781f998d2d2093f3ec1781a83fafe}{\index{R\-C\-S.\-h@{R\-C\-S.\-h}!To\-Radian\-Vector@{To\-Radian\-Vector}}
+\index{To\-Radian\-Vector@{To\-Radian\-Vector}!RCS.h@{R\-C\-S.\-h}}
+\subsubsection[{To\-Radian\-Vector}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ std\-::vector$<$T$>$ To\-Radian\-Vector (
+\begin{DoxyParamCaption}
+\item[{std\-::vector$<$ T $>$}]{goaljts}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{RCS_8h_a911781f998d2d2093f3ec1781a83fafe}
+\hypertarget{RCS_8h_afe12749d85a89b8b8b2aaca821330357}{\index{R\-C\-S.\-h@{R\-C\-S.\-h}!To\-Vector@{To\-Vector}}
+\index{To\-Vector@{To\-Vector}!RCS.h@{R\-C\-S.\-h}}
+\subsubsection[{To\-Vector}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ std\-::vector$<$T$>$ To\-Vector (
+\begin{DoxyParamCaption}
+\item[{int}]{n, }
+\item[{}]{...}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{RCS_8h_afe12749d85a89b8b8b2aaca821330357}

@@ -17,7 +17,6 @@
 #include "Globals.h"
 #include "Controller.h"
 #include "Kinematics.h"
-#include "Communication.h"
 #include "RosSetup.h"
 #include "RvizMarker.h"
 #include "NIST/BLogging.h"
@@ -25,18 +24,35 @@
 #include "Scene.h"
 #include "Checkerboard.h"
 #include "StackTrace.h"
+#include "RCSInterpreter.h"
+#include "Demo.h"
+#include "Test.h"
+
+#define MULTITHREADED
+#define MOTOMAN
+#define FANUC
 // /opt/ros/indigo/include/moveit/robot_state/robot_state.h
 // /opt/ros/indigo/include/moveit/move_group_interface/move_group.h
-extern RCS::Pose ComputeGripperOffset();
-extern RCS::Pose AutoComputeGripperOffset(urdf::Model& robot_model);
+
+//Eigen::Affine3d fanucoffset00 = Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, -0.5, 0.0);
+//Eigen::Affine3d motomanoffset00 = Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, 0.5, 0.0);
+
+tf::Pose fanucbaseoffset = RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
+        tf::Vector3(0.0, -0.5, 0.0)); 
+
+tf::Pose motomanbaseoffset = RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
+        tf::Vector3(0.0, 0.5, 0.0)); 
+
+tf::Pose fanucGripper = RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
+        tf::Vector3(0.140, 0.0, -0.017));
+
+tf::Pose motoGripper = RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
+        tf::Vector3(-0.017, 0.0, 0.140));
 
 
 int main(int argc, char** argv) {
-
-    // Current robot joints declaration
-    sensor_msgs::JointState cjoints;
     int bPublishPoint=0;
-    signal(SIGSEGV, handler);   // install our handler
+    //signal(SIGSEGV, handler);   // install our handler
     try {
         // Find path of executable
         std::string path(argv[0]);
@@ -61,7 +77,7 @@ int main(int argc, char** argv) {
                 "/opt/ros/indigo/lib/python2.7/dist-packages:"
                 "/home/isd/michalos/el-robotics-core/nist_kitting/src", true);
 
-        setenv("PKG_CONFIG_PATH", "/usr/local/michalos/nistfanuc_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/opt/ros/indigo/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistfanuc_ws/devel/lib/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/pkgconfig:/opt/ros/indigo/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig", true);
+       // setenv("PKG_CONFIG_PATH", "/usr/local/michalos/nistfanuc_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/opt/ros/indigo/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistfanuc_ws/devel/lib/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/pkgconfig:/opt/ros/indigo/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig", true);
         setenv("PATH", "/usr/local/michalos/nistfanuc_ws/devel/bin:/usr/local/michalos/nistcrcl_ws/devel/bin:/opt/ros/indigo/bin:/usr/local/jdk1.8.0_60/bin:/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:/usr/X11R6/bin:/usr/local/ulapi/bin:/usr/local/gomotion/bin:/home/isd/michalos/bin", true);
 
         // This sets up some application name/value pairs: user, hostname
@@ -75,14 +91,30 @@ int main(int argc, char** argv) {
         ros::NodeHandle nh;
         ros::Rate r(50); // 10 times a second - 10Hz
 
+ #if 0
+        /**
+         * The five different ROS verbosity levels are, in order:
+         * DEBUG ROS_DEBUG
+         * INFO ROS_INFO
+         * WARN
+         * ERROR
+         * FATAL  ROS_FATAL
+         */
+
+        if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info)) {
+            ros::console::notifyLoggerLevelsChanged();
+        }
+#endif
+        RvizDemo rvizdemo(nh);
 
         // Accessing Private Parameters
         // ros::param::get("~private_name", param); 
         boostlogfile = nh.param<std::string>("logfile", "/home/isd/michalos/Documents/example.log");
         boostloglevel = (boost::log::v2_mt_posix::trivial::severity_level) nh.param<int>("loglevel", 0); // 0 = debug
-        Cnc.bCvsPoseLogging() = nh.param<int>("csvlogging", 0);
-        Cnc.CvsPoseLoggingFile() = nh.param<std::string>("csvlogfile", "/home/isd/michalos/Documents/nistcrcl.csv");
+        RCS::Fnc->bCvsPoseLogging() = nh.param<int>("csvlogging", 0);
+        RCS::Fnc->CvsPoseLoggingFile() = nh.param<std::string>("csvlogfile", "/home/isd/michalos/Documents/nistcrcl.csv");
         bPublishPoint = nh.param<int>("PublishPoint", 0);
+        
         // THIS DOESN'T WORK
 #if 0
         int rosloglevel = nh.param<int>("~rosloglevel", 0); // 0 = debug
@@ -91,126 +123,77 @@ int main(int argc, char** argv) {
             ros::console::notifyLoggerLevelsChanged();
         }
 #endif  
-//        LOG_DEBUG << ExecuteShellCommand("env|sort\n");
 
-
-        // Controller shared objects dependent on ROS - many with abstract interface definition
-        boost::shared_ptr<CJointReader>jointReader;
-        boost::shared_ptr<CJointWriter>jointWriter;
-        boost::shared_ptr<IKinematics> kin;
-        boost::shared_ptr<CRvizMarker> pRvizMarker;
-        boost::shared_ptr<CLinkReader> pLinkReader;
-
+ 
         //  Required for multithreaded ROS communication  NOT TRUE: if not ros::spinOnce
-        ros::AsyncSpinner spinner(1);
+        ros::AsyncSpinner spinner(2);
         spinner.start();
-
-        // This is useful for rosbag i suppose
-        //        std::string run_id;
-        //        nh.getParam("run_id", run_id);
-        //        std::cout << run_id.c_str() << std::endl;
 
         // ROS config - parameter list - save for comparison later
         std::string params = ReadRosParams(nh);
         Globals.WriteFile(Globals.ExeDirectory + "rosconfig.txt", params);
         path = ros::package::getPath("nist_fanuc");
         Globals._appproperties["nist_fanuc"] = path;
-#if 0
-        // This sets up the `env` so that ROS can run - has too many hardwired dependencies
-        SetupRosEnvironment(path);
-#endif
-        // Controller instantiatio of shared objects  - dependent on ROS
-        jointReader = boost::shared_ptr<CJointReader>(new CJointReader(nh));
-        jointWriter = boost::shared_ptr<CJointWriter>(new CJointWriter(nh));
-        pRvizMarker = boost::shared_ptr<CRvizMarker>(new CRvizMarker(nh));
-        pRvizMarker->Init();
-        pLinkReader = boost::shared_ptr<CLinkReader>(new CLinkReader(nh));
-
-#define ARMKIN
-#ifdef ARMKIN
-        kin = boost::shared_ptr<IKinematics>(new ArmKinematics());
-        // Initializatin of Controller instantiatio of shared objects  
-        kin->Init(std::string("manipulator"), std::string("tool0"));
-        kin->Init(nh);
-        RCS::Cnc.Kinematics() = kin;
-        ComputeGripperOffset();
-        AutoComputeGripperOffset(kin->armkin->robot_model);
-#endif
-//#define FASTKIN    
-#ifdef FASTKIN
-        kin = boost::shared_ptr<IKinematics>(new FastKinematics());
-        // Initializatin of Controller instantiatio of shared objects  
-        kin->Init(std::string("manipulator"), std::string("tool0"));
-        kin->Init(nh);
-        RCS::Cnc.Kinematics() = kin;
-        JointState cmd;
-        cmd.position = ToVector<double>(6,   0.0,  0.0,  0.0,  0.0,  0.0, 0.0);
-        cmd.name = kin->JointNames();
-        RCS::Pose pose = Cnc.Kinematics()->FK(cmd.position);
-        LOG_DEBUG << "Test FK Pose 1" << RCS::DumpPoseSimple(pose).c_str();
-        cmd.position = ToVector<double>(6, -1.05, 1.03, 0.0, 0.07, -0.51, 0.0);
-        pose = Cnc.Kinematics()->FK(cmd.position);
-        LOG_DEBUG << "Test FK Pose 2 " << RCS::DumpPoseSimple(pose).c_str();
-
-#endif
-
-
+        
+        // Controller shared objects dependent on ROS - many with abstract interface definition   
+        
         // Initialize Controller...
-        RCS::Cnc.Setup(nh);
-        //RCS::Controller._NumJoints = 6; // hard code even thought chainrobotmodel will work
-        RCS::Cnc.status.Init();
-        RCS::Cnc.CycleTime() = DEFAULT_LOOP_CYCLE;
-
-        //        RCS::Controller.TrajectoryWriter() = trajWriter;
-        RCS::Cnc.JointWriter() = jointWriter;
-        RCS::Cnc.RvizMarker() = pRvizMarker;
-        RCS::Cnc.EEPoseReader() = pLinkReader;
-
-        RCS::Cnc.eCartesianMotionPlanner = RCS::CController::BASIC;
-        RCS::Cnc.eJointMotionPlanner = RCS::CController::BASIC;
-        // RCS::CController::MOVEIT;  NOPLANNER=0, MOVEIT, DESCARTES, BASIC, WAYPOINT, GOMOTION         
-
-        //#define INITJOINTCONTROLLER
-#ifdef INITJOINTCONTROLLER
-        // Read latest values, dont start until they are read
-        jointReader->Start();
-        cjoints = jointReader->GetCurrentReadings();
-        while (cjoints.position.size() == 0) {
-            //ros::spinOnce();
-            cjoints = jointReader->GetCurrentReadings();
-            Globals.Sleep(100);
-            //r.sleep();
-            std::cout << "." << std::flush;
-        }
-        LOG_DEBUG << "\nCurrent joints=" << VectorDump<double> (cjoints.position).c_str();
-
-        // Store current joint values
-        //RosKinematics kin;
-        RCS::Cnc.status.currentjoints = cjoints;
-        LOG_DEBUG << "Current=" << VectorDump<double> (RCS::Cnc.status.currentjoints.position).c_str();
-        RCS::Controller.status.currentpose = kin->FK(RCS::Cnc.status.currentjoints.position);
-        LOG_DEBUG << DumpPose(RCS::Controller.status.currentpose).c_str();
-        //        RCS::Cnc.CrclDelegate()->crclwm.Update(RCS::Cnc.status.currentpose);
-        //        RCS::Cnc.CrclDelegate()->crclwm.Update(RCS::Cnc.status.currentjoints);
-
-        LOG_DEBUG << "Starting current joints=" << DumpJoints(cjoints).c_str();
-        LOG_DEBUG << "Starting current pose=" << DumpPose(RCS::Controller.status.currentpose).c_str();
-
+#ifdef FANUC
+        boost::shared_ptr<IKinematics> fkin;
+        RCS::Fnc->SetBaseOffset(fanucbaseoffset);
+        RCS::Fnc->SetToolOffset(fanucGripper);
+        fkin = boost::shared_ptr<IKinematics>(new ArmKinematics("fanuc_", fanucbaseoffset));
+        fkin->Init(std::string("manipulator"), std::string("fanuc_link_6"), std::string("world"));
+        fkin->Init(nh);
+        RCS::Fnc->Kinematics() = fkin;
+        RCS::Fnc->CycleTime() = DEFAULT_LOOP_CYCLE;
+        RCS::Fnc->NamedJointMove["Safe"]=ToVector<double>(6, 1.49, -0.17, -1.14, 0.11, -0.45, -1.67);
+        RCS::Fnc->Setup(nh, "fanuc_");
+        FanucNearestJointsLookup fanuchints(RCS::Fnc, fkin);
+        fanuchints.SetRobotHints();
+        InlineRobotCommands fanucrobot(RCS::Fnc, fanuchints);       RCS::Fnc->Kinematics() = fkin;
+        RCS::Fnc->_interpreter = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter(RCS::Fnc, fkin, fanuchints));
 #endif
+        
+#ifdef MOTOMAN
+        boost::shared_ptr<IKinematics> fastkin;
+        fastkin = boost::shared_ptr<IKinematics>(new FastKinematics());
+        // Initialization of Controller instantiation of shared objects  
+        fastkin->Init(std::string("manipulator"), std::string("motoman_link_t"), std::string("world"));
+        fastkin->Init(nh);
+//        LOG_DEBUG << "Motoman Joint Names=" << VectorDump<std::string>(fastkin->JointNames()).c_str();
+        RCS::Mnc->Kinematics() = fastkin;
+        RCS::Mnc->Setup(nh, "motoman_");
+        RCS::Mnc->CycleTime() = DEFAULT_LOOP_CYCLE;
+        RCS::Mnc->SetBaseOffset(motomanbaseoffset);
+        RCS::Mnc->SetToolOffset(motoGripper);
+        RCS::Mnc->NamedJointMove["Safe"]=ToVector<double>(7, 1.30, -0.84, 0.08, 2.26, 2.96, -0.38, -1.28);
+        
+        MotomanNearestJointsLookup motohints(RCS::Mnc, fastkin);
+        motohints.SetRobotHints();
+        InlineRobotCommands motomanrobot(RCS::Mnc, motohints);
+        RCS::Mnc->_interpreter = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter( RCS::Mnc, fastkin, motohints));
+#endif
+ 
+        InitScene();
 
-#if 1
-        InitSceneObject();
+#ifdef CHECKERS
         RvizCheckers rvizgame(nh);
         rvizgame.RvizSetup();
-        SetupSceneObject();
-        // LOG_DEBUG << ObjectDB::DumpDB();
-        
 #endif
-        RCS::Cnc._interpreter = boost::shared_ptr<RCSInterpreter>(new BangBangInterpreter());
-        RCS::Cnc._interpreter->_kinematics=kin;
-        RCS::Cnc.Start(); // start the Controller Session thread
-        AddGripperOffset();
+        
+        DrawScene();  // Debug: LOG_DEBUG << ObjectDB::DumpDB();
 
+#ifdef   MULTITHREADED
+#ifdef FANUC   
+        RCS::Fnc->Start(); // start the Controller Session thread
+#endif
+#ifdef MOTOMAN
+        RCS::Mnc->Start(); // start the Controller Session thread
+#endif
+#endif
+        
+#ifdef CHECKERS
         // Play checkers - only move markers, no robot interaction
         Checkers::Move from, to;
         int player;
@@ -223,30 +206,48 @@ int main(int argc, char** argv) {
             if (rvizgame.CheckersMove(player, from, to))
                 break;
             rvizgame.Game().printDisplayFancy(rvizgame.Game().Board());
-            rvizgame.PhysicalMove(player, from.row, from.col, to);
+            if(player==Checkers::RED) {
+                LOG_DEBUG << "Fanuc RED Move";
+                rvizgame.PhysicalMove(fanucrobot, player, from.row, from.col, to);
+            }
+            else {
+                rvizgame.PhysicalMove(motomanrobot, player, from.row, from.col, to);
+                LOG_DEBUG << "Motoman BLACK Move";
+           }
+#ifndef   MULTITHREADED
+            while (RCS::Mnc->IsBusy()) {
+                RCS::Mnc->Action();
+            }
+#endif
             ros::spinOnce();
             ros::spinOnce();
             ros::Duration(0.2).sleep();
         }
-        
-#ifdef BOLTDEMO
-        TestRobotCommands();
 #endif
-       
-        spinner.stop();
-        ros::spin();
-        //        do {
-        //            ros::spinOnce();
-        //            r.sleep();
-        //        } while(ros::ok());
-        //        
+       while(!rvizdemo.Ready() ) {
+           ros::Duration(1.0).sleep();
+       }
+
+
+        //spinner.stop();
+        //      ros::spin();
+        do {
+            //for(size_t i=0; i< 10; i++)
+             //   ros::spinOnce();
+#ifdef BOLTDEMO
+            if (RCS::Fnc->crclcmds.SizeMsgQueue() == 0) {
+                ClearScene();
+                NewScene();
+                DrawScene();
+                fanucrobot.TestRobotCommands();
+            }
+#endif           
+            r.sleep();
+        } while(ros::ok());
+        spinner.stop();    
         LOG_DEBUG << "Cntrl C pressed \n" << std::flush;
 
         // ^C pressed - stop all threads or will hang
-        if (jointReader)
-            jointReader->Stop(); // unsubscribe
-        if (jointWriter)
-            jointWriter->Stop(); // unpusblish
         RCS::Thread::StopAll(); // includes thread for Controller, robotstatus
 
     } catch (std::exception e) {

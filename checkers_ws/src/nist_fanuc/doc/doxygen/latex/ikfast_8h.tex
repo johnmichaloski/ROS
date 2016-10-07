@@ -1,0 +1,225 @@
+\hypertarget{ikfast_8h}{\section{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/ikfast.h File Reference}
+\label{ikfast_8h}\index{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/ikfast.\-h@{/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/ikfast.\-h}}
+}
+{\ttfamily \#include $<$vector$>$}\\*
+{\ttfamily \#include $<$list$>$}\\*
+{\ttfamily \#include $<$stdexcept$>$}\\*
+{\ttfamily \#include $<$cmath$>$}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classikfast_1_1IkSingleDOFSolutionBase}{ikfast\-::\-Ik\-Single\-D\-O\-F\-Solution\-Base$<$ T $>$}
+\item 
+class \hyperlink{classikfast_1_1IkSolutionBase}{ikfast\-::\-Ik\-Solution\-Base$<$ T $>$}
+\item 
+class \hyperlink{classikfast_1_1IkSolutionListBase}{ikfast\-::\-Ik\-Solution\-List\-Base$<$ T $>$}
+\item 
+class \hyperlink{classikfast_1_1IkFastFunctions}{ikfast\-::\-Ik\-Fast\-Functions$<$ T $>$}
+\item 
+class \hyperlink{classikfast_1_1IkSolution}{ikfast\-::\-Ik\-Solution$<$ T $>$}
+\item 
+class \hyperlink{classikfast_1_1IkSolutionList}{ikfast\-::\-Ik\-Solution\-List$<$ T $>$}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{namespaceikfast}{ikfast}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{ikfast_8h_aa9b5df21ca9479bf3deaa7da9845cd6c}{I\-K\-F\-A\-S\-T\-\_\-\-H\-A\-S\-\_\-\-L\-I\-B\-R\-A\-R\-Y}
+\begin{DoxyCompactList}\small\item\em Header file for all ikfast c++ files/shared objects. \end{DoxyCompactList}\item 
+\#define \hyperlink{ikfast_8h_a2acf0f2516ebf5481d4db7f86f4d0da6}{I\-K\-F\-A\-S\-T\-\_\-\-N\-O\-\_\-\-M\-A\-I\-N}
+\item 
+\#define \hyperlink{ikfast_8h_a56c268d91880cb60bdd424953b526a19}{I\-K\-F\-A\-S\-T\-\_\-\-H\-E\-A\-D\-E\-R\-\_\-\-C\-O\-M\-M\-O\-N}
+\item 
+\#define \hyperlink{ikfast_8h_afb507c47cee8d15d0241aa894bef5a67}{I\-K\-F\-A\-S\-T\-\_\-\-V\-E\-R\-S\-I\-O\-N}~0x10000048
+\item 
+\#define \hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef double \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} bool \hyperlink{ikfast_8h_a5adc58004a3319e0e988a80a60cf0f80}{Compute\-Ik} (const \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real} $\ast$eetrans, const \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real} $\ast$eerot, const \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real} $\ast$pfree, \hyperlink{classikfast_1_1IkSolutionListBase}{ikfast\-::\-Ik\-Solution\-List\-Base}$<$ \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real} $>$ \&solutions)
+\begin{DoxyCompactList}\small\item\em Computes all I\-K solutions given a end effector coordinates and the free joints. \end{DoxyCompactList}\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} bool \hyperlink{ikfast_8h_a89f49fc6a4d83f569fd5b02d16dca3a3}{Compute\-Ik2} (const \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real} $\ast$eetrans, const \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real} $\ast$eerot, const \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real} $\ast$pfree, \hyperlink{classikfast_1_1IkSolutionListBase}{ikfast\-::\-Ik\-Solution\-List\-Base}$<$ \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real} $>$ \&solutions, void $\ast$p\-Open\-R\-A\-V\-E\-Manip)
+\begin{DoxyCompactList}\small\item\em Similar to Compute\-Ik except takes Open\-R\-A\-V\-E boost\-::shared\-\_\-ptr$<$\-Robot\-Base\-::\-Manipulator$>$$\ast$. \end{DoxyCompactList}\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} void \hyperlink{ikfast_8h_a4c86d9942cccced3b6cf2ebc8d821b29}{Compute\-Fk} (const \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real} $\ast$joints, \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real} $\ast$eetrans, \hyperlink{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{Ik\-Real} $\ast$eerot)
+\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int \hyperlink{ikfast_8h_af0cf03d3ad69d099a9a2eb6db5e5b352}{Get\-Num\-Free\-Parameters} ()
+\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int $\ast$ \hyperlink{ikfast_8h_a17f253d85cd4ac00e8840c417eef2487}{Get\-Free\-Parameters} ()
+\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int \hyperlink{ikfast_8h_a3e9541dde410904e043fe18701061b62}{Get\-Num\-Joints} ()
+\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int \hyperlink{ikfast_8h_a6709f20b26f0903f0aa58a26934c853c}{Get\-Ik\-Real\-Size} ()
+\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} const char $\ast$ \hyperlink{ikfast_8h_aeb290d53b240a4d54cae3caaf43d19d7}{Get\-Ik\-Fast\-Version} ()
+\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int \hyperlink{ikfast_8h_abc401850b948d5a0402e9dbb77d3846f}{Get\-Ik\-Type} ()
+\item 
+\hyperlink{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} const char $\ast$ \hyperlink{ikfast_8h_afb700ffecf29c92e7b86762777659d85}{Get\-Kinematics\-Hash} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}{\index{ikfast.\-h@{ikfast.\-h}!I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I@{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I}}
+\index{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I@{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I}!ikfast.h@{ikfast.\-h}}
+\subsubsection[{I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I}}\label{ikfast_8h_a66d5a8084bb0ca9375811186791a5b0c}
+\hypertarget{ikfast_8h_aa9b5df21ca9479bf3deaa7da9845cd6c}{\index{ikfast.\-h@{ikfast.\-h}!I\-K\-F\-A\-S\-T\-\_\-\-H\-A\-S\-\_\-\-L\-I\-B\-R\-A\-R\-Y@{I\-K\-F\-A\-S\-T\-\_\-\-H\-A\-S\-\_\-\-L\-I\-B\-R\-A\-R\-Y}}
+\index{I\-K\-F\-A\-S\-T\-\_\-\-H\-A\-S\-\_\-\-L\-I\-B\-R\-A\-R\-Y@{I\-K\-F\-A\-S\-T\-\_\-\-H\-A\-S\-\_\-\-L\-I\-B\-R\-A\-R\-Y}!ikfast.h@{ikfast.\-h}}
+\subsubsection[{I\-K\-F\-A\-S\-T\-\_\-\-H\-A\-S\-\_\-\-L\-I\-B\-R\-A\-R\-Y}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-K\-F\-A\-S\-T\-\_\-\-H\-A\-S\-\_\-\-L\-I\-B\-R\-A\-R\-Y}}\label{ikfast_8h_aa9b5df21ca9479bf3deaa7da9845cd6c}
+
+
+Header file for all ikfast c++ files/shared objects. 
+
+The ikfast inverse kinematics compiler is part of Open\-R\-A\-V\-E.
+
+The file is divided into two sections\-:
+\begin{DoxyItemize}
+\item {\bfseries Common} -\/ the abstract classes section that all ikfast share regardless of their settings
+\item {\bfseries Library Specific} -\/ the library-\/specific definitions, which depends on the precision/settings that the library was compiled with
+\end{DoxyItemize}
+
+The defines are as follows, they are also used for the ikfast C++ class\-:
+
+
+\begin{DoxyItemize}
+\item I\-K\-F\-A\-S\-T\-\_\-\-H\-E\-A\-D\-E\-R\-\_\-\-C\-O\-M\-M\-O\-N -\/ common classes
+\item I\-K\-F\-A\-S\-T\-\_\-\-H\-A\-S\-\_\-\-L\-I\-B\-R\-A\-R\-Y -\/ if defined, will include library-\/specific functions. by default this is off
+\item I\-K\-F\-A\-S\-T\-\_\-\-C\-L\-I\-B\-R\-A\-R\-Y -\/ Define this linking statically or dynamically to get correct visibility.
+\item I\-K\-F\-A\-S\-T\-\_\-\-N\-O\-\_\-\-M\-A\-I\-N -\/ Remove the {\ttfamily main} function, usually used with I\-K\-F\-A\-S\-T\-\_\-\-C\-L\-I\-B\-R\-A\-R\-Y
+\item I\-K\-F\-A\-S\-T\-\_\-\-A\-S\-S\-E\-R\-T -\/ Define in order to get a custom assert called when Na\-Ns, divides by zero, and other invalid conditions are detected.
+\item I\-K\-F\-A\-S\-T\-\_\-\-R\-E\-A\-L -\/ Use to force a custom real number type for Ik\-Real.
+\item I\-K\-F\-A\-S\-T\-\_\-\-N\-A\-M\-E\-S\-P\-A\-C\-E -\/ Enclose all functions and classes in this namespace, the {\ttfamily main} function is excluded. 
+\end{DoxyItemize}\hypertarget{ikfast_8h_a56c268d91880cb60bdd424953b526a19}{\index{ikfast.\-h@{ikfast.\-h}!I\-K\-F\-A\-S\-T\-\_\-\-H\-E\-A\-D\-E\-R\-\_\-\-C\-O\-M\-M\-O\-N@{I\-K\-F\-A\-S\-T\-\_\-\-H\-E\-A\-D\-E\-R\-\_\-\-C\-O\-M\-M\-O\-N}}
+\index{I\-K\-F\-A\-S\-T\-\_\-\-H\-E\-A\-D\-E\-R\-\_\-\-C\-O\-M\-M\-O\-N@{I\-K\-F\-A\-S\-T\-\_\-\-H\-E\-A\-D\-E\-R\-\_\-\-C\-O\-M\-M\-O\-N}!ikfast.h@{ikfast.\-h}}
+\subsubsection[{I\-K\-F\-A\-S\-T\-\_\-\-H\-E\-A\-D\-E\-R\-\_\-\-C\-O\-M\-M\-O\-N}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-K\-F\-A\-S\-T\-\_\-\-H\-E\-A\-D\-E\-R\-\_\-\-C\-O\-M\-M\-O\-N}}\label{ikfast_8h_a56c268d91880cb60bdd424953b526a19}
+\hypertarget{ikfast_8h_a2acf0f2516ebf5481d4db7f86f4d0da6}{\index{ikfast.\-h@{ikfast.\-h}!I\-K\-F\-A\-S\-T\-\_\-\-N\-O\-\_\-\-M\-A\-I\-N@{I\-K\-F\-A\-S\-T\-\_\-\-N\-O\-\_\-\-M\-A\-I\-N}}
+\index{I\-K\-F\-A\-S\-T\-\_\-\-N\-O\-\_\-\-M\-A\-I\-N@{I\-K\-F\-A\-S\-T\-\_\-\-N\-O\-\_\-\-M\-A\-I\-N}!ikfast.h@{ikfast.\-h}}
+\subsubsection[{I\-K\-F\-A\-S\-T\-\_\-\-N\-O\-\_\-\-M\-A\-I\-N}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-K\-F\-A\-S\-T\-\_\-\-N\-O\-\_\-\-M\-A\-I\-N}}\label{ikfast_8h_a2acf0f2516ebf5481d4db7f86f4d0da6}
+\hypertarget{ikfast_8h_afb507c47cee8d15d0241aa894bef5a67}{\index{ikfast.\-h@{ikfast.\-h}!I\-K\-F\-A\-S\-T\-\_\-\-V\-E\-R\-S\-I\-O\-N@{I\-K\-F\-A\-S\-T\-\_\-\-V\-E\-R\-S\-I\-O\-N}}
+\index{I\-K\-F\-A\-S\-T\-\_\-\-V\-E\-R\-S\-I\-O\-N@{I\-K\-F\-A\-S\-T\-\_\-\-V\-E\-R\-S\-I\-O\-N}!ikfast.h@{ikfast.\-h}}
+\subsubsection[{I\-K\-F\-A\-S\-T\-\_\-\-V\-E\-R\-S\-I\-O\-N}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-K\-F\-A\-S\-T\-\_\-\-V\-E\-R\-S\-I\-O\-N~0x10000048}}\label{ikfast_8h_afb507c47cee8d15d0241aa894bef5a67}
+
+
+\subsection{Typedef Documentation}
+\hypertarget{ikfast_8h_ad067e4244010306f633e94db2645dd6d}{\index{ikfast.\-h@{ikfast.\-h}!Ik\-Real@{Ik\-Real}}
+\index{Ik\-Real@{Ik\-Real}!ikfast.h@{ikfast.\-h}}
+\subsubsection[{Ik\-Real}]{\setlength{\rightskip}{0pt plus 5cm}typedef double {\bf Ik\-Real}}}\label{ikfast_8h_ad067e4244010306f633e94db2645dd6d}
+
+
+\subsection{Function Documentation}
+\hypertarget{ikfast_8h_a4c86d9942cccced3b6cf2ebc8d821b29}{\index{ikfast.\-h@{ikfast.\-h}!Compute\-Fk@{Compute\-Fk}}
+\index{Compute\-Fk@{Compute\-Fk}!ikfast.h@{ikfast.\-h}}
+\subsubsection[{Compute\-Fk}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} void Compute\-Fk (
+\begin{DoxyParamCaption}
+\item[{const {\bf Ik\-Real} $\ast$}]{j, }
+\item[{{\bf Ik\-Real} $\ast$}]{eetrans, }
+\item[{{\bf Ik\-Real} $\ast$}]{eerot}
+\end{DoxyParamCaption}
+)}}\label{ikfast_8h_a4c86d9942cccced3b6cf2ebc8d821b29}
+solves the forward kinematics equations. 
+\begin{DoxyParams}{Parameters}
+{\em pfree} & is an array specifying the free joints of the chain. \\
+\hline
+\end{DoxyParams}
+\hypertarget{ikfast_8h_a5adc58004a3319e0e988a80a60cf0f80}{\index{ikfast.\-h@{ikfast.\-h}!Compute\-Ik@{Compute\-Ik}}
+\index{Compute\-Ik@{Compute\-Ik}!ikfast.h@{ikfast.\-h}}
+\subsubsection[{Compute\-Ik}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} bool Compute\-Ik (
+\begin{DoxyParamCaption}
+\item[{const {\bf Ik\-Real} $\ast$}]{eetrans, }
+\item[{const {\bf Ik\-Real} $\ast$}]{eerot, }
+\item[{const {\bf Ik\-Real} $\ast$}]{pfree, }
+\item[{{\bf Ik\-Solution\-List\-Base}$<$ {\bf Ik\-Real} $>$ \&}]{solutions}
+\end{DoxyParamCaption}
+)}}\label{ikfast_8h_a5adc58004a3319e0e988a80a60cf0f80}
+
+
+Computes all I\-K solutions given a end effector coordinates and the free joints. 
+
+
+\begin{DoxyItemize}
+\item {\ttfamily eetrans} -\/ 3 translation values. For iktype {\bfseries Translation\-X\-Y\-Orientation3\-D}, the z-\/axis is the orientation.
+\item {\ttfamily eerot}
+\item For {\bfseries Transform6\-D} it is 9 values for the 3x3 rotation matrix.
+\item For {\bfseries Direction3\-D}, {\bfseries Ray4\-D}, and {\bfseries Translation\-Direction5\-D}, the first 3 values represent the target direction.
+\item For {\bfseries Translation\-X\-Axis\-Angle4\-D}, {\bfseries Translation\-Y\-Axis\-Angle4\-D}, and {\bfseries Translation\-Z\-Axis\-Angle4\-D} the first value represents the angle.
+\item For {\bfseries Translation\-Local\-Global6\-D}, the diagonal elements (\mbox{[}0\mbox{]},\mbox{[}4\mbox{]},\mbox{[}8\mbox{]}) are the local translation inside the end effector coordinate system.
+\end{DoxyItemize}
+
+solves the inverse kinematics equations. 
+\begin{DoxyParams}{Parameters}
+{\em pfree} & is an array specifying the free joints of the chain. \\
+\hline
+\end{DoxyParams}
+\hypertarget{ikfast_8h_a89f49fc6a4d83f569fd5b02d16dca3a3}{\index{ikfast.\-h@{ikfast.\-h}!Compute\-Ik2@{Compute\-Ik2}}
+\index{Compute\-Ik2@{Compute\-Ik2}!ikfast.h@{ikfast.\-h}}
+\subsubsection[{Compute\-Ik2}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} bool Compute\-Ik2 (
+\begin{DoxyParamCaption}
+\item[{const {\bf Ik\-Real} $\ast$}]{eetrans, }
+\item[{const {\bf Ik\-Real} $\ast$}]{eerot, }
+\item[{const {\bf Ik\-Real} $\ast$}]{pfree, }
+\item[{{\bf ikfast\-::\-Ik\-Solution\-List\-Base}$<$ {\bf Ik\-Real} $>$ \&}]{solutions, }
+\item[{void $\ast$}]{p\-Open\-R\-A\-V\-E\-Manip}
+\end{DoxyParamCaption}
+)}}\label{ikfast_8h_a89f49fc6a4d83f569fd5b02d16dca3a3}
+
+
+Similar to Compute\-Ik except takes Open\-R\-A\-V\-E boost\-::shared\-\_\-ptr$<$\-Robot\-Base\-::\-Manipulator$>$$\ast$. 
+
+\hypertarget{ikfast_8h_a17f253d85cd4ac00e8840c417eef2487}{\index{ikfast.\-h@{ikfast.\-h}!Get\-Free\-Parameters@{Get\-Free\-Parameters}}
+\index{Get\-Free\-Parameters@{Get\-Free\-Parameters}!ikfast.h@{ikfast.\-h}}
+\subsubsection[{Get\-Free\-Parameters}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int$\ast$ Get\-Free\-Parameters (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{ikfast_8h_a17f253d85cd4ac00e8840c417eef2487}
+\hypertarget{ikfast_8h_aeb290d53b240a4d54cae3caaf43d19d7}{\index{ikfast.\-h@{ikfast.\-h}!Get\-Ik\-Fast\-Version@{Get\-Ik\-Fast\-Version}}
+\index{Get\-Ik\-Fast\-Version@{Get\-Ik\-Fast\-Version}!ikfast.h@{ikfast.\-h}}
+\subsubsection[{Get\-Ik\-Fast\-Version}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} const char$\ast$ Get\-Ik\-Fast\-Version (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{ikfast_8h_aeb290d53b240a4d54cae3caaf43d19d7}
+\hypertarget{ikfast_8h_a6709f20b26f0903f0aa58a26934c853c}{\index{ikfast.\-h@{ikfast.\-h}!Get\-Ik\-Real\-Size@{Get\-Ik\-Real\-Size}}
+\index{Get\-Ik\-Real\-Size@{Get\-Ik\-Real\-Size}!ikfast.h@{ikfast.\-h}}
+\subsubsection[{Get\-Ik\-Real\-Size}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int Get\-Ik\-Real\-Size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{ikfast_8h_a6709f20b26f0903f0aa58a26934c853c}
+\hypertarget{ikfast_8h_abc401850b948d5a0402e9dbb77d3846f}{\index{ikfast.\-h@{ikfast.\-h}!Get\-Ik\-Type@{Get\-Ik\-Type}}
+\index{Get\-Ik\-Type@{Get\-Ik\-Type}!ikfast.h@{ikfast.\-h}}
+\subsubsection[{Get\-Ik\-Type}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int Get\-Ik\-Type (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{ikfast_8h_abc401850b948d5a0402e9dbb77d3846f}
+\hypertarget{ikfast_8h_afb700ffecf29c92e7b86762777659d85}{\index{ikfast.\-h@{ikfast.\-h}!Get\-Kinematics\-Hash@{Get\-Kinematics\-Hash}}
+\index{Get\-Kinematics\-Hash@{Get\-Kinematics\-Hash}!ikfast.h@{ikfast.\-h}}
+\subsubsection[{Get\-Kinematics\-Hash}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} const char$\ast$ Get\-Kinematics\-Hash (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{ikfast_8h_afb700ffecf29c92e7b86762777659d85}
+\hypertarget{ikfast_8h_af0cf03d3ad69d099a9a2eb6db5e5b352}{\index{ikfast.\-h@{ikfast.\-h}!Get\-Num\-Free\-Parameters@{Get\-Num\-Free\-Parameters}}
+\index{Get\-Num\-Free\-Parameters@{Get\-Num\-Free\-Parameters}!ikfast.h@{ikfast.\-h}}
+\subsubsection[{Get\-Num\-Free\-Parameters}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int Get\-Num\-Free\-Parameters (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{ikfast_8h_af0cf03d3ad69d099a9a2eb6db5e5b352}
+\hypertarget{ikfast_8h_a3e9541dde410904e043fe18701061b62}{\index{ikfast.\-h@{ikfast.\-h}!Get\-Num\-Joints@{Get\-Num\-Joints}}
+\index{Get\-Num\-Joints@{Get\-Num\-Joints}!ikfast.h@{ikfast.\-h}}
+\subsubsection[{Get\-Num\-Joints}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-K\-F\-A\-S\-T\-\_\-\-A\-P\-I} int Get\-Num\-Joints (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{ikfast_8h_a3e9541dde410904e043fe18701061b62}

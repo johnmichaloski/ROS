@@ -51,17 +51,18 @@ The ros parameter name is given by the yaml: controller_joint_names
  */
 
 class GripperInterface {
-public:
+protected:
     ros::Publisher joint_pub;
     std::vector<std::string> joint_names;
     const double degree = M_PI / 180;
     sensor_msgs::JointState joint_state;
     std::string prefix;
+public:
 
     GripperInterface() {
     }
 
-    void init(ros::NodeHandle &nh, std::string prefix, bool bPublish = false) {
+    virtual void init(ros::NodeHandle &nh, std::string prefix, bool bPublish = false) {
         ROS_INFO("GripperHwInterface init");
         try {
             this->prefix = prefix;
@@ -143,32 +144,4 @@ public:
         joint_state.position[5] = -position;
         return joint_state;
     }
-
-#if 0
-    boost::shared_ptr<urdf::Model> urdf;
-
-    ////////////////////////////////////////////
-    ///
-
-    boost::shared_ptr<urdf::Model> getUrdf(const ros::NodeHandle& nh, const std::string& param_name) {
-        boost::shared_ptr<urdf::Model> urdf(new urdf::Model);
-
-        std::string urdf_str;
-        // Check for robot_description in proper namespace
-        if (nh.getParam(param_name, urdf_str)) {
-            if (!urdf->initString(urdf_str)) {
-                ROS_ERROR_STREAM("Failed to parse URDF contained in '" << param_name << "' parameter (namespace: " <<
-                        nh.getNamespace() << ").");
-                return boost::shared_ptr<urdf::Model>();
-            }
-        }// Check for robot_description in root
-        else if (!urdf->initParam("robot_description")) {
-            ROS_ERROR_STREAM("Failed to parse URDF contained in '" << param_name << "' parameter");
-            return boost::shared_ptr<urdf::Model>();
-        }
-        return urdf;
-    }
-
-#endif
-
 };

@@ -15,6 +15,19 @@
 #include <visualization_msgs/Marker.h>
 #include "RCS.h"
 
+/*
+ Sample code:
+        boost::shared_ptr<CRvizMarker> pRvizMarker;
+        pRvizMarker = boost::shared_ptr<CRvizMarker>(new CRvizMarker(nh));
+        pRvizMarker->Init();
+. . .
+                     if (bMarker()) {
+                        RCS::Pose goalpose = Kinematics()->FK(_newcc.joints.position);
+                         LOG_DEBUG << "Marker Pose " << DumpPose(goalpose).c_str();
+                        RvizMarker()->Send(goalpose);
+                    }
+ 
+ */
 /**
  * \brief The CRvizMarker provides a C++ class to send markers to rviz.
  * Note you must manually add the rviz subscribe to marker messages. Read here for

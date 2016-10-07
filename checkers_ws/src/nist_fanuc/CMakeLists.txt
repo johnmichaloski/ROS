@@ -68,6 +68,11 @@ set(CMAKE_CXX_FLAGS "-DBOOST_LOG_DYN_LINK ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "-fpermissive ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "-g ${CMAKE_CXX_FLAGS}")
 
+set(CMAKE_CXX_FLAGS "-DCHECKERS ${CMAKE_CXX_FLAGS}")
+#set(CMAKE_CXX_FLAGS "-DBOLTDEMO ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-DFANUCPREFIX ${CMAKE_CXX_FLAGS}")
+
+
 set(CMAKE_EXE_LINKER_FLAGS "-rdynamic ${CMAKE_EXE_LINKER_FLAGS}")
 
 message("DEBUG variable catkin_INCLUDEDIR: ${catkin_INCLUDEDIR}")
@@ -98,7 +103,6 @@ add_executable(nist_fanuc
 
 
 src/BLogging.cpp
-src/Communication.cpp
 src/Controller.cpp
 src/Conversions.cpp
 src/CsvLogging.cpp
@@ -111,10 +115,12 @@ src/RvizMarker.cpp
 src/Scene.cpp
 src/RosSetup.cpp
 src/arm_kinematics.cpp
-#src/moveit.cpp
 src/nist_fanuc.cpp
 src/trajectoryMaker.cpp
-src/fanuc_lrmate200id_manipulator_ikfast_solver.cpp
+#src/fanuc/fanuc_lrmate200id_manipulator_ikfast_solver.cpp
+#src/fanuc/fanuc_lrmate200id.cpp
+src/Demo.cpp
+src/motoman/ikfast_sia20d_manipulator.cpp
 )
 
 #Add all files in subdirectories of the project in

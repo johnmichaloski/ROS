@@ -1,0 +1,189 @@
+\hypertarget{classInlineRobotCommands}{\section{Inline\-Robot\-Commands Class Reference}
+\label{classInlineRobotCommands}\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}}
+}
+
+
+{\ttfamily \#include $<$Demo.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classInlineRobotCommands_a55f98544e6640f051b32f3fa46b910ce}{Inline\-Robot\-Commands} (boost\-::shared\-\_\-ptr$<$ \hyperlink{structRCS_1_1CController}{R\-C\-S\-::\-C\-Controller} $>$ \hyperlink{classInlineRobotCommands_a8bbcf09003802157c790e6259c7ff266}{cnc}, \hyperlink{classNearestJointsLookup}{Nearest\-Joints\-Lookup} \&hints)
+\item 
+boost\-::shared\-\_\-ptr\\*
+$<$ \hyperlink{structRCS_1_1CController}{R\-C\-S\-::\-C\-Controller} $>$ \hyperlink{classInlineRobotCommands_a8bbcf09003802157c790e6259c7ff266}{cnc} ()
+\item 
+void \hyperlink{classInlineRobotCommands_a1f29c0424d9c98c01691ddfe521383a3}{Pick} (\hyperlink{namespaceRCS_aa07e45d8a50e30064283d2b38087f999}{R\-C\-S\-::\-Pose} pose, std\-::string objname)
+\item 
+void \hyperlink{classInlineRobotCommands_ae38c59374bd43f0487f497ed5f075a4f}{Move\-To} (\hyperlink{namespaceRCS_aa07e45d8a50e30064283d2b38087f999}{R\-C\-S\-::\-Pose} pose, std\-::string objname=\char`\"{}\char`\"{})
+\item 
+void \hyperlink{classInlineRobotCommands_a09d5b54783e9170d2cc38bccd5e9f68e}{Do\-Dwell} (double dwelltime)
+\item 
+void \hyperlink{classInlineRobotCommands_adf938bd806e814533d0e8da269f9c9ae}{Add\-Gripper\-Offset} ()
+\item 
+void \hyperlink{classInlineRobotCommands_a4d534f48643fe9eb9c9092113b4ae388}{Open\-Gripper} ()
+\item 
+void \hyperlink{classInlineRobotCommands_aba001f2c6b02d413ce81925946bfd46d}{Close\-Gripper} ()
+\item 
+void \hyperlink{classInlineRobotCommands_a7c03908c20b1278c65c0d33bfeb66a87}{Set\-Gripper} (double ee)
+\item 
+void \hyperlink{classInlineRobotCommands_ae5d97e1a52590a52434aaa2f9235803a}{Place} (\hyperlink{namespaceRCS_aa07e45d8a50e30064283d2b38087f999}{R\-C\-S\-::\-Pose} pose, std\-::string objname)
+\item 
+void \hyperlink{classInlineRobotCommands_aa3edde0550fe9a01c9a82f39c4afc913}{Move\-Object} (std\-::string objname, \hyperlink{namespaceRCS_aa07e45d8a50e30064283d2b38087f999}{R\-C\-S\-::\-Pose} pose, int color)
+\item 
+void \hyperlink{classInlineRobotCommands_a0ca748c8f39015ccbe6a93d43b667cec}{Erase\-Object} (std\-::string objname)
+\item 
+void \hyperlink{classInlineRobotCommands_a9bdbd051bf6c63654580d6cd72265c3d}{Test\-Robot\-Commands} ()
+\item 
+void \hyperlink{classInlineRobotCommands_a5db059cdcc49da3e7ee21c6bd59f6eed}{Move\-Joints} (std\-::vector$<$ long unsigned int $>$ jointnum, std\-::vector$<$ double $>$ positions)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+double \hyperlink{classInlineRobotCommands_abe4d63965a1a4d3fafa630ace7305fd4}{mydwell}
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+boost\-::shared\-\_\-ptr\\*
+$<$ \hyperlink{structRCS_1_1CController}{R\-C\-S\-::\-C\-Controller} $>$ \hyperlink{classInlineRobotCommands_a30ef647cba21bf1ea526f144438d37b7}{\-\_\-cnc}
+\item 
+\hyperlink{classNearestJointsLookup}{Nearest\-Joints\-Lookup} \& \hyperlink{classInlineRobotCommands_a0089ed745abbe24d8e0229be71deae04}{\-\_\-hints}
+\end{DoxyCompactItemize}
+\subsection*{Static Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static int \hyperlink{classInlineRobotCommands_a2186bbc7718fcaaaa1841d7a01c726d9}{crclcommandnum} = 1
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classInlineRobotCommands_a55f98544e6640f051b32f3fa46b910ce}{\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!Inline\-Robot\-Commands@{Inline\-Robot\-Commands}}
+\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!InlineRobotCommands@{Inline\-Robot\-Commands}}
+\subsubsection[{Inline\-Robot\-Commands}]{\setlength{\rightskip}{0pt plus 5cm}Inline\-Robot\-Commands\-::\-Inline\-Robot\-Commands (
+\begin{DoxyParamCaption}
+\item[{boost\-::shared\-\_\-ptr$<$ {\bf R\-C\-S\-::\-C\-Controller} $>$}]{cnc, }
+\item[{{\bf Nearest\-Joints\-Lookup} \&}]{hints}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classInlineRobotCommands_a55f98544e6640f051b32f3fa46b910ce}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classInlineRobotCommands_adf938bd806e814533d0e8da269f9c9ae}{\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!Add\-Gripper\-Offset@{Add\-Gripper\-Offset}}
+\index{Add\-Gripper\-Offset@{Add\-Gripper\-Offset}!InlineRobotCommands@{Inline\-Robot\-Commands}}
+\subsubsection[{Add\-Gripper\-Offset}]{\setlength{\rightskip}{0pt plus 5cm}void Inline\-Robot\-Commands\-::\-Add\-Gripper\-Offset (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classInlineRobotCommands_adf938bd806e814533d0e8da269f9c9ae}
+\hypertarget{classInlineRobotCommands_aba001f2c6b02d413ce81925946bfd46d}{\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!Close\-Gripper@{Close\-Gripper}}
+\index{Close\-Gripper@{Close\-Gripper}!InlineRobotCommands@{Inline\-Robot\-Commands}}
+\subsubsection[{Close\-Gripper}]{\setlength{\rightskip}{0pt plus 5cm}void Inline\-Robot\-Commands\-::\-Close\-Gripper (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classInlineRobotCommands_aba001f2c6b02d413ce81925946bfd46d}
+\hypertarget{classInlineRobotCommands_a8bbcf09003802157c790e6259c7ff266}{\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!cnc@{cnc}}
+\index{cnc@{cnc}!InlineRobotCommands@{Inline\-Robot\-Commands}}
+\subsubsection[{cnc}]{\setlength{\rightskip}{0pt plus 5cm}boost\-::shared\-\_\-ptr$<${\bf R\-C\-S\-::\-C\-Controller}$>$ Inline\-Robot\-Commands\-::cnc (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classInlineRobotCommands_a8bbcf09003802157c790e6259c7ff266}
+\hypertarget{classInlineRobotCommands_a09d5b54783e9170d2cc38bccd5e9f68e}{\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!Do\-Dwell@{Do\-Dwell}}
+\index{Do\-Dwell@{Do\-Dwell}!InlineRobotCommands@{Inline\-Robot\-Commands}}
+\subsubsection[{Do\-Dwell}]{\setlength{\rightskip}{0pt plus 5cm}void Inline\-Robot\-Commands\-::\-Do\-Dwell (
+\begin{DoxyParamCaption}
+\item[{double}]{dwelltime}
+\end{DoxyParamCaption}
+)}}\label{classInlineRobotCommands_a09d5b54783e9170d2cc38bccd5e9f68e}
+\hypertarget{classInlineRobotCommands_a0ca748c8f39015ccbe6a93d43b667cec}{\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!Erase\-Object@{Erase\-Object}}
+\index{Erase\-Object@{Erase\-Object}!InlineRobotCommands@{Inline\-Robot\-Commands}}
+\subsubsection[{Erase\-Object}]{\setlength{\rightskip}{0pt plus 5cm}void Inline\-Robot\-Commands\-::\-Erase\-Object (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{objname}
+\end{DoxyParamCaption}
+)}}\label{classInlineRobotCommands_a0ca748c8f39015ccbe6a93d43b667cec}
+\hypertarget{classInlineRobotCommands_a5db059cdcc49da3e7ee21c6bd59f6eed}{\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!Move\-Joints@{Move\-Joints}}
+\index{Move\-Joints@{Move\-Joints}!InlineRobotCommands@{Inline\-Robot\-Commands}}
+\subsubsection[{Move\-Joints}]{\setlength{\rightskip}{0pt plus 5cm}void Inline\-Robot\-Commands\-::\-Move\-Joints (
+\begin{DoxyParamCaption}
+\item[{std\-::vector$<$ long unsigned int $>$}]{jointnum, }
+\item[{std\-::vector$<$ double $>$}]{positions}
+\end{DoxyParamCaption}
+)}}\label{classInlineRobotCommands_a5db059cdcc49da3e7ee21c6bd59f6eed}
+\hypertarget{classInlineRobotCommands_aa3edde0550fe9a01c9a82f39c4afc913}{\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!Move\-Object@{Move\-Object}}
+\index{Move\-Object@{Move\-Object}!InlineRobotCommands@{Inline\-Robot\-Commands}}
+\subsubsection[{Move\-Object}]{\setlength{\rightskip}{0pt plus 5cm}void Inline\-Robot\-Commands\-::\-Move\-Object (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{objname, }
+\item[{{\bf R\-C\-S\-::\-Pose}}]{pose, }
+\item[{int}]{color}
+\end{DoxyParamCaption}
+)}}\label{classInlineRobotCommands_aa3edde0550fe9a01c9a82f39c4afc913}
+\hypertarget{classInlineRobotCommands_ae38c59374bd43f0487f497ed5f075a4f}{\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!Move\-To@{Move\-To}}
+\index{Move\-To@{Move\-To}!InlineRobotCommands@{Inline\-Robot\-Commands}}
+\subsubsection[{Move\-To}]{\setlength{\rightskip}{0pt plus 5cm}void Inline\-Robot\-Commands\-::\-Move\-To (
+\begin{DoxyParamCaption}
+\item[{{\bf R\-C\-S\-::\-Pose}}]{pose, }
+\item[{std\-::string}]{objname = {\ttfamily \char`\"{}\char`\"{}}}
+\end{DoxyParamCaption}
+)}}\label{classInlineRobotCommands_ae38c59374bd43f0487f497ed5f075a4f}
+\hypertarget{classInlineRobotCommands_a4d534f48643fe9eb9c9092113b4ae388}{\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!Open\-Gripper@{Open\-Gripper}}
+\index{Open\-Gripper@{Open\-Gripper}!InlineRobotCommands@{Inline\-Robot\-Commands}}
+\subsubsection[{Open\-Gripper}]{\setlength{\rightskip}{0pt plus 5cm}void Inline\-Robot\-Commands\-::\-Open\-Gripper (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classInlineRobotCommands_a4d534f48643fe9eb9c9092113b4ae388}
+\hypertarget{classInlineRobotCommands_a1f29c0424d9c98c01691ddfe521383a3}{\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!Pick@{Pick}}
+\index{Pick@{Pick}!InlineRobotCommands@{Inline\-Robot\-Commands}}
+\subsubsection[{Pick}]{\setlength{\rightskip}{0pt plus 5cm}void Inline\-Robot\-Commands\-::\-Pick (
+\begin{DoxyParamCaption}
+\item[{{\bf R\-C\-S\-::\-Pose}}]{pose, }
+\item[{std\-::string}]{objname}
+\end{DoxyParamCaption}
+)}}\label{classInlineRobotCommands_a1f29c0424d9c98c01691ddfe521383a3}
+\hypertarget{classInlineRobotCommands_ae5d97e1a52590a52434aaa2f9235803a}{\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!Place@{Place}}
+\index{Place@{Place}!InlineRobotCommands@{Inline\-Robot\-Commands}}
+\subsubsection[{Place}]{\setlength{\rightskip}{0pt plus 5cm}void Inline\-Robot\-Commands\-::\-Place (
+\begin{DoxyParamCaption}
+\item[{{\bf R\-C\-S\-::\-Pose}}]{pose, }
+\item[{std\-::string}]{objname}
+\end{DoxyParamCaption}
+)}}\label{classInlineRobotCommands_ae5d97e1a52590a52434aaa2f9235803a}
+\hypertarget{classInlineRobotCommands_a7c03908c20b1278c65c0d33bfeb66a87}{\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!Set\-Gripper@{Set\-Gripper}}
+\index{Set\-Gripper@{Set\-Gripper}!InlineRobotCommands@{Inline\-Robot\-Commands}}
+\subsubsection[{Set\-Gripper}]{\setlength{\rightskip}{0pt plus 5cm}void Inline\-Robot\-Commands\-::\-Set\-Gripper (
+\begin{DoxyParamCaption}
+\item[{double}]{ee}
+\end{DoxyParamCaption}
+)}}\label{classInlineRobotCommands_a7c03908c20b1278c65c0d33bfeb66a87}
+\hypertarget{classInlineRobotCommands_a9bdbd051bf6c63654580d6cd72265c3d}{\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!Test\-Robot\-Commands@{Test\-Robot\-Commands}}
+\index{Test\-Robot\-Commands@{Test\-Robot\-Commands}!InlineRobotCommands@{Inline\-Robot\-Commands}}
+\subsubsection[{Test\-Robot\-Commands}]{\setlength{\rightskip}{0pt plus 5cm}void Inline\-Robot\-Commands\-::\-Test\-Robot\-Commands (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classInlineRobotCommands_a9bdbd051bf6c63654580d6cd72265c3d}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classInlineRobotCommands_a30ef647cba21bf1ea526f144438d37b7}{\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!\-\_\-cnc@{\-\_\-cnc}}
+\index{\-\_\-cnc@{\-\_\-cnc}!InlineRobotCommands@{Inline\-Robot\-Commands}}
+\subsubsection[{\-\_\-cnc}]{\setlength{\rightskip}{0pt plus 5cm}boost\-::shared\-\_\-ptr$<${\bf R\-C\-S\-::\-C\-Controller}$>$ Inline\-Robot\-Commands\-::\-\_\-cnc\hspace{0.3cm}{\ttfamily [protected]}}}\label{classInlineRobotCommands_a30ef647cba21bf1ea526f144438d37b7}
+\hypertarget{classInlineRobotCommands_a0089ed745abbe24d8e0229be71deae04}{\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!\-\_\-hints@{\-\_\-hints}}
+\index{\-\_\-hints@{\-\_\-hints}!InlineRobotCommands@{Inline\-Robot\-Commands}}
+\subsubsection[{\-\_\-hints}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Nearest\-Joints\-Lookup}\& Inline\-Robot\-Commands\-::\-\_\-hints\hspace{0.3cm}{\ttfamily [protected]}}}\label{classInlineRobotCommands_a0089ed745abbe24d8e0229be71deae04}
+\hypertarget{classInlineRobotCommands_a2186bbc7718fcaaaa1841d7a01c726d9}{\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!crclcommandnum@{crclcommandnum}}
+\index{crclcommandnum@{crclcommandnum}!InlineRobotCommands@{Inline\-Robot\-Commands}}
+\subsubsection[{crclcommandnum}]{\setlength{\rightskip}{0pt plus 5cm}int Inline\-Robot\-Commands\-::crclcommandnum = 1\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}}\label{classInlineRobotCommands_a2186bbc7718fcaaaa1841d7a01c726d9}
+\hypertarget{classInlineRobotCommands_abe4d63965a1a4d3fafa630ace7305fd4}{\index{Inline\-Robot\-Commands@{Inline\-Robot\-Commands}!mydwell@{mydwell}}
+\index{mydwell@{mydwell}!InlineRobotCommands@{Inline\-Robot\-Commands}}
+\subsubsection[{mydwell}]{\setlength{\rightskip}{0pt plus 5cm}double Inline\-Robot\-Commands\-::mydwell}}\label{classInlineRobotCommands_abe4d63965a1a4d3fafa630ace7305fd4}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\hyperlink{Demo_8h}{Demo.\-h}\item 
+/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/src/\hyperlink{Demo_8cpp}{Demo.\-cpp}\end{DoxyCompactItemize}

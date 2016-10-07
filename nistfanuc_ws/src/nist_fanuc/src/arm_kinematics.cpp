@@ -112,7 +112,7 @@ bool Kinematics::readJoints(urdf::Model &robot_model) {
             return false;
         }
         if (joint->type != urdf::Joint::UNKNOWN && joint->type != urdf::Joint::FIXED) {
-            ROS_DEBUG( "adding joint: [%s]", joint->name.c_str() );
+            ROS_INFO( "adding joint: [%s]", joint->name.c_str() );
             num_joints++;
         }
         link = robot_model.getLink(link->getParent()->name);
@@ -191,6 +191,7 @@ bool Kinematics::getPositionIK(moveit_msgs::GetPositionIK::Request &request,
     KDL::JntArray jnt_pos_in;
     KDL::JntArray jnt_pos_out;
     jnt_pos_in.resize(num_joints);
+    jnt_pos_out.resize(num_joints);
     for (unsigned int i=0; i < num_joints; i++) {
         int tmp_index = getJointIndex(request.ik_request.robot_state.joint_state.name[i]   ) ;//.ik_request.ik_seed_state.joint_state.name[i]);
         if (tmp_index >=0) {
@@ -199,6 +200,8 @@ bool Kinematics::getPositionIK(moveit_msgs::GetPositionIK::Request &request,
             ROS_ERROR("i: %d, No joint index for %s",i,request.ik_request.robot_state.joint_state.name[i].c_str());
         }
     }
+    KDL::Frame F_dest;
+
 #if 0
     //Convert F to our root_frame
     try {
@@ -208,27 +211,34 @@ bool Kinematics::getPositionIK(moveit_msgs::GetPositionIK::Request &request,
         response.error_code.val = response.error_code.FRAME_TRANSFORM_FAILURE;
        return false;
     }
-#endif
-    KDL::Frame F_dest;
+   tf::TransformTFToKDL(transform_root, F_dest);
+#else
     tf::TransformTFToKDL(transform, F_dest);
-//    tf::TransformTFToKDL(transform_root, F_dest);
+#endif
+    try {
 
-    int ik_valid = ik_solver_pos->CartToJnt(jnt_pos_in, F_dest, jnt_pos_out);
+        int ik_valid = ik_solver_pos->CartToJnt(jnt_pos_in, F_dest, jnt_pos_out);
 
-    if (ik_valid >= 0) {
-        response.solution.joint_state.name = info.joint_names;
-        response.solution.joint_state.position.resize(num_joints);
-        for (unsigned int i=0; i < num_joints; i++) {
-            response.solution.joint_state.position[i] = jnt_pos_out(i);
-            ROS_DEBUG("IK Solution: %s %d: %f",response.solution.joint_state.name[i].c_str(),i,jnt_pos_out(i));
+        if (ik_valid >= 0) {
+            response.solution.joint_state.name = info.joint_names;
+            response.solution.joint_state.position.resize(num_joints);
+            for (unsigned int i = 0; i < num_joints; i++) {
+                response.solution.joint_state.position[i] = jnt_pos_out(i);
+                ROS_DEBUG("IK Solution: %s %d: %f", response.solution.joint_state.name[i].c_str(), i, jnt_pos_out(i));
+            }
+            response.error_code.val = response.error_code.SUCCESS;
+            return true;
+        } else {
+            ROS_DEBUG("An IK solution could not be found");
+            response.error_code.val = response.error_code.NO_IK_SOLUTION;
+            return true;
         }
-        response.error_code.val = response.error_code.SUCCESS;
-        return true;
-    } else {
-        ROS_DEBUG("An IK solution could not be found");
-        response.error_code.val = response.error_code.NO_IK_SOLUTION;
-        return true;
+    }    catch (...) {
+        
     }
+    ROS_DEBUG("An IK solution exception was thrown");
+    response.error_code.val = response.error_code.NO_IK_SOLUTION;
+    return true;
 }
 
 bool Kinematics::getIKSolverInfo(moveit_msgs::GetKinematicSolverInfo::Request &request,

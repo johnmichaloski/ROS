@@ -70,10 +70,15 @@ catkin init
 <p>You can control the number of build jobs. Typically a job controller is used and all the cores are assigned make files, which halts GUI interaction.</p>
 <p>You can control the maximum number of packages allowed to build in parallel by using the -p or &ndash;parallel-packages option and you can change the number of make jobs available with the -j or &ndash;jobs option.</p>
 <p>To disable the job server, you can use the &ndash;no-jobserver option. </p>
-<pre class="fragment">catkin build PKG --no-deps -p 7 # Build PKG only, and use only 7 or 8 cores</pre> </div></div><!-- contents -->
+<pre class="fragment">catkin build PKG --no-deps -p 7 # Build PKG only, and use only 7 or 8 cores
+</pre><h2>Building With Warnings </h2>
+<p>It can sometimes be useful to compile with additional warnings enabled across your whole catkin workspace. To achieve this, use a command similar to this: </p>
+<pre class="fragment">$ catkin build -v --cmake-args -DCMAKE_C_FLAGS="-Wall -W -Wno-unused-parameter"
+</pre><p>This command passes the <code>-DCMAKE_C_FLAGS=</code>... argument to all invocations of cmake. </p>
+</div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 15 2016 14:48:00 for CRCL FANUC by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Sep 28 2016 15:13:34 for CRCL FANUC by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

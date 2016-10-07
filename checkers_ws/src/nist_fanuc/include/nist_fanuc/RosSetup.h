@@ -29,7 +29,10 @@ extern "C" {
      * \return bool true if success.
      */
     extern bool SetupAppEnvironment();
-
+#if 0
+        // Example use in main program - This sets up the `env` so that ROS can run - has too many hardwired dependencies
+        SetupRosEnvironment(path);
+#endif
     /*!
      * \brief SetupRosEnvironment will attempt to provide an environment equivalent to ROS "source devel/setup.bash".
      * \fixme some of the code is hard coded, but unnecessary if executable run in shell.

@@ -24,18 +24,30 @@
 #include "Scene.h"
 #include "Checkerboard.h"
 #include "StackTrace.h"
-#include "fanuc_lrmate200id.h"
 #include "RCSInterpreter.h"
 #include "Demo.h"
 #include "Test.h"
 
+#define MULTITHREADED
+#define MOTOMAN
+#define FANUC
 // /opt/ros/indigo/include/moveit/robot_state/robot_state.h
 // /opt/ros/indigo/include/moveit/move_group_interface/move_group.h
-extern RCS::Pose ComputeGripperOffset();
-extern RCS::Pose AutoComputeGripperOffset(urdf::Model& robot_model, std::string prefix);
 
-Eigen::Affine3d fanucoffset00 = Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, -0.5, 0.0);
-Eigen::Affine3d motomanoffset00 = Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, 0.5, 0.0);
+//Eigen::Affine3d fanucoffset00 = Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, -0.5, 0.0);
+//Eigen::Affine3d motomanoffset00 = Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, 0.5, 0.0);
+
+tf::Pose fanucbaseoffset = RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
+        tf::Vector3(0.0, -0.5, 0.0)); 
+
+tf::Pose motomanbaseoffset = RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
+        tf::Vector3(0.0, 0.5, 0.0)); 
+
+tf::Pose fanucGripper = RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
+        tf::Vector3(0.140, 0.0, -0.017));
+
+tf::Pose motoGripper = RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
+        tf::Vector3(-0.017, 0.0, 0.140));
 
 
 int main(int argc, char** argv) {
@@ -79,18 +91,20 @@ int main(int argc, char** argv) {
         ros::NodeHandle nh;
         ros::Rate r(50); // 10 times a second - 10Hz
 
+ #if 0
         /**
-         * The five different verbosity levels are, in order:
+         * The five different ROS verbosity levels are, in order:
          * DEBUG ROS_DEBUG
          * INFO ROS_INFO
          * WARN
          * ERROR
          * FATAL  ROS_FATAL
          */
+
         if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info)) {
             ros::console::notifyLoggerLevelsChanged();
         }
-    
+#endif
         RvizDemo rvizdemo(nh);
 
         // Accessing Private Parameters
@@ -110,10 +124,7 @@ int main(int argc, char** argv) {
         }
 #endif  
 
-        // Controller shared objects dependent on ROS - many with abstract interface definition   
-        boost::shared_ptr<IKinematics> fkin;
-        boost::shared_ptr<IKinematics> mkin;
-
+ 
         //  Required for multithreaded ROS communication  NOT TRUE: if not ros::spinOnce
         ros::AsyncSpinner spinner(2);
         spinner.start();
@@ -123,109 +134,64 @@ int main(int argc, char** argv) {
         Globals.WriteFile(Globals.ExeDirectory + "rosconfig.txt", params);
         path = ros::package::getPath("nist_fanuc");
         Globals._appproperties["nist_fanuc"] = path;
-
-
-#if 0
-        boost::shared_ptr<CRvizMarker> pRvizMarker;
-        pRvizMarker = boost::shared_ptr<CRvizMarker>(new CRvizMarker(nh));
-        pRvizMarker->Init();
-#endif
         
-        tf::Pose fanucbaseoffset =Conversion::Affine3d2RcsPose(fanucoffset00);
-        tf::Pose motomanbaseoffset =Conversion::Affine3d2RcsPose(motomanoffset00);
-
-#define ARMKIN
-#ifdef ARMKIN
- #ifdef FANUCPREFIX
+        // Controller shared objects dependent on ROS - many with abstract interface definition   
+        
+        // Initialize Controller...
+#ifdef FANUC
+        boost::shared_ptr<IKinematics> fkin;
+        RCS::Fnc->SetBaseOffset(fanucbaseoffset);
+        RCS::Fnc->SetToolOffset(fanucGripper);
         fkin = boost::shared_ptr<IKinematics>(new ArmKinematics("fanuc_", fanucbaseoffset));
-        mkin = boost::shared_ptr<IKinematics>(new ArmKinematics("motoman_", motomanbaseoffset));
-#else
-        fkin = boost::shared_ptr<IKinematics>(new ArmKinematics("", "link_6", "base_link"));
-#endif
-        // Initialization of Controller instantiation of shared objects  
-        // Fixme: there is no tool0?
-        //  rosparam tip_name=	"fanuc_link_6" root_name"="world" 
-        fkin->Init(std::string("manipulator"), std::string("fanuc_link_6"),std::string("world"));
+        fkin->Init(std::string("manipulator"), std::string("fanuc_link_6"), std::string("world"));
         fkin->Init(nh);
-        
-        mkin->Init(std::string("manipulator"), std::string("motoman_link_t"),std::string("world"));
-        mkin->Init(nh);
-        
         RCS::Fnc->Kinematics() = fkin;
-        RCS::Mnc->Kinematics() = mkin;
-        ComputeGripperOffset();
-#ifdef FANUCPREFIX
-        AutoComputeGripperOffset(fkin->armkin->robot_model, "fanuc_");
-#else
-        AutoComputeGripperOffset(fkin->armkin->robot_model, "");
-#endif
-
-        TestFk(fkin, "armkin");
-        TestIk(fkin, "armkin");
-        TestFk(mkin, "motoman armkin");
-
+        RCS::Fnc->CycleTime() = DEFAULT_LOOP_CYCLE;
+        RCS::Fnc->NamedJointMove["Safe"]=ToVector<double>(6, 1.49, -0.17, -1.14, 0.11, -0.45, -1.67);
+        RCS::Fnc->Setup(nh, "fanuc_");
+        FanucNearestJointsLookup fanuchints(RCS::Fnc, fkin);
+        fanuchints.SetRobotHints();
+        InlineRobotCommands fanucrobot(RCS::Fnc, fanuchints);       RCS::Fnc->Kinematics() = fkin;
+        RCS::Fnc->_interpreter = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter(RCS::Fnc, fkin, fanuchints));
 #endif
         
-//#define FASTKIN    
-#ifdef FASTKIN
+#ifdef MOTOMAN
         boost::shared_ptr<IKinematics> fastkin;
         fastkin = boost::shared_ptr<IKinematics>(new FastKinematics());
-        // Initializatin of Controller instantiatio of shared objects  
-        fastkin->Init(std::string("manipulator"), std::string("tool0"));
+        // Initialization of Controller instantiation of shared objects  
+        fastkin->Init(std::string("manipulator"), std::string("motoman_link_t"), std::string("world"));
         fastkin->Init(nh);
-        //RCS::Fnc->Kinematics() = fastkin;
-        TestFk(fastkin, "fastkin");
-        TestIk(fastkin, "fastkin");
-#endif
-
-//#define lrmate200KIN    
-#ifdef lrmate200KIN
-        boost::shared_ptr<IKinematics> lrmate200idkin;
-        lrmate200idkin = boost::shared_ptr<IKinematics>(new FanucLrMate200idKinematics());
-        lrmate200idkin->Init(std::string("manipulator"), std::string("tool0"));
-        lrmate200idkin->Init(nh);
-        TestFk(lrmate200idkin, "lrmate200idkin");
-        TestIk(lrmate200idkin, "lrmate200idkin");  
-#endif
-
-        // Initialize Controller...
-#ifdef FANUCPREFIX
-        RCS::Fnc->Setup(nh, "fanuc_");
-        //RCS::Fnc->Setup(nh, "motoman_");
-#else
-        RCS::Fnc->Setup(nh, "");
-#endif
-        RCS::Fnc->status.Init();
-        RCS::Fnc->CycleTime() = DEFAULT_LOOP_CYCLE;
-
-
-        FanucNearestJointsLookup fanuchints(fanucbaseoffset, fkin);
-        fanuchints.SetRobotHints();
-        InlineRobotCommands fanucrobot(RCS::Fnc, fanuchints);
+//        LOG_DEBUG << "Motoman Joint Names=" << VectorDump<std::string>(fastkin->JointNames()).c_str();
+        RCS::Mnc->Kinematics() = fastkin;
+        RCS::Mnc->Setup(nh, "motoman_");
+        RCS::Mnc->CycleTime() = DEFAULT_LOOP_CYCLE;
+        RCS::Mnc->SetBaseOffset(motomanbaseoffset);
+        RCS::Mnc->SetToolOffset(motoGripper);
+        RCS::Mnc->NamedJointMove["Safe"]=ToVector<double>(7, 1.30, -0.84, 0.08, 2.26, 2.96, -0.38, -1.28);
         
-
-        InitScene();
- #if 0       
-        RvizCheckers rvizgame(nh);
-        Checkers::BoardType outboard;
-        std::stringstream str;
-        str<< rvizgame.Game().TestBoard();
-
-        LOG_DEBUG << str.str().c_str();
-        rvizgame.Game().Deserialize(str, outboard);
-         LOG_DEBUG << rvizgame.Game().printDisplayFancy(outboard).c_str();
+        MotomanNearestJointsLookup motohints(RCS::Mnc, fastkin);
+        motohints.SetRobotHints();
+        InlineRobotCommands motomanrobot(RCS::Mnc, motohints);
+        RCS::Mnc->_interpreter = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter( RCS::Mnc, fastkin, motohints));
 #endif
+ 
+        InitScene();
+
 #ifdef CHECKERS
         RvizCheckers rvizgame(nh);
         rvizgame.RvizSetup();
 #endif
-        DrawScene();
-       // LOG_DEBUG << ObjectDB::DumpDB();
         
-        RCS::Fnc->_interpreter = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter( RCS::Fnc, fkin));
-        RCS::Fnc->Kinematics() = fkin;
+        DrawScene();  // Debug: LOG_DEBUG << ObjectDB::DumpDB();
+
+#ifdef   MULTITHREADED
+#ifdef FANUC   
         RCS::Fnc->Start(); // start the Controller Session thread
-        fanucrobot.AddGripperOffset();
+#endif
+#ifdef MOTOMAN
+        RCS::Mnc->Start(); // start the Controller Session thread
+#endif
+#endif
         
 #ifdef CHECKERS
         // Play checkers - only move markers, no robot interaction
@@ -240,7 +206,19 @@ int main(int argc, char** argv) {
             if (rvizgame.CheckersMove(player, from, to))
                 break;
             rvizgame.Game().printDisplayFancy(rvizgame.Game().Board());
-            rvizgame.PhysicalMove(fanucrobot, player, from.row, from.col, to);
+            if(player==Checkers::RED) {
+                LOG_DEBUG << "Fanuc RED Move";
+                rvizgame.PhysicalMove(fanucrobot, player, from.row, from.col, to);
+            }
+            else {
+                rvizgame.PhysicalMove(motomanrobot, player, from.row, from.col, to);
+                LOG_DEBUG << "Motoman BLACK Move";
+           }
+#ifndef   MULTITHREADED
+            while (RCS::Mnc->IsBusy()) {
+                RCS::Mnc->Action();
+            }
+#endif
             ros::spinOnce();
             ros::spinOnce();
             ros::Duration(0.2).sleep();

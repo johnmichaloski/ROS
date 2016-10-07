@@ -24,8 +24,6 @@
 #include "Debug.h"
 using namespace RCS;
 using namespace sensor_msgs;
-
-
 /**
     uint8 crclcommand
 
@@ -41,9 +39,10 @@ using namespace sensor_msgs;
     float64 eepercent
     CrclMaxProfileMsg[] profile # maximum profile 
  */
-BangBangInterpreter::BangBangInterpreter(boost::shared_ptr<RCS::CController> nc, IKinematicsSharedPtr k ):
-_nc(nc), _kinematics(k) 
-{
+BangBangInterpreter::BangBangInterpreter(boost::shared_ptr<RCS::CController> nc,
+        IKinematicsSharedPtr k,
+        NearestJointsLookup &hints)
+: _nc(nc), _kinematics(k), _hints(hints) {
 }
 
 void BangBangInterpreter::SetRange(std::vector<double> minrange, std::vector<double> maxrange) {
@@ -59,23 +58,34 @@ RCS::CanonCmd BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd) {
     } else if (cmd.crclcommand == CanonCmdType::CANON_MOVE_TO) {
         // FIXME: need to subtract off tool offset from tcp
         RCS::Pose finalpose = Conversion::GeomMsgPose2RcsPose(cmd.finalpose);
-        //RCS::Pose goalpose =  Cnc.invGripperPose() * finalpose;
-        RCS::Pose goalpose =  finalpose * _nc->invGripperPose() ;
+        RCS::Pose goalpose = finalpose * _nc->invGripperPose();
+
         LOG_DEBUG << "Final Pose " << RCS::DumpPoseSimple(finalpose).c_str();
         LOG_DEBUG << "Minus Gripper Pose " << RCS::DumpPoseSimple(goalpose).c_str();
 
-        if (cmd.hint.size() ==0){
+        std::vector<double> hint;
+        if (cmd.hint.size() == 0) {
+            // Kludge placement of code for now. Need generalized solution
+            // KDL can handle base offset in fanuc, doesn't even work in Motoman
+            // ikfast solution based on 0,0,0 origin not base offset origin
+            goalpose = _nc->invBasePose() * goalpose;
+            LOG_DEBUG << " Base Robot Pose " << RCS::DumpPoseSimple(_nc->basePose()).c_str();
+            LOG_DEBUG << "Pre Base Robot Pose " << RCS::DumpPoseSimple(goalpose).c_str();
             //cmd.joints.position = Cnc.Kinematics()->IK(goalpose, cmd.ConfigMin(), cmd.ConfigMax());
-            cmd.joints.position = _kinematics->IK(goalpose, Subset(_nc->status.currentjoints.position, 6));
+            cmd.joints.position = _kinematics->IK(goalpose, Subset(_nc->status.currentjoints.position, _nc->Kinematics()->NumJoints()));
         }
         else
         {
-            LOG_DEBUG << "Pose Hint " << VectorDump<double>(  cmd.hint).c_str();
+            hint = _hints.FindClosest(goalpose);
+            LOG_DEBUG << "Pose Hint " << VectorDump<double>( hint).c_str();
             // KDL needs a hint or algorithm won't converge
             // http://www.orocos.org/forum/orocos/orocos-users/kdl-ik-position-solver
-            cmd.joints.position = _kinematics->IK(goalpose, cmd.hint);
+            cmd.joints.position = _kinematics->IK(goalpose, hint);
         }
            
+        if(cmd.joints.position.size() == 0)
+            cmd.joints.position =hint;
+            
         assert(cmd.joints.position.size() > 0);
         LOG_DEBUG << "KDL IK Joints " << VectorDump<double>(  cmd.joints.position).c_str();
         cmd.joints.name = _kinematics->JointNames();

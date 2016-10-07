@@ -1,0 +1,72 @@
+.TH "RvizDemo" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+RvizDemo \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <Demo\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBRvizDemo\fP (ros::NodeHandle &nh)"
+.br
+.ti -1c
+.RI "bool \fBReady\fP ()"
+.br
+.ti -1c
+.RI "void \fBUnset\fP ()"
+.br
+.ti -1c
+.RI "void \fBcallback\fP (const geometry_msgs::PointStamped::ConstPtr &msg)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "ros::Subscriber \fBsub\fP"
+.br
+.ti -1c
+.RI "ros::NodeHandle & \fB_nh\fP"
+.br
+.ti -1c
+.RI "bool \fBbFlag\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static boost::mutex \fB_flag_mutex\fP"
+.br
+.in -1c
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "RvizDemo::RvizDemo (ros::NodeHandle &nh)\fC [inline]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void RvizDemo::callback (const geometry_msgs::PointStamped::ConstPtr &msg)\fC [inline]\fP"
+
+.SS "bool RvizDemo::Ready ()\fC [inline]\fP"
+
+.SS "void RvizDemo::Unset ()\fC [inline]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "boost::mutex RvizDemo::_flag_mutex\fC [static]\fP, \fC [protected]\fP"
+
+.SS "ros::NodeHandle& RvizDemo::_nh\fC [protected]\fP"
+
+.SS "bool RvizDemo::bFlag\fC [protected]\fP"
+
+.SS "ros::Subscriber RvizDemo::sub\fC [protected]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CRCL FANUC from the source code\&.

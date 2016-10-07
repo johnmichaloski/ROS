@@ -1,0 +1,88 @@
+.TH "/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/src/fanuc_lrmate200id.cpp" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/src/fanuc_lrmate200id.cpp \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'fanuc_lrmate200id\&.h'\fP
+.br
+\fC#include 'RCS\&.h'\fP
+.br
+\fC#include 'Globals\&.h'\fP
+.br
+\fC#include 'Debug\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBHAVE_SINCOS\fP"
+.br
+.ti -1c
+.RI "#define \fBREAL_EPSILON\fP   ( 1\&.0e-7 )"
+.br
+.ti -1c
+.RI "#define \fBTRAN_CLOSE\fP(x, y)   ( fabs( ( x ) - ( y ) ) < \fBREAL_EPSILON\fP )"
+.br
+.ti -1c
+.RI "#define \fBSINGULAR_FUZZ\fP   ( 1\&.0e-6 )"
+.br
+.ti -1c
+.RI "#define \fBFLAG_FUZZ\fP   ( 1\&.0e-6 )"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef boost::array< double, 12 > \fBRosMatrix\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBsincos\fP (double x, double *sx, double *cx)"
+.br
+.ti -1c
+.RI "boost::array< double, 12 > \fB_matrixFromPose\fP (tf::Pose pose)"
+.br
+.ti -1c
+.RI "tf::Pose \fBthree21_kin_fwd\fP (\fBthree21_kin\fP &kins, const double *joints)"
+.br
+.ti -1c
+.RI "int \fBthree21_kin_inv\fP (\fBthree21_kin\fP *kins, const tf::Pose &world, std::vector< double > &joints)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define FLAG_FUZZ   ( 1\&.0e-6 )"
+
+.SS "#define HAVE_SINCOS"
+
+.SS "#define REAL_EPSILON   ( 1\&.0e-7 )"
+
+.SS "#define SINGULAR_FUZZ   ( 1\&.0e-6 )"
+
+.SS "#define TRAN_CLOSE(x, y)   ( fabs( ( x ) - ( y ) ) < \fBREAL_EPSILON\fP )"
+
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef boost::array<double, 12> \fBRosMatrix\fP"
+
+.SH "Function Documentation"
+.PP 
+.SS "boost::array<double, 12> _matrixFromPose (tf::Posepose)"
+
+.SS "void sincos (doublex, double *sx, double *cx)"
+
+.SS "tf::Pose three21_kin_fwd (\fBthree21_kin\fP &kins, const double *joints)"
+
+.SS "int three21_kin_inv (\fBthree21_kin\fP *kins, const tf::Pose &world, std::vector< double > &joints)"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CRCL FANUC from the source code\&.

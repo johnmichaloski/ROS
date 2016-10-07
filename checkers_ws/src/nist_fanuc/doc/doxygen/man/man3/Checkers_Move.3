@@ -1,0 +1,114 @@
+.TH "Checkers::Move" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Checkers::Move \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <Checkers\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMove\fP ()"
+.br
+.ti -1c
+.RI "\fBMove\fP (int \fBrow\fP, int \fBcol\fP, bool \fBbJump\fP=false)"
+.br
+.ti -1c
+.RI "void \fBStart\fP (int \fBplayer\fP, int \fBrow\fP, int \fBcol\fP)"
+.br
+.ti -1c
+.RI "\fBMove\fP \fBDiff\fP (\fBMove\fP start)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "int \fBrow\fP"
+.br
+.ti -1c
+.RI "int \fBcol\fP"
+.br
+.ti -1c
+.RI "int \fBplayer\fP"
+.br
+.ti -1c
+.RI "bool \fBbJump\fP"
+.br
+.ti -1c
+.RI "bool \fBbDoubleJumps\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBMove\fP > \fBdoublejumps\fP"
+.br
+.ti -1c
+.RI "int \fBsrow\fP"
+.br
+.ti -1c
+.RI "int \fBscol\fP"
+.br
+.ti -1c
+.RI "double \fBscore\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "bool \fBoperator<\fP (const \fBMove\fP &left, const \fBMove\fP &other)"
+.br
+.ti -1c
+.RI "std::ostream & \fBoperator<<\fP (std::ostream &output_out, const \fBMove\fP &move_in)"
+.br
+.ti -1c
+.RI "std::istream & \fBoperator>>\fP (std::istream &s_in, \fBMove\fP &move_out)"
+.br
+.in -1c
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Checkers::Move::Move ()\fC [inline]\fP"
+
+.SS "Checkers::Move::Move (introw, intcol, boolbJump = \fCfalse\fP)\fC [inline]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBMove\fP Checkers::Move::Diff (\fBMove\fPstart)\fC [inline]\fP"
+
+.SS "void Checkers::Move::Start (intplayer, introw, intcol)\fC [inline]\fP"
+
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "bool operator< (const \fBMove\fP &left, const \fBMove\fP &other)\fC [friend]\fP"
+
+.SS "std::ostream& operator<< (std::ostream &output_out, const \fBMove\fP &move_in)\fC [friend]\fP"
+
+.SS "std::istream& operator>> (std::istream &s_in, \fBMove\fP &move_out)\fC [friend]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "bool Checkers::Move::bDoubleJumps"
+
+.SS "bool Checkers::Move::bJump"
+
+.SS "int Checkers::Move::col"
+
+.SS "std::vector<\fBMove\fP> Checkers::Move::doublejumps"
+
+.SS "int Checkers::Move::player"
+
+.SS "int Checkers::Move::row"
+
+.SS "int Checkers::Move::scol"
+
+.SS "double Checkers::Move::score"
+
+.SS "int Checkers::Move::srow"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CRCL FANUC from the source code\&.

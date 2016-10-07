@@ -1,23 +1,32 @@
-.TH "/usr/local/michalos/github/usnistgov/el-robotics-core/nist_fanuc/src/Kinematics.cpp" 3 "Fri Apr 15 2016" "CRCL FANUC" \" -*- nroff -*-
+.TH "/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/include/nist_fanuc/IKFAST/Kinematics.cpp" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/usr/local/michalos/github/usnistgov/el-robotics-core/nist_fanuc/src/Kinematics.cpp \- 
+/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/include/nist_fanuc/IKFAST/Kinematics.cpp \- 
 .SH SYNOPSIS
 .br
 .PP
 \fC#include 'Kinematics\&.h'\fP
 .br
-\fC#include <eigen_conversions/eigen_msg\&.h>\fP
+\fC#include <algorithm>\fP
 .br
-\fC#include 'RosConversions\&.h'\fP
-.br
-\fC#include <iostream>\fP
-.br
-\fC#include 'Conversions\&.h'\fP
+\fC#include 'ikfast\&.h'\fP
 .br
 \fC#include 'Globals\&.h'\fP
 .br
+\fC#include 'urdf_model\\eigenmath\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBWIN32\fP"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define WIN32"
 
 .SH "Author"
 .PP 

@@ -5,6 +5,18 @@
 // http://docs.ros.org/kinetic/api/tf_conversions/html/c++/tf__eigen_8cpp_source.html
 
 #pragma once
+
+/*
+DISCLAIMER:
+This software was produced by the National Institute of Standards
+and Technology (NIST), an agency of the U.S. government, and by statute is
+not subject to copyright in the United States.  Recipients of this software
+assume all responsibility associated with its operation, modification,
+maintenance, and subsequent redistribution.
+
+See NIST Administration Manual 4.09.07 b and Appendix I.
+*/
+
 // Eigen
 #include <Eigen/Core>
 #include <Eigen/Geometry>
@@ -19,7 +31,12 @@
 #include <eigen_conversions/eigen_msg.h>
 
 #include "RCS.h"
-
+#ifndef Deg2Rad
+#define Deg2Rad(Ang)    ( (double) ( Ang * M_PI / 180.0 ) )
+#define Rad2Deg(Ang)    ( (double) ( Ang * 180.0 / M_PI ) )
+#define MM2Meter(d)     ( (double) ( d / 1000.00 ) )
+#define Meter2MM(d)     ( (double) ( d * 1000.00 ) )
+#endif
 // tf
 // Transform http://docs.ros.org/jade/api/tf/html/c++/classtf_1_1Transform.html
 // Quaternion http://docs.ros.org/jade/api/tf/html/c++/classtf_1_1Quaternion.html
@@ -37,6 +54,7 @@ namespace Conversion {
         return tf::Vector3(e(0, 3), e(1, 3), e(2, 3));
     }
 
+    //tf::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0, 0, 0))
     inline tf::Pose Identity() {
         tf::Transform t;
         t.setIdentity();
@@ -50,6 +68,9 @@ namespace Conversion {
         p.setRotation(tf::Quaternion(m.orientation.x, m.orientation.y, m.orientation.z, m.orientation.w));
         return p;
     }
+    inline tf::Quaternion quaternionEigenToTF(const Eigen::Quaterniond& e) {
+        return tf::Quaternion(e.x(), e.y(), e.z(), e.w());
+    }
 
     inline tf::Pose GeomMsgPose2RcsPose(const geometry_msgs::Pose &m) {
         tf::Pose p;
@@ -57,7 +78,13 @@ namespace Conversion {
         p.setRotation(tf::Quaternion(m.orientation.x, m.orientation.y, m.orientation.z, m.orientation.w));
         return p;
     }
+    inline tf::Quaternion RPYRadians(double roll, double pitch, double yaw) {
+        return tf::Quaternion(yaw, pitch, roll);
+    }
 
+    inline tf::Quaternion RPYDegrees(double roll, double pitch, double yaw) {
+        return tf::Quaternion(Deg2Rad(yaw), Deg2Rad(pitch), Deg2Rad(roll));
+    }
     // geometry_msgs
     geometry_msgs::Pose convertPointToPose(const geometry_msgs::Point &point);
     geometry_msgs::Point convertPoint(const geometry_msgs::Vector3 &point);

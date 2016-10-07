@@ -26,35 +26,23 @@ enum \hyperlink{classCGlobals_a32f8f289bca445b5a2f6d1c68b6cbbb2}{Time\-Format} \
 \begin{DoxyCompactList}\small\item\em Constructor for globals function. Functions here usually vary between windows and linux, or there is no easy mechanism in C++ to extend classes (e.\-g., string) like in C\#. \end{DoxyCompactList}\item 
 std\-::string \hyperlink{classCGlobals_ab08bfe830833f153fcd15e1eadb05287}{Str\-Format} (const char $\ast$fmt,...)
 \begin{DoxyCompactList}\small\item\em Str\-Format accepts a traditional C format string and expects parameter to follow on calling stack and will produce a string from it. \end{DoxyCompactList}\item 
-bool \hyperlink{classCGlobals_a7df69244ed592e7291bf9608fa54bfac}{Is\-Debug} ()
-\item 
-void \hyperlink{classCGlobals_af14ced4c6f3b924d134894651f1afce0}{Dump} ()
-\begin{DoxyCompactList}\small\item\em dumps to std out global parameters set at runtime parameters. \end{DoxyCompactList}\item 
 void \hyperlink{classCGlobals_a5d120cec7b57ee16fca7fc9398c67d61}{Sleep} (unsigned int ms)
 \begin{DoxyCompactList}\small\item\em sleep milliseconds. Equivalent to Sleep in windows. \end{DoxyCompactList}\item 
-bool \hyperlink{classCGlobals_ac1722817e9b2e73b2daa73ef40179cef}{Read\-File} (std\-::string filename, std\-::string \&\hyperlink{SanityCheckTests_8cpp_aed76f8804515a6923e39ee3257c3fb52}{contents})
+bool \hyperlink{classCGlobals_ac1722817e9b2e73b2daa73ef40179cef}{Read\-File} (std\-::string filename, std\-::string \&contents)
 \begin{DoxyCompactList}\small\item\em Reads a file all at once into a string. Include file open, read, close. If fails, empty string is only diagnostic. \end{DoxyCompactList}\item 
-void \hyperlink{classCGlobals_aaba4dc868620e6714f96339f873db4d6}{Write\-File} (std\-::string filename, std\-::string \&\hyperlink{SanityCheckTests_8cpp_aed76f8804515a6923e39ee3257c3fb52}{contents})
+void \hyperlink{classCGlobals_aaba4dc868620e6714f96339f873db4d6}{Write\-File} (std\-::string filename, std\-::string \&contents)
 \begin{DoxyCompactList}\small\item\em Writes entire string contents to a file all at once. Include file open, write, close. No error messages. \end{DoxyCompactList}\item 
-void \hyperlink{classCGlobals_a7876537cd390030c33daa30f43c2070c}{Append\-File} (std\-::string filename, std\-::string \hyperlink{SanityCheckTests_8cpp_aed76f8804515a6923e39ee3257c3fb52}{contents})
+void \hyperlink{classCGlobals_a7876537cd390030c33daa30f43c2070c}{Append\-File} (std\-::string filename, std\-::string contents)
 \begin{DoxyCompactList}\small\item\em Appends entire string contents to a file all at once. Include file open, write, close. No error messages. \end{DoxyCompactList}\item 
 std\-::string \hyperlink{classCGlobals_aba6226926f731d175e54efa0dec2833b}{Trim} (std\-::string s)
 \begin{DoxyCompactList}\small\item\em Trim cleans blank characters from the front and back of a string. Blank chars are white space, tab, carriage return. \end{DoxyCompactList}\item 
-unsigned int \hyperlink{classCGlobals_af8125cf019b0b2fec19a53b76bb9d57e}{Debug\-Message} (std\-::string errmsg)
-\begin{DoxyCompactList}\small\item\em Prints an diagnostic message to the debug reporting mechanism. (cout or Output\-Debug\-String) \end{DoxyCompactList}\item 
-unsigned int \hyperlink{classCGlobals_a4e5323745d12ff5eab9b12e0e42bd1dc}{Error\-Message} (std\-::string errmsg)
-\begin{DoxyCompactList}\small\item\em Prints an error message to the error reporting mechanism. \end{DoxyCompactList}\item 
-unsigned int \hyperlink{classCGlobals_a9ee96ec24bdb9d8606b540e684384649}{Debug\-Str\-Format} (const char $\ast$fmt,...)
-\begin{DoxyCompactList}\small\item\em Prints a format string and arguments as a diagnostic message to the debug reporting mechanism. (cout or Output\-Debug\-String) \end{DoxyCompactList}\item 
 std\-::string \hyperlink{classCGlobals_abd6bdad8865f80e6a084c6f02a1cd047}{Get\-Time\-Stamp} (\hyperlink{classCGlobals_a32f8f289bca445b5a2f6d1c68b6cbbb2}{Time\-Format} format=\hyperlink{classCGlobals_a32f8f289bca445b5a2f6d1c68b6cbbb2ab0c064ba74b13a541bb4b8379bca2ae7}{G\-M\-T\-\_\-\-U\-V\-\_\-\-S\-E\-C})
-\begin{DoxyCompactList}\small\item\em Get\-Time\-Stamp returns a timestamp string depending on the input format. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Prints a format string and arguments as a diagnostic message to the debug reporting mechanism. (cout or Output\-Debug\-String) \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 std\-::map$<$ std\-::string, \\*
 std\-::string $>$ \hyperlink{classCGlobals_a66ffe804a7f6a8d41803482f5dc121e6}{\-\_\-appproperties}
-\item 
-int \& \hyperlink{classCGlobals_ac0446ab6c8959e553bd9e2cae4e3f5f3}{Debug}
 \item 
 std\-::string \hyperlink{classCGlobals_a366c33d78a09a99d5eb0e902facf4624}{Exe\-Directory}
 \item 
@@ -120,33 +108,13 @@ Appends entire string contents to a file all at once. Include file open, write, 
 {\em contents} & is a reference to a string in which to write string. \\
 \hline
 \end{DoxyParams}
-\hypertarget{classCGlobals_af8125cf019b0b2fec19a53b76bb9d57e}{\index{C\-Globals@{C\-Globals}!Debug\-Message@{Debug\-Message}}
-\index{Debug\-Message@{Debug\-Message}!CGlobals@{C\-Globals}}
-\subsubsection[{Debug\-Message}]{\setlength{\rightskip}{0pt plus 5cm}unsigned int C\-Globals\-::\-Debug\-Message (
+\hypertarget{classCGlobals_abd6bdad8865f80e6a084c6f02a1cd047}{\index{C\-Globals@{C\-Globals}!Get\-Time\-Stamp@{Get\-Time\-Stamp}}
+\index{Get\-Time\-Stamp@{Get\-Time\-Stamp}!CGlobals@{C\-Globals}}
+\subsubsection[{Get\-Time\-Stamp}]{\setlength{\rightskip}{0pt plus 5cm}std\-::string C\-Globals\-::\-Get\-Time\-Stamp (
 \begin{DoxyParamCaption}
-\item[{std\-::string}]{errmsg}
+\item[{{\bf Time\-Format}}]{format = {\ttfamily {\bf G\-M\-T\-\_\-\-U\-V\-\_\-\-S\-E\-C}}}
 \end{DoxyParamCaption}
-)}}\label{classCGlobals_af8125cf019b0b2fec19a53b76bb9d57e}
-
-
-Prints an diagnostic message to the debug reporting mechanism. (cout or Output\-Debug\-String) 
-
-
-\begin{DoxyParams}{Parameters}
-{\em str} & errmsg is the error message that is posted to the debug reporting mechanism. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-a error result integer. (e.\-g., E\-\_\-\-F\-A\-I\-L or -\/1). 
-\end{DoxyReturn}
-\hypertarget{classCGlobals_a9ee96ec24bdb9d8606b540e684384649}{\index{C\-Globals@{C\-Globals}!Debug\-Str\-Format@{Debug\-Str\-Format}}
-\index{Debug\-Str\-Format@{Debug\-Str\-Format}!CGlobals@{C\-Globals}}
-\subsubsection[{Debug\-Str\-Format}]{\setlength{\rightskip}{0pt plus 5cm}unsigned int C\-Globals\-::\-Debug\-Str\-Format (
-\begin{DoxyParamCaption}
-\item[{const char $\ast$}]{fmt, }
-\item[{}]{...}
-\end{DoxyParamCaption}
-)}}\label{classCGlobals_a9ee96ec24bdb9d8606b540e684384649}
+)}}\label{classCGlobals_abd6bdad8865f80e6a084c6f02a1cd047}
 
 
 Prints a format string and arguments as a diagnostic message to the debug reporting mechanism. (cout or Output\-Debug\-String) 
@@ -157,50 +125,9 @@ Prints a format string and arguments as a diagnostic message to the debug report
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-a error result integer. (e.\-g., E\-\_\-\-F\-A\-I\-L or -\/1). 
+a error result integer. (e.\-g., E\-\_\-\-F\-A\-I\-L or -\/1).
 \end{DoxyReturn}
-\hypertarget{classCGlobals_af14ced4c6f3b924d134894651f1afce0}{\index{C\-Globals@{C\-Globals}!Dump@{Dump}}
-\index{Dump@{Dump}!CGlobals@{C\-Globals}}
-\subsubsection[{Dump}]{\setlength{\rightskip}{0pt plus 5cm}void C\-Globals\-::\-Dump (
-\begin{DoxyParamCaption}
-{}
-\end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classCGlobals_af14ced4c6f3b924d134894651f1afce0}
-
-
-dumps to std out global parameters set at runtime parameters. 
-
-\hypertarget{classCGlobals_a4e5323745d12ff5eab9b12e0e42bd1dc}{\index{C\-Globals@{C\-Globals}!Error\-Message@{Error\-Message}}
-\index{Error\-Message@{Error\-Message}!CGlobals@{C\-Globals}}
-\subsubsection[{Error\-Message}]{\setlength{\rightskip}{0pt plus 5cm}unsigned int C\-Globals\-::\-Error\-Message (
-\begin{DoxyParamCaption}
-\item[{std\-::string}]{errmsg}
-\end{DoxyParamCaption}
-)}}\label{classCGlobals_a4e5323745d12ff5eab9b12e0e42bd1dc}
-
-
-Prints an error message to the error reporting mechanism. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em str} & errmsg is the error message that is posted to the error reporting mechanism. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-a error result integer. (e.\-g., E\-\_\-\-F\-A\-I\-L or -\/1). 
-\end{DoxyReturn}
-\hypertarget{classCGlobals_abd6bdad8865f80e6a084c6f02a1cd047}{\index{C\-Globals@{C\-Globals}!Get\-Time\-Stamp@{Get\-Time\-Stamp}}
-\index{Get\-Time\-Stamp@{Get\-Time\-Stamp}!CGlobals@{C\-Globals}}
-\subsubsection[{Get\-Time\-Stamp}]{\setlength{\rightskip}{0pt plus 5cm}std\-::string C\-Globals\-::\-Get\-Time\-Stamp (
-\begin{DoxyParamCaption}
-\item[{{\bf Time\-Format}}]{format = {\ttfamily {\bf G\-M\-T\-\_\-\-U\-V\-\_\-\-S\-E\-C}}}
-\end{DoxyParamCaption}
-)}}\label{classCGlobals_abd6bdad8865f80e6a084c6f02a1cd047}
-
-
 Get\-Time\-Stamp returns a timestamp string depending on the input format. 
-
-
 \begin{DoxyParams}{Parameters}
 {\em format} & is one of an enumeration describing how to format timestamp. \\
 \hline
@@ -208,13 +135,6 @@ Get\-Time\-Stamp returns a timestamp string depending on the input format.
 \begin{DoxyReturn}{Returns}
 a formated timestamp string. 
 \end{DoxyReturn}
-\hypertarget{classCGlobals_a7df69244ed592e7291bf9608fa54bfac}{\index{C\-Globals@{C\-Globals}!Is\-Debug@{Is\-Debug}}
-\index{Is\-Debug@{Is\-Debug}!CGlobals@{C\-Globals}}
-\subsubsection[{Is\-Debug}]{\setlength{\rightskip}{0pt plus 5cm}bool C\-Globals\-::\-Is\-Debug (
-\begin{DoxyParamCaption}
-{}
-\end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classCGlobals_a7df69244ed592e7291bf9608fa54bfac}
 \hypertarget{classCGlobals_ac1722817e9b2e73b2daa73ef40179cef}{\index{C\-Globals@{C\-Globals}!Read\-File@{Read\-File}}
 \index{Read\-File@{Read\-File}!CGlobals@{C\-Globals}}
 \subsubsection[{Read\-File}]{\setlength{\rightskip}{0pt plus 5cm}bool C\-Globals\-::\-Read\-File (
@@ -311,10 +231,7 @@ Writes entire string contents to a file all at once. Include file open, write, c
 \hypertarget{classCGlobals_a66ffe804a7f6a8d41803482f5dc121e6}{\index{C\-Globals@{C\-Globals}!\-\_\-appproperties@{\-\_\-appproperties}}
 \index{\-\_\-appproperties@{\-\_\-appproperties}!CGlobals@{C\-Globals}}
 \subsubsection[{\-\_\-appproperties}]{\setlength{\rightskip}{0pt plus 5cm}std\-::map$<$ std\-::string, std\-::string$>$ C\-Globals\-::\-\_\-appproperties}}\label{classCGlobals_a66ffe804a7f6a8d41803482f5dc121e6}
-map of application properties, e.\-g., \mbox{[}\char`\"{}prop\char`\"{}\mbox{]}=\char`\"{}value\char`\"{} \hypertarget{classCGlobals_ac0446ab6c8959e553bd9e2cae4e3f5f3}{\index{C\-Globals@{C\-Globals}!Debug@{Debug}}
-\index{Debug@{Debug}!CGlobals@{C\-Globals}}
-\subsubsection[{Debug}]{\setlength{\rightskip}{0pt plus 5cm}int\& C\-Globals\-::\-Debug}}\label{classCGlobals_ac0446ab6c8959e553bd9e2cae4e3f5f3}
-\hypertarget{classCGlobals_a366c33d78a09a99d5eb0e902facf4624}{\index{C\-Globals@{C\-Globals}!Exe\-Directory@{Exe\-Directory}}
+map of application properties, e.\-g., \mbox{[}\char`\"{}prop\char`\"{}\mbox{]}=\char`\"{}value\char`\"{} \hypertarget{classCGlobals_a366c33d78a09a99d5eb0e902facf4624}{\index{C\-Globals@{C\-Globals}!Exe\-Directory@{Exe\-Directory}}
 \index{Exe\-Directory@{Exe\-Directory}!CGlobals@{C\-Globals}}
 \subsubsection[{Exe\-Directory}]{\setlength{\rightskip}{0pt plus 5cm}std\-::string C\-Globals\-::\-Exe\-Directory}}\label{classCGlobals_a366c33d78a09a99d5eb0e902facf4624}
 the path to directory where exe is located \hypertarget{classCGlobals_a5ded9605f21a03f651f6097f1b0ef42c}{\index{C\-Globals@{C\-Globals}!inifile@{inifile}}
@@ -323,9 +240,9 @@ the path to directory where exe is located \hypertarget{classCGlobals_a5ded9605f
 inifile path name \hypertarget{classCGlobals_ac1198be99fab95dbe1f2b94891fb0088}{\index{C\-Globals@{C\-Globals}!Socket\-Port@{Socket\-Port}}
 \index{Socket\-Port@{Socket\-Port}!CGlobals@{C\-Globals}}
 \subsubsection[{Socket\-Port}]{\setlength{\rightskip}{0pt plus 5cm}std\-::string C\-Globals\-::\-Socket\-Port}}\label{classCGlobals_ac1198be99fab95dbe1f2b94891fb0088}
-socket port to listen for \hyperlink{namespaceCrcl}{Crcl} clients 
+socket port to listen for Crcl clients 
 
 The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
 \item 
-/usr/local/michalos/github/usnistgov/el-\/robotics-\/core/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\hyperlink{Globals_8h}{Globals.\-h}\item 
-/usr/local/michalos/github/usnistgov/el-\/robotics-\/core/nist\-\_\-fanuc/src/\hyperlink{Globals_8cpp}{Globals.\-cpp}\end{DoxyCompactItemize}
+/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\hyperlink{Globals_8h}{Globals.\-h}\item 
+/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/src/\hyperlink{Globals_8cpp}{Globals.\-cpp}\end{DoxyCompactItemize}

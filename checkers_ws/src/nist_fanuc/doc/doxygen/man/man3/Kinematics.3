@@ -1,0 +1,121 @@
+.TH "Kinematics" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Kinematics \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <arm_kinematics\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBKinematics\fP ()"
+.br
+.ti -1c
+.RI "bool \fBinit\fP (ros::NodeHandle &nh, std::string tipname, std::string rootname)"
+.br
+.ti -1c
+.RI "bool \fBgetPositionIK\fP (moveit_msgs::GetPositionIK::Request &request, moveit_msgs::GetPositionIK::Response &response)"
+.br
+.RI "\fIThis is the basic IK service method that will compute and return an IK solution\&. \fP"
+.ti -1c
+.RI "bool \fBgetIKSolverInfo\fP (moveit_msgs::GetKinematicSolverInfo::Request &request, moveit_msgs::GetKinematicSolverInfo::Response &response)"
+.br
+.RI "\fIThis is the basic kinematics info service that will return information about the kinematics node\&. \fP"
+.ti -1c
+.RI "bool \fBgetFKSolverInfo\fP (moveit_msgs::GetKinematicSolverInfo::Request &request, moveit_msgs::GetKinematicSolverInfo::Response &response)"
+.br
+.RI "\fIThis is the basic kinematics info service that will return information about the kinematics node\&. \fP"
+.ti -1c
+.RI "bool \fBgetPositionFK\fP (moveit_msgs::GetPositionFK::Request &request, moveit_msgs::GetPositionFK::Response &response)"
+.br
+.RI "\fIThis is the basic forward kinematics service that will return information about the kinematics node\&. \fP"
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "KDL::JntArray \fBjoint_min\fP"
+.br
+.ti -1c
+.RI "KDL::JntArray \fBjoint_max\fP"
+.br
+.ti -1c
+.RI "urdf::Model \fBrobot_model\fP"
+.br
+.in -1c
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Kinematics::Kinematics ()"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "bool Kinematics::getFKSolverInfo (moveit_msgs::GetKinematicSolverInfo::Request &request, moveit_msgs::GetKinematicSolverInfo::Response &response)"
+
+.PP
+This is the basic kinematics info service that will return information about the kinematics node\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIA\fP request message\&. See service definition for GetKinematicSolverInfo for more information on this message\&. 
+.br
+\fIThe\fP response message\&. See service definition for GetKinematicSolverInfo for more information on this message\&. 
+.RE
+.PP
+
+.SS "bool Kinematics::getIKSolverInfo (moveit_msgs::GetKinematicSolverInfo::Request &request, moveit_msgs::GetKinematicSolverInfo::Response &response)"
+
+.PP
+This is the basic kinematics info service that will return information about the kinematics node\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIA\fP request message\&. See service definition for GetKinematicSolverInfo for more information on this message\&. 
+.br
+\fIThe\fP response message\&. See service definition for GetKinematicSolverInfo for more information on this message\&. 
+.RE
+.PP
+
+.SS "bool Kinematics::getPositionFK (moveit_msgs::GetPositionFK::Request &request, moveit_msgs::GetPositionFK::Response &response)"
+
+.PP
+This is the basic forward kinematics service that will return information about the kinematics node\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIA\fP request message\&. See service definition for GetPositionFK for more information on this message\&. 
+.br
+\fIThe\fP response message\&. See service definition for GetPositionFK for more information on this message\&. 
+.RE
+.PP
+
+.SS "bool Kinematics::getPositionIK (moveit_msgs::GetPositionIK::Request &request, moveit_msgs::GetPositionIK::Response &response)"
+
+.PP
+This is the basic IK service method that will compute and return an IK solution\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIA\fP request message\&. See service definition for GetPositionIK for more information on this message\&. 
+.br
+\fIThe\fP response message\&. See service definition for GetPositionIK for more information on this message\&. 
+.RE
+.PP
+
+.SS "bool Kinematics::init (ros::NodeHandle &nh, std::stringtipname, std::stringrootname)"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "KDL::JntArray Kinematics::joint_max"
+
+.SS "KDL::JntArray Kinematics::joint_min"
+
+.SS "urdf::Model Kinematics::robot_model"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CRCL FANUC from the source code\&.

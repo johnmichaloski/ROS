@@ -135,7 +135,7 @@ void TrajectoryMaker::updateJointCommands(std::vector<double> & curjoints, std::
         }
         lastjoints = joint.position; // save last joint positions
         plannedjts.push_back(joint);
-        //std::cout << "Joint Displacements" << VectorDump<double> (joint.position);
+        //std::cout << "Joint Displacements" << RCS::VectorDump<double> (joint.position);
     }
    
 }
@@ -237,7 +237,7 @@ std::vector<double> TrajectoryMaker::makePositionVector(std::vector<double> myra
             displacements[counter] *= -1;
         }
     }
-    //std::cout << "Displacements" << VectorDump<double> (displacements);
+    //std::cout << "Displacements" << RCS::VectorDump<double> (displacements);
     return displacements;
 }
 

@@ -150,15 +150,15 @@ std::string ReadRosParam(ros::NodeHandle &nh, std::string paramkey) {
     } else if (nh.getParam(paramkey, b)) {
         result << b;
     } else if (nh.getParam(paramkey, svec)) {
-        result << VectorDump<std::string> (svec);
+        result << RCS::VectorDump<std::string> (svec);
     } else if (nh.getParam(paramkey, dvec)) {
-        result << VectorDump<double> (dvec);
+        result << RCS::VectorDump<double> (dvec);
     } else if (nh.getParam(paramkey, fvec)) {
-        result << VectorDump<float> (fvec);
+        result << RCS::VectorDump<float> (fvec);
     } else if (nh.getParam(paramkey, ivec)) {
-        result << VectorDump<int> (ivec);
+        result << RCS::VectorDump<int> (ivec);
     } else if (nh.getParam(paramkey, bvec)) {
-        result << VectorDump<bool> (bvec);
+        result << RCS::VectorDump<bool> (bvec);
     } else if (nh.getParam(paramkey, smap)) {
         result << MapDump<std::string> (smap);
     } else if (nh.getParam(paramkey, dmap)) {

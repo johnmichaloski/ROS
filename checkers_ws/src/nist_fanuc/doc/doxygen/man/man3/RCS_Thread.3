@@ -1,4 +1,4 @@
-.TH "RCS::Thread" 3 "Fri Apr 15 2016" "CRCL FANUC" \" -*- nroff -*-
+.TH "RCS::Thread" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -14,7 +14,7 @@ RCS::Thread \-
 .PP
 \fC#include <RCSThreadTemplate\&.h>\fP
 .PP
-Inherited by \fBRCS::CController\fP, \fBRCS::RobotProgram\fP, and \fBRCS::RobotStatus\fP\&.
+Inherited by \fBRCS::CController\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
@@ -81,7 +81,7 @@ Inherited by \fBRCS::CController\fP, \fBRCS::RobotProgram\fP, and \fBRCS::RobotS
 .ti -1c
 .RI "void \fBCycle\fP ()"
 .br
-.RI "\fICycle is the thread main function\&. It calls init, action, and cleanup\&. After each cycle waits exactly amount given by cycle time\&. \fP"
+.RI "\fICycle is the thread main function\&. It calls init, action, and cleanup\&. After each cycle waits exa_newccctly amount given by cycle time\&. \fP"
 .in -1c
 .SS "Static Public Member Functions"
 
@@ -146,7 +146,7 @@ Destructor of thread, makes sure thread has stopped\&.
 .PP
 Action override function called every cycle\&. 
 .PP
-Reimplemented in \fBRCS::RobotProgram\fP, \fBRCS::RobotStatus\fP, and \fBRCS::CController\fP\&.
+Reimplemented in \fBRCS::CController\fP\&.
 .SS "virtual void RCS::Thread::Cleanup ()\fC [inline]\fP, \fC [virtual]\fP"
 
 .PP
@@ -154,7 +154,7 @@ Cleanup function called after \fBAction()\fP loop done\&.
 .SS "void RCS::Thread::Cycle ()\fC [inline]\fP"
 
 .PP
-Cycle is the thread main function\&. It calls init, action, and cleanup\&. After each cycle waits exactly amount given by cycle time\&. 
+Cycle is the thread main function\&. It calls init, action, and cleanup\&. After each cycle waits exa_newccctly amount given by cycle time\&. 
 .SS "double& RCS::Thread::CycleTime ()\fC [inline]\fP"
 
 .PP
@@ -181,8 +181,6 @@ int returns debug dlvel of thread\&.
 
 .PP
 Init function called before \fBAction()\fP loop\&. 
-.PP
-Reimplemented in \fBRCS::CController\fP\&.
 .SS "void RCS::Thread::Join ()\fC [inline]\fP"
 
 .PP

@@ -13,7 +13,10 @@
 
 #pragma once
 #include <boost/shared_ptr.hpp>
+#include <boost/signals2/signal.hpp>
+
 #include <list>
+
 #include <ros/ros.h>
 #include <ros/package.h>
 
@@ -34,9 +37,12 @@
 #include "nistcrcl/CrclCommandMsg.h"
 #include "nistcrcl/CrclStatusMsg.h"
 //#include "nist_fanuc/Demo.h"
+
 namespace RCS {
 
     extern boost::mutex cncmutex;
+    extern boost::mutex kdlMutex; /**< mutex for stopping */
+    extern boost::condition kdlCond; /**< condition for stopping */
 
     /**
      * \brief The CController provides a collection for all the relevant controller pieces.
@@ -51,9 +57,10 @@ namespace RCS {
          * \brief CController constructor that requires a cycle time for RCS thread timing.
          * \param cycletime  in seconds.
          */
-        CController(double cycletime);
+        CController(std::string name, double cycletime);
 
         ~CController(void);
+        bool IsBusy();
         RCS::CanonWorldModel status; /**< current status of controller */
         RCS::CanonWorldModel laststatus; /**< last status of controller */
         RCS::CMessageQueue<nistcrcl::CrclCommandMsg > crclcmds; /**< queue of commands interpreted from Crcl messages */
@@ -86,8 +93,8 @@ namespace RCS {
          */
         std::string DumpHeader(std::string separator = ",");
 
+        VAR(Name, std::string);
         VAR(Kinematics, boost::shared_ptr<IKinematics>);
-        //        VAR(TrajectoryModel, boost::shared_ptr<CTrajectory>);
         VAR(JointWriter, boost::shared_ptr<CJointWriter>);
         VAR(RvizMarker, boost::shared_ptr<CRvizMarker>)
         VAR(EEPoseReader, boost::shared_ptr<CLinkReader>)
@@ -101,12 +108,18 @@ namespace RCS {
         VAR(invGripperPose, RCS::Pose);
         VAR(basePose, RCS::Pose);
         VAR(invBasePose, RCS::Pose);
-
+        
+        ros::NodeHandle *_nh;
+        void SetToolOffset(RCS::Pose offset){ _gripperPose = offset; _invGripperPose = offset.inverse();}
+        void SetBaseOffset(RCS::Pose offset){ _basePose = offset; _invBasePose = offset.inverse();}
         ros::Publisher crcl_status; /**< ros publisher information used for crcl status updates */
         ros::Subscriber crcl_cmd; /**< ros subscriber information used for crcl command updates */
-        ros::Publisher rviz_jntcmd; /**< ros publisher information for joint_publisher */
         void CmdCallback(const nistcrcl::CrclCommandMsg::ConstPtr& cmdmsg);
-        ros::NodeHandle *_nh;
+        
+        static ros::Publisher rviz_jntcmd; /**< ros publisher information for joint_publisher */
+        static bool bRvizPubSetup;
+
+        std::map<std::string, std::vector<double>> NamedJointMove;
         GripperInterface gripper;
         void MotionLogging();
         void PublishCrclStatus();

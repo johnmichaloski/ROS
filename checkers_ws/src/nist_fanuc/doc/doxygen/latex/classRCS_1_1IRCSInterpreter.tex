@@ -1,0 +1,59 @@
+\hypertarget{classRCS_1_1IRCSInterpreter}{\section{R\-C\-S\-:\-:I\-R\-C\-S\-Interpreter Class Reference}
+\label{classRCS_1_1IRCSInterpreter}\index{R\-C\-S\-::\-I\-R\-C\-S\-Interpreter@{R\-C\-S\-::\-I\-R\-C\-S\-Interpreter}}
+}
+
+
+I\-Interpreter parses a \hyperlink{namespaceRCS}{R\-C\-S} command and generates robot motion commands.  
+
+
+
+
+{\ttfamily \#include $<$R\-C\-S.\-h$>$}
+
+Inheritance diagram for R\-C\-S\-:\-:I\-R\-C\-S\-Interpreter\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classRCS_1_1IRCSInterpreter}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual \hyperlink{structRCS_1_1CanonCmd}{R\-C\-S\-::\-Canon\-Cmd} \hyperlink{classRCS_1_1IRCSInterpreter_adb4258abff48650cc30398ec996d04c1}{Parse\-Command} (\hyperlink{structRCS_1_1CanonCmd}{R\-C\-S\-::\-Canon\-Cmd} cmd)=0
+\item 
+virtual void \hyperlink{classRCS_1_1IRCSInterpreter_a5181a696aed581ae842bfd31537cfc1f}{Set\-Range} (std\-::vector$<$ double $>$ minrange, std\-::vector$<$ double $>$ maxrange)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+I\-Interpreter parses a \hyperlink{namespaceRCS}{R\-C\-S} command and generates robot motion commands. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classRCS_1_1IRCSInterpreter_adb4258abff48650cc30398ec996d04c1}{\index{R\-C\-S\-::\-I\-R\-C\-S\-Interpreter@{R\-C\-S\-::\-I\-R\-C\-S\-Interpreter}!Parse\-Command@{Parse\-Command}}
+\index{Parse\-Command@{Parse\-Command}!RCS::IRCSInterpreter@{R\-C\-S\-::\-I\-R\-C\-S\-Interpreter}}
+\subsubsection[{Parse\-Command}]{\setlength{\rightskip}{0pt plus 5cm}virtual {\bf R\-C\-S\-::\-Canon\-Cmd} R\-C\-S\-::\-I\-R\-C\-S\-Interpreter\-::\-Parse\-Command (
+\begin{DoxyParamCaption}
+\item[{{\bf R\-C\-S\-::\-Canon\-Cmd}}]{cmd}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}}\label{classRCS_1_1IRCSInterpreter_adb4258abff48650cc30398ec996d04c1}
+
+
+Implemented in \hyperlink{classRCS_1_1BangBangInterpreter_a7a5611f4e162defa15aeb1d503c7f3cb}{R\-C\-S\-::\-Bang\-Bang\-Interpreter}.
+
+\hypertarget{classRCS_1_1IRCSInterpreter_a5181a696aed581ae842bfd31537cfc1f}{\index{R\-C\-S\-::\-I\-R\-C\-S\-Interpreter@{R\-C\-S\-::\-I\-R\-C\-S\-Interpreter}!Set\-Range@{Set\-Range}}
+\index{Set\-Range@{Set\-Range}!RCS::IRCSInterpreter@{R\-C\-S\-::\-I\-R\-C\-S\-Interpreter}}
+\subsubsection[{Set\-Range}]{\setlength{\rightskip}{0pt plus 5cm}virtual void R\-C\-S\-::\-I\-R\-C\-S\-Interpreter\-::\-Set\-Range (
+\begin{DoxyParamCaption}
+\item[{std\-::vector$<$ double $>$}]{minrange, }
+\item[{std\-::vector$<$ double $>$}]{maxrange}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}}\label{classRCS_1_1IRCSInterpreter_a5181a696aed581ae842bfd31537cfc1f}
+
+
+Reimplemented in \hyperlink{classRCS_1_1BangBangInterpreter_a69cc779236827f55ff895019e4833209}{R\-C\-S\-::\-Bang\-Bang\-Interpreter}.
+
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\hyperlink{RCS_8h}{R\-C\-S.\-h}\end{DoxyCompactItemize}

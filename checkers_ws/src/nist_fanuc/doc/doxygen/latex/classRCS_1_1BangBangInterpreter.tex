@@ -1,0 +1,101 @@
+\hypertarget{classRCS_1_1BangBangInterpreter}{\section{R\-C\-S\-:\-:Bang\-Bang\-Interpreter Class Reference}
+\label{classRCS_1_1BangBangInterpreter}\index{R\-C\-S\-::\-Bang\-Bang\-Interpreter@{R\-C\-S\-::\-Bang\-Bang\-Interpreter}}
+}
+
+
+{\ttfamily \#include $<$R\-C\-S\-Interpreter.\-h$>$}
+
+Inheritance diagram for R\-C\-S\-:\-:Bang\-Bang\-Interpreter\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classRCS_1_1BangBangInterpreter}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classRCS_1_1BangBangInterpreter_af5d124c1c3ba7865155018a1f3415695}{Bang\-Bang\-Interpreter} (boost\-::shared\-\_\-ptr$<$ \hyperlink{structRCS_1_1CController}{R\-C\-S\-::\-C\-Controller} $>$ nc, \hyperlink{Kinematics_8h_aa720b9842c846588baf215581fb9f902}{I\-Kinematics\-Shared\-Ptr} k=N\-U\-L\-L)
+\item 
+virtual \hyperlink{structRCS_1_1CanonCmd}{R\-C\-S\-::\-Canon\-Cmd} \hyperlink{classRCS_1_1BangBangInterpreter_a7a5611f4e162defa15aeb1d503c7f3cb}{Parse\-Command} (\hyperlink{structRCS_1_1CanonCmd}{R\-C\-S\-::\-Canon\-Cmd} cmd)
+\item 
+virtual void \hyperlink{classRCS_1_1BangBangInterpreter_a69cc779236827f55ff895019e4833209}{Set\-Range} (std\-::vector$<$ double $>$ \hyperlink{classRCS_1_1BangBangInterpreter_a83562103bf03ffe4de00cd3a2f06c772}{minrange}, std\-::vector$<$ double $>$ \hyperlink{classRCS_1_1BangBangInterpreter_a4e10b3c84dfeb87228da9eb62be855c0}{maxrange})
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\-::vector$<$ double $>$ \hyperlink{classRCS_1_1BangBangInterpreter_a83562103bf03ffe4de00cd3a2f06c772}{minrange}
+\item 
+std\-::vector$<$ double $>$ \hyperlink{classRCS_1_1BangBangInterpreter_a4e10b3c84dfeb87228da9eb62be855c0}{maxrange}
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{Kinematics_8h_aa720b9842c846588baf215581fb9f902}{I\-Kinematics\-Shared\-Ptr} \hyperlink{classRCS_1_1BangBangInterpreter_a3c3c12685416ba957ce2176c062890b4}{\-\_\-kinematics}
+\item 
+boost\-::shared\-\_\-ptr\\*
+$<$ \hyperlink{structRCS_1_1CController}{R\-C\-S\-::\-C\-Controller} $>$ \hyperlink{classRCS_1_1BangBangInterpreter_a874d893a4134087ff5493758661599e2}{\-\_\-nc}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classRCS_1_1BangBangInterpreter_af5d124c1c3ba7865155018a1f3415695}{\index{R\-C\-S\-::\-Bang\-Bang\-Interpreter@{R\-C\-S\-::\-Bang\-Bang\-Interpreter}!Bang\-Bang\-Interpreter@{Bang\-Bang\-Interpreter}}
+\index{Bang\-Bang\-Interpreter@{Bang\-Bang\-Interpreter}!RCS::BangBangInterpreter@{R\-C\-S\-::\-Bang\-Bang\-Interpreter}}
+\subsubsection[{Bang\-Bang\-Interpreter}]{\setlength{\rightskip}{0pt plus 5cm}Bang\-Bang\-Interpreter\-::\-Bang\-Bang\-Interpreter (
+\begin{DoxyParamCaption}
+\item[{boost\-::shared\-\_\-ptr$<$ {\bf R\-C\-S\-::\-C\-Controller} $>$}]{nc, }
+\item[{{\bf I\-Kinematics\-Shared\-Ptr}}]{k = {\ttfamily NULL}}
+\end{DoxyParamCaption}
+)}}\label{classRCS_1_1BangBangInterpreter_af5d124c1c3ba7865155018a1f3415695}
+uint8 crclcommand
+
+\subsection*{\href{https://github.com/ros/common_msgs}{\tt https\-://github.\-com/ros/common\-\_\-msgs}}
+
+geometry\-\_\-msgs/\-Pose finalpose geometry\-\_\-msgs/\-Pose\mbox{[}\mbox{]} waypoints \subsection*{Below joint info could be trajectory\-\_\-msgs/\-Joint\-Trajectory\-Point}
+
+sensor\-\_\-msgs/\-Joint\-State joints bool b\-Straight float64 dwell\-\_\-seconds string opmessage bool b\-Coordinated float64 eepercent Crcl\-Max\-Profile\-Msg\mbox{[}\mbox{]} profile \# maximum profile 
+
+\subsection{Member Function Documentation}
+\hypertarget{classRCS_1_1BangBangInterpreter_a7a5611f4e162defa15aeb1d503c7f3cb}{\index{R\-C\-S\-::\-Bang\-Bang\-Interpreter@{R\-C\-S\-::\-Bang\-Bang\-Interpreter}!Parse\-Command@{Parse\-Command}}
+\index{Parse\-Command@{Parse\-Command}!RCS::BangBangInterpreter@{R\-C\-S\-::\-Bang\-Bang\-Interpreter}}
+\subsubsection[{Parse\-Command}]{\setlength{\rightskip}{0pt plus 5cm}{\bf R\-C\-S\-::\-Canon\-Cmd} Bang\-Bang\-Interpreter\-::\-Parse\-Command (
+\begin{DoxyParamCaption}
+\item[{{\bf R\-C\-S\-::\-Canon\-Cmd}}]{cmd}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{classRCS_1_1BangBangInterpreter_a7a5611f4e162defa15aeb1d503c7f3cb}
+
+
+Implements \hyperlink{classRCS_1_1IRCSInterpreter_adb4258abff48650cc30398ec996d04c1}{R\-C\-S\-::\-I\-R\-C\-S\-Interpreter}.
+
+\hypertarget{classRCS_1_1BangBangInterpreter_a69cc779236827f55ff895019e4833209}{\index{R\-C\-S\-::\-Bang\-Bang\-Interpreter@{R\-C\-S\-::\-Bang\-Bang\-Interpreter}!Set\-Range@{Set\-Range}}
+\index{Set\-Range@{Set\-Range}!RCS::BangBangInterpreter@{R\-C\-S\-::\-Bang\-Bang\-Interpreter}}
+\subsubsection[{Set\-Range}]{\setlength{\rightskip}{0pt plus 5cm}void Bang\-Bang\-Interpreter\-::\-Set\-Range (
+\begin{DoxyParamCaption}
+\item[{std\-::vector$<$ double $>$}]{minrange, }
+\item[{std\-::vector$<$ double $>$}]{maxrange}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{classRCS_1_1BangBangInterpreter_a69cc779236827f55ff895019e4833209}
+
+
+Reimplemented from \hyperlink{classRCS_1_1IRCSInterpreter_a5181a696aed581ae842bfd31537cfc1f}{R\-C\-S\-::\-I\-R\-C\-S\-Interpreter}.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classRCS_1_1BangBangInterpreter_a3c3c12685416ba957ce2176c062890b4}{\index{R\-C\-S\-::\-Bang\-Bang\-Interpreter@{R\-C\-S\-::\-Bang\-Bang\-Interpreter}!\-\_\-kinematics@{\-\_\-kinematics}}
+\index{\-\_\-kinematics@{\-\_\-kinematics}!RCS::BangBangInterpreter@{R\-C\-S\-::\-Bang\-Bang\-Interpreter}}
+\subsubsection[{\-\_\-kinematics}]{\setlength{\rightskip}{0pt plus 5cm}{\bf I\-Kinematics\-Shared\-Ptr} R\-C\-S\-::\-Bang\-Bang\-Interpreter\-::\-\_\-kinematics\hspace{0.3cm}{\ttfamily [protected]}}}\label{classRCS_1_1BangBangInterpreter_a3c3c12685416ba957ce2176c062890b4}
+kinematics pointer \hypertarget{classRCS_1_1BangBangInterpreter_a874d893a4134087ff5493758661599e2}{\index{R\-C\-S\-::\-Bang\-Bang\-Interpreter@{R\-C\-S\-::\-Bang\-Bang\-Interpreter}!\-\_\-nc@{\-\_\-nc}}
+\index{\-\_\-nc@{\-\_\-nc}!RCS::BangBangInterpreter@{R\-C\-S\-::\-Bang\-Bang\-Interpreter}}
+\subsubsection[{\-\_\-nc}]{\setlength{\rightskip}{0pt plus 5cm}boost\-::shared\-\_\-ptr$<${\bf R\-C\-S\-::\-C\-Controller}$>$ R\-C\-S\-::\-Bang\-Bang\-Interpreter\-::\-\_\-nc\hspace{0.3cm}{\ttfamily [protected]}}}\label{classRCS_1_1BangBangInterpreter_a874d893a4134087ff5493758661599e2}
+\hypertarget{classRCS_1_1BangBangInterpreter_a4e10b3c84dfeb87228da9eb62be855c0}{\index{R\-C\-S\-::\-Bang\-Bang\-Interpreter@{R\-C\-S\-::\-Bang\-Bang\-Interpreter}!maxrange@{maxrange}}
+\index{maxrange@{maxrange}!RCS::BangBangInterpreter@{R\-C\-S\-::\-Bang\-Bang\-Interpreter}}
+\subsubsection[{maxrange}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$double$>$ R\-C\-S\-::\-Bang\-Bang\-Interpreter\-::maxrange}}\label{classRCS_1_1BangBangInterpreter_a4e10b3c84dfeb87228da9eb62be855c0}
+\hypertarget{classRCS_1_1BangBangInterpreter_a83562103bf03ffe4de00cd3a2f06c772}{\index{R\-C\-S\-::\-Bang\-Bang\-Interpreter@{R\-C\-S\-::\-Bang\-Bang\-Interpreter}!minrange@{minrange}}
+\index{minrange@{minrange}!RCS::BangBangInterpreter@{R\-C\-S\-::\-Bang\-Bang\-Interpreter}}
+\subsubsection[{minrange}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$double$>$ R\-C\-S\-::\-Bang\-Bang\-Interpreter\-::minrange}}\label{classRCS_1_1BangBangInterpreter_a83562103bf03ffe4de00cd3a2f06c772}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\hyperlink{RCSInterpreter_8h}{R\-C\-S\-Interpreter.\-h}\item 
+/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/src/\hyperlink{RCSInterpreter_8cpp}{R\-C\-S\-Interpreter.\-cpp}\end{DoxyCompactItemize}

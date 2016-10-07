@@ -119,10 +119,10 @@ MotionControl::computeWaypoints(RCS::Pose & _curPos, RCS::Pose & _goalPos, doubl
     i = (bAddStart) ? 0 : 1;
     for (; i <= nIncrements; i++) {
         RCS::Pose npose;
-        RCS::Vector3 trans = _curPos.getOrigin().lerp( _goalPos.getOrigin(), i * dIncrement);
-       //  npose.position = _lerp3(_curPos.position, _goalPos.position, i * dIncrement);
+        RCS::Vector3 trans = _curPos.getOrigin().lerp(_goalPos.getOrigin(), i * dIncrement);
+        //  npose.position = _lerp3(_curPos.position, _goalPos.position, i * dIncrement);
         //npose.rotation = slerp(_curPos.rotation, _goalPos.rotation, i * dIncrement);
-        RCS::Rotation rot =  _curPos.getRotation().slerp(_goalPos.getRotation(), i * dIncrement);
+        RCS::Rotation rot = _curPos.getRotation().slerp(_goalPos.getRotation(), i * dIncrement);
         npose.setOrigin(trans);
         npose.setRotation(rot);
         poses.push_back(npose);

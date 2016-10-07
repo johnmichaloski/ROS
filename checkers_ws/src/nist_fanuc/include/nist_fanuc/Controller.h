@@ -12,9 +12,11 @@
  */
 
 #pragma once
-#include "RCS.h"
 #include <boost/shared_ptr.hpp>
+#include <boost/signals2/signal.hpp>
+
 #include <list>
+
 #include <ros/ros.h>
 #include <ros/package.h>
 
@@ -23,20 +25,24 @@
 #include "NIST/RCSMsgQueue.h"
 #include "NIST/BLogging.h"
 
+#include "nist_fanuc/RCS.h"
 #include "nist_fanuc/Gripper.h"
-#include "nist_fanuc/RCSInterpreter.h"
+//#include "nist_fanuc/RCSInterpreter.h" // now included in RCS.h
 #include "nist_fanuc/Communication.h"
 #include "nist_fanuc/RvizMarker.h"
-#include "nist_fanuc/arm_kinematics.h"
+#include "nist_fanuc/Kinematics.h"
 #include "nist_fanuc/Gripper.h"
 #include "nist_fanuc/CsvLogging.h"
 
 #include "nistcrcl/CrclCommandMsg.h"
 #include "nistcrcl/CrclStatusMsg.h"
+//#include "nist_fanuc/Demo.h"
 
 namespace RCS {
 
     extern boost::mutex cncmutex;
+    extern boost::mutex kdlMutex; /**< mutex for stopping */
+    extern boost::condition kdlCond; /**< condition for stopping */
 
     /**
      * \brief The CController provides a collection for all the relevant controller pieces.
@@ -51,15 +57,16 @@ namespace RCS {
          * \brief CController constructor that requires a cycle time for RCS thread timing.
          * \param cycletime  in seconds.
          */
-        CController(double cycletime);
+        CController(std::string name, double cycletime);
 
         ~CController(void);
+        bool IsBusy();
         RCS::CanonWorldModel status; /**< current status of controller */
         RCS::CanonWorldModel laststatus; /**< last status of controller */
         RCS::CMessageQueue<nistcrcl::CrclCommandMsg > crclcmds; /**< queue of commands interpreted from Crcl messages */
         std::list<RCS::CanonCmd> donecmds; /**< list of commands interpreted from Crcl messages that have completed*/
         RCS::CMessageQueue<RCS::CanonCmd> robotcmds; /**< list of commands to be sent to robot */
- 
+
         /*!
          *\brief Verifies that all the pointer references in the controller have been instantiated (i.e., not null).
          */
@@ -74,7 +81,7 @@ namespace RCS {
         /*!
          *\brief Setup routine for the controller..
          */
-        void Setup(ros::NodeHandle &nh);
+        void Setup(ros::NodeHandle &nh, std::string prefix);
 
         /*!
          *\brief Creates a comma separated string of current state of robot. (Can use other separator). 
@@ -86,8 +93,8 @@ namespace RCS {
          */
         std::string DumpHeader(std::string separator = ",");
 
+        VAR(Name, std::string);
         VAR(Kinematics, boost::shared_ptr<IKinematics>);
-//        VAR(TrajectoryModel, boost::shared_ptr<CTrajectory>);
         VAR(JointWriter, boost::shared_ptr<CJointWriter>);
         VAR(RvizMarker, boost::shared_ptr<CRvizMarker>)
         VAR(EEPoseReader, boost::shared_ptr<CLinkReader>)
@@ -96,26 +103,40 @@ namespace RCS {
         VAR(bMarker, bool)
         VAR(bCvsPoseLogging, bool)
         VAR(CvsPoseLoggingFile, std::string)
-        VAR(PoseLogging, CsvLogging )
+        VAR(PoseLogging, CsvLogging)
+        VAR(gripperPose, RCS::Pose);
+        VAR(invGripperPose, RCS::Pose);
+        VAR(basePose, RCS::Pose);
+        VAR(invBasePose, RCS::Pose);
+        
+        ros::NodeHandle *_nh;
+        void SetToolOffset(RCS::Pose offset){ _gripperPose = offset; _invGripperPose = offset.inverse();}
+        void SetBaseOffset(RCS::Pose offset){ _basePose = offset; _invBasePose = offset.inverse();}
         ros::Publisher crcl_status; /**< ros publisher information used for crcl status updates */
         ros::Subscriber crcl_cmd; /**< ros subscriber information used for crcl command updates */
-        ros::Publisher  rviz_jntcmd; /**< ros publisher information for joint_publisher */
         void CmdCallback(const nistcrcl::CrclCommandMsg::ConstPtr& cmdmsg);
-        ros::NodeHandle *_nh;
+        
+        static ros::Publisher rviz_jntcmd; /**< ros publisher information for joint_publisher */
+        static bool bRvizPubSetup;
+
+        std::map<std::string, std::vector<double>> NamedJointMove;
         GripperInterface gripper;
         void MotionLogging();
         void PublishCrclStatus();
-        RCS::Pose gripperPose;
-        RCS::Pose invGripperPose;
+
+
+
+        //VAR(NearestJoints, NearestJointsLookup);
+
         /*!
          *\brief Routine to set the kinematics reference pointer. Uses the interface class IKinematics, but can have any implementation instance. 
          */
         void SetKinematics(boost::shared_ptr<IKinematics> k) {
             Kinematics() = k;
-            _interpreter->_kinematics = k;
+  //          _interpreter->_kinematics = k;
         }
 
-        boost::shared_ptr<RCSInterpreter> _interpreter; /**<  interprets canon commands into robot commands */
+        boost::shared_ptr<IRCSInterpreter> _interpreter; /**<  interprets canon commands into robot commands */
 
         /**<  current new canon command to interpret*/
         NVAR(NewCC, RCS::CanonCmd, _newcc);
@@ -137,18 +158,22 @@ namespace RCS {
         RCS::Pose GetLastCommandedPose();
 
 
-//         static unsigned long _csvlogFlag;
- 
+        //         static unsigned long _csvlogFlag;
+
         enum MotionPlannerEnum {
             NOPLANNER = 0, MOVEIT, DESCARTES, BASIC, WAYPOINT, GOMOTION
         };
         MotionPlannerEnum eCartesianMotionPlanner; /**< type of cartesian motion to use */
         MotionPlannerEnum eJointMotionPlanner; /**< type of joint motion to use */
     };
-    extern CController Cnc; /**< global declaration of ONE controller */
+    //extern CController Fnc; /**< global declaration of Fanuc controller */
+   // extern CController Mnc; /**< global declaration of Motoman controller */
+    extern boost::shared_ptr<CController> Fnc;
+    extern boost::shared_ptr<CController> Mnc;
 
     //* The RobotCommands is currently a dummy class. The CController thread 
 #ifdef ROBOTSTATUS
+
     /**
      * \brief  The RobotStatus is a thread that reads the status of the robot and updates the world model. 
      * The RobotStatus is a separate thread that reads the robot status using ROS communication mechanisms
@@ -191,16 +216,3 @@ namespace RCS {
 #endif
 }
 
-
-extern void TestRobotCommands() ;
-
-extern void Pick(RCS::Pose pose, std::string objname);
-extern void MoveTo(RCS::Pose pose,std::string objname="");
-extern void DoDwell(double dwelltime);
-extern void AddGripperOffset();
-extern void OpenGripper();
-extern void CloseGripper();
-extern void SetGripper(double ee);
-extern void Place(RCS::Pose pose, std::string objname);
-extern void MoveObject(std::string objname, RCS::Pose pose, int color);
-extern void EraseObject(std::string objname);

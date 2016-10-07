@@ -1,0 +1,106 @@
+.TH "NearestJointsLookup" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+NearestJointsLookup \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <Demo\&.h>\fP
+.PP
+Inherited by \fBFanucNearestJointsLookup\fP, and \fBMotomanNearestJointsLookup\fP\&.
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBcmp_op\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBNearestJointsLookup\fP (tf::Pose baseoffset, \fBIKinematicsSharedPtr\fP kin)"
+.br
+.ti -1c
+.RI "void \fBAdd\fP (tf::Pose pose, std::vector< double > joints)"
+.br
+.ti -1c
+.RI "std::string \fBDump\fP ()"
+.br
+.ti -1c
+.RI "std::vector< double > \fBFindClosest\fP (tf::Pose pose)"
+.br
+.ti -1c
+.RI "virtual void \fBSetRobotHints\fP ()"
+.br
+.ti -1c
+.RI "virtual tf::Pose & \fBBaseOffset\fP ()"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< tf::Pose, 
+.br
+std::vector< double >, \fBcmp_op\fP >
+.br
+::iterator \fBMapIterator\fP"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBIKinematicsSharedPtr\fP \fB_kinematics\fP"
+.br
+.ti -1c
+.RI "std::map< tf::Pose, 
+.br
+std::vector< double >, \fBcmp_op\fP > \fBmapping\fP"
+.br
+.ti -1c
+.RI "tf::Pose \fBbaseOffset\fP"
+.br
+.ti -1c
+.RI "Eigen::Affine3d \fBoffset00\fP"
+.br
+.in -1c
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<tf::Pose, std::vector<double>, \fBcmp_op\fP>::iterator \fBNearestJointsLookup::MapIterator\fP\fC [protected]\fP"
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "NearestJointsLookup::NearestJointsLookup (tf::Posebaseoffset, \fBIKinematicsSharedPtr\fPkin)\fC [inline]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void NearestJointsLookup::Add (tf::Posepose, std::vector< double >joints)\fC [inline]\fP"
+
+.SS "virtual tf::Pose& NearestJointsLookup::BaseOffset ()\fC [inline]\fP, \fC [virtual]\fP"
+
+.SS "std::string NearestJointsLookup::Dump ()\fC [inline]\fP"
+
+.SS "std::vector<double> NearestJointsLookup::FindClosest (tf::Posepose)\fC [inline]\fP"
+
+.SS "virtual void NearestJointsLookup::SetRobotHints ()\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Reimplemented in \fBMotomanNearestJointsLookup\fP, and \fBFanucNearestJointsLookup\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBIKinematicsSharedPtr\fP NearestJointsLookup::_kinematics\fC [protected]\fP"
+
+.SS "tf::Pose NearestJointsLookup::baseOffset\fC [protected]\fP"
+
+.SS "std::map<tf::Pose, std::vector<double>, \fBcmp_op\fP> NearestJointsLookup::mapping\fC [protected]\fP"
+
+.SS "Eigen::Affine3d NearestJointsLookup::offset00\fC [protected]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CRCL FANUC from the source code\&.

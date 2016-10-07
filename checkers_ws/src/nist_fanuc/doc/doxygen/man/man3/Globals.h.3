@@ -1,12 +1,16 @@
-.TH "/usr/local/michalos/github/usnistgov/el-robotics-core/nist_fanuc/include/nist_fanuc/Globals.h" 3 "Fri Apr 15 2016" "CRCL FANUC" \" -*- nroff -*-
+.TH "/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/include/nist_fanuc/Globals.h" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/usr/local/michalos/github/usnistgov/el-robotics-core/nist_fanuc/include/nist_fanuc/Globals.h \- 
+/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/include/nist_fanuc/Globals.h \- 
 .SH SYNOPSIS
 .br
 .PP
 \fC#include <stdio\&.h>\fP
+.br
+\fC#include <stdarg\&.h>\fP
+.br
+\fC#include <time\&.h>\fP
 .br
 \fC#include <vector>\fP
 .br
@@ -16,17 +20,17 @@
 .br
 \fC#include <fstream>\fP
 .br
-\fC#include <boost/thread\&.hpp>\fP
+\fC#include <sstream>\fP
 .br
 \fC#include <ctime>\fP
 .br
-\fC#include <stdarg\&.h>\fP
+\fC#include <boost/thread\&.hpp>\fP
 .br
-\fC#include <sstream>\fP
+\fC#include <boost/preprocessor\&.hpp>\fP
 .br
-\fC#include <time\&.h>\fP
+\fC#include <stdexcept>\fP
 .br
-\fC#include 'Logging\&.h'\fP
+\fC#include <iostream>\fP
 .br
 
 .SS "Classes"
@@ -43,6 +47,7 @@
 .ti -1c
 .RI "#define \fBIfDebug\fP(arg)"
 .br
+.RI "\fI#include 'Logging\&.h' \fP"
 .ti -1c
 .RI "#define \fB_strnicmp\fP   strncasecmp"
 .br
@@ -51,6 +56,12 @@
 .br
 .ti -1c
 .RI "#define \fBE_FAIL\fP   -1"
+.br
+.ti -1c
+.RI "#define \fB__PRETTY_FUNCTION__\fP   __func__"
+.br
+.ti -1c
+.RI "#define \fBIKFAST_ASSERT\fP(b)   { if( !(b) ) { std::stringstream ss; ss << 'ikfast exception: ' << __FILE__ << ':' << __LINE__ << ': ' <<\fB__PRETTY_FUNCTION__\fP << ': Assertion '' << #b << '' failed'; throw std::runtime_error(ss\&.str()); } }"
 .br
 .ti -1c
 .RI "#define \fBCLEANSTORE\fP(Y, X, Z)"
@@ -67,6 +78,12 @@
 .ti -1c
 .RI "#define \fBFOREACH\fP(it, v)   for(typeof((v)\&.begin()) it = (v)\&.begin(); it != (v)\&.end(); it++)"
 .br
+.ti -1c
+.RI "#define \fBX_DEFINE_ENUM_WITH_STRING_CONVERSIONS_TOSTRING_CASE\fP(r, data, elem)   case elem : return BOOST_PP_STRINGIZE(elem);"
+.br
+.ti -1c
+.RI "#define \fBDEFINE_ENUM_WITH_STRING_CONVERSIONS\fP(name, enumerators)"
+.br
 .in -1c
 .SS "Functions"
 
@@ -74,25 +91,18 @@
 .ti -1c
 .RI "void \fBDebugBreak\fP ()"
 .br
-.ti -1c
-.RI "template<typename T > std::string \fBVectorDump\fP (std::vector< T > v)"
-.br
-.ti -1c
-.RI "template<typename T > std::vector< T > \fBToVector\fP (int n,\&.\&.\&.)"
-.br
 .in -1c
 .SS "Variables"
 
 .in +1c
-.ti -1c
-.RI "\fBALogger\fP \fBLogFile\fP"
-.br
 .ti -1c
 .RI "\fBCGlobals\fP \fBGlobals\fP"
 .br
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
+.SS "#define __PRETTY_FUNCTION__   __func__"
+
 .SS "#define _strnicmp   strncasecmp"
 
 .SS "#define CLEANSTORE(Y, X, Z)"
@@ -102,11 +112,36 @@
 try{ Y = X; }           \
     catch ( \&.\&.\&. ) { Y = Z; }
 .fi
+.SS "#define DEFINE_ENUM_WITH_STRING_CONVERSIONS(name, enumerators)"
+\fBValue:\fP
+.PP
+.nf
+enum name {                                                               \
+        BOOST_PP_SEQ_ENUM(enumerators)                                        \
+    };                                                                        \
+                                                                              \
+    inline const char* ToString(name v)                                       \
+    {                                                                         \
+        switch (v)                                                            \
+        {                                                                     \
+            BOOST_PP_SEQ_FOR_EACH(                                            \
+                X_DEFINE_ENUM_WITH_STRING_CONVERSIONS_TOSTRING_CASE,          \
+                name,                                                         \
+                enumerators                                                   \
+            )                                                                 \
+            default: return "[Unknown " BOOST_PP_STRINGIZE(name) "]";         \
+        }                                                                     \
+    }
+.fi
 .SS "#define E_FAIL   -1"
 
 .SS "#define FOREACH(it, v)   for(typeof((v)\&.begin()) it = (v)\&.begin(); it != (v)\&.end(); it++)"
 
 .SS "#define IfDebug(arg)"
+
+.PP
+#include 'Logging\&.h' 
+.SS "#define IKFAST_ASSERT(b)   { if( !(b) ) { std::stringstream ss; ss << 'ikfast exception: ' << __FILE__ << ':' << __LINE__ << ': ' <<\fB__PRETTY_FUNCTION__\fP << ': Assertion '' << #b << '' failed'; throw std::runtime_error(ss\&.str()); } }"
 
 .SS "#define NVAR(X, Y, Z)"
 \fBValue:\fP
@@ -131,20 +166,16 @@ try{ Y = X; }        \
 protected: Y _ ## X; \
 public: Y & X( ) { return _ ## X; }
 .fi
+.SS "#define X_DEFINE_ENUM_WITH_STRING_CONVERSIONS_TOSTRING_CASE(r, data, elem)   case elem : return BOOST_PP_STRINGIZE(elem);"
+
 .SH "Function Documentation"
 .PP 
 .SS "void DebugBreak ()"
 global definition of windows DebugBreak equivalent\&. 
-.SS "template<typename T > std::vector<T> ToVector (intn, \&.\&.\&.)\fC [inline]\fP"
-
-.SS "template<typename T > std::string VectorDump (std::vector< T >v)\fC [inline]\fP"
-
 .SH "Variable Documentation"
 .PP 
 .SS "\fBCGlobals\fP Globals"
 global definition of globals 
-.SS "\fBALogger\fP LogFile"
-
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for CRCL FANUC from the source code\&.

@@ -65,6 +65,8 @@ inline void sincos(double x, double *sx, double *cx) {
 #define Meter2MM(d)     ( (double) ( d * 1000.00 ) )
 #endif
 
+
+// ToVector calling parameters MUSTt match e.g., double or long depending on template, OR wont work
 template<typename T>
 inline std::vector<T> ToVector(int n, ...) {
     std::vector<T> ds;
@@ -441,6 +443,7 @@ namespace RCS {
 
     };
 
+    struct CController;
     /*!
      * \brief CanonWorldModel describes the controller state. Includes reference to robot model.
      */
@@ -451,7 +454,7 @@ namespace RCS {
          */
         CanonWorldModel() {
         }
-        void Init();
+        void Init(CController*);
 
         CanonCmd echocmd; /**<  copy of current command */
         int echo_cmd; /**<  copy of current command type */

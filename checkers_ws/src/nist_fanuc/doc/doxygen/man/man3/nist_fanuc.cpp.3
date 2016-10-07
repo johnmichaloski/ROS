@@ -1,83 +1,114 @@
-.TH "/usr/local/michalos/github/usnistgov/el-robotics-core/nist_fanuc/src/nist_fanuc.cpp" 3 "Fri Apr 15 2016" "CRCL FANUC" \" -*- nroff -*-
+.TH "/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/src/nist_fanuc.cpp" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/usr/local/michalos/github/usnistgov/el-robotics-core/nist_fanuc/src/nist_fanuc.cpp \- 
+/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/src/nist_fanuc.cpp \- 
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <boost/format\&.hpp>\fP
-.br
 \fC#include 'nist_fanuc\&.h'\fP
+.br
+\fC#include <boost/format\&.hpp>\fP
 .br
 \fC#include <string>\fP
 .br
-\fC#include 'sys/stat\&.h'\fP
+\fC#include <sys/stat\&.h>\fP
 .br
-\fC#include 'fcntl\&.h'\fP
+\fC#include <fcntl\&.h>\fP
 .br
 \fC#include <iostream>\fP
 .br
 \fC#include <sstream>\fP
 .br
-\fC#include <xercesc/dom/DOM\&.hpp>\fP
+\fC#include <ros/package\&.h>\fP
 .br
-\fC#include <xercesc/util/PlatformUtils\&.hpp>\fP
-.br
-\fC#include <xercesc/framework/XMLGrammarPoolImpl\&.hpp>\fP
+\fC#include <ros/console\&.h>\fP
 .br
 \fC#include 'MotionControl\&.h'\fP
-.br
-\fC#include 'AsioCrclServer\&.h'\fP
 .br
 \fC#include 'Globals\&.h'\fP
 .br
 \fC#include 'Controller\&.h'\fP
 .br
-\fC#include 'CrclInterface\&.h'\fP
-.br
 \fC#include 'Kinematics\&.h'\fP
 .br
-\fC#include 'Communication\&.h'\fP
-.br
-\fC#include 'Setup\&.h'\fP
-.br
-\fC#include <ros/package\&.h>\fP
+\fC#include 'RosSetup\&.h'\fP
 .br
 \fC#include 'RvizMarker\&.h'\fP
+.br
+\fC#include 'NIST/BLogging\&.h'\fP
+.br
+\fC#include 'Debug\&.h'\fP
+.br
+\fC#include 'Scene\&.h'\fP
+.br
+\fC#include 'Checkerboard\&.h'\fP
+.br
+\fC#include 'StackTrace\&.h'\fP
+.br
+\fC#include 'fanuc_lrmate200id\&.h'\fP
+.br
+\fC#include 'RCSInterpreter\&.h'\fP
+.br
+\fC#include 'Demo\&.h'\fP
+.br
+\fC#include 'Test\&.h'\fP
 .br
 
 .SS "Macros"
 
 .in +1c
 .ti -1c
-.RI "#define \fBINITJOINTCONTROLLER\fP"
-.br
-.ti -1c
-.RI "#define \fBROBOTSTATUS\fP"
-.br
-.ti -1c
-.RI "#define \fBBOOSTASIO\fP"
+.RI "#define \fBARMKIN\fP"
 .br
 .in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
+.RI "\fBRCS::Pose\fP \fBComputeGripperOffset\fP ()"
+.br
+.ti -1c
+.RI "\fBRCS::Pose\fP \fBAutoComputeGripperOffset\fP (urdf::Model &robot_model, std::string prefix)"
+.br
+.ti -1c
 .RI "int \fBmain\fP (int argc, char **argv)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "Eigen::Affine3d \fBfanucoffset00\fP = Eigen::Affine3d::Identity() * Eigen::Translation3d(0\&.0, -0\&.5, 0\&.0)"
+.br
+.ti -1c
+.RI "Eigen::Affine3d \fBmotomanoffset00\fP = Eigen::Affine3d::Identity() * Eigen::Translation3d(0\&.0, 0\&.5, 0\&.0)"
 .br
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
-.SS "#define BOOSTASIO"
-
-.SS "#define INITJOINTCONTROLLER"
-
-.SS "#define ROBOTSTATUS"
+.SS "#define ARMKIN"
 
 .SH "Function Documentation"
 .PP 
+.SS "\fBRCS::Pose\fP AutoComputeGripperOffset (urdf::Model &robot_model, std::stringprefix)"
+
+.SS "\fBRCS::Pose\fP ComputeGripperOffset ()"
+robotiq_85_base_joint axis=1,0,0 rpy='0 0 0' xyz='\&.0085 0 -\&.0041' robotiq_85_right_knuckle_joint axis=1,0,0 rpy='1\&.5707 -1\&.5707 0' xyz='\&.04191 -\&.0306 0' robotiq_85_right_finger_joint axis=1,0,0 rpy='3\&.1415 0 0' xyz='0 \&.00508 \&.03134' robotiq_85_right_inner_knuckle_joint axis=1,0,0 rpy='-1\&.5707 -1\&.5707 0' xyz='\&.04843 -\&.0127 0' robotiq_85_right_finger_tip_joint axis=1,0,0 rpy='0 0 0' xyz='0 \&.04196 -\&.0388' 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
 .SS "int main (intargc, char **argv)"
+The five different verbosity levels are, in order: DEBUG ROS_DEBUG INFO ROS_INFO WARN ERROR FATAL ROS_FATAL
+.SH "Variable Documentation"
+.PP 
+.SS "Eigen::Affine3d fanucoffset00 = Eigen::Affine3d::Identity() * Eigen::Translation3d(0\&.0, -0\&.5, 0\&.0)"
+
+.SS "Eigen::Affine3d motomanoffset00 = Eigen::Affine3d::Identity() * Eigen::Translation3d(0\&.0, 0\&.5, 0\&.0)"
 
 .SH "Author"
 .PP 

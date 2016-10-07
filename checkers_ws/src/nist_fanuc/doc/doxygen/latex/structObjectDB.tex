@@ -1,0 +1,238 @@
+\hypertarget{structObjectDB}{\section{Object\-D\-B Struct Reference}
+\label{structObjectDB}\index{Object\-D\-B@{Object\-D\-B}}
+}
+
+
+{\ttfamily \#include $<$Scene.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structObjectDB_ae145fb7a66b48f862cc6cbc4d01ae9a6}{Object\-D\-B} (std\-::string \hyperlink{structObjectDB_aac9d3fa047f7df1d8981fd3c6e97dd25}{name}, std\-::string \hyperlink{structObjectDB_a0f12d7a7c86ff08dfd2ee1efc93d2c89}{metatype}, std\-::size\-\_\-t \hyperlink{structObjectDB_aab8a4b39fdbd287df00a9b38d1cae926}{id})
+\item 
+\hyperlink{structObjectDB_afadfd1e507d2b3998d527ccd6f0f24e4}{Object\-D\-B} (std\-::string \hyperlink{structObjectDB_aac9d3fa047f7df1d8981fd3c6e97dd25}{name}, std\-::string \hyperlink{structObjectDB_a0f12d7a7c86ff08dfd2ee1efc93d2c89}{metatype}, std\-::size\-\_\-t \hyperlink{structObjectDB_aab8a4b39fdbd287df00a9b38d1cae926}{id}, Eigen\-::\-Affine3d \hyperlink{structObjectDB_a8026e6c724f6193ab457c5f0ad924551}{pose}, std\-::string \hyperlink{structObjectDB_a2e171343bb62d57745e9bbb02c8a6bf7}{filepath}, rviz\-\_\-visual\-\_\-tools\-::colors \hyperlink{structObjectDB_a836db3f6e7558a6d9e634b6ea0f0f587}{color}=rviz\-\_\-visual\-\_\-tools\-::\-C\-L\-E\-A\-R, double \hyperlink{structObjectDB_a8275f4314ddaba5cf47d65fac944ea96}{scale}=1.\-0)
+\item 
+\hyperlink{structObjectDB_ad4df607c899e78310311452a541d0a99}{Object\-D\-B} (std\-::string \hyperlink{structObjectDB_aac9d3fa047f7df1d8981fd3c6e97dd25}{name}, std\-::string \hyperlink{structObjectDB_a0f12d7a7c86ff08dfd2ee1efc93d2c89}{metatype}, Eigen\-::\-Affine3d \hyperlink{structObjectDB_a8026e6c724f6193ab457c5f0ad924551}{pose}=Eigen\-::\-Affine3d\-::\-Identity(), Eigen\-::\-Affine3d \hyperlink{structObjectDB_ae11c0410cb15ffe04a5179e59c48c078}{adjacentpose}=Eigen\-::\-Affine3d\-::\-Identity(), rviz\-\_\-visual\-\_\-tools\-::colors \hyperlink{structObjectDB_a836db3f6e7558a6d9e634b6ea0f0f587}{color}=rviz\-\_\-visual\-\_\-tools\-::\-C\-L\-E\-A\-R)
+\item 
+\hyperlink{structObjectDB_a0c10410ce9a14185e1bacd78d0c6fa75}{Object\-D\-B} (std\-::string \hyperlink{structObjectDB_aac9d3fa047f7df1d8981fd3c6e97dd25}{name}, std\-::string \hyperlink{structObjectDB_a0f12d7a7c86ff08dfd2ee1efc93d2c89}{metatype}, Eigen\-::\-Affine3d \hyperlink{structObjectDB_a8026e6c724f6193ab457c5f0ad924551}{pose}, rviz\-\_\-visual\-\_\-tools\-::colors \hyperlink{structObjectDB_a836db3f6e7558a6d9e634b6ea0f0f587}{color}, double \hyperlink{structObjectDB_afa3f0a0fd7cc078010a6265c1061b3d2}{height}=0.\-01, double \hyperlink{structObjectDB_acd411795d2b56563c2fcfca77d25fc0c}{radius}=0.\-005, const std\-::string \&ns=\char`\"{}Cylinder\char`\"{})
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \hyperlink{structObjectDB_a444595d5d64fcfcf2a961e3f7735c317}{Save} (\hyperlink{structObjectDB}{Object\-D\-B} $\ast$obj)
+\item 
+static \hyperlink{structObjectDB}{Object\-D\-B} $\ast$ \hyperlink{structObjectDB_a0545684267bc54c7c2db6a5bd05e83af}{Find} (std\-::size\-\_\-t \hyperlink{structObjectDB_aab8a4b39fdbd287df00a9b38d1cae926}{id})
+\item 
+static Eigen\-::\-Affine3d \& \hyperlink{structObjectDB_a8cce5c93cb5984f63592e8462853d49a}{Find\-Pose} (std\-::string \hyperlink{structObjectDB_aac9d3fa047f7df1d8981fd3c6e97dd25}{name})
+\item 
+static \hyperlink{structObjectDB}{Object\-D\-B} $\ast$ \hyperlink{structObjectDB_aebc35a4364c0a693c68facb7e50eea67}{Find} (std\-::string \hyperlink{structObjectDB_aac9d3fa047f7df1d8981fd3c6e97dd25}{name})
+\item 
+static std\-::string \hyperlink{structObjectDB_a6b8e4cb3b57a314c21fdc9e51f0c2254}{Dump\-D\-B} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Eigen\-::\-Affine3d \hyperlink{structObjectDB_a8026e6c724f6193ab457c5f0ad924551}{pose}
+\item 
+std\-::string \hyperlink{structObjectDB_aac9d3fa047f7df1d8981fd3c6e97dd25}{name}
+\item 
+std\-::string \hyperlink{structObjectDB_a0f12d7a7c86ff08dfd2ee1efc93d2c89}{metatype}
+\item 
+std\-::string \hyperlink{structObjectDB_a2e171343bb62d57745e9bbb02c8a6bf7}{filepath}
+\item 
+rviz\-\_\-visual\-\_\-tools\-::colors \hyperlink{structObjectDB_a836db3f6e7558a6d9e634b6ea0f0f587}{color}
+\item 
+double \hyperlink{structObjectDB_a8275f4314ddaba5cf47d65fac944ea96}{scale}
+\item 
+std\-::size\-\_\-t \hyperlink{structObjectDB_aab8a4b39fdbd287df00a9b38d1cae926}{id}
+\item 
+rviz\-\_\-visual\-\_\-tools\-::colors \hyperlink{structObjectDB_aae11be013aa483a2b10b6a880d68ee5f}{firstcolor}
+\item 
+Eigen\-::\-Affine3d \hyperlink{structObjectDB_aea55dd4e3af88e8bd3f545f8f59b8946}{grippedpose}
+\item 
+double \hyperlink{structObjectDB_a96cb58335a637b741d3d91578a3596d1}{gripperclose}
+\item 
+Eigen\-::\-Affine3d \hyperlink{structObjectDB_ae11c0410cb15ffe04a5179e59c48c078}{adjacentpose}
+\item 
+Eigen\-::\-Vector3d \hyperlink{structObjectDB_a28f2e4ccb5338e593f84d57cf174295a}{centroid}
+\item 
+double \hyperlink{structObjectDB_afa3f0a0fd7cc078010a6265c1061b3d2}{height}
+\item 
+double \hyperlink{structObjectDB_acd411795d2b56563c2fcfca77d25fc0c}{radius}
+\item 
+bool \hyperlink{structObjectDB_a790dfadf5010aa532a5607f33f626415}{King}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static std\-::map$<$ std\-::string, \\*
+std\-::string $>$ \hyperlink{structObjectDB_a5ac6046dd7ea5cf8c2adac6f6c5ed50e}{\-\_\-typemapping}
+\item 
+static std\-::size\-\_\-t \hyperlink{structObjectDB_a63154106183736bf0dac1188eff2d0aa}{gid} = 1
+\item 
+static std\-::vector$<$ \hyperlink{structObjectDB}{Object\-D\-B} $\ast$ $>$ \hyperlink{structObjectDB_abb9b942eb8b04ead17f60ce1b1b89ce7}{objects}
+\item 
+static \hyperlink{structObjectDB}{Object\-D\-B} $\ast$ \hyperlink{structObjectDB_a50ed67ad47552cecb2f94837740d70ff}{dummy} = new \hyperlink{structObjectDB}{Object\-D\-B}(\char`\"{}dummy\char`\"{}, \char`\"{}nevermatch\char`\"{}, (std\-::size\-\_\-t) 0)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{structObjectDB_ae145fb7a66b48f862cc6cbc4d01ae9a6}{\index{Object\-D\-B@{Object\-D\-B}!Object\-D\-B@{Object\-D\-B}}
+\index{Object\-D\-B@{Object\-D\-B}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{Object\-D\-B}]{\setlength{\rightskip}{0pt plus 5cm}Object\-D\-B\-::\-Object\-D\-B (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{name, }
+\item[{std\-::string}]{metatype, }
+\item[{std\-::size\-\_\-t}]{id}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{structObjectDB_ae145fb7a66b48f862cc6cbc4d01ae9a6}
+\hypertarget{structObjectDB_afadfd1e507d2b3998d527ccd6f0f24e4}{\index{Object\-D\-B@{Object\-D\-B}!Object\-D\-B@{Object\-D\-B}}
+\index{Object\-D\-B@{Object\-D\-B}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{Object\-D\-B}]{\setlength{\rightskip}{0pt plus 5cm}Object\-D\-B\-::\-Object\-D\-B (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{name, }
+\item[{std\-::string}]{metatype, }
+\item[{std\-::size\-\_\-t}]{id, }
+\item[{Eigen\-::\-Affine3d}]{pose, }
+\item[{std\-::string}]{filepath, }
+\item[{rviz\-\_\-visual\-\_\-tools\-::colors}]{color = {\ttfamily rviz\-\_\-visual\-\_\-tools\-:\-:CLEAR}, }
+\item[{double}]{scale = {\ttfamily 1.0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{structObjectDB_afadfd1e507d2b3998d527ccd6f0f24e4}
+\hypertarget{structObjectDB_ad4df607c899e78310311452a541d0a99}{\index{Object\-D\-B@{Object\-D\-B}!Object\-D\-B@{Object\-D\-B}}
+\index{Object\-D\-B@{Object\-D\-B}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{Object\-D\-B}]{\setlength{\rightskip}{0pt plus 5cm}Object\-D\-B\-::\-Object\-D\-B (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{name, }
+\item[{std\-::string}]{metatype, }
+\item[{Eigen\-::\-Affine3d}]{pose = {\ttfamily Eigen\-:\-:Affine3d\-:\-:Identity()}, }
+\item[{Eigen\-::\-Affine3d}]{adjacentpose = {\ttfamily Eigen\-:\-:Affine3d\-:\-:Identity()}, }
+\item[{rviz\-\_\-visual\-\_\-tools\-::colors}]{color = {\ttfamily rviz\-\_\-visual\-\_\-tools\-:\-:CLEAR}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{structObjectDB_ad4df607c899e78310311452a541d0a99}
+\hypertarget{structObjectDB_a0c10410ce9a14185e1bacd78d0c6fa75}{\index{Object\-D\-B@{Object\-D\-B}!Object\-D\-B@{Object\-D\-B}}
+\index{Object\-D\-B@{Object\-D\-B}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{Object\-D\-B}]{\setlength{\rightskip}{0pt plus 5cm}Object\-D\-B\-::\-Object\-D\-B (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{name, }
+\item[{std\-::string}]{metatype, }
+\item[{Eigen\-::\-Affine3d}]{pose, }
+\item[{rviz\-\_\-visual\-\_\-tools\-::colors}]{color, }
+\item[{double}]{height = {\ttfamily 0.01}, }
+\item[{double}]{radius = {\ttfamily 0.005}, }
+\item[{const std\-::string \&}]{ns = {\ttfamily \char`\"{}Cylinder\char`\"{}}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{structObjectDB_a0c10410ce9a14185e1bacd78d0c6fa75}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{structObjectDB_a6b8e4cb3b57a314c21fdc9e51f0c2254}{\index{Object\-D\-B@{Object\-D\-B}!Dump\-D\-B@{Dump\-D\-B}}
+\index{Dump\-D\-B@{Dump\-D\-B}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{Dump\-D\-B}]{\setlength{\rightskip}{0pt plus 5cm}static std\-::string Object\-D\-B\-::\-Dump\-D\-B (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}}\label{structObjectDB_a6b8e4cb3b57a314c21fdc9e51f0c2254}
+\hypertarget{structObjectDB_a0545684267bc54c7c2db6a5bd05e83af}{\index{Object\-D\-B@{Object\-D\-B}!Find@{Find}}
+\index{Find@{Find}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{Find}]{\setlength{\rightskip}{0pt plus 5cm}static {\bf Object\-D\-B}$\ast$ Object\-D\-B\-::\-Find (
+\begin{DoxyParamCaption}
+\item[{std\-::size\-\_\-t}]{id}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}}\label{structObjectDB_a0545684267bc54c7c2db6a5bd05e83af}
+\hypertarget{structObjectDB_aebc35a4364c0a693c68facb7e50eea67}{\index{Object\-D\-B@{Object\-D\-B}!Find@{Find}}
+\index{Find@{Find}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{Find}]{\setlength{\rightskip}{0pt plus 5cm}static {\bf Object\-D\-B}$\ast$ Object\-D\-B\-::\-Find (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}}\label{structObjectDB_aebc35a4364c0a693c68facb7e50eea67}
+\hypertarget{structObjectDB_a8cce5c93cb5984f63592e8462853d49a}{\index{Object\-D\-B@{Object\-D\-B}!Find\-Pose@{Find\-Pose}}
+\index{Find\-Pose@{Find\-Pose}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{Find\-Pose}]{\setlength{\rightskip}{0pt plus 5cm}static Eigen\-::\-Affine3d\& Object\-D\-B\-::\-Find\-Pose (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}}\label{structObjectDB_a8cce5c93cb5984f63592e8462853d49a}
+\hypertarget{structObjectDB_a444595d5d64fcfcf2a961e3f7735c317}{\index{Object\-D\-B@{Object\-D\-B}!Save@{Save}}
+\index{Save@{Save}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{Save}]{\setlength{\rightskip}{0pt plus 5cm}static void Object\-D\-B\-::\-Save (
+\begin{DoxyParamCaption}
+\item[{{\bf Object\-D\-B} $\ast$}]{obj}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}}\label{structObjectDB_a444595d5d64fcfcf2a961e3f7735c317}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{structObjectDB_a5ac6046dd7ea5cf8c2adac6f6c5ed50e}{\index{Object\-D\-B@{Object\-D\-B}!\-\_\-typemapping@{\-\_\-typemapping}}
+\index{\-\_\-typemapping@{\-\_\-typemapping}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{\-\_\-typemapping}]{\setlength{\rightskip}{0pt plus 5cm}std\-::map$<$ std\-::string, std\-::string $>$ Object\-D\-B\-::\-\_\-typemapping\hspace{0.3cm}{\ttfamily [static]}}}\label{structObjectDB_a5ac6046dd7ea5cf8c2adac6f6c5ed50e}
+{\bfseries Initial value\-:}
+\begin{DoxyCode}
+=
+        map\_list\_of(\textcolor{stringliteral}{"bolt"}, \textcolor{stringliteral}{"mesh"})
+(\textcolor{stringliteral}{"boltholder"}, \textcolor{stringliteral}{"mesh"})
+(\textcolor{stringliteral}{"wall"}, \textcolor{stringliteral}{"cuboid"})
+(\textcolor{stringliteral}{"Checkerboard"}, \textcolor{stringliteral}{"cuboid"})
+(\textcolor{stringliteral}{"Cylinder"}, \textcolor{stringliteral}{"Cylinder"})
+\end{DoxyCode}
+\hypertarget{structObjectDB_ae11c0410cb15ffe04a5179e59c48c078}{\index{Object\-D\-B@{Object\-D\-B}!adjacentpose@{adjacentpose}}
+\index{adjacentpose@{adjacentpose}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{adjacentpose}]{\setlength{\rightskip}{0pt plus 5cm}Eigen\-::\-Affine3d Object\-D\-B\-::adjacentpose}}\label{structObjectDB_ae11c0410cb15ffe04a5179e59c48c078}
+\hypertarget{structObjectDB_a28f2e4ccb5338e593f84d57cf174295a}{\index{Object\-D\-B@{Object\-D\-B}!centroid@{centroid}}
+\index{centroid@{centroid}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{centroid}]{\setlength{\rightskip}{0pt plus 5cm}Eigen\-::\-Vector3d Object\-D\-B\-::centroid}}\label{structObjectDB_a28f2e4ccb5338e593f84d57cf174295a}
+\hypertarget{structObjectDB_a836db3f6e7558a6d9e634b6ea0f0f587}{\index{Object\-D\-B@{Object\-D\-B}!color@{color}}
+\index{color@{color}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{color}]{\setlength{\rightskip}{0pt plus 5cm}rviz\-\_\-visual\-\_\-tools\-::colors Object\-D\-B\-::color}}\label{structObjectDB_a836db3f6e7558a6d9e634b6ea0f0f587}
+\hypertarget{structObjectDB_a50ed67ad47552cecb2f94837740d70ff}{\index{Object\-D\-B@{Object\-D\-B}!dummy@{dummy}}
+\index{dummy@{dummy}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{dummy}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Object\-D\-B} $\ast$ Object\-D\-B\-::dummy = new {\bf Object\-D\-B}(\char`\"{}dummy\char`\"{}, \char`\"{}nevermatch\char`\"{}, (std\-::size\-\_\-t) 0)\hspace{0.3cm}{\ttfamily [static]}}}\label{structObjectDB_a50ed67ad47552cecb2f94837740d70ff}
+\hypertarget{structObjectDB_a2e171343bb62d57745e9bbb02c8a6bf7}{\index{Object\-D\-B@{Object\-D\-B}!filepath@{filepath}}
+\index{filepath@{filepath}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{filepath}]{\setlength{\rightskip}{0pt plus 5cm}std\-::string Object\-D\-B\-::filepath}}\label{structObjectDB_a2e171343bb62d57745e9bbb02c8a6bf7}
+\hypertarget{structObjectDB_aae11be013aa483a2b10b6a880d68ee5f}{\index{Object\-D\-B@{Object\-D\-B}!firstcolor@{firstcolor}}
+\index{firstcolor@{firstcolor}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{firstcolor}]{\setlength{\rightskip}{0pt plus 5cm}rviz\-\_\-visual\-\_\-tools\-::colors Object\-D\-B\-::firstcolor}}\label{structObjectDB_aae11be013aa483a2b10b6a880d68ee5f}
+\hypertarget{structObjectDB_a63154106183736bf0dac1188eff2d0aa}{\index{Object\-D\-B@{Object\-D\-B}!gid@{gid}}
+\index{gid@{gid}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{gid}]{\setlength{\rightskip}{0pt plus 5cm}std\-::size\-\_\-t Object\-D\-B\-::gid = 1\hspace{0.3cm}{\ttfamily [static]}}}\label{structObjectDB_a63154106183736bf0dac1188eff2d0aa}
+\hypertarget{structObjectDB_aea55dd4e3af88e8bd3f545f8f59b8946}{\index{Object\-D\-B@{Object\-D\-B}!grippedpose@{grippedpose}}
+\index{grippedpose@{grippedpose}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{grippedpose}]{\setlength{\rightskip}{0pt plus 5cm}Eigen\-::\-Affine3d Object\-D\-B\-::grippedpose}}\label{structObjectDB_aea55dd4e3af88e8bd3f545f8f59b8946}
+\hypertarget{structObjectDB_a96cb58335a637b741d3d91578a3596d1}{\index{Object\-D\-B@{Object\-D\-B}!gripperclose@{gripperclose}}
+\index{gripperclose@{gripperclose}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{gripperclose}]{\setlength{\rightskip}{0pt plus 5cm}double Object\-D\-B\-::gripperclose}}\label{structObjectDB_a96cb58335a637b741d3d91578a3596d1}
+\hypertarget{structObjectDB_afa3f0a0fd7cc078010a6265c1061b3d2}{\index{Object\-D\-B@{Object\-D\-B}!height@{height}}
+\index{height@{height}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{height}]{\setlength{\rightskip}{0pt plus 5cm}double Object\-D\-B\-::height}}\label{structObjectDB_afa3f0a0fd7cc078010a6265c1061b3d2}
+\hypertarget{structObjectDB_aab8a4b39fdbd287df00a9b38d1cae926}{\index{Object\-D\-B@{Object\-D\-B}!id@{id}}
+\index{id@{id}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{id}]{\setlength{\rightskip}{0pt plus 5cm}std\-::size\-\_\-t Object\-D\-B\-::id}}\label{structObjectDB_aab8a4b39fdbd287df00a9b38d1cae926}
+\hypertarget{structObjectDB_a790dfadf5010aa532a5607f33f626415}{\index{Object\-D\-B@{Object\-D\-B}!King@{King}}
+\index{King@{King}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{King}]{\setlength{\rightskip}{0pt plus 5cm}bool Object\-D\-B\-::\-King}}\label{structObjectDB_a790dfadf5010aa532a5607f33f626415}
+\hypertarget{structObjectDB_a0f12d7a7c86ff08dfd2ee1efc93d2c89}{\index{Object\-D\-B@{Object\-D\-B}!metatype@{metatype}}
+\index{metatype@{metatype}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{metatype}]{\setlength{\rightskip}{0pt plus 5cm}std\-::string Object\-D\-B\-::metatype}}\label{structObjectDB_a0f12d7a7c86ff08dfd2ee1efc93d2c89}
+\hypertarget{structObjectDB_aac9d3fa047f7df1d8981fd3c6e97dd25}{\index{Object\-D\-B@{Object\-D\-B}!name@{name}}
+\index{name@{name}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{name}]{\setlength{\rightskip}{0pt plus 5cm}std\-::string Object\-D\-B\-::name}}\label{structObjectDB_aac9d3fa047f7df1d8981fd3c6e97dd25}
+\hypertarget{structObjectDB_abb9b942eb8b04ead17f60ce1b1b89ce7}{\index{Object\-D\-B@{Object\-D\-B}!objects@{objects}}
+\index{objects@{objects}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{objects}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$ {\bf Object\-D\-B} $\ast$ $>$ Object\-D\-B\-::objects\hspace{0.3cm}{\ttfamily [static]}}}\label{structObjectDB_abb9b942eb8b04ead17f60ce1b1b89ce7}
+\hypertarget{structObjectDB_a8026e6c724f6193ab457c5f0ad924551}{\index{Object\-D\-B@{Object\-D\-B}!pose@{pose}}
+\index{pose@{pose}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{pose}]{\setlength{\rightskip}{0pt plus 5cm}Eigen\-::\-Affine3d Object\-D\-B\-::pose}}\label{structObjectDB_a8026e6c724f6193ab457c5f0ad924551}
+\hypertarget{structObjectDB_acd411795d2b56563c2fcfca77d25fc0c}{\index{Object\-D\-B@{Object\-D\-B}!radius@{radius}}
+\index{radius@{radius}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{radius}]{\setlength{\rightskip}{0pt plus 5cm}double Object\-D\-B\-::radius}}\label{structObjectDB_acd411795d2b56563c2fcfca77d25fc0c}
+\hypertarget{structObjectDB_a8275f4314ddaba5cf47d65fac944ea96}{\index{Object\-D\-B@{Object\-D\-B}!scale@{scale}}
+\index{scale@{scale}!ObjectDB@{Object\-D\-B}}
+\subsubsection[{scale}]{\setlength{\rightskip}{0pt plus 5cm}double Object\-D\-B\-::scale}}\label{structObjectDB_a8275f4314ddaba5cf47d65fac944ea96}
+
+
+The documentation for this struct was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/include/nist\-\_\-fanuc/\hyperlink{Scene_8h}{Scene.\-h}\item 
+/usr/local/michalos/nistfanuc\-\_\-ws/src/nist\-\_\-fanuc/src/\hyperlink{Scene_8cpp}{Scene.\-cpp}\end{DoxyCompactItemize}

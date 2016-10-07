@@ -1,4 +1,4 @@
-.TH "CGlobals" 3 "Fri Apr 15 2016" "CRCL FANUC" \" -*- nroff -*-
+.TH "CGlobals" 3 "Wed Sep 28 2016" "CRCL FANUC" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -30,26 +30,19 @@ CGlobals \-
 .br
 .RI "\fIStrFormat accepts a traditional C format string and expects parameter to follow on calling stack and will produce a string from it\&. \fP"
 .ti -1c
-.RI "bool \fBIsDebug\fP ()"
-.br
-.ti -1c
-.RI "void \fBDump\fP ()"
-.br
-.RI "\fIdumps to std out global parameters set at runtime parameters\&. \fP"
-.ti -1c
 .RI "void \fBSleep\fP (unsigned int ms)"
 .br
 .RI "\fIsleep milliseconds\&. Equivalent to Sleep in windows\&. \fP"
 .ti -1c
-.RI "bool \fBReadFile\fP (std::string filename, std::string &\fBcontents\fP)"
+.RI "bool \fBReadFile\fP (std::string filename, std::string &contents)"
 .br
 .RI "\fIReads a file all at once into a string\&. Include file open, read, close\&. If fails, empty string is only diagnostic\&. \fP"
 .ti -1c
-.RI "void \fBWriteFile\fP (std::string filename, std::string &\fBcontents\fP)"
+.RI "void \fBWriteFile\fP (std::string filename, std::string &contents)"
 .br
 .RI "\fIWrites entire string contents to a file all at once\&. Include file open, write, close\&. No error messages\&. \fP"
 .ti -1c
-.RI "void \fBAppendFile\fP (std::string filename, std::string \fBcontents\fP)"
+.RI "void \fBAppendFile\fP (std::string filename, std::string contents)"
 .br
 .RI "\fIAppends entire string contents to a file all at once\&. Include file open, write, close\&. No error messages\&. \fP"
 .ti -1c
@@ -57,21 +50,9 @@ CGlobals \-
 .br
 .RI "\fITrim cleans blank characters from the front and back of a string\&. Blank chars are white space, tab, carriage return\&. \fP"
 .ti -1c
-.RI "unsigned int \fBDebugMessage\fP (std::string errmsg)"
-.br
-.RI "\fIPrints an diagnostic message to the debug reporting mechanism\&. (cout or OutputDebugString) \fP"
-.ti -1c
-.RI "unsigned int \fBErrorMessage\fP (std::string errmsg)"
-.br
-.RI "\fIPrints an error message to the error reporting mechanism\&. \fP"
-.ti -1c
-.RI "unsigned int \fBDebugStrFormat\fP (const char *fmt,\&.\&.\&.)"
-.br
-.RI "\fIPrints a format string and arguments as a diagnostic message to the debug reporting mechanism\&. (cout or OutputDebugString) \fP"
-.ti -1c
 .RI "std::string \fBGetTimeStamp\fP (\fBTimeFormat\fP format=\fBGMT_UV_SEC\fP)"
 .br
-.RI "\fIGetTimeStamp returns a timestamp string depending on the input format\&. \fP"
+.RI "\fIPrints a format string and arguments as a diagnostic message to the debug reporting mechanism\&. (cout or OutputDebugString) \fP"
 .in -1c
 .SS "Public Attributes"
 
@@ -80,9 +61,6 @@ CGlobals \-
 .RI "std::map< std::string, 
 .br
 std::string > \fB_appproperties\fP"
-.br
-.ti -1c
-.RI "int & \fBDebug\fP"
 .br
 .ti -1c
 .RI "std::string \fBExeDirectory\fP"
@@ -133,23 +111,7 @@ Appends entire string contents to a file all at once\&. Include file open, write
 .RE
 .PP
 
-.SS "unsigned int CGlobals::DebugMessage (std::stringerrmsg)"
-
-.PP
-Prints an diagnostic message to the debug reporting mechanism\&. (cout or OutputDebugString) 
-.PP
-\fBParameters:\fP
-.RS 4
-\fIstr\fP errmsg is the error message that is posted to the debug reporting mechanism\&. 
-.RE
-.PP
-\fBReturns:\fP
-.RS 4
-a error result integer\&. (e\&.g\&., E_FAIL or -1)\&. 
-.RE
-.PP
-
-.SS "unsigned int CGlobals::DebugStrFormat (const char *fmt, \&.\&.\&.)"
+.SS "std::string CGlobals::GetTimeStamp (\fBTimeFormat\fPformat = \fC\fBGMT_UV_SEC\fP\fP)"
 
 .PP
 Prints a format string and arguments as a diagnostic message to the debug reporting mechanism\&. (cout or OutputDebugString) 
@@ -161,32 +123,8 @@ Prints a format string and arguments as a diagnostic message to the debug report
 .PP
 \fBReturns:\fP
 .RS 4
-a error result integer\&. (e\&.g\&., E_FAIL or -1)\&. 
+a error result integer\&. (e\&.g\&., E_FAIL or -1)\&.
 .RE
-.PP
-
-.SS "void CGlobals::Dump ()\fC [inline]\fP"
-
-.PP
-dumps to std out global parameters set at runtime parameters\&. 
-.SS "unsigned int CGlobals::ErrorMessage (std::stringerrmsg)"
-
-.PP
-Prints an error message to the error reporting mechanism\&. 
-.PP
-\fBParameters:\fP
-.RS 4
-\fIstr\fP errmsg is the error message that is posted to the error reporting mechanism\&. 
-.RE
-.PP
-\fBReturns:\fP
-.RS 4
-a error result integer\&. (e\&.g\&., E_FAIL or -1)\&. 
-.RE
-.PP
-
-.SS "std::string CGlobals::GetTimeStamp (\fBTimeFormat\fPformat = \fC\fBGMT_UV_SEC\fP\fP)"
-
 .PP
 GetTimeStamp returns a timestamp string depending on the input format\&. 
 .PP
@@ -200,8 +138,6 @@ GetTimeStamp returns a timestamp string depending on the input format\&.
 a formated timestamp string\&. 
 .RE
 .PP
-
-.SS "bool CGlobals::IsDebug ()\fC [inline]\fP"
 
 .SS "bool CGlobals::ReadFile (std::stringfilename, std::string &contents)"
 
@@ -271,14 +207,12 @@ Writes entire string contents to a file all at once\&. Include file open, write,
 .PP 
 .SS "std::map< std::string, std::string> CGlobals::_appproperties"
 map of application properties, e\&.g\&., ['prop']='value' 
-.SS "int& CGlobals::Debug"
-
 .SS "std::string CGlobals::ExeDirectory"
 the path to directory where exe is located 
 .SS "std::string CGlobals::inifile"
 inifile path name 
 .SS "std::string CGlobals::SocketPort"
-socket port to listen for \fBCrcl\fP clients 
+socket port to listen for Crcl clients 
 
 .SH "Author"
 .PP 
