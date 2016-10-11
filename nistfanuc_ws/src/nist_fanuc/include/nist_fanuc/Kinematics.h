@@ -97,6 +97,7 @@ public:
 /**
  * \brief The IKinematics provides is an abstract class with pure virtual functions that are
  * overriden by actual kinematic implementations.
+ * 
  * */
 class IKinematics {
 protected:
@@ -276,6 +277,8 @@ typedef boost::shared_ptr<IKinematics> IKinematicsSharedPtr;
 // http://wiki.ros.org/arm_navigation/Tutorials/Running%20arm%20navigation%20on%20non-PR2%20arm
 // https://github.com/ros-planning/moveit_kinematics_tests/blob/kinetic-devel/kinematics_base_test/src/test_kinematics_plugin.cpp
 // https://github.com/IDSCETHZurich/re_trajectory-generator/blob/master/poseToOrocos/src/poseStampedLoop.cpp
+// http://docs.ros.org/jade/api/moveit_msgs/html/msg/PositionIKRequest.html
+//http://docs.ros.org/hydro/api/ric_mc/html/GetPositionIK_8h_source.html
 #include <boost/shared_ptr.hpp>
 #include <moveit_msgs/GetPositionFK.h>
 #include <moveit_msgs/GetPositionIK.h>
@@ -290,13 +293,7 @@ public:
     ArmKinematics(std::string prefix, tf::Pose baseoffset) {
         this->prefix = prefix;
         this->baseoffset=baseoffset;
-       
-//#ifdef FANUCPREFIX
-//         prefix = "fanuc_";
-//#else
-//         prefix = "";
-//#endif
-       
+      
     }
     virtual RCS::Pose FK(std::vector<double> jv) {
         moveit_msgs::GetPositionFK::Response response;
@@ -311,8 +308,6 @@ public:
         Conversion::GeometryPose2TfPose(response.pose_stamped[0].pose, pose);
         return pose;
     }
-    // http://docs.ros.org/jade/api/moveit_msgs/html/msg/PositionIKRequest.html
-    //http://docs.ros.org/hydro/api/ric_mc/html/GetPositionIK_8h_source.html
 
     virtual std::vector<double> IK(RCS::Pose  pose,
             std::vector<double> oldjoints) {
@@ -370,15 +365,9 @@ public:
         }
     }
 };
-// http://docs.ros.org/jade/api/moveit_msgs/html/msg/PositionIKRequest.html
-//http://docs.ros.org/hydro/api/ric_mc/html/GetPositionIK_8h_source.html
 
-#define IKFAST_HAS_LIBRARY
-#define IKFAST_NO_MAIN
-#include "Motoman/ikfast.h"
-#include <algorithm>
-using namespace  ikfast;
-class FastKinematics : public IKinematics {
+
+class MotomanSia20dFastKinematics : public IKinematics {
     static double SIGN(double x) {
         return ( x >= 0.0f) ? +1.0f : -1.0f;
     }
@@ -398,9 +387,7 @@ class FastKinematics : public IKinematics {
 
     double harmonize(const std::vector<double> &ik_seed_state, std::vector<double> &solution) const;
 
-    void getClosestSolution(const IkSolutionList<IkReal> &solutions, 
-    const std::vector<double> &ik_seed_state, 
-    std::vector<double> &solution) const ;
+
     
 public:
 
@@ -426,6 +413,47 @@ public:
             std::vector<double> &max);
 
 };
+
+
+  class FanucLRMate200idFastKinematics : public IKinematics {
+    static double SIGN(double x) {
+        return ( x >= 0.0f) ? +1.0f : -1.0f;
+    }
+
+    static double NORM(double a, double b, double c, double d) {
+        return sqrt(a * a + b * b + c * c + d * d);
+    }
+    // Convert rotation matrix to quaternion (Daisuke Miyazaki)
+    // http://pastebin.com/NikwbL3k
+
+    static RCS::Rotation Convert2Rotation(double *eerot) ;
+    // Convert input effector pose, in w x y z quaternion notation, to rotation matrix.
+    // Must use doubles, else lose precision compared to directly inputting the rotation matrix.
+    // Found at http://kaist-ros-pkg.googlecode.com/svn/trunk/arm_kinematics_tools/src/ikfastdemo/ikfastdemo.cpp
+    static void Convert2RotationMatrix(const RCS::Rotation & quat, double *eerot);
+    double harmonize(const std::vector<double> &ik_seed_state, std::vector<double> &solution) const;
+  
+public:
+    virtual RCS::Pose FK(std::vector<double> joints);
+    virtual size_t AllPoseToJoints(RCS::Pose & pose, 
+    std::vector<std::vector<double>> &joints) ;
+    Eigen::VectorXd ConvertJoints(std::vector<double> v) ;
+    std::vector<double> ConvertJoints(Eigen::VectorXd ev) ;
+    virtual std::vector<double> NearestJoints(
+            std::vector<double> oldjoints,
+            std::vector<std::vector<double>> &newjoints) ;
+    virtual std::vector<double> IK(RCS::Pose  pose,
+            std::vector<double> oldjoints) ;
+    virtual std::vector<double> IK(RCS::Pose  pose,
+            std::vector<double> minrange, std::vector<double> maxrange) ;
+
+    virtual bool IsSingular(RCS::Pose  pose, double threshold) ;
+    virtual void Init(ros::NodeHandle &nh) ;
+    void VerifyLimits(std::vector<double> joints) ;
+    virtual std::vector<double> FindBoundedSolution(std::vector<std::vector<double>> &solutions,
+            std::vector<double> &min,
+            std::vector<double> &max);
+};      
 
 #if 0
 class MotomanSia20d {
@@ -456,7 +484,7 @@ public:
     double harmonize(const std::vector<double> &ik_seed_state,
             std::vector<double> &solution) const;
     
-    void getClosestSolution(const IkSolutionList<IkReal> &solutions,
+    void getClosestSolution(const IkSolutionList<double> &solutions,
             const std::vector<double> &ik_seed_state,
             std::vector<double> &solution) const;
     

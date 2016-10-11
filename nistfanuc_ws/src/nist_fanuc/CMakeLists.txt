@@ -120,7 +120,9 @@ src/trajectoryMaker.cpp
 #src/fanuc/fanuc_lrmate200id_manipulator_ikfast_solver.cpp
 #src/fanuc/fanuc_lrmate200id.cpp
 src/Demo.cpp
-src/motoman/ikfast_sia20d_manipulator.cpp
+#src/motoman/ikfast_sia20d_manipulator.cpp
+src/motomansia20dkinematics.cpp
+src/fanuclrmate200idkinematics.cpp
 )
 
 #Add all files in subdirectories of the project in

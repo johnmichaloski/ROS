@@ -1,0 +1,8 @@
+/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/src/motomansia20dkinematics.cpp: In member function 'virtual std::size_t MotomanSia20dFastKinematics::AllPoseToJoints(RCS::Pose&, std::vector<std::vector<double> >&)':
+/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/src/motomansia20dkinematics.cpp:198:91: note: #pragma message: TODO - Fix Singularity issue in MotomanSia20dFastKinematics::AllPoseToJoints
+     TODO(Fix Singularity issue in MotomanSia20dFastKinematics::AllPoseToJoints)
+                                                                                           ^
+/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/src/fanuclrmate200idkinematics.cpp: In member function 'virtual std::size_t FanucLRMate200idFastKinematics::AllPoseToJoints(RCS::Pose&, std::vector<std::vector<double> >&)':
+/usr/local/michalos/nistfanuc_ws/src/nist_fanuc/src/fanuclrmate200idkinematics.cpp:197:94: note: #pragma message: TODO - Fix Singularity issue in FanucLRMate200idFastKinematics::AllPoseToJoints
+     TODO(Fix Singularity issue in FanucLRMate200idFastKinematics::AllPoseToJoints)
+                                                                                              ^

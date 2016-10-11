@@ -1,4 +1,18 @@
 
+
+/*
+ * DISCLAIMER:
+ * This software was produced by the National Institute of Standards
+ * and Technology (NIST), an agency of the U.S. government, and by statute is
+ * not subject to copyright in the United States.  Recipients of this software
+ * assume all responsibility associated with its operation, modification,
+ * maintenance, and subsequent redistribution.
+ *
+ * See NIST Administration Manual 4.09.07 b and Appendix I.
+ */
+
+//#pragma message "Compiling " __FILE__ 
+
 #include "nist_fanuc.h"
 
 #include <boost/format.hpp>
@@ -157,7 +171,7 @@ int main(int argc, char** argv) {
         
 #ifdef MOTOMAN
         boost::shared_ptr<IKinematics> fastkin;
-        fastkin = boost::shared_ptr<IKinematics>(new FastKinematics());
+        fastkin = boost::shared_ptr<IKinematics>(new MotomanSia20dFastKinematics());
         // Initialization of Controller instantiation of shared objects  
         fastkin->Init(std::string("manipulator"), std::string("motoman_link_t"), std::string("world"));
         fastkin->Init(nh);

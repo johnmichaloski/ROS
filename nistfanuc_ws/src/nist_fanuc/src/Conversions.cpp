@@ -9,6 +9,7 @@ maintenance, and subsequent redistribution.
 
 See NIST Administration Manual 4.09.07 b and Appendix I.
  */
+//#pragma message "Compiling " __FILE__ 
 
 #include "Conversions.h"
 

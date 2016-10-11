@@ -10,7 +10,7 @@
  *
  * See NIST Administration Manual 4.09.07 b and Appendix I.
  */
-
+//#pragma message "Compiling " __FILE__ 
 
 #include <algorithm>  // max
 #include <tf/transform_datatypes.h>

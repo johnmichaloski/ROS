@@ -12,6 +12,7 @@
  */
 
 #define BOOST_ALL_NO_LIB
+//#pragma message "Compiling " __FILE__ 
 
 #include "Controller.h"
 #include <boost/exception/all.hpp>
