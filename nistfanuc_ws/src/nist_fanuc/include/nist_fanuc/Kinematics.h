@@ -15,7 +15,8 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 
 #include <boost/shared_ptr.hpp>
 #include <boost/thread/mutex.hpp>
-#include "arm_kinematics.h"
+//#include "arm_kinematics.h"
+#include <urdf/model.h>
 
 #include "RCS.h"
 #include "Globals.h"
@@ -106,25 +107,19 @@ protected:
     std::vector< double> jointvalues;
     std::vector< double> joint_min;
     std::vector< double> joint_max;
+    std::vector< bool> joint_has_limits;
     std::vector< double> hint;
     size_t num_joints;
     std::string _groupname;
     std::string _tiplinkname;
     std::string _rootlinkname;
     std::string prefix;
-    tf::Pose baseoffset;
+    bool ParseURDF(std::string xml_string, std::string base_frame);
+    
 public:
-    boost::shared_ptr<::Kinematics> armkin;
-
+    std::string getTipFrame(){ return _tiplinkname; }
     std::string & Prefix() {
         return prefix;
-    }
-
-    tf::Pose  baseOffset() {
-        return baseoffset;
-    }
-    tf::Pose  invBaseOffset() {
-        return baseoffset.inverse();
     }
     size_t NumJoints() {
         assert(joint_names.size() != 0);
@@ -134,9 +129,6 @@ public:
     virtual void SetHint(std::vector< double> hint) {
         this->hint = hint;
     }
-    //    RCS:Pose GetJointTransform(std::string jointname){
-    //    boost::shared_ptr<const urdf::Joint> urdf_joint = armkin->robot_model->getJoint(jointname);
-    //    }
 
     virtual std::vector<std::string> JointNames() {
         return joint_names;
@@ -237,8 +229,18 @@ public:
      * \param  nh ros node handle of node.
      */
     virtual void Init(ros::NodeHandle & nh) {
-    }
+        ROS_DEBUG_NAMED("ikfast", "Reading xml file from parameter server");
+        std::string urdf_xml;
+        if (!nh.getParam("robot_description", urdf_xml)) {
+            ROS_FATAL_NAMED("IKinematics", "Could not load the xml from parameter server: %s", urdf_xml.c_str());
+            //return false;
 
+        }
+        if (!ParseURDF(urdf_xml, _rootlinkname))
+            ROS_FATAL_NAMED("IKinematics", "Could not parse the xml for kinematic solver", _groupname.c_str());
+        //return false;
+
+    }
     virtual JointState UpdateJointState(std::vector<uint64_t> jointnums,
             JointState oldjoints,
             JointState njoints) {
@@ -273,100 +275,6 @@ public:
 typedef boost::shared_ptr<IKinematics> IKinematicsSharedPtr;
 
 
-//https://github.com/davetcoleman/kdlc_kinematic_plugin/blob/master/src/kdlc_kinematics_plugin.cpp
-// http://wiki.ros.org/arm_navigation/Tutorials/Running%20arm%20navigation%20on%20non-PR2%20arm
-// https://github.com/ros-planning/moveit_kinematics_tests/blob/kinetic-devel/kinematics_base_test/src/test_kinematics_plugin.cpp
-// https://github.com/IDSCETHZurich/re_trajectory-generator/blob/master/poseToOrocos/src/poseStampedLoop.cpp
-// http://docs.ros.org/jade/api/moveit_msgs/html/msg/PositionIKRequest.html
-//http://docs.ros.org/hydro/api/ric_mc/html/GetPositionIK_8h_source.html
-#include <boost/shared_ptr.hpp>
-#include <moveit_msgs/GetPositionFK.h>
-#include <moveit_msgs/GetPositionIK.h>
-#include <moveit_msgs/GetKinematicSolverInfo.h>
-#include <moveit_msgs/KinematicSolverInfo.h>
-
-class ArmKinematics : public IKinematics {
-protected:
-
-public:
-
-    ArmKinematics(std::string prefix, tf::Pose baseoffset) {
-        this->prefix = prefix;
-        this->baseoffset=baseoffset;
-      
-    }
-    virtual RCS::Pose FK(std::vector<double> jv) {
-        moveit_msgs::GetPositionFK::Response response;
-        moveit_msgs::GetPositionFK::Request request;
-        request.fk_link_names = link_names;
-        request.robot_state.joint_state.header.frame_id = _rootlinkname; // prefix + "base_link";
-        request.robot_state.joint_state.name = joint_names;
-        request.robot_state.joint_state.position = jv;
-        request.header.frame_id =  _rootlinkname; //prefix + "base_link";
-        armkin->getPositionFK(request, response);
-        RCS::Pose pose;
-        Conversion::GeometryPose2TfPose(response.pose_stamped[0].pose, pose);
-        return pose;
-    }
-
-    virtual std::vector<double> IK(RCS::Pose  pose,
-            std::vector<double> oldjoints) {
-        moveit_msgs::GetPositionIK::Response response;
-        moveit_msgs::GetPositionIK::Request request;
-        request.ik_request.pose_stamped.header.stamp = ros::Time::now();
-        request.ik_request.ik_link_name = _tiplinkname;
-        request.ik_request.group_name = "manipulator";
-        request.ik_request.robot_state.joint_state.name = joint_names;
-        request.ik_request.ik_link_names = link_names;
-        request.ik_request.robot_state.joint_state.position = oldjoints;
-        request.ik_request.timeout = ros::Duration(10.0);
-        request.ik_request.pose_stamped.header.frame_id = _rootlinkname;
-        
-        Conversion::TfPose2GeometryPose(pose, request.ik_request.pose_stamped.pose);
-
-        //request.pose_stamped.pose = pose;
-        request.ik_request.attempts = 1;
-        armkin->getPositionIK(request, response);
-        //response.error_code.val == response.error_code.SUCCES
-        return response.solution.joint_state.position;
-    }
-
-    virtual size_t AllPoseToJoints(RCS::Pose & pose,
-            std::vector<std::vector<double> > & newjoints) {
-        return 0;
-    }
-
-    virtual std::vector<double> NearestJoints(
-            std::vector<double> oldjoints,
-            std::vector<std::vector<double> > & newjoints) {
-        ROS_ERROR("ArmKinematics::NearestJoints() not implemented");
-        return std::vector<double>();
-    }
-
-
-    virtual bool IsSingular(RCS::Pose  pose, double threshold) {
-        return false;
-    }
-
-    virtual void Init(ros::NodeHandle &nh) {
-        armkin = boost::shared_ptr<::Kinematics>(new ::Kinematics());
-        armkin->init(nh, _tiplinkname, _rootlinkname);
-        moveit_msgs::GetKinematicSolverInfo::Request request;
-        moveit_msgs::GetKinematicSolverInfo::Response response;
-        armkin->getFKSolverInfo(request, response);
-        joint_names.clear();
-        link_names.clear();
-        num_joints = response.kinematic_solver_info.joint_names.size();
-        for (unsigned int i = 0; i < response.kinematic_solver_info.joint_names.size(); i++) {
-            joint_names.push_back(response.kinematic_solver_info.joint_names[i]);
-        }
-        for (unsigned int i = 0; i < response.kinematic_solver_info.link_names.size(); i++) {
-            link_names.push_back(response.kinematic_solver_info.link_names[i]);
-        }
-    }
-};
-
-
 class MotomanSia20dFastKinematics : public IKinematics {
     static double SIGN(double x) {
         return ( x >= 0.0f) ? +1.0f : -1.0f;
@@ -386,9 +294,7 @@ class MotomanSia20dFastKinematics : public IKinematics {
     static void Convert2RotationMatrix(const RCS::Rotation & quat, double *eerot);
 
     double harmonize(const std::vector<double> &ik_seed_state, std::vector<double> &solution) const;
-
-
-    
+   
 public:
 
     virtual RCS::Pose FK(std::vector<double> joints);
@@ -406,7 +312,7 @@ public:
             std::vector<double> minrange, std::vector<double> maxrange) ;
 
     virtual bool IsSingular(RCS::Pose  pose, double threshold) ;
-    virtual void Init(ros::NodeHandle &nh) ;
+    //virtual void Init(ros::NodeHandle &nh) ;
     void VerifyLimits(std::vector<double> joints) ;
     virtual std::vector<double> FindBoundedSolution(std::vector<std::vector<double>> &solutions,
             std::vector<double> &min,
@@ -448,7 +354,7 @@ public:
             std::vector<double> minrange, std::vector<double> maxrange) ;
 
     virtual bool IsSingular(RCS::Pose  pose, double threshold) ;
-    virtual void Init(ros::NodeHandle &nh) ;
+    //virtual void Init(ros::NodeHandle &nh) ;
     void VerifyLimits(std::vector<double> joints) ;
     virtual std::vector<double> FindBoundedSolution(std::vector<std::vector<double>> &solutions,
             std::vector<double> &min,

@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+
+<launch>
+	<arg name="bprefix" default="true"/>
+  	<arg name="srdf_file" default="$(find robotduo)/config/robotduo.srdf" />
+
+	<!--<param name="robot_description" command="cat $(find robotduo)/urdf/tworobot.urdf" />-->
+
+  	<param name="robot_description" 
+		command="$(find xacro)/xacro.py $(find robotduo)/urdf/robotduo.xacro" /> 
+  	<rosparam  command="load" file="$(find robotduo)/config/joint_names_robotduo.yaml" />
+	<param name="robot_description_semantic" command="cat $(arg srdf_file)" />
+  
+
+	<param name="loglevel" value="1" />
+	<param name="logfile" value="$(find robotduo)/log/nist_fanuc.log" />
+	<param name="csvlogging" value="0" />
+	<param name="csvlogfile" value="$(find robotduo)/log/nistcrcl.csv" />
+
+	<!-- arm kinematics expects name from roslaunch parameter...-->
+	<group if="$(arg bprefix)">
+  	<!-- stuff that will only be evaluated if bprefix is true -->
+  	<param name="tip_name" value="fanuc_link_6" />
+	<param name="root_name" value="world" />
+	</group>	
+	
+	<group unless="$(arg bprefix)">
+  	<!-- stuff that will only be evaluated if bprefix is false -->
+  	<param name="tip_name" value="link_6" />
+	<param name="root_name" value="base_link" />
+	</group>
+	
+	
+	<node name="nistcrcl" pkg="nistcrcl" type="nistcrcl" respawn="false" output="screen" />	
+ 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" output="screen" />
+
+	<!-- We do not have a robot connected, so publish fake joint states -->
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+	    <param name="/use_gui" value="true"/>
+	    <rosparam param="/source_list">[nist_controller/robot/joint_states]</rosparam>
+	</node>
+
+<!---->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find robotduo)/visualize.rviz" required="true" />
+
+<!--
+ <include file="$(find fanuc_lrmate200id_moveit_config)/launch/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>
+    <arg name="fake_execution" value="true"/>
+    <arg name="info" value="true"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+	   <include file="$(find fanuc_lrmate200id_support)/launch/moveit_rviz.launch">
+	    <arg name="config" value="true"/>
+	  </include>
+-->
+</launch>

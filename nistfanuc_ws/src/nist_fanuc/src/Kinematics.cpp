@@ -15,6 +15,82 @@
 #include <boost/format.hpp>
 #include "BLogging.h"
 
+bool IKinematics::ParseURDF(std::string xml_string, std::string base_frame) {
+
+
+   urdf::Model robot_model;
+#if 0
+    std::string xml_string;
+
+    std::string urdf_xml, full_urdf_xml;
+    node_handle.param("urdf_xml", urdf_xml, robot_description);
+    node_handle.searchParam(urdf_xml, full_urdf_xml);
+
+    ROS_DEBUG_NAMED("ikfast", "Reading xml file from parameter server");
+    if (!node_handle.getParam(full_urdf_xml, xml_string)) {
+        ROS_FATAL_NAMED("ikfast", "Could not load the xml from parameter server: %s", urdf_xml.c_str());
+        return false;
+    }
+
+    node_handle.param(full_urdf_xml, xml_string, std::string());
+#endif
+    robot_model.initString(xml_string);
+
+    ROS_DEBUG_STREAM_NAMED("ikfast", "Reading joints and links from URDF");
+
+    boost::shared_ptr<urdf::Link> link = boost::const_pointer_cast<urdf::Link>(robot_model.getLink(getTipFrame()));
+    while (link->name != base_frame){ // && joint_names.size() <= num_joints_) {
+        ROS_DEBUG_NAMED("ikfast", "Link %s", link->name.c_str());
+        link_names.push_back(link->name);
+        boost::shared_ptr<urdf::Joint> joint = link->parent_joint;
+        if (joint) {
+            if (joint->type != urdf::Joint::UNKNOWN && joint->type != urdf::Joint::FIXED) {
+                ROS_DEBUG_STREAM_NAMED("ikfast", "Adding joint " << joint->name);
+
+                joint_names.push_back(joint->name);
+                float lower, upper;
+                int hasLimits;
+                if (joint->type != urdf::Joint::CONTINUOUS) {
+                    if (joint->safety) {
+                        lower = joint->safety->soft_lower_limit;
+                        upper = joint->safety->soft_upper_limit;
+                    } else {
+                        lower = joint->limits->lower;
+                        upper = joint->limits->upper;
+                    }
+                    hasLimits = 1;
+                } else {
+                    lower = -M_PI;
+                    upper = M_PI;
+                    hasLimits = 0;
+                }
+                if (hasLimits) {
+                    joint_has_limits.push_back(true);
+                    joint_min.push_back(lower);
+                    joint_max.push_back(upper);
+                } else {
+                    joint_has_limits.push_back(false);
+                    joint_min.push_back(-M_PI);
+                    joint_max.push_back(M_PI);
+                }
+            }
+        } else {
+            ROS_WARN_NAMED("ikfast", "no joint corresponding to %s", link->name.c_str());
+        }
+        link = link->getParent();
+    }
+
+    std::reverse(link_names.begin(), link_names.end());
+    std::reverse(joint_names.begin(), joint_names.end());
+    std::reverse(joint_min.begin(), joint_min.end());
+    std::reverse(joint_max.begin(), joint_max.end());
+    std::reverse(joint_has_limits.begin(), joint_has_limits.end());
+
+//    for (size_t i = 0; i < num_joints; ++i)
+//        ROS_DEBUG_STREAM_NAMED("ikfast", joint_names[i] << " " << joint_min[i] << " " << joint_max[i] << " " << joint_has_limits[i]);
+
+    return true;
+}
 
 // Could find basics explained here: http://aeswiki.datasys.swri.edu/rositraining/Exercises/3.6
 

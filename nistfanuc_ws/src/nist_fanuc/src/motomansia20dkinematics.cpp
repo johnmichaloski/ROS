@@ -299,7 +299,7 @@ std::vector<double> MotomanSia20dFastKinematics::IK(RCS::Pose pose,
 bool MotomanSia20dFastKinematics::IsSingular(RCS::Pose pose, double threshold) {
     return false;
 }
-
+#if 0
 void MotomanSia20dFastKinematics::Init(ros::NodeHandle &nh) {
     armkin = boost::shared_ptr<::Kinematics>(new ::Kinematics());
     armkin->init(nh, _tiplinkname, _rootlinkname);
@@ -320,7 +320,7 @@ void MotomanSia20dFastKinematics::Init(ros::NodeHandle &nh) {
     for (int i = 0; i < armkin->joint_max.rows(); i++)
         joint_max .push_back(armkin->joint_max(i));
 }
-
+#endif
 void MotomanSia20dFastKinematics::VerifyLimits(std::vector<double> joints) {
     for (size_t i = 0; i < joints.size(); i++)
         if (joints[i] < joint_min[i] || joints[i] > joint_max[i])

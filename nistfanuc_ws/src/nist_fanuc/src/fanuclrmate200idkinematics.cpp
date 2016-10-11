@@ -299,7 +299,9 @@ bool FanucLRMate200idFastKinematics::IsSingular(RCS::Pose pose, double threshold
     return false;
 }
 
+#if 0
 void FanucLRMate200idFastKinematics::Init(ros::NodeHandle &nh) {
+#if 0
     armkin = boost::shared_ptr<::Kinematics>(new ::Kinematics());
     armkin->init(nh, _tiplinkname, _rootlinkname);
     moveit_msgs::GetKinematicSolverInfo::Request request;
@@ -318,8 +320,16 @@ void FanucLRMate200idFastKinematics::Init(ros::NodeHandle &nh) {
         joint_min.push_back(armkin->joint_min(i));
     for (int i = 0; i < armkin->joint_max.rows(); i++)
         joint_max .push_back(armkin->joint_max(i));
+    #endif    
+    ROS_DEBUG_NAMED("ikfast", "Reading xml file from parameter server");
+    std::string xml_string;
+    if (!nh.getParam("robot_description", xml_string)) {
+        ROS_FATAL_NAMED("ikfast", "Could not load the xml from parameter server: %s", urdf_xml.c_str());
+        return false;
+    }
+    
 }
-
+#endif
 void FanucLRMate200idFastKinematics::VerifyLimits(std::vector<double> joints) {
     for (size_t i = 0; i < joints.size(); i++)
         if (joints[i] < joint_min[i] || joints[i] > joint_max[i])

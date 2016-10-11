@@ -114,7 +114,7 @@ src/RCSInterpreter.cpp
 src/RvizMarker.cpp
 src/Scene.cpp
 src/RosSetup.cpp
-src/arm_kinematics.cpp
+#src/arm_kinematics.cpp
 src/nist_fanuc.cpp
 src/trajectoryMaker.cpp
 #src/fanuc/fanuc_lrmate200id_manipulator_ikfast_solver.cpp
