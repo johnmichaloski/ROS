@@ -180,7 +180,7 @@ size_t FanucLRMate200idFastKinematics::AllPoseToJoints(RCS::Pose & pose, std::ve
     ikfast::IkSolutionList<double> solutions;
 
     // std::vector<double> vfree(GetNumFreeParameters());
-    std::vector<double> vfree(1, 3);
+    std::vector<double> vfree;
 
     double eetrans[3] = {pose.getOrigin().x(), pose.getOrigin().y(), pose.getOrigin().z()};
 
@@ -352,5 +352,5 @@ std::vector<double> FanucLRMate200idFastKinematics::FindBoundedSolution(std::vec
     return std::vector<double>(); // no match
 }
 
-#include "Motoman/ikfast_sia20d_manipulator.cpp"
+#include "Fanuc/fanuc_lrmate200id_manipulator_ikfast_solver.cpp"
 

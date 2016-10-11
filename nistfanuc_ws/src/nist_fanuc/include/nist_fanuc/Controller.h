@@ -108,7 +108,9 @@ namespace RCS {
         VAR(invGripperPose, RCS::Pose);
         VAR(basePose, RCS::Pose);
         VAR(invBasePose, RCS::Pose);
-        
+        VAR(QBend, tf::Quaternion);
+ 
+            
         ros::NodeHandle *_nh;
         void SetToolOffset(RCS::Pose offset){ _gripperPose = offset; _invGripperPose = offset.inverse();}
         void SetBaseOffset(RCS::Pose offset){ _basePose = offset; _invBasePose = offset.inverse();}

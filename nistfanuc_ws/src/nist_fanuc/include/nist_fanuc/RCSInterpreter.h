@@ -29,13 +29,13 @@ namespace RCS {
     protected:
         IKinematicsSharedPtr _kinematics; /**<  kinematics pointer */
         boost::shared_ptr<RCS::CController>_nc;
-        NearestJointsLookup &_hints;
+        //NearestJointsLookup &_hints;
     public:
         std::vector<double> minrange;
         std::vector<double> maxrange;
         BangBangInterpreter(boost::shared_ptr<RCS::CController> nc, 
-        IKinematicsSharedPtr k ,
-        NearestJointsLookup &hints);
+        IKinematicsSharedPtr k); //  ,
+        //NearestJointsLookup &hints);
         virtual RCS::CanonCmd ParseCommand(RCS::CanonCmd cmd);
         virtual void SetRange(std::vector<double> minrange, std::vector<double> maxrange);
     };

@@ -1,5 +1,6 @@
 
 
+=========================================================================
 #if 0
         // wait till move  done...
         while (robot.cnc()->crclcmds.SizeMsgQueue() > 0) // wait till nothing left or messes up timing

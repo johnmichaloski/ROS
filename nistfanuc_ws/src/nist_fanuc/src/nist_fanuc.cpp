@@ -52,20 +52,19 @@
 //Eigen::Affine3d motomanoffset00 = Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, 0.5, 0.0);
 
 tf::Pose fanucbaseoffset = RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
-        tf::Vector3(0.0, -0.5, 0.0)); 
+        tf::Vector3(0.0, -0.5, 0.0));
 
 tf::Pose motomanbaseoffset = RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
-        tf::Vector3(0.0, 0.5, 0.0)); 
+        tf::Vector3(0.0, 0.5, 0.0));
 
-tf::Pose fanucGripper = RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
-        tf::Vector3(0.140, 0.0, -0.017));
+//tf::Pose fanucGripper = RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),  tf::Vector3(0.140, 0.0, -0.017));
+tf::Pose fanucGripper = RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),  tf::Vector3(0.017, 0.0,  0.140));
 
 tf::Pose motoGripper = RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
         tf::Vector3(-0.017, 0.0, 0.140));
 
-
 int main(int argc, char** argv) {
-    int bPublishPoint=0;
+    int bPublishPoint = 0;
     //signal(SIGSEGV, handler);   // install our handler
     try {
         // Find path of executable
@@ -91,7 +90,7 @@ int main(int argc, char** argv) {
                 "/opt/ros/indigo/lib/python2.7/dist-packages:"
                 "/home/isd/michalos/el-robotics-core/nist_kitting/src", true);
 
-       // setenv("PKG_CONFIG_PATH", "/usr/local/michalos/nistfanuc_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/opt/ros/indigo/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistfanuc_ws/devel/lib/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/pkgconfig:/opt/ros/indigo/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig", true);
+        // setenv("PKG_CONFIG_PATH", "/usr/local/michalos/nistfanuc_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/opt/ros/indigo/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistfanuc_ws/devel/lib/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/pkgconfig:/opt/ros/indigo/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig", true);
         setenv("PATH", "/usr/local/michalos/nistfanuc_ws/devel/bin:/usr/local/michalos/nistcrcl_ws/devel/bin:/opt/ros/indigo/bin:/usr/local/jdk1.8.0_60/bin:/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:/usr/X11R6/bin:/usr/local/ulapi/bin:/usr/local/gomotion/bin:/home/isd/michalos/bin", true);
 
         // This sets up some application name/value pairs: user, hostname
@@ -105,7 +104,7 @@ int main(int argc, char** argv) {
         ros::NodeHandle nh;
         ros::Rate r(50); // 10 times a second - 10Hz
 
- #if 0
+#if 0
         /**
          * The five different ROS verbosity levels are, in order:
          * DEBUG ROS_DEBUG
@@ -128,7 +127,7 @@ int main(int argc, char** argv) {
         RCS::Fnc->bCvsPoseLogging() = nh.param<int>("csvlogging", 0);
         RCS::Fnc->CvsPoseLoggingFile() = nh.param<std::string>("csvlogfile", "/home/isd/michalos/Documents/nistcrcl.csv");
         bPublishPoint = nh.param<int>("PublishPoint", 0);
-        
+
         // THIS DOESN'T WORK
 #if 0
         int rosloglevel = nh.param<int>("~rosloglevel", 0); // 0 = debug
@@ -138,7 +137,7 @@ int main(int argc, char** argv) {
         }
 #endif  
 
- 
+
         //  Required for multithreaded ROS communication  NOT TRUE: if not ros::spinOnce
         ros::AsyncSpinner spinner(2);
         spinner.start();
@@ -148,123 +147,143 @@ int main(int argc, char** argv) {
         Globals.WriteFile(Globals.ExeDirectory + "rosconfig.txt", params);
         path = ros::package::getPath("nist_fanuc");
         Globals._appproperties["nist_fanuc"] = path;
-        
+
         // Controller shared objects dependent on ROS - many with abstract interface definition   
-        
+
         // Initialize Controller...
 #ifdef FANUC
-        boost::shared_ptr<IKinematics> fkin;
+        // ikfast kinematic solver
         RCS::Fnc->SetBaseOffset(fanucbaseoffset);
-        RCS::Fnc->SetToolOffset(fanucGripper);
-        fkin = boost::shared_ptr<IKinematics>(new ArmKinematics("fanuc_", fanucbaseoffset));
+        RCS::Fnc->SetToolOffset(fanucGripper);     
+        //RCS::Fnc->QBend() = tf::Quaternion(M_PI / 2.0, 0.0, 0.0);
+        //RCS::Fnc->QBend() = tf::Quaternion(0.0, M_PI / 2.0, 0.0);
+        RCS::Fnc->QBend() = tf::Quaternion(Deg2Rad(180.0), Deg2Rad(0.0), Deg2Rad(0.0));
+        boost::shared_ptr<IKinematics> fkin;
+        fkin = boost::shared_ptr<IKinematics>(new FanucLRMate200idFastKinematics());
         fkin->Init(std::string("manipulator"), std::string("fanuc_link_6"), std::string("world"));
         fkin->Init(nh);
         RCS::Fnc->Kinematics() = fkin;
         RCS::Fnc->CycleTime() = DEFAULT_LOOP_CYCLE;
-        RCS::Fnc->NamedJointMove["Safe"]=ToVector<double>(6, 1.49, -0.17, -1.14, 0.11, -0.45, -1.67);
+        RCS::Fnc->NamedJointMove["Safe"] = ToVector<double>(6, 1.49, -0.17, -1.14, 0.11, -0.45, -1.67);
         RCS::Fnc->Setup(nh, "fanuc_");
-        FanucNearestJointsLookup fanuchints(RCS::Fnc, fkin);
-        fanuchints.SetRobotHints();
-        InlineRobotCommands fanucrobot(RCS::Fnc, fanuchints);       RCS::Fnc->Kinematics() = fkin;
-        RCS::Fnc->_interpreter = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter(RCS::Fnc, fkin, fanuchints));
+        //FanucNearestJointsLookup fanuchints(RCS::Fnc, fkin);
+        // hints fail, and I need to factor in robot base offset
+        //fanuchints.SetRobotHints();  
+        InlineRobotCommands fanucrobot(RCS::Fnc); // , fanuchints);
+        RCS::Fnc->Kinematics() = fkin;
+        RCS::Fnc->_interpreter = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter(RCS::Fnc, fkin)); // , fanuchints));
 #endif
-        
+
 #ifdef MOTOMAN
+        RCS::Mnc->SetBaseOffset(motomanbaseoffset);
+        RCS::Mnc->SetToolOffset(motoGripper);
+        RCS::Mnc->QBend() = tf::Quaternion(Deg2Rad(-180.0), Deg2Rad(0.0), Deg2Rad(0.0));
         boost::shared_ptr<IKinematics> fastkin;
         fastkin = boost::shared_ptr<IKinematics>(new MotomanSia20dFastKinematics());
         // Initialization of Controller instantiation of shared objects  
         fastkin->Init(std::string("manipulator"), std::string("motoman_link_t"), std::string("world"));
         fastkin->Init(nh);
-//        LOG_DEBUG << "Motoman Joint Names=" << VectorDump<std::string>(fastkin->JointNames()).c_str();
+        //        LOG_DEBUG << "Motoman Joint Names=" << VectorDump<std::string>(fastkin->JointNames()).c_str();
         RCS::Mnc->Kinematics() = fastkin;
         RCS::Mnc->Setup(nh, "motoman_");
         RCS::Mnc->CycleTime() = DEFAULT_LOOP_CYCLE;
-        RCS::Mnc->SetBaseOffset(motomanbaseoffset);
-        RCS::Mnc->SetToolOffset(motoGripper);
-        RCS::Mnc->NamedJointMove["Safe"]=ToVector<double>(7, 1.30, -0.84, 0.08, 2.26, 2.96, -0.38, -1.28);
-        
-        MotomanNearestJointsLookup motohints(RCS::Mnc, fastkin);
-        motohints.SetRobotHints();
-        InlineRobotCommands motomanrobot(RCS::Mnc, motohints);
-        RCS::Mnc->_interpreter = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter( RCS::Mnc, fastkin, motohints));
+
+        RCS::Mnc->NamedJointMove["Safe"] = ToVector<double>(7, 1.30, -0.84, 0.08, 2.26, 2.96, -0.38, -1.28);
+
+        //MotomanNearestJointsLookup motohints(RCS::Mnc, fastkin);
+        //motohints.SetRobotHints();
+        InlineRobotCommands motomanrobot(RCS::Mnc); // , motohints);
+        RCS::Mnc->_interpreter = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter(RCS::Mnc, fastkin)); // , motohints));
 #endif
- 
+
         InitScene();
 
 #ifdef CHECKERS
         RvizCheckers rvizgame(nh);
         rvizgame.RvizSetup();
 #endif
-        
-        DrawScene();  // Debug: LOG_DEBUG << ObjectDB::DumpDB();
+
+        DrawScene(); // Debug: LOG_DEBUG << ObjectDB::DumpDB();
 
 #ifdef   MULTITHREADED
 #ifdef FANUC   
-        RCS::Fnc->Start(); // start the Controller Session thread
+                RCS::Fnc->Start(); // start the Controller Session thread
 #endif
 #ifdef MOTOMAN
-        RCS::Mnc->Start(); // start the Controller Session thread
+                RCS::Mnc->Start(); // start the Controller Session thread
 #endif
 #endif
-        
+
 #ifdef CHECKERS
-        // Play checkers - only move markers, no robot interaction
-        Checkers::Move from, to;
-        int player;
+                // Play checkers - only move markers, no robot interaction
+                Checkers::Move from, to;
+                int player;
         for (size_t i = 0; i < 40; i++) {
             if (bPublishPoint) {
                 while (!rvizgame.Ready())
-                    ros::spinOnce();
-                rvizgame.Ready() = false;
-            }
+                        ros::spinOnce();
+                        rvizgame.Ready() = false;
+                }
             if (rvizgame.CheckersMove(player, from, to))
                 break;
-            rvizgame.Game().printDisplayFancy(rvizgame.Game().Board());
-            if(player==Checkers::RED) {
+                rvizgame.Game().printDisplayFancy(rvizgame.Game().Board());
+            if (player == Checkers::RED) {
                 LOG_DEBUG << "Fanuc RED Move";
                 rvizgame.PhysicalMove(fanucrobot, player, from.row, from.col, to);
-            }
-            else {
-                rvizgame.PhysicalMove(motomanrobot, player, from.row, from.col, to);
+            } else {
                 LOG_DEBUG << "Motoman BLACK Move";
-           }
+                rvizgame.PhysicalMove(motomanrobot, player, from.row, from.col, to);
+            }
 #ifndef   MULTITHREADED
             while (RCS::Mnc->IsBusy()) {
                 RCS::Mnc->Action();
             }
 #endif
+            // Synchronize with rviz let PublishPoint pause execution
+            if (rvizdemo.Clicked()) {
+                RCS::Fnc->Suspend();
+                RCS::Mnc->Suspend();
+                while (1) {
+                    ros::spinOnce();
+                    ros::Duration(0.2).sleep();
+                    if (rvizdemo.Clicked())
+                        break;
+                }
+                RCS::Fnc->Resume();
+                RCS::Mnc->Resume();
+            }
             ros::spinOnce();
-            ros::spinOnce();
-            ros::Duration(0.2).sleep();
+                    ros::spinOnce();
+                    ros::Duration(0.2).sleep();
         }
 #endif
-       while(!rvizdemo.Ready() ) {
-           ros::Duration(1.0).sleep();
-       }
+        while (!rvizdemo.Ready()) {
+            ros::Duration(1.0).sleep();
+        }
 
 
         //spinner.stop();
         //      ros::spin();
         do {
             //for(size_t i=0; i< 10; i++)
-             //   ros::spinOnce();
+            //   ros::spinOnce();
 #ifdef BOLTDEMO
             if (RCS::Fnc->crclcmds.SizeMsgQueue() == 0) {
                 ClearScene();
-                NewScene();
-                DrawScene();
-                fanucrobot.TestRobotCommands();
+                        NewScene();
+                        DrawScene();
+                        fanucrobot.TestRobotCommands();
             }
 #endif           
             r.sleep();
-        } while(ros::ok());
-        spinner.stop();    
-        LOG_DEBUG << "Cntrl C pressed \n" << std::flush;
+        } while (ros::ok());
+                spinner.stop();
+                LOG_DEBUG << "Cntrl C pressed \n" << std::flush;
 
-        // ^C pressed - stop all threads or will hang
-        RCS::Thread::StopAll(); // includes thread for Controller, robotstatus
+                // ^C pressed - stop all threads or will hang
+                RCS::Thread::StopAll(); // includes thread for Controller, robotstatus
 
-    } catch (std::exception e) {
+        } catch (std::exception e) {
         LOG_FATAL << Globals.StrFormat("%s%s", "Abnormal exception end to  CRCL2Robot", e.what());
     } catch (...) {
         LOG_FATAL << "Abnormal exception end to  CRCL2Robot";
