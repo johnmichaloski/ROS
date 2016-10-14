@@ -61,9 +61,6 @@ namespace RCS {
     bool CController::Verify() {
         IfDebug(LOG_DEBUG << "CController::Verify");
         assert(Kinematics() != NULL);
-#ifdef  MOVEITKIN
-        assert(TrajectoryModel() != NULL);
-#endif
     }
 
     void CController::CmdCallback(const nistcrcl::CrclCommandMsg::ConstPtr& cmdmsg) {
@@ -71,7 +68,6 @@ namespace RCS {
         nistcrcl::CrclCommandMsg cmd(*cmdmsg);
         ROS_INFO("CController::CmdCallback");
         crclcmds.AddMsgQueue(cmd);
-
     }
 
     void CController::Setup(ros::NodeHandle &nh, std::string prefix) {
@@ -185,7 +181,7 @@ namespace RCS {
             if (crclcmds.SizeMsgQueue() > 0 && robotcmds.SizeMsgQueue() == 0) {
                 // Translate into Cnc.cmds 
                 // FIXME: this is an upcast
-                RCS::CanonCmd cc;
+                RCS::CanonCmd cc, newcc;
                 
                 nistcrcl::CrclCommandMsg msg = crclcmds.PeekFrontMsgQueue();
                 //nistcrcl::CrclCommandMsg msg = crclcmds.PopFrontMsgQueue();
@@ -194,10 +190,13 @@ namespace RCS {
                 LOG_TRACE << "Msg Joints " << RCS::VectorDump<double>(msg.joints.position).c_str();
                 LOG_TRACE << "CC Joints " << RCS::VectorDump<double>(cc.joints.position).c_str();
 
-    
-                robotcmds.AddMsgQueue(_interpreter->ParseCommand(cc));
+                int status = _interpreter->ParseCommand(cc, newcc);
+                robotcmds.AddMsgQueue(newcc);
                 // Signals done with canon command
-                crclcmds.PopFrontMsgQueue();
+                if(status== CanonStatusType::CANON_DONE) 
+                {
+                    crclcmds.PopFrontMsgQueue();
+                }
             }
 
             // Motion commands to robot - only joint at this point
@@ -254,23 +253,14 @@ namespace RCS {
                     invBasePose() = basePose().inverse();
                 }
                 else {
-#ifdef FEEDBACKTEST2
-                    status.currentjoints = Kinematics()->UpdateJointState(_newcc.jointnum, status.currentjoints, _newcc.joints);
-#else
                     // Should have been updated by interpreter - and many more of them
                     status.currentjoints = _newcc.joints;
-#endif
                     status.currentpose = Kinematics()->FK(status.currentjoints.position); /**<  current robot pose */
                     status.currentjoints.header.stamp = ros::Time(0);
                     LOG_DEBUG << "Current Pose " << DumpPoseSimple(status.currentpose).c_str();
                     LOG_DEBUG << "Current Joints " << RCS::VectorDump<double>(status.currentjoints.position).c_str();
                     Kinematics()->VerifyLimits(status.currentjoints.position);
-#if 0
-                    if (!_newcc.partname.empty()) {
-                        Eigen::Affine3d& pose = ObjectDB::FindPose(_newcc.partname);
-                        UpdateScene(_newcc.partname, pose, rviz_visual_tools::CLEAR);
-                    }
-#endif
+
                     rviz_jntcmd.publish(status.currentjoints);
                     rviz_jntcmd.publish(status.currentjoints);
                     ros::spinOnce();

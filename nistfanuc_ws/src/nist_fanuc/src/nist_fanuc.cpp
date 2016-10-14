@@ -55,6 +55,10 @@ int main(int argc, char** argv) {
         std::string path(argv[0]);
         Globals.ExeDirectory = path.substr(0, path.find_last_of('/') + 1);
         Globals._appproperties["ExeDirectory"] = Globals.ExeDirectory;
+       
+        // This hard coding of env variables is required for debugging with netbeans ide
+        // If ROS environment variables are not set it cannot find "stuff"
+#ifdef DEBUG       
         setenv("ROS_ROOT", "/opt/ros/indigo/share/ros", true);
         setenv("ROS_PACKAGE_PATH", "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes:"
                 "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes_core:"
@@ -76,7 +80,8 @@ int main(int argc, char** argv) {
 
         // setenv("PKG_CONFIG_PATH", "/usr/local/michalos/nistfanuc_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/opt/ros/indigo/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistfanuc_ws/devel/lib/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/pkgconfig:/opt/ros/indigo/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig", true);
         setenv("PATH", "/usr/local/michalos/nistfanuc_ws/devel/bin:/usr/local/michalos/nistcrcl_ws/devel/bin:/opt/ros/indigo/bin:/usr/local/jdk1.8.0_60/bin:/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:/usr/X11R6/bin:/usr/local/ulapi/bin:/usr/local/gomotion/bin:/home/isd/michalos/bin", true);
-
+#endif
+        
         // This sets up some application name/value pairs: user, hostname
         SetupAppEnvironment();
 
@@ -84,7 +89,7 @@ int main(int argc, char** argv) {
         //SetupRosEnvironment(""); // FAILS hard coded env above
 
         // Initialize ROS
-        ros::init(argc, argv, "nist_fanuc");
+        ros::init(argc, argv, ROSPACKAGENAME);
         ros::NodeHandle nh;
         ros::Rate r(50); // 10 times a second - 10Hz
  
@@ -130,7 +135,7 @@ int main(int argc, char** argv) {
         path = ros::package::getPath(ROSPACKAGENAME);
         Globals._appproperties[ROSPACKAGENAME] = path;
         Nist::Config cfg;
-        cfg.load(path+"/config/nist_fanuc_config.ini");
+        cfg.load(path+"/config/config.ini");
         std::string appname = cfg.GetSymbolValue("system.name", "").c_str( );
         
         std::vector<std::string> robots = cfg.GetTokens("system.robots", ",");

@@ -51,7 +51,7 @@ void BangBangInterpreter::SetRange(std::vector<double> minrange, std::vector<dou
     this->maxrange = maxrange;
 }
 
-RCS::CanonCmd BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd) {
+int BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd) {
 
     if (cmd.crclcommand == CanonCmdType::CANON_MOVE_JOINT) {
         // Move immediately to joint value - Fill in other joints with current values
@@ -77,9 +77,10 @@ RCS::CanonCmd BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd) {
         LOG_DEBUG << "IK Joints " << VectorDump<double>(  cmd.joints.position).c_str();
         cmd.joints.name = _kinematics->JointNames();
         cmd.crclcommand = CanonCmdType::CANON_MOVE_JOINT;
+         
     }
+    outcmd=cmd;
+   //_nc->robotcmds.AddMsgQueue(cmd);
 
-   _nc->robotcmds.AddMsgQueue(cmd);
-
-    return cmd;
+    return CanonStatusType::CANON_DONE;
 }

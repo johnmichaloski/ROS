@@ -1144,3 +1144,10 @@ void MotomanSia20dFastKinematics::Init(ros::NodeHandle &nh) {
         joint_max .push_back(armkin->joint_max(i));
 }
 #endif
+
+#if 0
+                    if (!_newcc.partname.empty()) {
+                        Eigen::Affine3d& pose = ObjectDB::FindPose(_newcc.partname);
+                        UpdateScene(_newcc.partname, pose, rviz_visual_tools::CLEAR);
+                    }
+#endif
