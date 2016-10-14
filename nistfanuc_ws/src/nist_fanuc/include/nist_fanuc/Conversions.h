@@ -42,8 +42,16 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 // Quaternion http://docs.ros.org/jade/api/tf/html/c++/classtf_1_1Quaternion.html
 
 namespace Conversion {
+    // tf
 
-     // tf
+    inline tf::Pose CreatePose(std::vector<double> ds) {
+        assert(ds.size() >6);
+        tf::Pose p;
+        p.setOrigin(tf::Vector3(ds[0], ds[1], ds[2]));
+        p.setRotation(tf::Quaternion(ds[3], ds[4], ds[5], ds[6]));
+        return p;
+    }
+
    template<typename T>
     inline tf::Vector3 vectorEigenToTF(T e) {
         return tf::Vector3(e(0), e(1), e(2));

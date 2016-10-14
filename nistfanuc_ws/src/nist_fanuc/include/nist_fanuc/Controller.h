@@ -170,8 +170,8 @@ namespace RCS {
     };
     //extern CController Fnc; /**< global declaration of Fanuc controller */
    // extern CController Mnc; /**< global declaration of Motoman controller */
-    extern boost::shared_ptr<CController> Fnc;
-    extern boost::shared_ptr<CController> Mnc;
+    //extern boost::shared_ptr<CController> Fnc;
+    //extern boost::shared_ptr<CController> Mnc;
 
     //* The RobotCommands is currently a dummy class. The CController thread 
 #ifdef ROBOTSTATUS

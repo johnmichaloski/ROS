@@ -19,6 +19,7 @@ rviz_visual_tools
     moveit_ros_move_group
     moveit_ros_planning
     moveit_ros_manipulation
+    gomotion
 )
 
 find_package(Boost REQUIRED system thread chrono regex log_setup log)
@@ -47,6 +48,7 @@ catkin_package(
 tf_conversions
 eigen_conversions
 rviz_visual_tools
+gomotion
   DEPENDS
     Boost
     Eigen
@@ -100,8 +102,6 @@ include_directories(include
 
 
 add_executable(nist_fanuc 
-
-
 src/BLogging.cpp
 src/Controller.cpp
 src/Conversions.cpp
@@ -139,10 +139,13 @@ add_custom_target(dummy_${PROJECT_NAME} SOURCES ${extra_files})
 
 
 link_directories(/usr/lib/x86_64-linux-gnu/)
+link_directories(${CATKIN_DEVEL_PREFIX}/install})
 
 target_link_libraries(nist_fanuc 
 libtinyxml.a  
 libxerces-c.a  
+# I had to add ${catkin_LIBRARIES} AND remove the reference to the shared library 
+#libgomotion.so Catkin library?
 ${catkin_LIBRARIES}
 ${Boost_LIBRARIES}
 )

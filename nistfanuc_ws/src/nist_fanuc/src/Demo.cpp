@@ -53,16 +53,6 @@ void InlineRobotCommands::OpenGripper() {
     SetGripper(0.45);
 }
 
-//void InlineRobotCommands::AddGripperOffset() {
-//    // http://robotiq.com/products/adaptive-robot-gripper/
-//    RCS::CanonCmd cmd;
-//    cmd.crclcommandnum = crclcommandnum++;
-//    cmd.crclcommand = CanonCmdType::CANON_SET_GRIPPER_POSE;
-//    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(
-//            RCS::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0),
-//            tf::Vector3(0.140, 0.0, -0.017))); // -0.01156)));
-//    _cnc->crclcmds.AddMsgQueue(cmd);
-//}
 
 void InlineRobotCommands::DoDwell(double dwelltime) {
 

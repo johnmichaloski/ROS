@@ -38,7 +38,7 @@ bool IKinematics::ParseURDF(std::string xml_string, std::string base_frame) {
 
     ROS_DEBUG_STREAM_NAMED("ikfast", "Reading joints and links from URDF");
 
-    boost::shared_ptr<urdf::Link> link = boost::const_pointer_cast<urdf::Link>(robot_model.getLink(getTipFrame()));
+    boost::shared_ptr<urdf::Link> link = boost::const_pointer_cast<urdf::Link>(robot_model.getLink(getTipLink()));
     while (link->name != base_frame){ // && joint_names.size() <= num_joints_) {
         ROS_DEBUG_NAMED("ikfast", "Link %s", link->name.c_str());
         link_names.push_back(link->name);

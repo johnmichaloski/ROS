@@ -299,28 +299,7 @@ std::vector<double> MotomanSia20dFastKinematics::IK(RCS::Pose pose,
 bool MotomanSia20dFastKinematics::IsSingular(RCS::Pose pose, double threshold) {
     return false;
 }
-#if 0
-void MotomanSia20dFastKinematics::Init(ros::NodeHandle &nh) {
-    armkin = boost::shared_ptr<::Kinematics>(new ::Kinematics());
-    armkin->init(nh, _tiplinkname, _rootlinkname);
-    moveit_msgs::GetKinematicSolverInfo::Request request;
-    moveit_msgs::GetKinematicSolverInfo::Response response;
-    armkin->getFKSolverInfo(request, response);
-    joint_names.clear();
-    link_names.clear();
-    num_joints = response.kinematic_solver_info.joint_names.size();
-    for (unsigned int i = 0; i < response.kinematic_solver_info.joint_names.size(); i++) {
-        joint_names.push_back(response.kinematic_solver_info.joint_names[i]);
-    }
-    for (unsigned int i = 0; i < response.kinematic_solver_info.link_names.size(); i++) {
-        link_names.push_back(response.kinematic_solver_info.link_names[i]);
-    }
-    for (int i = 0; i < armkin->joint_min.rows(); i++)
-        joint_min.push_back(armkin->joint_min(i));
-    for (int i = 0; i < armkin->joint_max.rows(); i++)
-        joint_max .push_back(armkin->joint_max(i));
-}
-#endif
+
 void MotomanSia20dFastKinematics::VerifyLimits(std::vector<double> joints) {
     for (size_t i = 0; i < joints.size(); i++)
         if (joints[i] < joint_min[i] || joints[i] > joint_max[i])

@@ -117,7 +117,8 @@ protected:
     bool ParseURDF(std::string xml_string, std::string base_frame);
     
 public:
-    std::string getTipFrame(){ return _tiplinkname; }
+    std::string getRootLink(){ return _rootlinkname; }
+    std::string getTipLink(){ return _tiplinkname; }
     std::string & Prefix() {
         return prefix;
     }
@@ -215,6 +216,14 @@ public:
         _rootlinkname = rootlinkname;
     }
 
+    std::vector<unsigned long> AllJointNumbers() {
+
+        std::vector<unsigned long> jointnum(NumJoints());
+        std::iota(jointnum.begin(), jointnum.end(), 0); // adjusted already to 0..n-1
+        return jointnum;
+    }
+ 
+            
     /*!
      * \brief Returns true if the determinant of the jacobian is near zero. .
      * \param  groupname name of  chained joints in robot model.
@@ -238,6 +247,7 @@ public:
         }
         if (!ParseURDF(urdf_xml, _rootlinkname))
             ROS_FATAL_NAMED("IKinematics", "Could not parse the xml for kinematic solver", _groupname.c_str());
+        num_joints=joint_names.size();
         //return false;
 
     }
