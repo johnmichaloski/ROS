@@ -19,6 +19,7 @@
 #include <boost/thread.hpp>
 #include <strstream>
 #include <iostream>
+#include <csignal>
 
 #include "urdf_model/rosmath.h"
 #include "RvizMarker.h"
@@ -264,7 +265,11 @@ namespace RCS {
                     status.currentjoints.header.stamp = ros::Time(0);
                     LOG_DEBUG << "Current Pose " << DumpPoseSimple(status.currentpose).c_str();
                     LOG_DEBUG << "Current Joints " << RCS::VectorDump<double>(status.currentjoints.position).c_str();
-                    Kinematics()->VerifyLimits(status.currentjoints.position);
+                    std::vector<int> outofbounds;
+                    std::string msg;
+                    if (Kinematics()->CheckJointPositionLimits(status.currentjoints.position, outofbounds, msg)) {
+                        throw MotionException(1000, msg.c_str());
+                    }
 
                     rviz_jntcmd.publish(status.currentjoints);
                     rviz_jntcmd.publish(status.currentjoints);
@@ -297,6 +302,7 @@ namespace RCS {
                 MotionLogging();
         } catch (MotionException & e) {
             std::cerr << "Exception in  CController::Action() thread: " << e.what() << "\n";
+            std::raise(SIGINT);
         } catch (std::exception & e) {
             std::cerr << "Exception in  CController::Action() thread: " << e.what() << "\n";
         } catch (...) {
