@@ -15,6 +15,10 @@
 #include "Debug.h"
 #include <boost/format.hpp>
 #include "BLogging.h"
+#include "nist_fanuc/MotionException.h"
+#include "nist_fanuc/Controller.h"
+
+using namespace RCS;
 
 #define IKFAST_HAS_LIBRARY
 #define IKFAST_NO_MAIN
@@ -194,9 +198,10 @@ size_t FanucLRMate200idFastKinematics::AllPoseToJoints(RCS::Pose & pose, std::ve
 #endif
     bool bSuccess = ComputeIk(eetrans, eerot, vfree.size() > 0 ? &vfree[0] : NULL, solutions);
 
-    TODO(Fix Singularity issue in FanucLRMate200idFastKinematics::AllPoseToJoints)
+    //TODO(Fix Singularity issue in FanucLRMate200idFastKinematics::AllPoseToJoints)
     if (!bSuccess) {
         ROS_ERROR("Failed to get ik solution");
+        throw MotionException(10, _nc->Name().c_str());
         return -1;
     }
 

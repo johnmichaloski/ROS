@@ -79,10 +79,13 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1c/structgomotion_1_1go__motion__interface.html">go_motion_interface</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d7b/structgomotion_1_1points.html">points</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This structure holds the points to be interpolated.  <a href="../../df/d7b/structgomotion_1_1points.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/ddd/structgomotion_1_1coeff.html">coeff</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This structure holds the polynomial coefficients.  <a href="../../dd/ddd/structgomotion_1_1coeff.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d57/classgomotion_1_1go__interp.html">go_interp</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The interpolator structure.  <a href="../../db/d57/classgomotion_1_1go__interp.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d23/structgomotion_1_1go__cart.html">go_cart</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -137,10 +140,12 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d8e/structgomotion_1_1go__quartic.html">go_quartic</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d55/structgomotion_1_1go__position.html">go_position</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Depending upon whether you are doing joint interpolation or world coordinate interpolation (as specified by your call to go_motion_queue_set_type()), fill in joint[] or pose accordingly.  <a href="../../d1/d55/structgomotion_1_1go__position.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d14/structgomotion_1_1go__motion__params.html">go_motion_params</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dd5/structgomotion_1_1go__motion__linear__params.html">go_motion_linear_params</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">In the following comments, LIN, CIR and ALL refer to linear moves, circular moves and both, respectively.  <a href="../../d6/dd5/structgomotion_1_1go__motion__linear__params.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d59/structgomotion_1_1go__motion__circular__params.html">go_motion_circular_params</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -174,6 +179,7 @@ sensor_msgs::JointState_<br class="typebreak"/>
 Enumerations</h2></td></tr>
 <tr class="memitem:ada59e79a297fc10f2dbc85e4777fa4ae"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="../../d1/d0f/namespacegomotion.html#ada59e79a297fc10f2dbc85e4777fa4aea0d345844cda261ed2253d7fc9404e2ef">COEFF_MAX</a> = 6
  }</td></tr>
+<tr class="memdesc:ada59e79a297fc10f2dbc85e4777fa4ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many coefficients we support, one more than max polynomial degree.  <a href="../../d1/d0f/namespacegomotion.html#ada59e79a297fc10f2dbc85e4777fa4ae">More...</a><br/></td></tr>
 <tr class="separator:ada59e79a297fc10f2dbc85e4777fa4ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b5a03fc09c09e262c6941325f7beb17"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="../../d1/d0f/namespacegomotion.html#a5b5a03fc09c09e262c6941325f7beb17afd19d6aee8f10a912a656a2e01650b62">GO_LINK_DH</a> = 1, 
 <a class="el" href="../../d1/d0f/namespacegomotion.html#a5b5a03fc09c09e262c6941325f7beb17a7b78cd6a637ea7ae037ec521ef34b8ab">GO_LINK_PK</a>, 
@@ -553,38 +559,55 @@ Functions</h2></td></tr>
 <tr class="memitem:aef277eea6bd1f630b83f90d7cef869cf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d44/gotypes_8h.html#a55d48b38cd959f63c7e8db8337a9792a">go_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d0f/namespacegomotion.html#aef277eea6bd1f630b83f90d7cef869cf">go_rpy_xyz_convert</a> (const <a class="el" href="../../d5/dc3/structgomotion_1_1go__rpy.html">go_rpy</a> *, <a class="el" href="../../d2/d23/structgomotion_1_1go__xyz.html">go_xyz</a> *)</td></tr>
 <tr class="separator:aef277eea6bd1f630b83f90d7cef869cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad926ed07425571d1df303c65bc22161f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d44/gotypes_8h.html#a55d48b38cd959f63c7e8db8337a9792a">go_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d0f/namespacegomotion.html#ad926ed07425571d1df303c65bc22161f">go_traj_ca_generate</a> (<a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> acc, <a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> deltacc, <a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> deltvel, <a class="el" href="../../d9/d44/structgomotion_1_1go__traj__ca__spec.html">go_traj_ca_spec</a> *pts)</td></tr>
+<tr class="memdesc:ad926ed07425571d1df303c65bc22161f"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d1/d0f/namespacegomotion.html#ad926ed07425571d1df303c65bc22161f" title="go_traj_ca_generate() takes an accel value, and intervals for the accel period and cruise period...">go_traj_ca_generate()</a> takes an accel value, and intervals for the accel period and cruise period, and fills in the <a class="el" href="../../d9/d44/structgomotion_1_1go__traj__ca__spec.html">go_traj_ca_spec</a> with the interval parameters.  <a href="#ad926ed07425571d1df303c65bc22161f">More...</a><br/></td></tr>
 <tr class="separator:ad926ed07425571d1df303c65bc22161f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c957035ba66766366a69beed80f9193"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d44/gotypes_8h.html#a55d48b38cd959f63c7e8db8337a9792a">go_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d0f/namespacegomotion.html#a7c957035ba66766366a69beed80f9193">go_traj_ca_compute</a> (<a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> d, <a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> v, <a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> a, <a class="el" href="../../d9/d44/structgomotion_1_1go__traj__ca__spec.html">go_traj_ca_spec</a> *pts)</td></tr>
+<tr class="memdesc:a7c957035ba66766366a69beed80f9193"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d1/d0f/namespacegomotion.html#a7c957035ba66766366a69beed80f9193" title="go_traj_ca_compute() takes values for distance &#39;d&#39; to move, max velocity &#39;v&#39; to limit if necessary...">go_traj_ca_compute()</a> takes values for distance 'd' to move, max velocity 'v' to limit if necessary, and constant accel 'a', and fills in the <a class="el" href="../../d9/d44/structgomotion_1_1go__traj__ca__spec.html">go_traj_ca_spec</a> with the interval parameters.  <a href="#a7c957035ba66766366a69beed80f9193">More...</a><br/></td></tr>
 <tr class="separator:a7c957035ba66766366a69beed80f9193"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a116794cb4157c4f54caf98f65a2ec44f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d44/gotypes_8h.html#a55d48b38cd959f63c7e8db8337a9792a">go_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d0f/namespacegomotion.html#a116794cb4157c4f54caf98f65a2ec44f">go_traj_ca_scale</a> (const <a class="el" href="../../d9/d44/structgomotion_1_1go__traj__ca__spec.html">go_traj_ca_spec</a> *ts, <a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> t, <a class="el" href="../../d9/d44/structgomotion_1_1go__traj__ca__spec.html">go_traj_ca_spec</a> *pts)</td></tr>
+<tr class="memdesc:a116794cb4157c4f54caf98f65a2ec44f"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d1/d0f/namespacegomotion.html#a116794cb4157c4f54caf98f65a2ec44f" title="go_traj_ca_scale() takes a time &#39;t&#39; for the desired time of the motion, and scales the times and moti...">go_traj_ca_scale()</a> takes a time 't' for the desired time of the motion, and scales the times and motion params so that the total distance remains the same and everything else is in proportion  <a href="#a116794cb4157c4f54caf98f65a2ec44f">More...</a><br/></td></tr>
 <tr class="separator:a116794cb4157c4f54caf98f65a2ec44f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb9f59e687213362972a8405d6210b11"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d44/gotypes_8h.html#a55d48b38cd959f63c7e8db8337a9792a">go_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d0f/namespacegomotion.html#aeb9f59e687213362972a8405d6210b11">go_traj_ca_stop</a> (const <a class="el" href="../../d9/d44/structgomotion_1_1go__traj__ca__spec.html">go_traj_ca_spec</a> *ts, <a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> t, <a class="el" href="../../d9/d44/structgomotion_1_1go__traj__ca__spec.html">go_traj_ca_spec</a> *pts)</td></tr>
+<tr class="memdesc:aeb9f59e687213362972a8405d6210b11"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d1/d0f/namespacegomotion.html#aeb9f59e687213362972a8405d6210b11" title="go_traj_ca_stop() takes a time &#39;t&#39; for the desired time to begin stopping, and recomputes the times s...">go_traj_ca_stop()</a> takes a time 't' for the desired time to begin stopping, and recomputes the times so that the move will stop as soon as possible during subsequent interps.  <a href="#aeb9f59e687213362972a8405d6210b11">More...</a><br/></td></tr>
 <tr class="separator:aeb9f59e687213362972a8405d6210b11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f1160c8b5662ad14fb8987be62e379d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d44/gotypes_8h.html#a55d48b38cd959f63c7e8db8337a9792a">go_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d0f/namespacegomotion.html#a5f1160c8b5662ad14fb8987be62e379d">go_traj_ca_extend</a> (const <a class="el" href="../../d9/d44/structgomotion_1_1go__traj__ca__spec.html">go_traj_ca_spec</a> *ts, <a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> t, <a class="el" href="../../d9/d44/structgomotion_1_1go__traj__ca__spec.html">go_traj_ca_spec</a> *pts)</td></tr>
+<tr class="memdesc:a5f1160c8b5662ad14fb8987be62e379d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d1/d0f/namespacegomotion.html#a5f1160c8b5662ad14fb8987be62e379d" title="go_traj_ca_extend() takes a time &#39;t&#39; for the desired time to finish the motion, and extends the const...">go_traj_ca_extend()</a> takes a time 't' for the desired time to finish the motion, and extends the constant-speed section so that it stops then.  <a href="#a5f1160c8b5662ad14fb8987be62e379d">More...</a><br/></td></tr>
 <tr class="separator:a5f1160c8b5662ad14fb8987be62e379d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa138950bb1c02fcbeeb017e61fd061e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d44/gotypes_8h.html#a55d48b38cd959f63c7e8db8337a9792a">go_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d0f/namespacegomotion.html#aa138950bb1c02fcbeeb017e61fd061e0">go_traj_ca_interp</a> (const <a class="el" href="../../d9/d44/structgomotion_1_1go__traj__ca__spec.html">go_traj_ca_spec</a> *ts, <a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> t, <a class="el" href="../../d0/dc1/structgomotion_1_1go__traj__interp__spec.html">go_traj_interp_spec</a> *ti)</td></tr>
+<tr class="memdesc:aa138950bb1c02fcbeeb017e61fd061e0"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d1/d0f/namespacegomotion.html#aa138950bb1c02fcbeeb017e61fd061e0" title="go_traj_ca_interp() takes a go_traj_ca_spec and interpolates the d-v-a values for the given time t...">go_traj_ca_interp()</a> takes a <a class="el" href="../../d9/d44/structgomotion_1_1go__traj__ca__spec.html">go_traj_ca_spec</a> and interpolates the d-v-a values for the given time t, storing the d-v-a values in ti.  <a href="#aa138950bb1c02fcbeeb017e61fd061e0">More...</a><br/></td></tr>
 <tr class="separator:aa138950bb1c02fcbeeb017e61fd061e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e56fd184b0ec5ce1668553a315c0ed7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d44/gotypes_8h.html#a55d48b38cd959f63c7e8db8337a9792a">go_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d0f/namespacegomotion.html#a6e56fd184b0ec5ce1668553a315c0ed7">go_traj_cj_generate</a> (<a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> jrk, <a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> deltjrk, <a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> deltacc, <a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> deltvel, <a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> *pts)</td></tr>
+<tr class="memdesc:a6e56fd184b0ec5ce1668553a315c0ed7"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d1/d0f/namespacegomotion.html#a6e56fd184b0ec5ce1668553a315c0ed7" title="go_traj_cj_generate() takes a jerk value, and intervals for the jerk period, accel period and cruise ...">go_traj_cj_generate()</a> takes a jerk value, and intervals for the jerk period, accel period and cruise period, and fills in the <a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> with the interval parameters.  <a href="#a6e56fd184b0ec5ce1668553a315c0ed7">More...</a><br/></td></tr>
 <tr class="separator:a6e56fd184b0ec5ce1668553a315c0ed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5edc6aa7aad4817534ac8099a2638610"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d44/gotypes_8h.html#a55d48b38cd959f63c7e8db8337a9792a">go_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d0f/namespacegomotion.html#a5edc6aa7aad4817534ac8099a2638610">go_traj_cj_compute</a> (<a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> d, <a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> v, <a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> a, <a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> j, <a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> *pts)</td></tr>
+<tr class="memdesc:a5edc6aa7aad4817534ac8099a2638610"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d1/d0f/namespacegomotion.html#a5edc6aa7aad4817534ac8099a2638610" title="go_traj_cj_compute() takes values for distance &#39;d&#39; to move, max velocity &#39;v&#39; to limit if necessary...">go_traj_cj_compute()</a> takes values for distance 'd' to move, max velocity 'v' to limit if necessary, max accel 'a' to limit if necessary, and constant jerk 'j', and fills in the <a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> with the interval parameters.  <a href="#a5edc6aa7aad4817534ac8099a2638610">More...</a><br/></td></tr>
 <tr class="separator:a5edc6aa7aad4817534ac8099a2638610"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6597fcefe873523be5a8a7a587788b53"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d44/gotypes_8h.html#a55d48b38cd959f63c7e8db8337a9792a">go_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d0f/namespacegomotion.html#a6597fcefe873523be5a8a7a587788b53">go_traj_cj_scale</a> (const <a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> *ts, <a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> t, <a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> *pts)</td></tr>
+<tr class="memdesc:a6597fcefe873523be5a8a7a587788b53"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d1/d0f/namespacegomotion.html#a6597fcefe873523be5a8a7a587788b53" title="go_traj_cj_scale() takes a time &#39;t&#39; for the desired time of the motion, and scales the times and moti...">go_traj_cj_scale()</a> takes a time 't' for the desired time of the motion, and scales the times and motion params so that the total distance remains the same and everything else is in proportion  <a href="#a6597fcefe873523be5a8a7a587788b53">More...</a><br/></td></tr>
 <tr class="separator:a6597fcefe873523be5a8a7a587788b53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0764efa1b4a4385aaf9fe13e0ea7b812"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d44/gotypes_8h.html#a55d48b38cd959f63c7e8db8337a9792a">go_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d0f/namespacegomotion.html#a0764efa1b4a4385aaf9fe13e0ea7b812">go_traj_cj_stop</a> (const <a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> *ts, <a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> t, <a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> *pts)</td></tr>
+<tr class="memdesc:a0764efa1b4a4385aaf9fe13e0ea7b812"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d1/d0f/namespacegomotion.html#a0764efa1b4a4385aaf9fe13e0ea7b812" title="go_traj_cj_stop() takes a time &#39;t&#39; for the desired time to begin stopping, and recomputes the times s...">go_traj_cj_stop()</a> takes a time 't' for the desired time to begin stopping, and recomputes the times so that the move will stop as soon as possible during subsequent interps.  <a href="#a0764efa1b4a4385aaf9fe13e0ea7b812">More...</a><br/></td></tr>
 <tr class="separator:a0764efa1b4a4385aaf9fe13e0ea7b812"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6229b01a04c2232c7535f600849bb73"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d44/gotypes_8h.html#a55d48b38cd959f63c7e8db8337a9792a">go_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d0f/namespacegomotion.html#ad6229b01a04c2232c7535f600849bb73">go_traj_cj_extend</a> (const <a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> *ts, <a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> t, <a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> *pts)</td></tr>
+<tr class="memdesc:ad6229b01a04c2232c7535f600849bb73"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d1/d0f/namespacegomotion.html#ad6229b01a04c2232c7535f600849bb73" title="go_traj_cj_extend() takes a time &#39;t&#39; for the desired time to finish the motion, and extends the const...">go_traj_cj_extend()</a> takes a time 't' for the desired time to finish the motion, and extends the constant-speed section so that it stops then.  <a href="#ad6229b01a04c2232c7535f600849bb73">More...</a><br/></td></tr>
 <tr class="separator:ad6229b01a04c2232c7535f600849bb73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d66e2943e92ad2df63ae5d008eb8a6c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d44/gotypes_8h.html#a55d48b38cd959f63c7e8db8337a9792a">go_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d0f/namespacegomotion.html#a2d66e2943e92ad2df63ae5d008eb8a6c">go_traj_cj_interp</a> (const <a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> *ts, <a class="el" href="../../d7/d44/gotypes_8h.html#afd666a2393eebd71ee455846ac9def9b">go_real</a> t, <a class="el" href="../../d0/dc1/structgomotion_1_1go__traj__interp__spec.html">go_traj_interp_spec</a> *ti)</td></tr>
+<tr class="memdesc:a2d66e2943e92ad2df63ae5d008eb8a6c"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d1/d0f/namespacegomotion.html#a2d66e2943e92ad2df63ae5d008eb8a6c" title="go_traj_cj_interp() takes a go_traj_cj_spec and interpolates the d-v-a-j values for the given time t...">go_traj_cj_interp()</a> takes a <a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> and interpolates the d-v-a-j values for the given time t, storing the d-v-a-j values in ti.  <a href="#a2d66e2943e92ad2df63ae5d008eb8a6c">More...</a><br/></td></tr>
 <tr class="separator:a2d66e2943e92ad2df63ae5d008eb8a6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a396781d83275b54de406e65a5c944093"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d44/gotypes_8h.html#a55d48b38cd959f63c7e8db8337a9792a">go_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d0f/namespacegomotion.html#a396781d83275b54de406e65a5c944093">go_traj_cj_compute_the_rest</a> (<a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> *pts)</td></tr>
+<tr class="memdesc:a396781d83275b54de406e65a5c944093"><td class="mdescLeft">&#160;</td><td class="mdescRight">! Expects <em>pts</em> attributes <em>dtend</em>, <em>jt0</em>, <em>at1</em>, <em>vt3</em>, <em>t1</em>, <em>t2</em> and <em>t3</em> to be already filled in from previous calls to one of the four <em>go_traj_cj_compute_tees</em> functions and <em>go_traj_cj_compute</em>.  <a href="#a396781d83275b54de406e65a5c944093">More...</a><br/></td></tr>
 <tr class="separator:a396781d83275b54de406e65a5c944093"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9cabcec05e99b4da69912b42fcc637e5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d44/gotypes_8h.html#a55d48b38cd959f63c7e8db8337a9792a">go_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d0f/namespacegomotion.html#a9cabcec05e99b4da69912b42fcc637e5">go_traj_cj_compute_tees_na_nc</a> (<a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> *pts)</td></tr>
+<tr class="memdesc:a9cabcec05e99b4da69912b42fcc637e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">! Computes the trajectory defining times <em>t1</em>, <em>t2</em> and <em>t4</em> for a motion with no acceleration or cruise phase, given <em>pts</em> filled in with <em>dtend</em> and <em>jt0</em>.  <a href="#a9cabcec05e99b4da69912b42fcc637e5">More...</a><br/></td></tr>
 <tr class="separator:a9cabcec05e99b4da69912b42fcc637e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af869a1a311f90bfd85c552a5a5fed4a1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d44/gotypes_8h.html#a55d48b38cd959f63c7e8db8337a9792a">go_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d0f/namespacegomotion.html#af869a1a311f90bfd85c552a5a5fed4a1">go_traj_cj_compute_tees_a_nc</a> (<a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> *pts)</td></tr>
+<tr class="memdesc:af869a1a311f90bfd85c552a5a5fed4a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">! Computes the trajectory defining times <em>t1</em>, <em>t2</em> and <em>t4</em> for a motion with acceleration but no cruise phase, given <em>pts</em> filled in with <em>dtend</em>, <em>jt0</em> and <em>at1</em>.  <a href="#af869a1a311f90bfd85c552a5a5fed4a1">More...</a><br/></td></tr>
 <tr class="separator:af869a1a311f90bfd85c552a5a5fed4a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac06c11fdcb4ac07e6bd860c904644c52"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d44/gotypes_8h.html#a55d48b38cd959f63c7e8db8337a9792a">go_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d0f/namespacegomotion.html#ac06c11fdcb4ac07e6bd860c904644c52">go_traj_cj_compute_tees_na_c</a> (<a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> *pts)</td></tr>
+<tr class="memdesc:ac06c11fdcb4ac07e6bd860c904644c52"><td class="mdescLeft">&#160;</td><td class="mdescRight">! Computes the trajectory defining times <em>t1</em>, <em>t2</em> and <em>t4</em> for a motion with no acceleration but a cruise phase, given <em>pts</em> filled in with <em>dtend</em>, <em>jt0</em> and <em>vt3</em>.  <a href="#ac06c11fdcb4ac07e6bd860c904644c52">More...</a><br/></td></tr>
 <tr class="separator:ac06c11fdcb4ac07e6bd860c904644c52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a474f6e7cd5710ecb20c7fe42d188ddc9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d44/gotypes_8h.html#a55d48b38cd959f63c7e8db8337a9792a">go_result</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d0f/namespacegomotion.html#a474f6e7cd5710ecb20c7fe42d188ddc9">go_traj_cj_compute_tees_a_c</a> (<a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> *pts)</td></tr>
+<tr class="memdesc:a474f6e7cd5710ecb20c7fe42d188ddc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">! Computes the trajectory defining times <em>t1</em>, <em>t2</em> and <em>t4</em> for a motion with no acceleration but a cruise phase, given <em>pts</em> filled in with <em>dtend</em>, <em>jt0</em>, at1 and <em>vt3</em>.  <a href="#a474f6e7cd5710ecb20c7fe42d188ddc9">More...</a><br/></td></tr>
 <tr class="separator:a474f6e7cd5710ecb20c7fe42d188ddc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
@@ -627,6 +650,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>How many coefficients we support, one more than max polynomial degree. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ada59e79a297fc10f2dbc85e4777fa4aea0d345844cda261ed2253d7fc9404e2ef"></a>COEFF_MAX</em>&#160;</td><td class="fielddoc">
 </td></tr>
@@ -673,6 +698,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a82062c31fb510f6d6810ba83bf8a3c12ac47bceaf1669bb9214788f7b09d51eb8"></a>GO_MOTION_NONE</em>&#160;</td><td class="fielddoc">
+<p>types of motion queueing done </p>
 </td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a82062c31fb510f6d6810ba83bf8a3c12a4dfd8a68dda6ffe82c50ad931121576c"></a>GO_MOTION_JOINT</em>&#160;</td><td class="fielddoc">
 </td></tr>
@@ -681,6 +707,7 @@ Functions</h2></td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a82062c31fb510f6d6810ba83bf8a3c12ab73840e3ff8f43a33e770cc18527bf97"></a>GO_MOTION_WORLD</em>&#160;</td><td class="fielddoc">
 </td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a82062c31fb510f6d6810ba83bf8a3c12aa864f102b66c4fb339cdc3448f4ae3a8"></a>GO_MOTION_LINEAR</em>&#160;</td><td class="fielddoc">
+<p>these are used to further specify types of world motion </p>
 </td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a82062c31fb510f6d6810ba83bf8a3c12a4f3cd483df8a1589b29c5be3d58ea712"></a>GO_MOTION_CIRCULAR</em>&#160;</td><td class="fielddoc">
 </td></tr>
@@ -5963,6 +5990,12 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p><a class="el" href="../../d1/d0f/namespacegomotion.html#a7c957035ba66766366a69beed80f9193" title="go_traj_ca_compute() takes values for distance &#39;d&#39; to move, max velocity &#39;v&#39; to limit if necessary...">go_traj_ca_compute()</a> takes values for distance 'd' to move, max velocity 'v' to limit if necessary, and constant accel 'a', and fills in the <a class="el" href="../../d9/d44/structgomotion_1_1go__traj__ca__spec.html">go_traj_ca_spec</a> with the interval parameters. </p>
+<p>cruise phase</p>
+<p>no cruise phase</p>
+<p>cruise phase</p>
+<p>no cruise phase </p>
+
 <p>Definition at line <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00230">230</a> of file <a class="el" href="../../d7/dc0/gotraj_8h_source.html">gotraj.h</a>.</p>
 
 <p>References <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00011">gomotion::go_traj_ca_spec::at0</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00013">gomotion::go_traj_ca_spec::dt1</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00016">gomotion::go_traj_ca_spec::dt2</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00018">gomotion::go_traj_ca_spec::dtend</a>, <a class="el" href="../../d7/d44/gotypes_8h_source.html#l00120">GO_RESULT_ERROR</a>, <a class="el" href="../../d7/d44/gotypes_8h_source.html#l00115">GO_RESULT_OK</a>, <a class="el" href="../../d7/d2c/gomath_8h_source.html#l00282">go_sq</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00019">gomotion::go_traj_ca_spec::invd</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00008">reciprocate</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00012">gomotion::go_traj_ca_spec::t1</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00015">gomotion::go_traj_ca_spec::t2</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00017">gomotion::go_traj_ca_spec::tend</a>, and <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00014">gomotion::go_traj_ca_spec::vt1</a>.</p>
@@ -6008,6 +6041,9 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p><a class="el" href="../../d1/d0f/namespacegomotion.html#a5f1160c8b5662ad14fb8987be62e379d" title="go_traj_ca_extend() takes a time &#39;t&#39; for the desired time to finish the motion, and extends the const...">go_traj_ca_extend()</a> takes a time 't' for the desired time to finish the motion, and extends the constant-speed section so that it stops then. </p>
+<p>The time must be shorter than the original time, and longer than the fastest stopping time. </p>
 
 <p>Definition at line <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00366">366</a> of file <a class="el" href="../../d7/dc0/gotraj_8h_source.html">gotraj.h</a>.</p>
 
@@ -6059,6 +6095,14 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p><a class="el" href="../../d1/d0f/namespacegomotion.html#ad926ed07425571d1df303c65bc22161f" title="go_traj_ca_generate() takes an accel value, and intervals for the accel period and cruise period...">go_traj_ca_generate()</a> takes an accel value, and intervals for the accel period and cruise period, and fills in the <a class="el" href="../../d9/d44/structgomotion_1_1go__traj__ca__spec.html">go_traj_ca_spec</a> with the interval parameters. </p>
+<p>constant acceleration functions</p>
+<p>This is useful for generating test cases. </p>
+<p>any time intervals less than 0. mean 0.</p>
+<p>compute intermediate values for end of each phase</p>
+<p>any time intervals less than 0. mean 0.</p>
+<p>compute intermediate values for end of each phase </p>
+
 <p>Definition at line <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00197">197</a> of file <a class="el" href="../../d7/dc0/gotraj_8h_source.html">gotraj.h</a>.</p>
 
 <p>References <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00011">gomotion::go_traj_ca_spec::at0</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00013">gomotion::go_traj_ca_spec::dt1</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00016">gomotion::go_traj_ca_spec::dt2</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00018">gomotion::go_traj_ca_spec::dtend</a>, <a class="el" href="../../d7/d44/gotypes_8h_source.html#l00120">GO_RESULT_ERROR</a>, <a class="el" href="../../d7/d44/gotypes_8h_source.html#l00115">GO_RESULT_OK</a>, <a class="el" href="../../d7/d2c/gomath_8h_source.html#l00282">go_sq</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00019">gomotion::go_traj_ca_spec::invd</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00008">reciprocate</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00012">gomotion::go_traj_ca_spec::t1</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00015">gomotion::go_traj_ca_spec::t2</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00017">gomotion::go_traj_ca_spec::tend</a>, and <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00014">gomotion::go_traj_ca_spec::vt1</a>.</p>
@@ -6102,6 +6146,11 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p><a class="el" href="../../d1/d0f/namespacegomotion.html#aa138950bb1c02fcbeeb017e61fd061e0" title="go_traj_ca_interp() takes a go_traj_ca_spec and interpolates the d-v-a values for the given time t...">go_traj_ca_interp()</a> takes a <a class="el" href="../../d9/d44/structgomotion_1_1go__traj__ca__spec.html">go_traj_ca_spec</a> and interpolates the d-v-a values for the given time t, storing the d-v-a values in ti. </p>
+<p>run interpolation on each phase for each motion parameter, using</p>
+<p>d = d0 + v0 t + 1/2 a0 t^2 v = v0 + a0 t a = a0 j = 0</p>
+<p>where d0, v0, a0 are the initial values for each phase </p>
 
 <p>Definition at line <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00400">400</a> of file <a class="el" href="../../d7/dc0/gotraj_8h_source.html">gotraj.h</a>.</p>
 
@@ -6149,6 +6198,14 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p><a class="el" href="../../d1/d0f/namespacegomotion.html#a116794cb4157c4f54caf98f65a2ec44f" title="go_traj_ca_scale() takes a time &#39;t&#39; for the desired time of the motion, and scales the times and moti...">go_traj_ca_scale()</a> takes a time 't' for the desired time of the motion, and scales the times and motion params so that the total distance remains the same and everything else is in proportion </p>
+<p>can't shrink motion </p>
+<pre class="fragment">this just adds a cruise phase to stretch the time, and reduces
+</pre><p> the acc value accordingly</p>
+<p>can't shrink motion </p>
+<pre class="fragment">this just adds a cruise phase to stretch the time, and reduces
+</pre><p> the acc value accordingly </p>
+
 <p>Definition at line <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00274">274</a> of file <a class="el" href="../../d7/dc0/gotraj_8h_source.html">gotraj.h</a>.</p>
 
 <p>References <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00011">gomotion::go_traj_ca_spec::at0</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00013">gomotion::go_traj_ca_spec::dt1</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00016">gomotion::go_traj_ca_spec::dt2</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00018">gomotion::go_traj_ca_spec::dtend</a>, <a class="el" href="../../d7/d44/gotypes_8h_source.html#l00115">GO_RESULT_OK</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00019">gomotion::go_traj_ca_spec::invd</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00012">gomotion::go_traj_ca_spec::t1</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00015">gomotion::go_traj_ca_spec::t2</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00017">gomotion::go_traj_ca_spec::tend</a>, and <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00014">gomotion::go_traj_ca_spec::vt1</a>.</p>
@@ -6192,6 +6249,22 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p><a class="el" href="../../d1/d0f/namespacegomotion.html#aeb9f59e687213362972a8405d6210b11" title="go_traj_ca_stop() takes a time &#39;t&#39; for the desired time to begin stopping, and recomputes the times s...">go_traj_ca_stop()</a> takes a time 't' for the desired time to begin stopping, and recomputes the times so that the move will stop as soon as possible during subsequent interps. </p>
+<p>stage I</p>
+<p>null stage II, same as I</p>
+<p>stage III</p>
+<p>stage I unchanged</p>
+<p>stage II</p>
+<p>stage III</p>
+<p>already in stage III, do nothing</p>
+<p>stage I</p>
+<p>null stage II, same as I</p>
+<p>stage III</p>
+<p>stage I unchanged</p>
+<p>stage II</p>
+<p>stage III</p>
+<p>already in stage III, do nothing </p>
 
 <p>Definition at line <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00315">315</a> of file <a class="el" href="../../d7/dc0/gotraj_8h_source.html">gotraj.h</a>.</p>
 
@@ -6248,7 +6321,24 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Given a total move distance <em>d</em>, maximum peak speed <em>v</em>, maximum peak acceleration <em>a</em> and jerk <em>j</em>, compute the times for each of the seven phases (jerk, accel, dejerk, cruise, dejerk, decel and jerk), and the associated cumulative distances, instantaneous speeds and accelerations. The resulting structure <em>pts</em> will be used by the constant-jerk interpolater <em>go_traj_cj_interp</em> repeatedly when evaluating the motion along this trajectory. </p>
+
+<p><a class="el" href="../../d1/d0f/namespacegomotion.html#a5edc6aa7aad4817534ac8099a2638610" title="go_traj_cj_compute() takes values for distance &#39;d&#39; to move, max velocity &#39;v&#39; to limit if necessary...">go_traj_cj_compute()</a> takes values for distance 'd' to move, max velocity 'v' to limit if necessary, max accel 'a' to limit if necessary, and constant jerk 'j', and fills in the <a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> with the interval parameters. </p>
+<p>! Given a total move distance <em>d</em>, maximum peak speed <em>v</em>, maximum peak acceleration <em>a</em> and jerk <em>j</em>, compute the times for each of the seven phases (jerk, accel, dejerk, cruise, dejerk, decel and jerk), and the associated cumulative distances, instantaneous speeds and accelerations.</p>
+<p>The resulting structure <em>pts</em> will be used by the constant-jerk interpolater <em>go_traj_cj_interp</em> repeatedly when evaluating the motion along this trajectory. </p>
+<p>fill the targets in, and they will be recomputed if needed</p>
+<p>accel phase</p>
+<p>cruise phase</p>
+<p>no cruise phase</p>
+<p>no accel phase</p>
+<p>cruise phase</p>
+<p>no cruise phase</p>
+<p>fill the targets in, and they will be recomputed if needed</p>
+<p>accel phase</p>
+<p>cruise phase</p>
+<p>no cruise phase</p>
+<p>no accel phase</p>
+<p>cruise phase</p>
+<p>no cruise phase </p>
 
 <p>Definition at line <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00621">621</a> of file <a class="el" href="../../d7/dc0/gotraj_8h_source.html">gotraj.h</a>.</p>
 
@@ -6279,7 +6369,8 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Computes the trajectory defining times <em>t1</em>, <em>t2</em> and <em>t4</em> for a motion with no acceleration but a cruise phase, given <em>pts</em> filled in with <em>dtend</em>, <em>jt0</em>, at1 and <em>vt3</em>.</p>
+
+<p>! Computes the trajectory defining times <em>t1</em>, <em>t2</em> and <em>t4</em> for a motion with no acceleration but a cruise phase, given <em>pts</em> filled in with <em>dtend</em>, <em>jt0</em>, at1 and <em>vt3</em>. </p>
 <p>A subsequent call to <em>go_traj_cj_compute_the_rest</em> will fill in the remaining parameters which will be used repeatedly by <em>go_traj_cj_interp</em>. </p>
 
 <p>Definition at line <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00603">603</a> of file <a class="el" href="../../d7/dc0/gotraj_8h_source.html">gotraj.h</a>.</p>
@@ -6311,7 +6402,8 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Computes the trajectory defining times <em>t1</em>, <em>t2</em> and <em>t4</em> for a motion with acceleration but no cruise phase, given <em>pts</em> filled in with <em>dtend</em>, <em>jt0</em> and <em>at1</em>.</p>
+
+<p>! Computes the trajectory defining times <em>t1</em>, <em>t2</em> and <em>t4</em> for a motion with acceleration but no cruise phase, given <em>pts</em> filled in with <em>dtend</em>, <em>jt0</em> and <em>at1</em>. </p>
 <p>A subsequent call to <em>go_traj_cj_compute_the_rest</em> will fill in the remaining parameters which will be used repeatedly by <em>go_traj_cj_interp</em>. </p>
 
 <p>Definition at line <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00564">564</a> of file <a class="el" href="../../d7/dc0/gotraj_8h_source.html">gotraj.h</a>.</p>
@@ -6343,7 +6435,8 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Computes the trajectory defining times <em>t1</em>, <em>t2</em> and <em>t4</em> for a motion with no acceleration but a cruise phase, given <em>pts</em> filled in with <em>dtend</em>, <em>jt0</em> and <em>vt3</em>.</p>
+
+<p>! Computes the trajectory defining times <em>t1</em>, <em>t2</em> and <em>t4</em> for a motion with no acceleration but a cruise phase, given <em>pts</em> filled in with <em>dtend</em>, <em>jt0</em> and <em>vt3</em>. </p>
 <p>A subsequent call to <em>go_traj_cj_compute_the_rest</em> will fill in the remaining parameters which will be used repeatedly by <em>go_traj_cj_interp</em>. </p>
 
 <p>Definition at line <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00585">585</a> of file <a class="el" href="../../d7/dc0/gotraj_8h_source.html">gotraj.h</a>.</p>
@@ -6375,7 +6468,8 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Computes the trajectory defining times <em>t1</em>, <em>t2</em> and <em>t4</em> for a motion with no acceleration or cruise phase, given <em>pts</em> filled in with <em>dtend</em> and <em>jt0</em>.</p>
+
+<p>! Computes the trajectory defining times <em>t1</em>, <em>t2</em> and <em>t4</em> for a motion with no acceleration or cruise phase, given <em>pts</em> filled in with <em>dtend</em> and <em>jt0</em>. </p>
 <p>A subsequent call to <em>go_traj_cj_compute_the_rest</em> will fill in the remaining parameters which will be used repeatedly by <em>go_traj_cj_interp</em>. </p>
 
 <p>Definition at line <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00546">546</a> of file <a class="el" href="../../d7/dc0/gotraj_8h_source.html">gotraj.h</a>.</p>
@@ -6407,7 +6501,8 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Expects <em>pts</em> attributes <em>dtend</em>, <em>jt0</em>, <em>at1</em>, <em>vt3</em>, <em>t1</em>, <em>t2</em> and <em>t3</em> to be already filled in from previous calls to one of the four <em>go_traj_cj_compute_tees</em> functions and <em>go_traj_cj_compute</em>.</p>
+
+<p>! Expects <em>pts</em> attributes <em>dtend</em>, <em>jt0</em>, <em>at1</em>, <em>vt3</em>, <em>t1</em>, <em>t2</em> and <em>t3</em> to be already filled in from previous calls to one of the four <em>go_traj_cj_compute_tees</em> functions and <em>go_traj_cj_compute</em>. </p>
 <p>Fills in all the remaining values in <em>pts:</em> the times for each of the seven phases, the associated cumulative distances, and the instantaneous speeds and accelerations. </p>
 
 <p>Definition at line <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00510">510</a> of file <a class="el" href="../../d7/dc0/gotraj_8h_source.html">gotraj.h</a>.</p>
@@ -6455,6 +6550,9 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p><a class="el" href="../../d1/d0f/namespacegomotion.html#ad6229b01a04c2232c7535f600849bb73" title="go_traj_cj_extend() takes a time &#39;t&#39; for the desired time to finish the motion, and extends the const...">go_traj_cj_extend()</a> takes a time 't' for the desired time to finish the motion, and extends the constant-speed section so that it stops then. </p>
+<p>The time must be shorter than the original time, and longer than the fastest stopping time. </p>
 
 <p>Definition at line <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00875">875</a> of file <a class="el" href="../../d7/dc0/gotraj_8h_source.html">gotraj.h</a>.</p>
 
@@ -6514,6 +6612,14 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p><a class="el" href="../../d1/d0f/namespacegomotion.html#a6e56fd184b0ec5ce1668553a315c0ed7" title="go_traj_cj_generate() takes a jerk value, and intervals for the jerk period, accel period and cruise ...">go_traj_cj_generate()</a> takes a jerk value, and intervals for the jerk period, accel period and cruise period, and fills in the <a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> with the interval parameters. </p>
+<p>constant jerk functions</p>
+<p>This is useful for generating test cases. </p>
+<p>any time intervals less than 0. mean 0.</p>
+<p>compute intermediate values for end of each phase</p>
+<p>any time intervals less than 0. mean 0.</p>
+<p>compute intermediate values for end of each phase </p>
+
 <p>Definition at line <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00448">448</a> of file <a class="el" href="../../d7/dc0/gotraj_8h_source.html">gotraj.h</a>.</p>
 
 <p>References <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00027">gomotion::go_traj_cj_spec::at1</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00025">gomotion::go_traj_cj_spec::dt1</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00029">gomotion::go_traj_cj_spec::dt2</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00032">gomotion::go_traj_cj_spec::dt3</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00035">gomotion::go_traj_cj_spec::dt4</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00037">gomotion::go_traj_cj_spec::dt5</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00039">gomotion::go_traj_cj_spec::dt6</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00041">gomotion::go_traj_cj_spec::dtend</a>, <a class="el" href="../../d7/d2c/gomath_8h_source.html#l00284">go_cub</a>, <a class="el" href="../../d7/d44/gotypes_8h_source.html#l00120">GO_RESULT_ERROR</a>, <a class="el" href="../../d7/d44/gotypes_8h_source.html#l00115">GO_RESULT_OK</a>, <a class="el" href="../../d7/d2c/gomath_8h_source.html#l00282">go_sq</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00042">gomotion::go_traj_cj_spec::invd</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00023">gomotion::go_traj_cj_spec::jt0</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00008">reciprocate</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00024">gomotion::go_traj_cj_spec::t1</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00028">gomotion::go_traj_cj_spec::t2</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00031">gomotion::go_traj_cj_spec::t3</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00034">gomotion::go_traj_cj_spec::t4</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00036">gomotion::go_traj_cj_spec::t5</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00038">gomotion::go_traj_cj_spec::t6</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00040">gomotion::go_traj_cj_spec::tend</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00026">gomotion::go_traj_cj_spec::vt1</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00030">gomotion::go_traj_cj_spec::vt2</a>, and <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00033">gomotion::go_traj_cj_spec::vt3</a>.</p>
@@ -6557,6 +6663,11 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p><a class="el" href="../../d1/d0f/namespacegomotion.html#a2d66e2943e92ad2df63ae5d008eb8a6c" title="go_traj_cj_interp() takes a go_traj_cj_spec and interpolates the d-v-a-j values for the given time t...">go_traj_cj_interp()</a> takes a <a class="el" href="../../d1/dcb/structgomotion_1_1go__traj__cj__spec.html">go_traj_cj_spec</a> and interpolates the d-v-a-j values for the given time t, storing the d-v-a-j values in ti. </p>
+<p>run interpolation on each phase for each motion parameter, using</p>
+<p>d = d0 + v0 t + 1/2 a0 t^2 + 1/6 j0 t^3 v = v0 + a0 t + 1/2 j0 t^2 a = a0 + j0 t j = j0</p>
+<p>where d0, v0, a0, j0 are the initial values for each phase </p>
 
 <p>Definition at line <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00913">913</a> of file <a class="el" href="../../d7/dc0/gotraj_8h_source.html">gotraj.h</a>.</p>
 
@@ -6604,6 +6715,10 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p><a class="el" href="../../d1/d0f/namespacegomotion.html#a6597fcefe873523be5a8a7a587788b53" title="go_traj_cj_scale() takes a time &#39;t&#39; for the desired time of the motion, and scales the times and moti...">go_traj_cj_scale()</a> takes a time 't' for the desired time of the motion, and scales the times and motion params so that the total distance remains the same and everything else is in proportion </p>
+<p>can't shrink shorter</p>
+<p>can't shrink shorter </p>
+
 <p>Definition at line <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00659">659</a> of file <a class="el" href="../../d7/dc0/gotraj_8h_source.html">gotraj.h</a>.</p>
 
 <p>References <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00027">gomotion::go_traj_cj_spec::at1</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00025">gomotion::go_traj_cj_spec::dt1</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00029">gomotion::go_traj_cj_spec::dt2</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00032">gomotion::go_traj_cj_spec::dt3</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00035">gomotion::go_traj_cj_spec::dt4</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00037">gomotion::go_traj_cj_spec::dt5</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00039">gomotion::go_traj_cj_spec::dt6</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00041">gomotion::go_traj_cj_spec::dtend</a>, <a class="el" href="../../d7/d2c/gomath_8h_source.html#l00284">go_cub</a>, <a class="el" href="../../d7/d44/gotypes_8h_source.html#l00115">GO_RESULT_OK</a>, <a class="el" href="../../d7/d2c/gomath_8h_source.html#l00282">go_sq</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00042">gomotion::go_traj_cj_spec::invd</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00023">gomotion::go_traj_cj_spec::jt0</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00024">gomotion::go_traj_cj_spec::t1</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00028">gomotion::go_traj_cj_spec::t2</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00031">gomotion::go_traj_cj_spec::t3</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00034">gomotion::go_traj_cj_spec::t4</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00036">gomotion::go_traj_cj_spec::t5</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00038">gomotion::go_traj_cj_spec::t6</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00040">gomotion::go_traj_cj_spec::tend</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00026">gomotion::go_traj_cj_spec::vt1</a>, <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00030">gomotion::go_traj_cj_spec::vt2</a>, and <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00033">gomotion::go_traj_cj_spec::vt3</a>.</p>
@@ -6649,6 +6764,68 @@ Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p><a class="el" href="../../d1/d0f/namespacegomotion.html#a0764efa1b4a4385aaf9fe13e0ea7b812" title="go_traj_cj_stop() takes a time &#39;t&#39; for the desired time to begin stopping, and recomputes the times s...">go_traj_cj_stop()</a> takes a time 't' for the desired time to begin stopping, and recomputes the times so that the move will stop as soon as possible during subsequent interps. </p>
+<p>incremental phase II distance</p>
+<p>incremental phase III distance</p>
+<p>incremental phase IV time</p>
+<p>incremental phase IV distance</p>
+<p>stopping in stage I</p>
+<p>adjust stage I</p>
+<p>null stage II, same as I</p>
+<p>stage III</p>
+<p>null stage IV, same as III</p>
+<p>stage V</p>
+<p>do earlier</p>
+<p>so we can use it here</p>
+<p>null stage VI, same as V</p>
+<p>stage VII</p>
+<p>stopping in stage II</p>
+<p>stage I unchanged</p>
+<p>adjust stage II</p>
+<p>stage III</p>
+<p>null stage IV, same as III</p>
+<p>stage V</p>
+<p>stage VI</p>
+<p>stage VII</p>
+<p>stopping in stage III</p>
+<p>stages I, II and III unchanged</p>
+<p>null stage IV</p>
+<p>take off original stage IV for remaining stages</p>
+<p>stopping in stage IV</p>
+<p>stages I, II and III unchanged</p>
+<p>adjusted stage IV</p>
+<p>stopping in stage V, VI or VII&ndash; leave alone</p>
+<p>incremental phase II distance</p>
+<p>incremental phase III distance</p>
+<p>incremental phase IV time</p>
+<p>incremental phase IV distance</p>
+<p>stopping in stage I</p>
+<p>adjust stage I</p>
+<p>null stage II, same as I</p>
+<p>stage III</p>
+<p>null stage IV, same as III</p>
+<p>stage V</p>
+<p>do earlier</p>
+<p>so we can use it here</p>
+<p>null stage VI, same as V</p>
+<p>stage VII</p>
+<p>stopping in stage II</p>
+<p>stage I unchanged</p>
+<p>adjust stage II</p>
+<p>stage III</p>
+<p>null stage IV, same as III</p>
+<p>stage V</p>
+<p>stage VI</p>
+<p>stage VII</p>
+<p>stopping in stage III</p>
+<p>stages I, II and III unchanged</p>
+<p>null stage IV</p>
+<p>take off original stage IV for remaining stages</p>
+<p>stopping in stage IV</p>
+<p>stages I, II and III unchanged</p>
+<p>adjusted stage IV</p>
+<p>stopping in stage V, VI or VII&ndash; leave alone </p>
 
 <p>Definition at line <a class="el" href="../../d7/dc0/gotraj_8h_source.html#l00722">722</a> of file <a class="el" href="../../d7/dc0/gotraj_8h_source.html">gotraj.h</a>.</p>
 
@@ -7463,7 +7640,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="../../d1/d0f/namespacegomotion.html">gomotion</a></li>
-    <li class="footer">Generated on Fri Oct 14 2016 15:52:32 for gomotion by
+    <li class="footer">Generated on Fri Oct 14 2016 16:50:17 for gomotion by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="../../doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

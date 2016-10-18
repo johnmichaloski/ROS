@@ -62,6 +62,12 @@ $(document).ready(function(){initNavTree('da/d01/group___t_r_a_j.html','../../')
 <div class="title">Trajectory Planning Algorithms</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>gotraj.c  
+<a href="#details">More...</a></p>
+<p>gotraj.c </p>
+<p>Trajectory planning functions</p>
+<p>CV means constant velocity, CA means constant acceleration, CJ means constant jerk. !</p>
 <p>The Go Motion trajectory planning algorithms are based on smooth velocity profiling with bounded speed, acceleration and jerk, called "constant jerk" or "S-curve" velocity profiling. This gives smoother control than "trapezoidal" velocity profiling, which transitions instantaneously between acceleration and no acceleration and incurs spikes in unbounded jerk.</p>
 <p>Constant-jerk (CJ) profiling is shown in Figure 1, a plot of the speed versus time. There are 7 phases to the motion. Phase 1 is a jerk phase, where the acceleration varies smoothly from 0 at time 0 to <em>a1</em> at time <em>t1</em> following the jerk (change in acceleration per unit time) <em>j0</em>. Phase 2 is an acceleration phase, with constant acceleration <em>a1</em> throughout. Phase 3 is a jerk phase (or de-jerk phase) with constant (negative) jerk slowing down the acceleration from <em>a1</em> to 0. Phase 4 is a constant speed phase at speed <em>v3</em>. Phase 5 is a constant-jerk counterpart to phase 3, where the deceleration varies smoothly from 0 to <em>-a1</em>. Phase 6 is a constant-acceleration counterpart to phase 2. Phase 7 is a constant-jerk counterpart to phase 1, where the deceleration varies smoothly from <em>-a1</em> to 0 and motion stops. </p>
 <div class="image">
@@ -73,7 +79,7 @@ $(document).ready(function(){initNavTree('da/d01/group___t_r_a_j.html','../../')
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Oct 14 2016 15:52:32 for gomotion by
+    <li class="footer">Generated on Fri Oct 14 2016 16:50:17 for gomotion by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="../../doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

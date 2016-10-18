@@ -25,7 +25,7 @@
 #include "Debug.h"
 #include "Scene.h"
 #include "BLogging.h"
-
+#include "MotionException.h"
 // RCS namespace declarations
 //////////////////////////////////
 namespace RCS {
@@ -197,6 +197,11 @@ namespace RCS {
                 {
                     crclcmds.PopFrontMsgQueue();
                 }
+                else if(status== CanonStatusType::CANON_ERROR )
+                {
+                    crclcmds.ClearMsgQueue();
+
+                }
             }
 
             // Motion commands to robot - only joint at this point
@@ -290,7 +295,8 @@ namespace RCS {
 #endif
             if (bCvsPoseLogging())
                 MotionLogging();
-
+        } catch (MotionException & e) {
+            std::cerr << "Exception in  CController::Action() thread: " << e.what() << "\n";
         } catch (std::exception & e) {
             std::cerr << "Exception in  CController::Action() thread: " << e.what() << "\n";
         } catch (...) {

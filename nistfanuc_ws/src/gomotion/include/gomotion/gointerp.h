@@ -7,12 +7,12 @@
 //typedef double go_real;
 namespace gomotion
 {
-	/*
+	/**
 	How many coefficients we support, one more than max polynomial degree 
 	*/
 	enum { COEFF_MAX = 6 };
 
-	/*
+	/**
 	This structure holds the points to be interpolated. See notes below for
 	how to fill the p[] array for the particular type of interpolation.
 	*/
@@ -20,7 +20,7 @@ namespace gomotion
 		go_real p[COEFF_MAX];
 	} ;
 
-	/*
+	/**
 	This structure holds the polynomial coefficients. In the derivations
 	below, coefficients a,b,c,d,... are used. Here, they correspond to the
 	a[] array like this:
@@ -33,7 +33,7 @@ namespace gomotion
 		go_real a[COEFF_MAX];
 	} ;
 
-	/*
+	/**
 	The interpolator structure
 
 	For constant- and linear interpolation, exact-fit and boundary interpolation

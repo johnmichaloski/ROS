@@ -29,8 +29,8 @@
 
 #include "MotionControl.h"
 #include "Globals.h"
-#include "Controller.h"
 #include "Kinematics.h"
+#include "Controller.h"
 #include "RosSetup.h"
 #include "RvizMarker.h"
 #include "NIST/BLogging.h"
@@ -42,8 +42,7 @@
 #include "Demo.h"
 #include "Test.h"
 #include "Config.h"
-
-#define ROSPACKAGENAME "nist_fanuc"
+#include "nist_fanuc/MotionException.h"
 //Eigen::Affine3d fanucoffset00 = Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, -0.5, 0.0);
 //Eigen::Affine3d motomanoffset00 = Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, 0.5, 0.0);
 
@@ -134,6 +133,7 @@ int main(int argc, char** argv) {
         Globals.WriteFile(Globals.ExeDirectory + "rosconfig.txt", params);
         path = ros::package::getPath(ROSPACKAGENAME);
         Globals._appproperties[ROSPACKAGENAME] = path;
+        MotionException::Load();
         Nist::Config cfg;
         cfg.load(path+"/config/config.ini");
         std::string appname = cfg.GetSymbolValue("system.name", "").c_str( );
@@ -167,9 +167,9 @@ int main(int argc, char** argv) {
             ncs[i]->CycleTime() = dCycleTime;
             
             if(kinsolver ==  "FanucLRMate200idFastKinematics")
-                kin = boost::shared_ptr<IKinematics>(new FanucLRMate200idFastKinematics());
+                kin = boost::shared_ptr<IKinematics>(new FanucLRMate200idFastKinematics(ncs[i]));
             if(kinsolver ==  "MotomanSia20dFastKinematics")
-                kin = boost::shared_ptr<IKinematics>(new MotomanSia20dFastKinematics());
+                kin = boost::shared_ptr<IKinematics>(new MotomanSia20dFastKinematics(ncs[i]));
             kin->Init(std::string("manipulator"), eelink, baselink);
             kin->Init(nh);
             ncs[i]->Kinematics() = kin;

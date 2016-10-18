@@ -27,6 +27,11 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+namespace RCS
+{
+struct CController;
+};
+
 /***
  * \brief ArmConfiguration provides a class to handle manipulator arm configuration.
  * using a bit mask determines a configuration. Given a configuration, a min and max vector 
@@ -93,8 +98,6 @@ public:
 
 };
 
-
-
 /**
  * \brief The IKinematics provides is an abstract class with pure virtual functions that are
  * overriden by actual kinematic implementations.
@@ -113,15 +116,25 @@ protected:
     std::string _groupname;
     std::string _tiplinkname;
     std::string _rootlinkname;
-    std::string prefix;
+    std::string _prefix;
+    boost::shared_ptr<RCS::CController> _nc;
     bool ParseURDF(std::string xml_string, std::string base_frame);
-    
+
 public:
-    std::string getRootLink(){ return _rootlinkname; }
-    std::string getTipLink(){ return _tiplinkname; }
-    std::string & Prefix() {
-        return prefix;
+
+    
+    std::string getRootLink() {
+        return _rootlinkname;
     }
+
+    std::string getTipLink() {
+        return _tiplinkname;
+    }
+
+    std::string & Prefix() {
+        return _prefix;
+    }
+
     size_t NumJoints() {
         assert(joint_names.size() != 0);
         return joint_names.size();
@@ -169,7 +182,7 @@ public:
      * \param  optional seed joint values to use as best guess for IK joint values.
      * \return vector of all robot joint values in doubles.
      */
-    virtual std::vector<double> IK(RCS::Pose  pose,
+    virtual std::vector<double> IK(RCS::Pose pose,
             std::vector<double> oldjoints) = 0;
 
     /*!
@@ -178,7 +191,7 @@ public:
      * \param  optional seed joint values to use as best guess for IK joint values.
      * \return vector of all robot joint values in doubles.
      */
-    virtual std::vector<double> IK(RCS::Pose  pose,
+    virtual std::vector<double> IK(RCS::Pose pose,
             std::vector<double> minrange, std::vector<double> maxrange) {
         return std::vector<double>();
     }
@@ -222,14 +235,13 @@ public:
         std::iota(jointnum.begin(), jointnum.end(), 0); // adjusted already to 0..n-1
         return jointnum;
     }
- 
-            
+
     /*!
      * \brief Returns true if the determinant of the jacobian is near zero. .
      * \param  groupname name of  chained joints in robot model.
      * \param  eelinkname name of end effector joint in robot model.
      */
-    virtual bool IsSingular(RCS::Pose  pose, double threshold) {
+    virtual bool IsSingular(RCS::Pose pose, double threshold) {
         return false;
     }
 
@@ -247,10 +259,11 @@ public:
         }
         if (!ParseURDF(urdf_xml, _rootlinkname))
             ROS_FATAL_NAMED("IKinematics", "Could not parse the xml for kinematic solver", _groupname.c_str());
-        num_joints=joint_names.size();
+        num_joints = joint_names.size();
         //return false;
 
     }
+
     virtual JointState UpdateJointState(std::vector<uint64_t> jointnums,
             JointState oldjoints,
             JointState njoints) {
@@ -259,7 +272,7 @@ public:
             joints.velocity.resize(joints.position.size(), 0.0);
         if (joints.effort.size() != joints.position.size())
             joints.effort.resize(joints.position.size(), 0.0);
-       
+
         // Check each joint, to see if joint is being actuated, if so, change goal position
         for (size_t i = 0; i < jointnums.size(); i++) {
             size_t n = jointnums[i]; // should already have indexes -1;
@@ -267,25 +280,67 @@ public:
             joints.velocity[n] = njoints.velocity[n];
             joints.effort[n] = njoints.effort[n];
             joints.effort[n] = 0.0;
-       }
+        }
         return joints;
     }
 
+    /*!
+     * \brief From a list of IK joint solutions find closest based on Arm Configuration instance.
+     * \param  solutions array that contains the IK joint solutions.
+     *  \ param min array defining minimum joint values within desired range. 
+     *  \ param max array defining maximum joint values within desired range. 
+     * \return  closed joint aray to arm configuration specification.
+     */
     virtual std::vector<double> FindBoundedSolution(std::vector<std::vector<double>> &solutions,
             std::vector<double> &min,
             std::vector<double> &max) {
         return std::vector<double>();
     }
 
+    /*!
+     * \brief From a list of IK joint solutions find closest based on Arm Configuration instance.
+     * \param  solutions array that contains the IK joint solutions.
+     *  \ param config instance of arm configuration specification, e.g., whether elbow up/down, etc. 
+     * \return  closed joint aray to arm configuration specification.
+     */
     virtual std::vector<double> FindBoundedSolution(std::vector<std::vector<double>> &solutions,
             boost::shared_ptr<IArmConfiguration> config) {
         return std::vector<double>();
     }
+
+    /*!
+     * \brief Compares array of joint positions  against joint minimums and maximums.
+     * \param  joints array that contains the value of each joints.
+     *  \ param outofbounds array that will contain the indexes of the out of bound joints. 
+     * Negative indexes indicate joint value less that minimum joint value.
+     * \param  msg is a message describing which joints are out of range.
+     * \ return bool whether joints in bounds, 0=within bounds, >1 joint(s) out of bounds
+     */
+    virtual bool CheckJointPositionLimits(std::vector<double> joints, std::vector<int> &outofbounds, std::string &msg) {
+        std::stringstream errmsg;
+        outofbounds.clear();
+        for (size_t i = 0; i < joints.size(); i++) {
+            if (joints[i] < joint_min[i] || joints[i] > joint_max[i]) {
+                if (joints[i] < joint_min[i]) {
+                    outofbounds.push_back(-i);
+                    errmsg << joint_names[i] << "exceed minimum\n";
+                }
+                if (joints[i] > joint_max[i]) {
+
+                    outofbounds.push_back(i);
+                    errmsg << joint_names[i] << "exceed maximum\n";
+                }
+
+            }
+        }
+        msg = errmsg.str();
+        return outofbounds.size() > 0;
+    }
 };
 typedef boost::shared_ptr<IKinematics> IKinematicsSharedPtr;
 
-
 class MotomanSia20dFastKinematics : public IKinematics {
+
     static double SIGN(double x) {
         return ( x >= 0.0f) ? +1.0f : -1.0f;
     }
@@ -296,7 +351,7 @@ class MotomanSia20dFastKinematics : public IKinematics {
     // Convert rotation matrix to quaternion (Daisuke Miyazaki)
     // http://pastebin.com/NikwbL3k
 
-    static RCS::Rotation Convert2Rotation(double *eerot) ;
+    static RCS::Rotation Convert2Rotation(double *eerot);
     // Convert input effector pose, in w x y z quaternion notation, to rotation matrix.
     // Must use doubles, else lose precision compared to directly inputting the rotation matrix.
     // Found at http://kaist-ros-pkg.googlecode.com/svn/trunk/arm_kinematics_tools/src/ikfastdemo/ikfastdemo.cpp
@@ -304,34 +359,38 @@ class MotomanSia20dFastKinematics : public IKinematics {
     static void Convert2RotationMatrix(const RCS::Rotation & quat, double *eerot);
 
     double harmonize(const std::vector<double> &ik_seed_state, std::vector<double> &solution) const;
-   
+
 public:
 
+    MotomanSia20dFastKinematics(boost::shared_ptr<RCS::CController> nc){
+        _nc=nc;
+    }
+
     virtual RCS::Pose FK(std::vector<double> joints);
- 
-    virtual size_t AllPoseToJoints(RCS::Pose & pose, 
-    std::vector<std::vector<double>> &joints) ;
-    Eigen::VectorXd ConvertJoints(std::vector<double> v) ;
-    std::vector<double> ConvertJoints(Eigen::VectorXd ev) ;
+
+    virtual size_t AllPoseToJoints(RCS::Pose & pose,
+            std::vector<std::vector<double>> &joints);
+    Eigen::VectorXd ConvertJoints(std::vector<double> v);
+    std::vector<double> ConvertJoints(Eigen::VectorXd ev);
     virtual std::vector<double> NearestJoints(
             std::vector<double> oldjoints,
-            std::vector<std::vector<double>> &newjoints) ;
-    virtual std::vector<double> IK(RCS::Pose  pose,
-            std::vector<double> oldjoints) ;
-    virtual std::vector<double> IK(RCS::Pose  pose,
-            std::vector<double> minrange, std::vector<double> maxrange) ;
+            std::vector<std::vector<double>> &newjoints);
+    virtual std::vector<double> IK(RCS::Pose pose,
+            std::vector<double> oldjoints);
+    virtual std::vector<double> IK(RCS::Pose pose,
+            std::vector<double> minrange, std::vector<double> maxrange);
 
-    virtual bool IsSingular(RCS::Pose  pose, double threshold) ;
+    virtual bool IsSingular(RCS::Pose pose, double threshold);
     //virtual void Init(ros::NodeHandle &nh) ;
-    void VerifyLimits(std::vector<double> joints) ;
+    void VerifyLimits(std::vector<double> joints);
     virtual std::vector<double> FindBoundedSolution(std::vector<std::vector<double>> &solutions,
             std::vector<double> &min,
             std::vector<double> &max);
 
 };
 
+class FanucLRMate200idFastKinematics : public IKinematics {
 
-  class FanucLRMate200idFastKinematics : public IKinematics {
     static double SIGN(double x) {
         return ( x >= 0.0f) ? +1.0f : -1.0f;
     }
@@ -342,36 +401,42 @@ public:
     // Convert rotation matrix to quaternion (Daisuke Miyazaki)
     // http://pastebin.com/NikwbL3k
 
-    static RCS::Rotation Convert2Rotation(double *eerot) ;
+    static RCS::Rotation Convert2Rotation(double *eerot);
     // Convert input effector pose, in w x y z quaternion notation, to rotation matrix.
     // Must use doubles, else lose precision compared to directly inputting the rotation matrix.
     // Found at http://kaist-ros-pkg.googlecode.com/svn/trunk/arm_kinematics_tools/src/ikfastdemo/ikfastdemo.cpp
     static void Convert2RotationMatrix(const RCS::Rotation & quat, double *eerot);
     double harmonize(const std::vector<double> &ik_seed_state, std::vector<double> &solution) const;
-  
+
 public:
+
+     FanucLRMate200idFastKinematics(boost::shared_ptr<RCS::CController> nc){
+        _nc=nc;
+    }
+
     virtual RCS::Pose FK(std::vector<double> joints);
-    virtual size_t AllPoseToJoints(RCS::Pose & pose, 
-    std::vector<std::vector<double>> &joints) ;
-    Eigen::VectorXd ConvertJoints(std::vector<double> v) ;
-    std::vector<double> ConvertJoints(Eigen::VectorXd ev) ;
+    virtual size_t AllPoseToJoints(RCS::Pose & pose,
+            std::vector<std::vector<double>> &joints);
+    Eigen::VectorXd ConvertJoints(std::vector<double> v);
+    std::vector<double> ConvertJoints(Eigen::VectorXd ev);
     virtual std::vector<double> NearestJoints(
             std::vector<double> oldjoints,
-            std::vector<std::vector<double>> &newjoints) ;
-    virtual std::vector<double> IK(RCS::Pose  pose,
-            std::vector<double> oldjoints) ;
-    virtual std::vector<double> IK(RCS::Pose  pose,
-            std::vector<double> minrange, std::vector<double> maxrange) ;
+            std::vector<std::vector<double>> &newjoints);
+    virtual std::vector<double> IK(RCS::Pose pose,
+            std::vector<double> oldjoints);
+    virtual std::vector<double> IK(RCS::Pose pose,
+            std::vector<double> minrange, std::vector<double> maxrange);
 
-    virtual bool IsSingular(RCS::Pose  pose, double threshold) ;
+    virtual bool IsSingular(RCS::Pose pose, double threshold);
     //virtual void Init(ros::NodeHandle &nh) ;
-    void VerifyLimits(std::vector<double> joints) ;
+    void VerifyLimits(std::vector<double> joints);
     virtual std::vector<double> FindBoundedSolution(std::vector<std::vector<double>> &solutions,
             std::vector<double> &min,
             std::vector<double> &max);
-};      
+};
 
 #if 0
+
 class MotomanSia20d {
 public:
     std::vector<std::string> joint_names_;
@@ -399,11 +464,11 @@ public:
 
     double harmonize(const std::vector<double> &ik_seed_state,
             std::vector<double> &solution) const;
-    
+
     void getClosestSolution(const IkSolutionList<double> &solutions,
             const std::vector<double> &ik_seed_state,
             std::vector<double> &solution) const;
-    
+
     void fillFreeParams(int count, int *array);
 
     int GetNumFreeParameters() {

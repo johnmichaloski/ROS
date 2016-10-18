@@ -22,7 +22,7 @@ rviz_visual_tools
     gomotion
 )
 
-find_package(Boost REQUIRED system thread chrono regex log_setup log)
+find_package(Boost REQUIRED system thread chrono regex log_setup log locale)
 find_package(Eigen REQUIRED)
 
 #The catkin_package function specifies which dependencies your package exports to its dependencies. In particular, #INCLUDE_DIRS specifies which directory in your package contains the header directory that should be on the include #path for any packages that compile against your package.
@@ -123,6 +123,7 @@ src/Demo.cpp
 #src/motoman/ikfast_sia20d_manipulator.cpp
 src/motomansia20dkinematics.cpp
 src/fanuclrmate200idkinematics.cpp
+src/MotionException.cpp
 )
 
 #Add all files in subdirectories of the project in

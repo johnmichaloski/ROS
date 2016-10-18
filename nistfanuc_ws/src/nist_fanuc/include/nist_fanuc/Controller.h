@@ -52,7 +52,7 @@ namespace RCS {
      *
      */
     struct CController : public RCS::Thread {
-        typedef std::list<RCS::CanonCmd> xml_message_list;
+        typedef std::list<RCS::CanonCmd> archive_message_list;
         /*!
          * \brief CController constructor that requires a cycle time for RCS thread timing.
          * \param cycletime  in seconds.
@@ -109,15 +109,23 @@ namespace RCS {
         VAR(basePose, RCS::Pose);
         VAR(invBasePose, RCS::Pose);
         VAR(QBend, tf::Quaternion);
- 
-            
+
+
         ros::NodeHandle *_nh;
-        void SetToolOffset(RCS::Pose offset){ _gripperPose = offset; _invGripperPose = offset.inverse();}
-        void SetBaseOffset(RCS::Pose offset){ _basePose = offset; _invBasePose = offset.inverse();}
+
+        void SetToolOffset(RCS::Pose offset) {
+            _gripperPose = offset;
+            _invGripperPose = offset.inverse();
+        }
+
+        void SetBaseOffset(RCS::Pose offset) {
+            _basePose = offset;
+            _invBasePose = offset.inverse();
+        }
         ros::Publisher crcl_status; /**< ros publisher information used for crcl status updates */
         ros::Subscriber crcl_cmd; /**< ros subscriber information used for crcl command updates */
         void CmdCallback(const nistcrcl::CrclCommandMsg::ConstPtr& cmdmsg);
-        
+
         static ros::Publisher rviz_jntcmd; /**< ros publisher information for joint_publisher */
         static bool bRvizPubSetup;
 
@@ -135,7 +143,7 @@ namespace RCS {
          */
         void SetKinematics(boost::shared_ptr<IKinematics> k) {
             Kinematics() = k;
-  //          _interpreter->_kinematics = k;
+            //          _interpreter->_kinematics = k;
         }
 
         boost::shared_ptr<IRCSInterpreter> _interpreter; /**<  interprets canon commands into robot commands */
@@ -169,7 +177,7 @@ namespace RCS {
         MotionPlannerEnum eJointMotionPlanner; /**< type of joint motion to use */
     };
     //extern CController Fnc; /**< global declaration of Fanuc controller */
-   // extern CController Mnc; /**< global declaration of Motoman controller */
+    // extern CController Mnc; /**< global declaration of Motoman controller */
     //extern boost::shared_ptr<CController> Fnc;
     //extern boost::shared_ptr<CController> Mnc;
 

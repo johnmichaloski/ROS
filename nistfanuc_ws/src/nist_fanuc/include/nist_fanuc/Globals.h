@@ -34,6 +34,10 @@
 // #ifdef HEAVYDEBUG
 //#ifdef DEBUGJOINTSTATUSCRCLUPDATE
 
+#ifndef ROSPACKAGENAME
+#define ROSPACKAGENAME "nist_fanuc"
+#endif
+
 #ifndef TODO
 #define DO_PRAGMA(x) _Pragma (#x)
           #define TODO(x) DO_PRAGMA(message ("TODO - " #x))

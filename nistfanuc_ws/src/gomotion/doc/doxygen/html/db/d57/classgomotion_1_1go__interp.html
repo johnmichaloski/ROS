@@ -73,13 +73,16 @@ $(document).ready(function(){initNavTree('db/d57/classgomotion_1_1go__interp.htm
 </div><!--header-->
 <div class="contents">
 
+<p>The interpolator structure.  
+ <a href="../../db/d57/classgomotion_1_1go__interp.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="../../de/d5d/gointerp_8h_source.html">gointerp.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for gomotion::go_interp:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d8/dcd/classgomotion_1_1go__interp__coll__graph.png" border="0" usemap="#gomotion_1_1go__interp_coll__map" alt="Collaboration graph"/></div>
 <map name="gomotion_1_1go__interp_coll__map" id="gomotion_1_1go__interp_coll__map">
-<area shape="rect" id="node2" href="../../df/d7b/structgomotion_1_1points.html" title="gomotion::points" alt="" coords="5,5,120,32"/><area shape="rect" id="node3" href="../../dd/ddd/structgomotion_1_1coeff.html" title="gomotion::coeff" alt="" coords="145,5,255,32"/></map>
+<area shape="rect" id="node2" href="../../df/d7b/structgomotion_1_1points.html" title="This structure holds the points to be interpolated. " alt="" coords="5,5,120,32"/><area shape="rect" id="node3" href="../../dd/ddd/structgomotion_1_1coeff.html" title="This structure holds the polynomial coefficients. " alt="" coords="145,5,255,32"/></map>
 <center><span class="legend">[<a target="top" href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
@@ -146,7 +149,11 @@ Data Fields</h2></td></tr>
 <tr class="separator:ac568f2bc77d7c587637c8340669a5937"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
+<div class="textblock"><p>The interpolator structure. </p>
+<p>For constant- and linear interpolation, exact-fit and boundary interpolation is the same, so we only have one type for these. Here we pass single points in succession, and interpolation is done at/between them.</p>
+<p>For higher-order interpolation, we have two types, exact-fit and boundary. For exact-fit, we pass single points in succession, and interpolation is done in the middle interval. For boundary, we pass n-tuples of pos, vel, accel, etc. and interpolation is done between each tuple.</p>
+<p>A variation on boundary interpolation is possible if the derivative values are not known but are estimated by differencing. The functions below suffixed _est are used for this. </p>
+
 <p>Definition at line <a class="el" href="../../de/d5d/gointerp_8h_source.html#l00054">54</a> of file <a class="el" href="../../de/d5d/gointerp_8h_source.html">gointerp.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="a2e1c3adf730ce4f1e90ea89b33065d1f"></a>
@@ -812,7 +819,7 @@ Data Fields</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="../../d1/d0f/namespacegomotion.html">gomotion</a></li><li class="navelem"><a class="el" href="../../db/d57/classgomotion_1_1go__interp.html">go_interp</a></li>
-    <li class="footer">Generated on Fri Oct 14 2016 15:52:32 for gomotion by
+    <li class="footer">Generated on Fri Oct 14 2016 16:50:17 for gomotion by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="../../doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>
