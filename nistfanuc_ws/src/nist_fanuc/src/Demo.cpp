@@ -25,6 +25,12 @@ using namespace RCS;
 
 boost::mutex RvizDemo::_flag_mutex;
 
+static     tf::Vector3 boltslots[4] = {
+        tf::Vector3(-0.113, -0.107, 0.0245),
+        tf::Vector3(0.00, -0.107, 0.0245),
+        tf::Vector3(-0.113, 0.007, 0.0245),
+        tf::Vector3(0.0, 0.007, 0.0245)
+    };
 
 // Motoman - assuming at 0, .5, 0
 // 0 0 0 = 1.15 -1.74 0 1.34 .22 0 0  (hint)
@@ -144,25 +150,20 @@ void InlineRobotCommands::TestRobotCommands() {
     boost::mutex::scoped_lock lock(cncmutex);
     static double dwelltime = 1.0;
     std::vector<long unsigned int> vjointnum = ToVector<long unsigned int>(6, 0L, 1L, 2L, 3L, 4L, 5L);
-    RCS::Pose retract = RCS::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0, 0, 0.2));
+    //RCS::Pose retract = RCS::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0, 0, 0.2));
 
     RCS::CanonCmd cmd;
 
     // Warm up
-    MoveJoints(vjointnum, ToVector<double>(6, 1.4, 0.0, 0.0, 0.0, 0.0, 0.0));
-    DoDwell(dwelltime);
-    MoveJoints(vjointnum, ToVector<double>(6, -1.4, 0.0, 0.0, 0.0, 0.0, 0.0));
-    DoDwell(dwelltime);
+//    MoveJoints(vjointnum, ToVector<double>(6, 1.4, 0.0, 0.0, 0.0, 0.0, 0.0));
+//    DoDwell(dwelltime);
+//    MoveJoints(vjointnum, ToVector<double>(6, -1.4, 0.0, 0.0, 0.0, 0.0, 0.0));
+//    DoDwell(dwelltime);
 
 
     RCS::Pose pickpose;
     // Bolt slots don't move for now - used ClickPoint on Rviz to find
-    tf::Vector3 boltslots[4] = {
-        tf::Vector3(0.390496134758, -0.101964049041, 0.0245),
-        tf::Vector3(0.38512814045, 0.00476559251547, 0.0245),
-        tf::Vector3(0.497517108917, -0.106719098985, 0.0245),
-        tf::Vector3(0.497517108917, 0.00590129941702, 0.0245)
-    };
+
     std::vector<int> bolts;
     for (size_t i = 0; i < 4; ++i) bolts.push_back(i); // 0 1 2 3 
     std::random_shuffle(bolts.begin(), bolts.end());
@@ -187,8 +188,13 @@ void InlineRobotCommands::TestRobotCommands() {
         DoDwell(mydwell);
         MoveTo(retract * RCS::Pose(QBend, offset), boltname);
 
-        RCS::Pose placepose = RCS::Pose(QBend, boltslots[bolt]) * this->_cnc->basePose();
+        RCS::Pose placepose = RCS::Pose(QBend, boltslots[bolt]); // * this->_cnc->basePose();
         Place(placepose, boltname);
+        DoDwell(mydwell);
+        
+        std::vector<unsigned long> jointnum(cnc()->Kinematics()->NumJoints());
+        std::iota(jointnum.begin(), jointnum.end(), 0); // adjusted already to 0..n-1
+        MoveJoints(jointnum, cnc()->NamedJointMove["Safe"]);
     }
 }
 

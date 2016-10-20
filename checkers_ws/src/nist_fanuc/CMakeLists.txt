@@ -19,9 +19,10 @@ rviz_visual_tools
     moveit_ros_move_group
     moveit_ros_planning
     moveit_ros_manipulation
+    gomotion
 )
 
-find_package(Boost REQUIRED system thread chrono regex log_setup log)
+find_package(Boost REQUIRED system thread chrono regex log_setup log locale)
 find_package(Eigen REQUIRED)
 
 #The catkin_package function specifies which dependencies your package exports to its dependencies. In particular, #INCLUDE_DIRS specifies which directory in your package contains the header directory that should be on the include #path for any packages that compile against your package.
@@ -47,6 +48,7 @@ catkin_package(
 tf_conversions
 eigen_conversions
 rviz_visual_tools
+gomotion
   DEPENDS
     Boost
     Eigen
@@ -100,8 +102,6 @@ include_directories(include
 
 
 add_executable(nist_fanuc 
-
-
 src/BLogging.cpp
 src/Controller.cpp
 src/Conversions.cpp
@@ -114,13 +114,16 @@ src/RCSInterpreter.cpp
 src/RvizMarker.cpp
 src/Scene.cpp
 src/RosSetup.cpp
-src/arm_kinematics.cpp
+#src/arm_kinematics.cpp
 src/nist_fanuc.cpp
 src/trajectoryMaker.cpp
 #src/fanuc/fanuc_lrmate200id_manipulator_ikfast_solver.cpp
 #src/fanuc/fanuc_lrmate200id.cpp
 src/Demo.cpp
-src/motoman/ikfast_sia20d_manipulator.cpp
+#src/motoman/ikfast_sia20d_manipulator.cpp
+src/motomansia20dkinematics.cpp
+src/fanuclrmate200idkinematics.cpp
+src/MotionException.cpp
 )
 
 #Add all files in subdirectories of the project in
@@ -137,10 +140,13 @@ add_custom_target(dummy_${PROJECT_NAME} SOURCES ${extra_files})
 
 
 link_directories(/usr/lib/x86_64-linux-gnu/)
+link_directories(${CATKIN_DEVEL_PREFIX}/install})
 
 target_link_libraries(nist_fanuc 
 libtinyxml.a  
 libxerces-c.a  
+# I had to add ${catkin_LIBRARIES} AND remove the reference to the shared library 
+#libgomotion.so Catkin library?
 ${catkin_LIBRARIES}
 ${Boost_LIBRARIES}
 )

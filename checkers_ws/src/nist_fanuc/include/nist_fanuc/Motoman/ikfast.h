@@ -34,6 +34,7 @@
 #include <list>
 #include <stdexcept>
 
+
 #ifndef IKFAST_HEADER_COMMON
 #define IKFAST_HEADER_COMMON
 
@@ -321,8 +322,10 @@ IKFAST_API int GetIkType();
 /// \brief a hash of all the chain values used for double checking that the correct IK is used.
 IKFAST_API const char* GetKinematicsHash();
 
+
 #ifdef IKFAST_NAMESPACE
 }
 #endif
+
 
 #endif // IKFAST_HAS_LIBRARY

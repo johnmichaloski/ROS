@@ -294,7 +294,7 @@ namespace RCS {
         static const int CANON_PAUSED = 2;
         static const int CANON_ABORT = 4;
         static const int CANON_WAITING = 5;
-    };
+    }; 
 
     /**
      * \brief IRate is an interface class for defining the allowed motion rates.
@@ -493,7 +493,7 @@ namespace RCS {
      */
     class IRCSInterpreter {
     public:
-        virtual RCS::CanonCmd ParseCommand(RCS::CanonCmd cmd) = 0;
+        virtual int ParseCommand(RCS::CanonCmd incmd, RCS::CanonCmd  &outcmd) = 0;
         virtual void SetRange(std::vector<double> minrange, std::vector<double> maxrange) {
         }
     };

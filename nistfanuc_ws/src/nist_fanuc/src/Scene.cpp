@@ -21,6 +21,11 @@ using namespace boost::assign;
 #include "Debug.h"
 using namespace rviz_visual_tools;
 
+static Eigen::Translation3d spot[4] = {
+    Eigen::Translation3d(-0.20, -.20, 0.04),
+    Eigen::Translation3d(-0.20, .10, 0.04),
+    Eigen::Translation3d( 0.15, -.20, 0.04),
+    Eigen::Translation3d( 0.15, .10, 0.04)};
 
 std::map<std::string, std::string> ObjectDB::_typemapping =
         map_list_of("bolt", "mesh")
@@ -62,21 +67,15 @@ void InitScene() {
     ClearScene();
 
     // Setup up triangle_marker_ for wall drawing
-#ifdef FANUCPREFIX
     triangle_marker_.header.frame_id = "world";
-#else
-    triangle_marker_.header.frame_id = "base_link";
-#endif
+
     triangle_marker_.ns = "Triangle";
     triangle_marker_.action = visualization_msgs::Marker::ADD;
     triangle_marker_.type = visualization_msgs::Marker::TRIANGLE_LIST;
     triangle_marker_.lifetime = ros::Duration(0.0);
     // Load Cylinder ----------------------------------------------------
-#ifdef FANUCPREFIX
+
     cylinder_marker_.header.frame_id = "world";
-#else
-    cylinder_marker_.header.frame_id = "base_link";
-#endif
     cylinder_marker_.ns = "Cylinder";
     cylinder_marker_.action = visualization_msgs::Marker::ADD;
     cylinder_marker_.type = visualization_msgs::Marker::CYLINDER;
@@ -116,41 +115,34 @@ void InitScene() {
             );
 
 #endif
-#ifdef BOLTDEMO
-    //#ifdef BOLTDEMO
+//#ifdef BOLTDEMO
     // Scene bolt and boltholder objects
     ObjectDB::Save(new ObjectDB("boltholder1", "boltholder", ObjectDB::gid++,
-            (Eigen::Affine3d::Identity() * Eigen::Translation3d(0.5, 0, 0.0)) * fanucoffset00,
+            (Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, 0, 0.0)), // * fanucoffset00,
             "file:///usr/local/michalos/nistfanuc_ws/src/nist_fanuc/worldmodel/medium_gear_holder.stl",
             rviz_visual_tools::RED, 0.035));
 
     for (size_t i = 0; i < 4; i++) {
-        Eigen::Translation3d spot[4] = {Eigen::Translation3d(0.25, -.45, 0.04),
-            Eigen::Translation3d(0.25, .45, 0.04),
-            Eigen::Translation3d(0.45, -.45, 0.04),
-            Eigen::Translation3d(0.45, .45, 0.04)};
+
         std::string boltname = Globals.StrFormat("bolt%d", i + 1);
         ObjectDB::Save(new ObjectDB(boltname, "bolt",
                 ObjectDB::gid++, Eigen::Affine3d::Identity() *
-                spot[i] * fanucoffset00, // Eigen::Translation3d(0.25, -.45, 0.04),
+                spot[i], //* fanucoffset00, // Eigen::Translation3d(0.25, -.45, 0.04),
                 "file:///usr/local/michalos/nistfanuc_ws/src/nist_fanuc/worldmodel/medium_gear.stl",
                 rviz_visual_tools::RED, 0.035));
     }
-#endif
+//#endif
 }
 
 void NewScene() {
-#ifdef BOLTDEMO
+//#ifdef BOLTDEMO
     for (size_t i = 0; i < 4; i++) {
-        Eigen::Translation3d spot[4] = {Eigen::Translation3d(0.25, -.45, 0.04),
-            Eigen::Translation3d(0.25, .45, 0.04),
-            Eigen::Translation3d(0.45, -.45, 0.04),
-            Eigen::Translation3d(0.45, .45, 0.04)};
         std::string boltname = Globals.StrFormat("bolt%d", i + 1);
         UpdateScene(boltname, Eigen::Affine3d::Identity() *
-                spot[i] * fanucoffset00, rviz_visual_tools::RED);
+                spot[i],// * fanucoffset00, 
+                rviz_visual_tools::RED);
     }
-#endif
+//#endif
 }
 
 // Initialize Eigen::Affine3d http://stackoverflow.com/questions/25504397/eigen-combine-rotation-and-translation-into-one-matrix

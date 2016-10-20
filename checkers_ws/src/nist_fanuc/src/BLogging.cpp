@@ -11,6 +11,8 @@ maintenance, and subsequent redistribution.
 See NIST Administration Manual 4.09.07 b and Appendix I.
 */
 
+//#pragma message "Compiling " __FILE__ 
+
 /**
 http://stackoverflow.com/questions/20086754/how-to-use-boost-log-from-multiple-files-with-gloa
 #include "Logging.h"

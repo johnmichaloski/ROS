@@ -1,0 +1,5 @@
+<map id="gomotion::go_position" name="gomotion::go_position">
+<area shape="rect" id="node2" href="$d4/d25/structgomotion_1_1go__pose.html" title="gomotion::go_pose" alt="" coords="77,96,207,123"/>
+<area shape="rect" id="node3" href="$d3/d17/structgomotion_1_1go__quat.html" title="gomotion::go_quat" alt="" coords="5,5,131,32"/>
+<area shape="rect" id="node4" href="$df/d23/structgomotion_1_1go__cart.html" title="gomotion::go_cart" alt="" coords="155,5,279,32"/>
+</map>

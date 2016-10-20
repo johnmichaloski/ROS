@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
         std::string path(argv[0]);
         Globals.ExeDirectory = path.substr(0, path.find_last_of('/') + 1);
         Globals._appproperties["ExeDirectory"] = Globals.ExeDirectory;
-       
+
         // This hard coding of env variables is required for debugging with netbeans ide
         // If ROS environment variables are not set it cannot find "stuff"
 #ifdef DEBUG       
@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
         // setenv("PKG_CONFIG_PATH", "/usr/local/michalos/nistfanuc_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/opt/ros/indigo/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistfanuc_ws/devel/lib/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/pkgconfig:/opt/ros/indigo/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig", true);
         setenv("PATH", "/usr/local/michalos/nistfanuc_ws/devel/bin:/usr/local/michalos/nistcrcl_ws/devel/bin:/opt/ros/indigo/bin:/usr/local/jdk1.8.0_60/bin:/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:/usr/X11R6/bin:/usr/local/ulapi/bin:/usr/local/gomotion/bin:/home/isd/michalos/bin", true);
 #endif
-        
+
         // This sets up some application name/value pairs: user, hostname
         SetupAppEnvironment();
 
@@ -91,7 +91,7 @@ int main(int argc, char** argv) {
         ros::init(argc, argv, ROSPACKAGENAME);
         ros::NodeHandle nh;
         ros::Rate r(50); // 10 times a second - 10Hz
- 
+
 #if 0
         /**
          * The five different ROS verbosity levels are, in order:
@@ -135,53 +135,53 @@ int main(int argc, char** argv) {
         Globals._appproperties[ROSPACKAGENAME] = path;
         MotionException::Load();
         Nist::Config cfg;
-        cfg.load(path+"/config/config.ini");
-        std::string appname = cfg.GetSymbolValue("system.name", "").c_str( );
-        
+        cfg.load(path + "/config/config.ini");
+        std::string appname = cfg.GetSymbolValue("system.name", "").c_str();
+
         std::vector<std::string> robots = cfg.GetTokens("system.robots", ",");
         std::vector<double> ds;
-                
+
         std::vector<boost::shared_ptr<CController> > ncs;
         std::vector<InlineRobotCommands > nccmds;
-        for(size_t i=0; i< robots.size(); i++){
+        for (size_t i = 0; i < robots.size(); i++) {
 
-            std::string robotname = cfg.GetSymbolValue(robots[i] + ".longname", "robot").c_str( );
-            double dCycleTime = cfg.GetSymbolValue(robots[i] + ".cycletime", "robot").toNumber<double>( );
-            std::string prefix = cfg.GetSymbolValue(robots[i] + ".prefix", "").c_str( );
-            std::string eelink = cfg.GetSymbolValue(robots[i] + ".eelink", "").c_str( );
-            std::string baselink = cfg.GetSymbolValue(robots[i] + ".baselink", "").c_str( );
-            std::vector<double> dbase=cfg.GetDblTokens(robots[i] + ".base", ",");
-            std::vector<double> dtool=cfg.GetDblTokens(robots[i] + ".tool", ",");
-            std::vector<double> dbend=cfg.GetDblTokens(robots[i] + ".bend", ",");
-            std::string kinsolver = cfg.GetSymbolValue(robots[i] + ".kinsolver", "").c_str( );
-            std::vector<std::string> jointmovenames = cfg.GetTokens(robots[i] + ".jointmovenames", ",")  ;
-            int bCsvLogging = cfg.GetSymbolValue(robots[i] + ".csvlogging", "0").toNumber<int>( );
+            std::string robotname = cfg.GetSymbolValue(robots[i] + ".longname", "robot").c_str();
+            double dCycleTime = cfg.GetSymbolValue(robots[i] + ".cycletime", "robot").toNumber<double>();
+            std::string prefix = cfg.GetSymbolValue(robots[i] + ".prefix", "").c_str();
+            std::string eelink = cfg.GetSymbolValue(robots[i] + ".eelink", "").c_str();
+            std::string baselink = cfg.GetSymbolValue(robots[i] + ".baselink", "").c_str();
+            std::vector<double> dbase = cfg.GetDblTokens(robots[i] + ".base", ",");
+            std::vector<double> dtool = cfg.GetDblTokens(robots[i] + ".tool", ",");
+            std::vector<double> dbend = cfg.GetDblTokens(robots[i] + ".bend", ",");
+            std::string kinsolver = cfg.GetSymbolValue(robots[i] + ".kinsolver", "").c_str();
+            std::vector<std::string> jointmovenames = cfg.GetTokens(robots[i] + ".jointmovenames", ",");
+            int bCsvLogging = cfg.GetSymbolValue(robots[i] + ".csvlogging", "0").toNumber<int>();
             // Fixme: add some sanity checking
-            
+
             ncs.push_back(boost::shared_ptr<CController>(new RCS::CController(robotname, dCycleTime)));
             ncs[i]->SetToolOffset(Conversion::CreatePose(dtool));
             ncs[i]->SetBaseOffset(Conversion::CreatePose(dbase));
             ncs[i]->QBend() = tf::Quaternion(Deg2Rad(dbend[0]), Deg2Rad(dbend[1]), Deg2Rad(dbend[2]));
-            ncs[i]->bCvsPoseLogging() =false;
+            ncs[i]->bCvsPoseLogging() = false;
             boost::shared_ptr<IKinematics> kin;
             ncs[i]->CycleTime() = dCycleTime;
-            
-            if(kinsolver ==  "FanucLRMate200idFastKinematics")
+
+            if (kinsolver == "FanucLRMate200idFastKinematics")
                 kin = boost::shared_ptr<IKinematics>(new FanucLRMate200idFastKinematics(ncs[i]));
-            if(kinsolver ==  "MotomanSia20dFastKinematics")
+            if (kinsolver == "MotomanSia20dFastKinematics")
                 kin = boost::shared_ptr<IKinematics>(new MotomanSia20dFastKinematics(ncs[i]));
             kin->Init(std::string("manipulator"), eelink, baselink);
             kin->Init(nh);
             ncs[i]->Kinematics() = kin;
             ncs[i]->Setup(nh, prefix);
-            
+
             // This should be selectable
-            ncs[i]->_interpreter = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter(ncs[i], kin)); 
-           
-        //    ncs[i]->NamedJointMove["Safe"] = ToVector<double>(6, 1.49, -0.17, -1.14, 0.11, -0.45, -1.67);
-            for(size_t j=0; j< jointmovenames.size(); j++){
-                 ds= cfg.GetDblTokens(robots[i]+"." + jointmovenames[j], ",");
-                ncs[i]->NamedJointMove[jointmovenames[j]] = ds;          
+            ncs[i]->_interpreter = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter(ncs[i], kin));
+
+            //    ncs[i]->NamedJointMove["Safe"] = ToVector<double>(6, 1.49, -0.17, -1.14, 0.11, -0.45, -1.67);
+            for (size_t j = 0; j < jointmovenames.size(); j++) {
+                ds = cfg.GetDblTokens(robots[i] + "." + jointmovenames[j], ",");
+                ncs[i]->NamedJointMove[jointmovenames[j]] = ds;
             }
             nccmds.push_back(InlineRobotCommands(ncs[i])); // , fanuchints);
 
@@ -194,97 +194,58 @@ int main(int argc, char** argv) {
             LOG_DEBUG << "safe " << VectorDump<double>(ncs[i]->NamedJointMove["Safe"]).c_str();
             LOG_DEBUG << "Joint names " << VectorDump<std::string>(ncs[i]->Kinematics()->JointNames()).c_str();
             //LOG_DEBUG << "cycletime " << ncs[i]->Name();
-            
+
         }
 
         InitScene();
-
-#ifdef CHECKERS
-        RvizCheckers rvizgame(nh);
-        rvizgame.RvizSetup();
-#endif
-
         DrawScene(); // Debug: LOG_DEBUG << ObjectDB::DumpDB();
 
-        for(size_t j=0; j< ncs.size(); j++){
-         ncs[j]->Start(); // start the Controller Session thread
-         nccmds[j].MoveJoints(ncs[j]->Kinematics()->AllJointNumbers(), ncs[j]->NamedJointMove["Safe"]);
-           
+        // Move robots to "safe position"
+        for (size_t j = 0; j < ncs.size(); j++) {
+            ncs[j]->Start(); // start the Controller Session thread
+            nccmds[j].MoveJoints(ncs[j]->Kinematics()->AllJointNumbers(), ncs[j]->NamedJointMove["Safe"]);
+
         }
 
-#ifdef CHECKERS
-        InlineRobotCommands * Ncs[2]={&nccmds[0], &nccmds[1]};
-        //InlineRobotCommands * Ncs[2]={&fanucrobot, &fanucrobot};
-        //InlineRobotCommands * Ncs[2]={&motomanrobot, &motomanrobot};
+        ClearScene();
+        NewScene();
+        DrawScene();
         
-                // Play checkers - only move markers, no robot interaction
-                Checkers::Move from, to;
-                int player;
-        for (size_t i = 0; i < 40; i++) {
-            if (bPublishPoint) {
-                while (!rvizgame.Ready())
-                        ros::spinOnce();
-                        rvizgame.Ready() = false;
-                }
-            if (rvizgame.CheckersMove(player, from, to))
-                break;
-                rvizgame.Game().printDisplayFancy(rvizgame.Game().Board());
-            if (player == Checkers::RED) {
-                LOG_DEBUG << "RED Move " << Ncs[0]->cnc()->Name().c_str();
-                rvizgame.PhysicalMove(*Ncs[0], player, from.row, from.col, to);
-            } else {
-                LOG_DEBUG << "BLACK Move " << Ncs[0]->cnc()->Name().c_str();
-                rvizgame.PhysicalMove(*Ncs[1], player, from.row, from.col, to);
-            }
-
-#if 0
-            // Synchronize with rviz let PublishPoint pause execution
-            if (rvizdemo.Clicked()) {
-                for (size_t j = 0; j < Ncs.size(); j++)
-                    Ncs[0]->cnc()->Suspend();
-                while (1) {
-                    ros::spinOnce();
-                    ros::Duration(0.2).sleep();
-                    if (rvizdemo.Clicked())
-                        break;
-                }
-                for (size_t j = 0; j < Ncs.size(); j++)
-                    Ncs[0]->cnc()->Resume();
-
-            }
-#endif
-            ros::spinOnce();
-                    ros::spinOnce();
-                    ros::Duration(0.2).sleep();
-        }
-#endif
+#if 1
+        // This waits for a publish point from rviz before proceeding
         while (!rvizdemo.Ready()) {
             ros::Duration(1.0).sleep();
         }
-
-
+        ros::Duration(5.0).sleep();
+#endif
         //spinner.stop();
         //      ros::spin();
         do {
-            //for(size_t i=0; i< 10; i++)
-            //   ros::spinOnce();
-#ifdef BOLTDEMO
-            if (RCS::Fnc->crclcmds.SizeMsgQueue() == 0) {
+            for (size_t i = 0; i < ncs.size(); i++) {
+                if (ncs[i]->crclcmds.SizeMsgQueue() == 0) {
+                    nccmds[i].TestRobotCommands();
+                }
+                while (ncs[i]->IsBusy()) {
+                    ros::spinOnce();
+                    ros::spinOnce();
+                    r.sleep();
+                }
                 ClearScene();
-                        NewScene();
-                        DrawScene();
-                        fanucrobot.TestRobotCommands();
-            }
+                NewScene();
+                DrawScene();
+           }
+
+#ifdef BOLTDEMO
 #endif           
             r.sleep();
         } while (ros::ok());
-                spinner.stop();
-                LOG_DEBUG << "Cntrl C pressed \n" << std::flush;
+        spinner.stop();
+        LOG_DEBUG << "Cntrl C pressed \n" << std::flush;
 
-                // ^C pressed - stop all threads or will hang
-                RCS::Thread::StopAll(); // includes thread for Controller, robotstatus
+        // ^C pressed - stop all threads or will hang
+        RCS::Thread::StopAll(); // includes thread for Controller, robotstatus
 
-        } catch (std::exception e) {
+    } catch (std::exception e) {
         LOG_FATAL << Globals.StrFormat("%s%s", "Abnormal exception end to  CRCL2Robot", e.what());
     } catch (...) {
         LOG_FATAL << "Abnormal exception end to  CRCL2Robot";

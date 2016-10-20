@@ -12,19 +12,21 @@
  */
 
 #define BOOST_ALL_NO_LIB
+//#pragma message "Compiling " __FILE__ 
 
 #include "Controller.h"
 #include <boost/exception/all.hpp>
 #include <boost/thread.hpp>
 #include <strstream>
 #include <iostream>
+#include <csignal>
 
 #include "urdf_model/rosmath.h"
 #include "RvizMarker.h"
 #include "Debug.h"
 #include "Scene.h"
 #include "BLogging.h"
-
+#include "MotionException.h"
 // RCS namespace declarations
 //////////////////////////////////
 namespace RCS {
@@ -32,8 +34,8 @@ namespace RCS {
 
     // ----------------------------------------------------
     // Extern definitions
-    boost::shared_ptr<CController> Fnc = boost::shared_ptr<CController>(new RCS::CController("Fanuc CNC", DEFAULT_LOOP_CYCLE));
-    boost::shared_ptr<CController> Mnc = boost::shared_ptr<CController>(new RCS::CController("Motoman CNC", DEFAULT_LOOP_CYCLE));
+   // boost::shared_ptr<CController> Fnc = boost::shared_ptr<CController>(new RCS::CController("Fanuc CNC", DEFAULT_LOOP_CYCLE));
+    //boost::shared_ptr<CController> Mnc = boost::shared_ptr<CController>(new RCS::CController("Motoman CNC", DEFAULT_LOOP_CYCLE));
 
     // Static definitions
     bool CController::bRvizPubSetup = false;
@@ -60,9 +62,6 @@ namespace RCS {
     bool CController::Verify() {
         IfDebug(LOG_DEBUG << "CController::Verify");
         assert(Kinematics() != NULL);
-#ifdef  MOVEITKIN
-        assert(TrajectoryModel() != NULL);
-#endif
     }
 
     void CController::CmdCallback(const nistcrcl::CrclCommandMsg::ConstPtr& cmdmsg) {
@@ -70,7 +69,6 @@ namespace RCS {
         nistcrcl::CrclCommandMsg cmd(*cmdmsg);
         ROS_INFO("CController::CmdCallback");
         crclcmds.AddMsgQueue(cmd);
-
     }
 
     void CController::Setup(ros::NodeHandle &nh, std::string prefix) {
@@ -184,7 +182,7 @@ namespace RCS {
             if (crclcmds.SizeMsgQueue() > 0 && robotcmds.SizeMsgQueue() == 0) {
                 // Translate into Cnc.cmds 
                 // FIXME: this is an upcast
-                RCS::CanonCmd cc;
+                RCS::CanonCmd cc, newcc;
                 
                 nistcrcl::CrclCommandMsg msg = crclcmds.PeekFrontMsgQueue();
                 //nistcrcl::CrclCommandMsg msg = crclcmds.PopFrontMsgQueue();
@@ -193,10 +191,18 @@ namespace RCS {
                 LOG_TRACE << "Msg Joints " << RCS::VectorDump<double>(msg.joints.position).c_str();
                 LOG_TRACE << "CC Joints " << RCS::VectorDump<double>(cc.joints.position).c_str();
 
-    
-                robotcmds.AddMsgQueue(_interpreter->ParseCommand(cc));
+                int status = _interpreter->ParseCommand(cc, newcc);
+                robotcmds.AddMsgQueue(newcc);
                 // Signals done with canon command
-                crclcmds.PopFrontMsgQueue();
+                if(status== CanonStatusType::CANON_DONE) 
+                {
+                    crclcmds.PopFrontMsgQueue();
+                }
+                else if(status== CanonStatusType::CANON_ERROR )
+                {
+                    crclcmds.ClearMsgQueue();
+
+                }
             }
 
             // Motion commands to robot - only joint at this point
@@ -253,23 +259,18 @@ namespace RCS {
                     invBasePose() = basePose().inverse();
                 }
                 else {
-#ifdef FEEDBACKTEST2
-                    status.currentjoints = Kinematics()->UpdateJointState(_newcc.jointnum, status.currentjoints, _newcc.joints);
-#else
                     // Should have been updated by interpreter - and many more of them
                     status.currentjoints = _newcc.joints;
-#endif
                     status.currentpose = Kinematics()->FK(status.currentjoints.position); /**<  current robot pose */
                     status.currentjoints.header.stamp = ros::Time(0);
                     LOG_DEBUG << "Current Pose " << DumpPoseSimple(status.currentpose).c_str();
                     LOG_DEBUG << "Current Joints " << RCS::VectorDump<double>(status.currentjoints.position).c_str();
-                    Kinematics()->VerifyLimits(status.currentjoints.position);
-#if 0
-                    if (!_newcc.partname.empty()) {
-                        Eigen::Affine3d& pose = ObjectDB::FindPose(_newcc.partname);
-                        UpdateScene(_newcc.partname, pose, rviz_visual_tools::CLEAR);
+                    std::vector<int> outofbounds;
+                    std::string msg;
+                    if (Kinematics()->CheckJointPositionLimits(status.currentjoints.position, outofbounds, msg)) {
+                        throw MotionException(1000, msg.c_str());
                     }
-#endif
+
                     rviz_jntcmd.publish(status.currentjoints);
                     rviz_jntcmd.publish(status.currentjoints);
                     ros::spinOnce();
@@ -299,7 +300,9 @@ namespace RCS {
 #endif
             if (bCvsPoseLogging())
                 MotionLogging();
-
+        } catch (MotionException & e) {
+            std::cerr << "Exception in  CController::Action() thread: " << e.what() << "\n";
+            std::raise(SIGINT);
         } catch (std::exception & e) {
             std::cerr << "Exception in  CController::Action() thread: " << e.what() << "\n";
         } catch (...) {

@@ -72,10 +72,11 @@ int BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd) 
         }
         //_nc->robotcmds.AddMsgQueue(cmd);
     } catch (MotionException & e) {
-        LOG_DEBUG << "Exception in  CController::Action() thread: " << e.what() << "\n";
-        cmd.crclcommand=CanonCmdType::CANON_STOP_MOTION;
-        cmd.opmessage=e.what();
-        cmd.stoptype=CanonStopMotionType::NORMAL;
+        LOG_DEBUG << "Exception in  BangBangInterpreter::ParseCommand() thread: " << e.what() << "\n";
+        cmd.crclcommand = CanonCmdType::CANON_STOP_MOTION;
+        cmd.opmessage = e.what();
+        cmd.stoptype = CanonStopMotionType::NORMAL;
+        outcmd = cmd;
         return CanonStatusType::CANON_ERROR;
     }
     outcmd = cmd;

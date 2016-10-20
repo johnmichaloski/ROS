@@ -1,6 +1,73 @@
+////////////////////////////////////////////////////////////
+
+Get the points where the gear tray insertion points are:
+rostopic echo /clicked_point
+
+////////////////////////////////////////////////////////////
+
+       InitScene();
+
+#ifdef CHECKERS
+        RvizCheckers rvizgame(nh);
+        rvizgame.RvizSetup();
+#endif
+
+        DrawScene(); // Debug: LOG_DEBUG << ObjectDB::DumpDB();
+
+        for(size_t j=0; j< ncs.size(); j++){
+         ncs[j]->Start(); // start the Controller Session thread
+         nccmds[j].MoveJoints(ncs[j]->Kinematics()->AllJointNumbers(), ncs[j]->NamedJointMove["Safe"]);
+           
+        }
 
 
+#ifdef CHECKERS
+        InlineRobotCommands * Ncs[2]={&nccmds[0], &nccmds[1]};
+        //InlineRobotCommands * Ncs[2]={&fanucrobot, &fanucrobot};
+        //InlineRobotCommands * Ncs[2]={&motomanrobot, &motomanrobot};
+        
+                // Play checkers - only move markers, no robot interaction
+                Checkers::Move from, to;
+                int player;
+        for (size_t i = 0; i < 40; i++) {
+            if (bPublishPoint) {
+                while (!rvizgame.Ready())
+                        ros::spinOnce();
+                        rvizgame.Ready() = false;
+                }
+            if (rvizgame.CheckersMove(player, from, to))
+                break;
+                rvizgame.Game().printDisplayFancy(rvizgame.Game().Board());
+            if (player == Checkers::RED) {
+                LOG_DEBUG << "RED Move " << Ncs[0]->cnc()->Name().c_str();
+                rvizgame.PhysicalMove(*Ncs[0], player, from.row, from.col, to);
+            } else {
+                LOG_DEBUG << "BLACK Move " << Ncs[0]->cnc()->Name().c_str();
+                rvizgame.PhysicalMove(*Ncs[1], player, from.row, from.col, to);
+            }
 
+#if 0
+            // Synchronize with rviz let PublishPoint pause execution
+            if (rvizdemo.Clicked()) {
+                for (size_t j = 0; j < Ncs.size(); j++)
+                    Ncs[0]->cnc()->Suspend();
+                while (1) {
+                    ros::spinOnce();
+                    ros::Duration(0.2).sleep();
+                    if (rvizdemo.Clicked())
+                        break;
+                }
+                for (size_t j = 0; j < Ncs.size(); j++)
+                    Ncs[0]->cnc()->Resume();
+
+            }
+#endif
+            ros::spinOnce();
+                    ros::spinOnce();
+                    ros::Duration(0.2).sleep();
+        }
+#endif
+////////////////////////////////////////////////////////////
 
 #if 0
         // Initialize Controller...

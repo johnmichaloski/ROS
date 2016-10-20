@@ -56,7 +56,102 @@ using std::string;
 
 //http://wiki.ros.org/pr2_mechanism/Tutorials/Coding%20a%20realtime%20Cartesian%20controller%20with%20KDL
 
+/**
+ #if 0
+//https://github.com/davetcoleman/kdlc_kinematic_plugin/blob/master/src/kdlc_kinematics_plugin.cpp
+// http://wiki.ros.org/arm_navigation/Tutorials/Running%20arm%20navigation%20on%20non-PR2%20arm
+// https://github.com/ros-planning/moveit_kinematics_tests/blob/kinetic-devel/kinematics_base_test/src/test_kinematics_plugin.cpp
+// https://github.com/IDSCETHZurich/re_trajectory-generator/blob/master/poseToOrocos/src/poseStampedLoop.cpp
+// http://docs.ros.org/jade/api/moveit_msgs/html/msg/PositionIKRequest.html
+//http://docs.ros.org/hydro/api/ric_mc/html/GetPositionIK_8h_source.html
+#include <boost/shared_ptr.hpp>
+#include <moveit_msgs/GetPositionFK.h>
+#include <moveit_msgs/GetPositionIK.h>
+#include <moveit_msgs/GetKinematicSolverInfo.h>
+#include <moveit_msgs/KinematicSolverInfo.h>
 
+class ArmKinematics : public IKinematics {
+protected:
+
+public:
+
+    ArmKinematics(std::string prefix, tf::Pose baseoffset) {
+        this->prefix = prefix;
+        this->baseoffset=baseoffset;
+      
+    }
+    virtual RCS::Pose FK(std::vector<double> jv) {
+        moveit_msgs::GetPositionFK::Response response;
+        moveit_msgs::GetPositionFK::Request request;
+        request.fk_link_names = link_names;
+        request.robot_state.joint_state.header.frame_id = _rootlinkname; // prefix + "base_link";
+        request.robot_state.joint_state.name = joint_names;
+        request.robot_state.joint_state.position = jv;
+        request.header.frame_id =  _rootlinkname; //prefix + "base_link";
+        armkin->getPositionFK(request, response);
+        RCS::Pose pose;
+        Conversion::GeometryPose2TfPose(response.pose_stamped[0].pose, pose);
+        return pose;
+    }
+
+    virtual std::vector<double> IK(RCS::Pose  pose,
+            std::vector<double> oldjoints) {
+        moveit_msgs::GetPositionIK::Response response;
+        moveit_msgs::GetPositionIK::Request request;
+        request.ik_request.pose_stamped.header.stamp = ros::Time::now();
+        request.ik_request.ik_link_name = _tiplinkname;
+        request.ik_request.group_name = "manipulator";
+        request.ik_request.robot_state.joint_state.name = joint_names;
+        request.ik_request.ik_link_names = link_names;
+        request.ik_request.robot_state.joint_state.position = oldjoints;
+        request.ik_request.timeout = ros::Duration(10.0);
+        request.ik_request.pose_stamped.header.frame_id = _rootlinkname;
+        
+        Conversion::TfPose2GeometryPose(pose, request.ik_request.pose_stamped.pose);
+
+        //request.pose_stamped.pose = pose;
+        request.ik_request.attempts = 1;
+        armkin->getPositionIK(request, response);
+        //response.error_code.val == response.error_code.SUCCES
+        return response.solution.joint_state.position;
+    }
+
+    virtual size_t AllPoseToJoints(RCS::Pose & pose,
+            std::vector<std::vector<double> > & newjoints) {
+        return 0;
+    }
+
+    virtual std::vector<double> NearestJoints(
+            std::vector<double> oldjoints,
+            std::vector<std::vector<double> > & newjoints) {
+        ROS_ERROR("ArmKinematics::NearestJoints() not implemented");
+        return std::vector<double>();
+    }
+
+
+    virtual bool IsSingular(RCS::Pose  pose, double threshold) {
+        return false;
+    }
+
+    virtual void Init(ros::NodeHandle &nh) {
+        armkin = boost::shared_ptr<::Kinematics>(new ::Kinematics());
+        armkin->init(nh, _tiplinkname, _rootlinkname);
+        moveit_msgs::GetKinematicSolverInfo::Request request;
+        moveit_msgs::GetKinematicSolverInfo::Response response;
+        armkin->getFKSolverInfo(request, response);
+        joint_names.clear();
+        link_names.clear();
+        num_joints = response.kinematic_solver_info.joint_names.size();
+        for (unsigned int i = 0; i < response.kinematic_solver_info.joint_names.size(); i++) {
+            joint_names.push_back(response.kinematic_solver_info.joint_names[i]);
+        }
+        for (unsigned int i = 0; i < response.kinematic_solver_info.link_names.size(); i++) {
+            link_names.push_back(response.kinematic_solver_info.link_names[i]);
+        }
+    }
+};
+#endif
+ */
 class Kinematics {
     public:
         Kinematics();

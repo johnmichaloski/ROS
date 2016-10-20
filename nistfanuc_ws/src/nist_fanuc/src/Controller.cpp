@@ -257,20 +257,26 @@ namespace RCS {
                 else if (_newcc.crclcommand == CanonCmdType::CANON_SET_BASE_POSE) {
                     basePose() = Conversion::GeomMsgPose2RcsPose(_newcc.finalpose);
                     invBasePose() = basePose().inverse();
+                } else if (_newcc.crclcommand == CanonCmdType::CANON_STOP_MOTION) {
+                    LOG_DEBUG << "STOP Controller ";
                 }
+
                 else {
                     // Should have been updated by interpreter - and many more of them
+                   LOG_DEBUG << "Current Joints " << RCS::VectorDump<double>(_newcc.joints.position).c_str();
                     status.currentjoints = _newcc.joints;
                     status.currentpose = Kinematics()->FK(status.currentjoints.position); /**<  current robot pose */
                     status.currentjoints.header.stamp = ros::Time(0);
                     LOG_DEBUG << "Current Pose " << DumpPoseSimple(status.currentpose).c_str();
-                    LOG_DEBUG << "Current Joints " << RCS::VectorDump<double>(status.currentjoints.position).c_str();
+                    //LOG_DEBUG << "Current Joints " << RCS::VectorDump<double>(status.currentjoints.position).c_str();
+                    // Fixme
+#if 0
                     std::vector<int> outofbounds;
                     std::string msg;
                     if (Kinematics()->CheckJointPositionLimits(status.currentjoints.position, outofbounds, msg)) {
                         throw MotionException(1000, msg.c_str());
                     }
-
+#endif
                     rviz_jntcmd.publish(status.currentjoints);
                     rviz_jntcmd.publish(status.currentjoints);
                     ros::spinOnce();

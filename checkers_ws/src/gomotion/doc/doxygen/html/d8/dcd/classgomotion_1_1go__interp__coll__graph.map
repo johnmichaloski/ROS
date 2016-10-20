@@ -1,0 +1,4 @@
+<map id="gomotion::go_interp" name="gomotion::go_interp">
+<area shape="rect" id="node2" href="$df/d7b/structgomotion_1_1points.html" title="This structure holds the points to be interpolated. " alt="" coords="5,5,120,32"/>
+<area shape="rect" id="node3" href="$dd/ddd/structgomotion_1_1coeff.html" title="This structure holds the polynomial coefficients. " alt="" coords="145,5,255,32"/>
+</map>

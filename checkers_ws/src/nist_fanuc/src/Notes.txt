@@ -1,5 +1,79 @@
 
 
+
+
+#if 0
+        // Initialize Controller...
+#ifdef FANUC
+        // ikfast kinematic solver
+        RCS::Fnc->SetToolOffset(Conversion::CreatePose(cfg.GetDblTokens(robots[0] + ".tool", ",")));
+        RCS::Fnc->SetBaseOffset(Conversion::CreatePose(cfg.GetDblTokens(robots[0] + ".base", ",")));
+        ds= cfg.GetDblTokens(robots[0] + ".bend", ",");
+        RCS::Fnc->QBend() = tf::Quaternion(Deg2Rad(ds[0]), Deg2Rad(ds[1]), Deg2Rad(ds[2]));
+        
+        boost::shared_ptr<IKinematics> fkin;
+        fkin = boost::shared_ptr<IKinematics>(new FanucLRMate200idFastKinematics());
+        fkin->Init(std::string("manipulator"), std::string("fanuc_link_6"), std::string("world"));
+        fkin->Init(nh);
+        RCS::Fnc->Kinematics() = fkin;
+        RCS::Fnc->CycleTime() = DEFAULT_LOOP_CYCLE;
+        RCS::Fnc->NamedJointMove["Safe"] = ToVector<double>(6, 1.49, -0.17, -1.14, 0.11, -0.45, -1.67);
+        RCS::Fnc->Setup(nh, "fanuc_");
+        //FanucNearestJointsLookup fanuchints(RCS::Fnc, fkin);
+        // hints fail, and I need to factor in robot base offset
+        //fanuchints.SetRobotHints();  
+        InlineRobotCommands fanucrobot(RCS::Fnc); // , fanuchints);
+        RCS::Fnc->Kinematics() = fkin;
+        RCS::Fnc->_interpreter = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter(RCS::Fnc, fkin)); // , fanuchints));
+#endif
+
+#ifdef MOTOMAN
+        RCS::Mnc->SetToolOffset(Conversion::CreatePose(cfg.GetDblTokens(robots[1] + ".tool", ",")));
+        RCS::Mnc->SetBaseOffset(Conversion::CreatePose(cfg.GetDblTokens(robots[1] + ".base", ",")));
+        ds= cfg.GetDblTokens(robots[1] + ".bend", ",");
+        RCS::Mnc->QBend() = tf::Quaternion(Deg2Rad(ds[0]), Deg2Rad(ds[1]), Deg2Rad(ds[2]));
+
+        
+        boost::shared_ptr<IKinematics> fastkin;
+        fastkin = boost::shared_ptr<IKinematics>(new MotomanSia20dFastKinematics());
+        // Initialization of Controller instantiation of shared objects  
+        fastkin->Init(std::string("manipulator"), std::string("motoman_link_t"), std::string("world"));
+        fastkin->Init(nh);
+        //        LOG_DEBUG << "Motoman Joint Names=" << VectorDump<std::string>(fastkin->JointNames()).c_str();
+        RCS::Mnc->Kinematics() = fastkin;
+        RCS::Mnc->Setup(nh, "motoman_");
+        RCS::Mnc->CycleTime() = DEFAULT_LOOP_CYCLE;
+
+        //RCS::Mnc->NamedJointMove["Safe"] = ToVector<double>(7, 1.30, -0.84, 0.08, 2.26, 2.96, -0.38, -1.28);
+        RCS::Mnc->NamedJointMove["Safe"] = ToVector<double>(7, 1.44, -0.12, 0.19, 2.26, 3.14, -1.34, -1.28);
+
+        //MotomanNearestJointsLookup motohints(RCS::Mnc, fastkin);
+        //motohints.SetRobotHints();
+        InlineRobotCommands motomanrobot(RCS::Mnc); // , motohints);
+        RCS::Mnc->_interpreter = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter(RCS::Mnc, fastkin)); // , motohints));
+#endif
+#endif
+#if 0
+#ifdef   MULTITHREADED
+#ifdef FANUC   
+        RCS::Fnc->Start(); // start the Controller Session thread
+        fanucrobot.MoveJoints(RCS::Fnc->Kinematics()->AllJointNumbers(), RCS::Fnc->NamedJointMove["Safe"]);
+#endif
+#ifdef MOTOMAN
+        RCS::Mnc->Start(); // start the Controller Session thread
+        motomanrobot.MoveJoints(RCS::Mnc->Kinematics()->AllJointNumbers(), RCS::Mnc->NamedJointMove["Safe"]);
+        
+#endif
+#endif
+#endif
+
+
+#ifndef   MULTITHREADED
+            while (RCS::Mnc->IsBusy()) {
+                RCS::Mnc->Action();
+            }
+#endif
+=========================================================================
 #if 0
         // wait till move  done...
         while (robot.cnc()->crclcmds.SizeMsgQueue() > 0) // wait till nothing left or messes up timing
@@ -1045,4 +1119,35 @@ int SimpleMotionInterpreter::ParseCommand(RCS::CanonCmd cc) {
     }
     return 0;
 }
+#endif
+
+
+#if 0
+void MotomanSia20dFastKinematics::Init(ros::NodeHandle &nh) {
+    armkin = boost::shared_ptr<::Kinematics>(new ::Kinematics());
+    armkin->init(nh, _tiplinkname, _rootlinkname);
+    moveit_msgs::GetKinematicSolverInfo::Request request;
+    moveit_msgs::GetKinematicSolverInfo::Response response;
+    armkin->getFKSolverInfo(request, response);
+    joint_names.clear();
+    link_names.clear();
+    num_joints = response.kinematic_solver_info.joint_names.size();
+    for (unsigned int i = 0; i < response.kinematic_solver_info.joint_names.size(); i++) {
+        joint_names.push_back(response.kinematic_solver_info.joint_names[i]);
+    }
+    for (unsigned int i = 0; i < response.kinematic_solver_info.link_names.size(); i++) {
+        link_names.push_back(response.kinematic_solver_info.link_names[i]);
+    }
+    for (int i = 0; i < armkin->joint_min.rows(); i++)
+        joint_min.push_back(armkin->joint_min(i));
+    for (int i = 0; i < armkin->joint_max.rows(); i++)
+        joint_max .push_back(armkin->joint_max(i));
+}
+#endif
+
+#if 0
+                    if (!_newcc.partname.empty()) {
+                        Eigen::Affine3d& pose = ObjectDB::FindPose(_newcc.partname);
+                        UpdateScene(_newcc.partname, pose, rviz_visual_tools::CLEAR);
+                    }
 #endif

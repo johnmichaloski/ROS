@@ -10,6 +10,8 @@
  *
  * See NIST Administration Manual 4.09.07 b and Appendix I.
  */
+//#pragma message "Compiling " __FILE__ 
+
 #include "Globals.h"
 #include <map>
 #include <iostream>
