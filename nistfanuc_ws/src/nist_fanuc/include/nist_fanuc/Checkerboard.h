@@ -328,3 +328,14 @@ Eigen::Affine3d GetPose(int row, int col) {
     }
 
 };
+
+// Checkers game - demo defined in Demo.cpp
+
+class CheckersGame {
+    boost::shared_ptr<RvizCheckers> rvizgame;
+    ros::NodeHandle & _nh;
+public:
+    CheckersGame(ros::NodeHandle & nh);
+    void Setup();
+    void Play(InlineRobotCommands *,InlineRobotCommands *);
+};

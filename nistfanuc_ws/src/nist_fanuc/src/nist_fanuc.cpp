@@ -43,8 +43,6 @@
 #include "Test.h"
 #include "Config.h"
 #include "nist_fanuc/MotionException.h"
-//Eigen::Affine3d fanucoffset00 = Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, -0.5, 0.0);
-//Eigen::Affine3d motomanoffset00 = Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, 0.5, 0.0);
 
 int main(int argc, char** argv) {
     int bPublishPoint = 0;
@@ -55,37 +53,12 @@ int main(int argc, char** argv) {
         Globals.ExeDirectory = path.substr(0, path.find_last_of('/') + 1);
         Globals._appproperties["ExeDirectory"] = Globals.ExeDirectory;
 
-        // This hard coding of env variables is required for debugging with netbeans ide
-        // If ROS environment variables are not set it cannot find "stuff"
-#ifdef DEBUG       
-        setenv("ROS_ROOT", "/opt/ros/indigo/share/ros", true);
-        setenv("ROS_PACKAGE_PATH", "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes:"
-                "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes_core:"
-                "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes_trajectory:"
-                "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes_moveit:"
-                "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes_planner:"
-                "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes_utilities:"
-                "/usr/local/michalos/nistfanuc_ws/src/fanuc_lrmate200id_support:"
-                "/usr/local/michalos/nistfanuc_ws/src/nist_fanuc:"
-                "/usr/local/michalos/nistfanuc_ws/src/nistcrcl:"
-                "/opt/ros/indigo/share:/opt/ros/indigo/stacks", true);
-        setenv("ROS_MASTER_URI", "http://localhost:11311", true);
-        setenv("ROS_DISTRO", "indigo", true);
-        setenv("ROS_ETC_DIR", "/opt/ros/indigo/etc/ros", true);
-        setenv("PYTHONPATH", "/usr/local/michalos/nistfanuc_ws/devel/lib/python2.7/dist-packages:"
-                "/usr/local/michalos/nistcrcl_ws/devel/lib/python2.7/dist-packages:"
-                "/opt/ros/indigo/lib/python2.7/dist-packages:"
-                "/home/isd/michalos/el-robotics-core/nist_kitting/src", true);
-
-        // setenv("PKG_CONFIG_PATH", "/usr/local/michalos/nistfanuc_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/opt/ros/indigo/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistfanuc_ws/devel/lib/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/pkgconfig:/opt/ros/indigo/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig", true);
-        setenv("PATH", "/usr/local/michalos/nistfanuc_ws/devel/bin:/usr/local/michalos/nistcrcl_ws/devel/bin:/opt/ros/indigo/bin:/usr/local/jdk1.8.0_60/bin:/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:/usr/X11R6/bin:/usr/local/ulapi/bin:/usr/local/gomotion/bin:/home/isd/michalos/bin", true);
-#endif
-
-        // This sets up some application name/value pairs: user, hostname
+        // This sets up tother application _appproperties name/value pairs: user, hostname
         SetupAppEnvironment();
 
-        //SetupRosEnvironment - needs to go before ROS!
-        //SetupRosEnvironment(""); // FAILS hard coded env above
+        // This hard coding of env variables is required for debugging with netbeans ide
+        // If ROS environment variables are not set it cannot find "stuff"
+        SetupRosEnvironment(); // needs to go before ROS!
 
         // Initialize ROS
         ros::init(argc, argv, ROSPACKAGENAME);
@@ -106,10 +79,7 @@ int main(int argc, char** argv) {
             ros::console::notifyLoggerLevelsChanged();
         }
 #endif
-        RvizDemo rvizdemo(nh);
-
-        // Accessing Private Parameters
-        // ros::param::get("~private_name", param); 
+ 
         boostlogfile = nh.param<std::string>("logfile", "/home/isd/michalos/Documents/example.log");
         boostloglevel = (boost::log::v2_mt_posix::trivial::severity_level) nh.param<int>("loglevel", 0); // 0 = debug
         bPublishPoint = nh.param<int>("PublishPoint", 0);
@@ -196,47 +166,19 @@ int main(int argc, char** argv) {
             //LOG_DEBUG << "cycletime " << ncs[i]->Name();
 
         }
-
-        InitScene();
-        DrawScene(); // Debug: LOG_DEBUG << ObjectDB::DumpDB();
-
+        
         // Move robots to "safe position"
         for (size_t j = 0; j < ncs.size(); j++) {
             ncs[j]->Start(); // start the Controller Session thread
             nccmds[j].MoveJoints(ncs[j]->Kinematics()->AllJointNumbers(), ncs[j]->NamedJointMove["Safe"]);
 
         }
-
-        ClearScene();
-        NewScene();
-        DrawScene();
-        
-#if 1
-        // This waits for a publish point from rviz before proceeding
-        while (!rvizdemo.Ready()) {
-            ros::Duration(1.0).sleep();
-        }
-        ros::Duration(5.0).sleep();
-#endif
-        //spinner.stop();
-        //      ros::spin();
+        GearDemoSetup(nh);
         do {
             for (size_t i = 0; i < ncs.size(); i++) {
-                if (ncs[i]->crclcmds.SizeMsgQueue() == 0) {
-                    nccmds[i].TestRobotCommands();
-                }
-                while (ncs[i]->IsBusy()) {
-                    ros::spinOnce();
-                    ros::spinOnce();
-                    r.sleep();
-                }
-                ClearScene();
-                NewScene();
-                DrawScene();
-           }
-
-#ifdef BOLTDEMO
-#endif           
+                GearDemoCycle(ncs[i],nccmds[i]);
+                GearDemoReset();
+            }
             r.sleep();
         } while (ros::ok());
         spinner.stop();

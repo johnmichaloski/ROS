@@ -178,3 +178,10 @@ public:
 };
 
 
+
+// Gear Demo 
+extern void GearDemoSetup(ros::NodeHandle & nh);
+extern  void GearDemoReset();
+extern void GearDemoCycle(boost::shared_ptr<RCS::CController>,InlineRobotCommands&) ;
+
+
