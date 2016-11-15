@@ -187,7 +187,7 @@ struct GearDemo {
     //boost::shared_ptr< ShapeModel::Instance> FindFreeGearHolder(std::string geartype, bool bFill=true);
     //tf::Pose GetFirstSlotHolder(boost::shared_ptr<ShapeModel::Instance> instance, std::string skupart,bool bFill=true);
     boost::shared_ptr< ShapeModel::Instance> FindFreeGear();
-    bool IssueRobotCommands(InlineRobotCommands & r);
+    bool IssueRobotCommands(InlineRobotCommands & r, bool bSafe=false);
 protected:
     ShapeModel::Shapes _shapes;
     ros::NodeHandle & _nh;
@@ -195,4 +195,21 @@ protected:
     tf::Pose _baseoffset;
     RvizDemo rvizdemo;
     std::string _jsonpath;
+};
+
+
+// Checkers game - demo defined in Demo.cpp
+#include "Checkerboard.h"
+class CheckersGame {
+    boost::shared_ptr<RvizCheckers> rvizgame;
+    ros::NodeHandle & _nh;
+public:
+    CheckersGame(ros::NodeHandle & nh);
+    void CheckersGame::PhysicalMove(InlineRobotCommands &robot,
+            int player,
+            int i, int j,
+            Checkers::Move m,
+            bool doublejump=false);
+    void Setup();
+    void Play(InlineRobotCommands *,InlineRobotCommands *);
 };

@@ -21,6 +21,9 @@ The version information for the Real Time Crcl Trajectory Controller is:
  - OS - Ubuntu 12.04 (64-bit)
  - Package versions in Appendix I
 Clearly improvements to the robot capabilities are in order. No collision is done so that the robot inverse kinematics chooses a solution where one of the joints has a negative Z, and would collide with the "floor".
+ - Collision checking – first start with illegal inverse kinematic solutions
+ - Separate destinations for robot versus object – robot wants to move to a little above slot and the gear wants to be in the slot at the bottom. Need to separate the destinations.
+ - Mongo db for arhival and retrieval of objects
 #Canonical Robot Control Language (CRCL) Background 
 Canonical robot command language (CRCL) is part of the robot research at NIST. CRCL is a messaging language for controlling a robot. CRCL commands are executed by a low-level device robot controller. The usual source of CRCL commands is a plan/program execution system. CRCL is intended for use with devices typically described as industrial robots and for other automated positioning devices such as automated guided vehicles (AGVs). An AGV with a robotic arm attached may be regarded as a single robot responding to a single stream of CRCL commands or as two robots responding to two separate streams of CRCL commands.
 Although CRCL is not a programming language, the commands are in the context of a session consisting of getting ready for activity, performing activities, and becoming quiescent. CRCL commands may be collected in files for testing purposes, but executing such files (by giving the commands in the order they occur in the file) is not be the normal operating mode of a robot. Because robots operate in uncertain and changing environment, the reliance on sensors to adjust for such disturbances makes canned scripts ineffective under real conditions. 

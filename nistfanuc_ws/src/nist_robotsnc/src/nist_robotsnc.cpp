@@ -198,15 +198,21 @@ int main(int argc, char** argv) {
                 r.sleep();
             }
         }
- 
+#if 1
+        CheckersGame checkers(nh);
+        checkers.Setup();
+        checkers.Play(&nccmds[0], &nccmds[1]);
+#endif
+#if 0
         do {
-            for (size_t i = 1; i < 2; i++) {  // only fanuc
+            for (size_t i = 1; i < 2; i++) {  // only motoman
            // for (size_t i = 0; i < ncs.size(); i++) {
                geardemo.Cycle(ncs[i], nccmds[i]);
                geardemo.Reset();
             }
             r.sleep();
         } while (ros::ok());
+#endif
         spinner.stop();
         LOG_DEBUG << "Cntrl C pressed \n" << std::flush;
 

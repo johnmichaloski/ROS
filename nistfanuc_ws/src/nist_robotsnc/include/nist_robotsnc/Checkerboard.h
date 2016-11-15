@@ -43,7 +43,7 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 // Checkers makes move 
 #include "Checkers.h"
 #include "Controller.h"
-#include "Demo.h"
+//#include "Demo.h"
 
 using namespace Conversion;
 #define UPDOWN
@@ -209,7 +209,7 @@ Eigen::Affine3d GetPose(int row, int col) {
     bool IsAlreadyKing(Checkers::Move m) {
         return ISKING(game.Board()[m.row][m.col]);
     }
-
+#if 0
     void PhysicalMove(InlineRobotCommands &robot,
             int player,
             int i, int j,
@@ -279,7 +279,7 @@ Eigen::Affine3d GetPose(int row, int col) {
         }
             
     }
-
+#endif
     int Player() {
         return curplayer;
     }
@@ -327,13 +327,3 @@ Eigen::Affine3d GetPose(int row, int col) {
 
 };
 
-// Checkers game - demo defined in Demo.cpp
-
-class CheckersGame {
-    boost::shared_ptr<RvizCheckers> rvizgame;
-    ros::NodeHandle & _nh;
-public:
-    CheckersGame(ros::NodeHandle & nh);
-    void Setup();
-    void Play(InlineRobotCommands *,InlineRobotCommands *);
-};

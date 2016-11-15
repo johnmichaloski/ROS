@@ -239,12 +239,7 @@ void Scene::ClearScene() {
 }
 
 void Scene::InitScene() {
-#ifdef FANUCPREFIX
     visual_tools = boost::shared_ptr<RvizVisualTools>(new RvizVisualTools("world", "/visualization_marker_array"));
-
-#else
-    visual_tools = boost::shared_ptr<RvizVisualTools>(new RvizVisualTools("base_link", "/visualization_marker_array"));
-#endif
     //visual_tools = boost::shared_ptr<SonOfRvizVisualTools>(new SonOfRvizVisualTools("base_link"));
     visual_tools->enableBatchPublishing(false);
 
@@ -304,42 +299,6 @@ void Scene::BuildScene() {
 
 #endif
 
-#if 0
-    //#ifdef BOLTDEMO
-    // Scene gear and gearholder objects
-    CreateMesh("gearholder1", "gearholder", gid++,
-            (Eigen::Affine3d::Identity() *
-            //           (Eigen::Translation3d(-0.026, -0.028, 0.0)*Eigen::UniformScaling< double >(.5))),
-            Eigen::Translation3d(0.038, 0.030, 0.0)),
-            "file:///usr/local/michalos/nistfanuc_ws/src/nist_fanuc/worldmodel/medium_gear_holder.stl",
-            "RED", // rviz_visual_tools::RED,
-            0.018);
-
-
-    CreateWireframeCuboid("gearholderoutline",
-            "trayoutline",
-            //(Eigen::Affine3d::Identity() * Eigen::Translation3d(-.111125/2.,-.111125/2., 0.0)), // midpoint
-            (Eigen::Affine3d::Identity() * Eigen::Translation3d(0., 0., 0.0)), // midpoint
-            .111125, .111125, .04, // depth, width, height
-            "GREEN" ); // rviz_visual_tools::GREEN);
-
-
-    for (size_t i = 0; i < 4; i++) {
-
-        std::string gearname = Globals.StrFormat("gear%d", i + 1);
-        Eigen::Affine3d gearpose = Conversion::poseTFToEigen(gearspot[i]);
-        LOG_DEBUG << "Gearpose" << RCS::DumpEigenPose(gearpose).c_str();
-        CreateMesh(gearname, "gear",
-                gid++, 
-                Conversion::poseTFToEigen(gearspot[i]),
-                //Eigen::Affine3d::Identity() * gearspot[i], //* fanucoffset00, // Eigen::Translation3d(0.25, -.45, 0.04),
-                "file:///usr/local/michalos/nistfanuc_ws/src/nist_fanuc/worldmodel/medium_gear.stl",
-                "RED", // rviz_visual_tools::RED,
-                0.0178);
-    }
-#endif
-    //#endif
-
 }
 
 void Scene::NewScene() {
@@ -398,7 +357,7 @@ bool Scene::DrawObject(ObjectDB *obj) {
                 MARKERCOLOR(obj->color)); // Eigen::Vector3d(0.0, 0.5, 1.0), 
     } else if (type == "Cylinder") {
         b = publishCylinder(obj->pose,
-                MARKERCOLOR(obj->color),
+                obj->color,
                 obj-> height,
                 obj-> radius,
                 obj->id);

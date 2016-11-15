@@ -1,4 +1,73 @@
+#if 0
+    //#ifdef BOLTDEMO
+    // Scene gear and gearholder objects
+    CreateMesh("gearholder1", "gearholder", gid++,
+            (Eigen::Affine3d::Identity() *
+            //           (Eigen::Translation3d(-0.026, -0.028, 0.0)*Eigen::UniformScaling< double >(.5))),
+            Eigen::Translation3d(0.038, 0.030, 0.0)),
+            "file:///usr/local/michalos/nistfanuc_ws/src/nist_fanuc/worldmodel/medium_gear_holder.stl",
+            "RED", // rviz_visual_tools::RED,
+            0.018);
 
+
+    CreateWireframeCuboid("gearholderoutline",
+            "trayoutline",
+            //(Eigen::Affine3d::Identity() * Eigen::Translation3d(-.111125/2.,-.111125/2., 0.0)), // midpoint
+            (Eigen::Affine3d::Identity() * Eigen::Translation3d(0., 0., 0.0)), // midpoint
+            .111125, .111125, .04, // depth, width, height
+            "GREEN" ); // rviz_visual_tools::GREEN);
+
+
+    for (size_t i = 0; i < 4; i++) {
+
+        std::string gearname = Globals.StrFormat("gear%d", i + 1);
+        Eigen::Affine3d gearpose = Conversion::poseTFToEigen(gearspot[i]);
+        LOG_DEBUG << "Gearpose" << RCS::DumpEigenPose(gearpose).c_str();
+        CreateMesh(gearname, "gear",
+                gid++, 
+                Conversion::poseTFToEigen(gearspot[i]),
+                //Eigen::Affine3d::Identity() * gearspot[i], //* fanucoffset00, // Eigen::Translation3d(0.25, -.45, 0.04),
+                "file:///usr/local/michalos/nistfanuc_ws/src/nist_fanuc/worldmodel/medium_gear.stl",
+                "RED", // rviz_visual_tools::RED,
+                0.0178);
+    }
+#endif
+    //#endif
+
+===================================================================
+#if 0
+        try {
+            //            ShapeModel::Instance outline = _shapes.NamedInstance("outline_" + holdername);
+            //
+            //            double width = _shapes.GetInstanceValue<double>(outline, "width");
+            //            double height = _shapes.GetInstanceValue<double>(outline, "height");
+            //            pScene->CreateWireframeCuboid("gearholderoutline",
+            //                    "trayoutline",
+            //                    Conversion::tfPose2Affine3d(gearpose),
+            //                    width, height, .04, "GREEN");
+
+            // 
+            // Now  fill in slots where gears are to go  in array sku_gear_vessel
+            std::vector<std::string> slotnames = _shapes.GetShapeChildrenNames(instances[i].metatype, "contains");
+            // Do they match - skip for now
+            for (size_t j = 0; j < s // FIXME: check that this is a mesh
+                    lotnames.size(); j++) {
+                tf::Pose slotpose = _shapes.GetChildPose(slotnames[j]);
+                LOG_DEBUG << "before slotpose " << RCS::DumpPoseSimple(gearpose).c_str();
+                // gear pose will already include rotation
+                slotpose = gearpose * slotpose;
+                LOG_DEBUG << "after slotpose " << RCS::DumpPoseSimple(slotpose).c_str();
+                pScene->CreateMarker("marker",
+                        Conversion::tfPose2Affine3d(slotpose),
+                        "GREEN");
+                pScene->sku_gear_vessel.push_back(slotpose);
+            }
+
+
+        } catch (...) {
+        }
+#endif
+=============================================================
 #if 0   
 
 tf::Pose GearDemo::GetFirstSlotHolder(boost::shared_ptr<ShapeModel::Instance> instance, std::string skupart, bool bFill) {

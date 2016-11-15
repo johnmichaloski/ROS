@@ -151,7 +151,7 @@ _nh(nh), _path(pkgpath), _baseoffset(offset), rvizdemo(nh) {
 
 }
 
-bool GearDemo::IssueRobotCommands(InlineRobotCommands & r) {
+bool GearDemo::IssueRobotCommands(InlineRobotCommands & r, bool bSafe) {
     // Finish queuing commands before handling them....
     boost::mutex::scoped_lock lock(cncmutex);
     static double dwelltime = 1.0;
@@ -166,23 +166,23 @@ bool GearDemo::IssueRobotCommands(InlineRobotCommands & r) {
         return false;
 
     std::string gearname = instance->name;
-    
+
     // Ok we will move this gear - mark as no longer free standing
     instance->properties["state"] = "stored";
-    
+
     ObjectDB * obj = pScene->Find(instance->name);
     NC_ASSERT(obj != NULL);
-    
-    Eigen::Affine3d affpose = Conversion::convertPointToPose(obj->pose.translation() + obj->gripperoffset.translation());
 
-    pickpose = RCS::Pose(r.QBend, Conversion::vectorEigenToTF(affpose.translation()));
+    Eigen::Affine3d affpose = Conversion::convertPointToPose(obj->pose.translation()); //  + obj->gripperoffset.translation());
+    tf::Pose gripperoffset = Conversion::Affine3d2RcsPose(obj->gripperoffset);
+    pickpose = RCS::Pose(r.QBend, Conversion::vectorEigenToTF(affpose.translation()))*gripperoffset;
 
     tf::Vector3 offset = pickpose.getOrigin();
 
     // Retract
     r.MoveTo(retract * RCS::Pose(r.QBend, offset));
     r.DoDwell(r.mydwell);
-    r.MoveTo(RCS::Pose(r.QBend, offset));
+    r.MoveTo(RCS::Pose(r.QBend, offset)*gripperoffset);
     r.DoDwell(r.mydwell);
     r.CloseGripper();
     r.DoDwell(r.mydwell);
@@ -201,12 +201,14 @@ bool GearDemo::IssueRobotCommands(InlineRobotCommands & r) {
     }
 
     RCS::Pose placepose = RCS::Pose(r.QBend, slotpose.getOrigin()); // fixme: what if gear rotated
-    r.Place(placepose, gearname);
+    r.Place(placepose , gearname);
     r.DoDwell(r.mydwell);
 
-    std::vector<unsigned long> jointnum(r.cnc()->Kinematics()->NumJoints());
-    std::iota(jointnum.begin(), jointnum.end(), 0); // adjusted already to 0..n-1
-    r.MoveJoints(jointnum, r.cnc()->NamedJointMove["Safe"]);
+    if (bSafe) {
+        std::vector<unsigned long> jointnum(r.cnc()->Kinematics()->NumJoints());
+        std::iota(jointnum.begin(), jointnum.end(), 0); // adjusted already to 0..n-1
+        r.MoveJoints(jointnum, r.cnc()->NamedJointMove["Safe"]);
+    }
     return true;
 }
 
@@ -254,12 +256,12 @@ void GearDemo::Setup() {
     std::vector<boost::shared_ptr< ShapeModel::Instance> > instances = _shapes.TypeInstances(type);
     for (size_t i = 0; i < instances.size(); i++) {
 
-//        if (instances[i]->properties["state"] != "free")
-//            continue;
-        
+        //        if (instances[i]->properties["state"] != "free")
+        //            continue;
+
         std::string gearname = instances[i]->name; // Globals.StrFormat("%s%d", sku.c_str(), i + 1);
         tf::Pose gearpose = _baseoffset * _shapes.GetInstancePose(instances[i]);
- 
+
         ShapeModel::Shape shape = _shapes.GetInstanceShape(instances[i]);
         ObjectDB *obj = pScene->CreateMesh(gearname, "gear",
                 pScene->gid++,
@@ -297,53 +299,22 @@ void GearDemo::Setup() {
                 shape.color,
                 shape.scale);
         obj->instance = instances[i];
-#if 0
-        try {
-            //            ShapeModel::Instance outline = _shapes.NamedInstance("outline_" + holdername);
-            //
-            //            double width = _shapes.GetInstanceValue<double>(outline, "width");
-            //            double height = _shapes.GetInstanceValue<double>(outline, "height");
-            //            pScene->CreateWireframeCuboid("gearholderoutline",
-            //                    "trayoutline",
-            //                    Conversion::tfPose2Affine3d(gearpose),
-            //                    width, height, .04, "GREEN");
 
-            // 
-            // Now  fill in slots where gears are to go  in array sku_gear_vessel
-            std::vector<std::string> slotnames = _shapes.GetShapeChildrenNames(instances[i].metatype, "contains");
-            // Do they match - skip for now
-            for (size_t j = 0; j < s // FIXME: check that this is a mesh
-                    lotnames.size(); j++) {
-                tf::Pose slotpose = _shapes.GetChildPose(slotnames[j]);
-                LOG_DEBUG << "before slotpose " << RCS::DumpPoseSimple(gearpose).c_str();
-                // gear pose will already include rotation
-                slotpose = gearpose * slotpose;
-                LOG_DEBUG << "after slotpose " << RCS::DumpPoseSimple(slotpose).c_str();
-                pScene->CreateMarker("marker",
-                        Conversion::tfPose2Affine3d(slotpose),
-                        "GREEN");
-                pScene->sku_gear_vessel.push_back(slotpose);
-            }
-
-
-        } catch (...) {
-        }
-#endif
     }
     // Debug: LOG_DEBUG << ObjectDB::DumpDB();   
 }
 
 void GearDemo::Reset() {
-//    pScene->ClearScene(); // erases all markers
-//    Setup(); // recreates all markers
-//    pScene->DrawScene(); // draws rviz scene with markers
+    //    pScene->ClearScene(); // erases all markers
+    //    Setup(); // recreates all markers
+    //    pScene->DrawScene(); // draws rviz scene with markers
 }
 
 void GearDemo::Cycle(boost::shared_ptr<RCS::CController> nc, InlineRobotCommands&robot) {
     ros::Rate r(50);
-//    nc->Suspend();
+    //    nc->Suspend();
     while (IssueRobotCommands(robot) != NULL) {
- //       nc->Start();
+        //       nc->Start();
         while (nc->IsBusy()) {
             if (rvizdemo.Clicked()) {
                 RCS::Thread::SuspendAll();
@@ -355,7 +326,7 @@ void GearDemo::Cycle(boost::shared_ptr<RCS::CController> nc, InlineRobotCommands
             ros::spinOnce();
             r.sleep();
         }
-//        nc->Suspend();
+        //        nc->Suspend();
     }
 }
 //////////////////////////////////////////////////////////////////////////
@@ -366,6 +337,74 @@ CheckersGame::CheckersGame(ros::NodeHandle & nh) : _nh(nh) {
 
 }
 
+void CheckersGame::PhysicalMove(InlineRobotCommands &robot,
+        int player,
+        int i, int j,
+        Checkers::Move m,
+        bool doublejump) {
+    std::string errmsg;
+    std::string typemove("move");
+
+    // If blank space there can be no actual checkername2 object
+    std::string checkername1 = Globals.StrFormat("Checker[%d:%d]", i, j);
+    std::string checkername2 = Globals.StrFormat("Checker[%d:%d]", m.row, m.col);
+    Eigen::Affine3d frompose = rvizgame->GetPose(i, j);
+    Eigen::Affine3d pose = rvizgame->GetPose(m.row, m.col);
+    ObjectDB * obj = pScene->Find(checkername1);
+
+    assert(obj != NULL);
+#ifdef DEBUG
+    LOG_DEBUG << "Move From " << Globals.StrFormat("[%d,%d]=%f,%f", i, j, frompose(0, 3), frompose(1, 3));
+    LOG_DEBUG << "Move To   " << Globals.StrFormat("[%d,%d]=%f,%f", m.row, m.col, pose(0, 3), pose(1, 3));
+    LOG_DEBUG << "tf    Checkerboard1 pose" << RCS::DumpPoseSimple(Conversion::Affine3d2RcsPose(obj-> pose));
+    LOG_DEBUG << "Eigen Checkerboard1 pose" << RCS::DumpEigenPose(obj-> pose);
+#endif
+
+    rviz_visual_tools::colors checkercolor = (ISRED(player)) ? rviz_visual_tools::RED : rviz_visual_tools::BLACK;
+    ;
+    robot.Pick(Conversion::Affine3d2RcsPose(obj-> pose), checkername1);
+    robot.Place(Conversion::Affine3d2RcsPose(pose), checkername1);
+
+    while (robot.cnc()->IsBusy())
+        ros::Duration(0.01).sleep();
+
+    if (m.bJump) {
+        typemove = "jump";
+        Checkers::Move jumped = m.Diff(Checkers::Move(i, j));
+        std::string jumpedcheckername = Globals.StrFormat("Checker[%d:%d]", jumped.row, jumped.col);
+        pScene->DeleteObject(jumpedcheckername);
+    }
+    if (rvizgame->IsKing(m)) {
+        // Double checker height - for now 
+        // May need to delete and then create?
+        obj->height *= 2;
+        obj->pose = Eigen::Translation3d(Eigen::Vector3d(0, 0, 0.01)) * obj->pose;
+        robot.MoveObject(obj->name, Conversion::Affine3d2RcsPose(obj->pose), pScene->MARKERCOLOR(checkercolor));
+        ros::spinOnce();
+        ros::spinOnce();
+        ros::spinOnce();
+    }
+#if 0
+    pScene->UpdateScene(checkername1, pose, obj->color);
+#endif
+    ros::spinOnce();
+    obj->name = checkername2; // change checker name 
+    if (m.doublejumps.size() > 0) {
+        PhysicalMove(robot, player, m.row, m.col, m.doublejumps[0], true);
+    }
+
+    // Done - move to safe non-collision position - skip if double jump
+    if (!doublejump) {
+        std::vector<unsigned long> jointnum(robot.cnc()->Kinematics()->NumJoints());
+        std::iota(jointnum.begin(), jointnum.end(), 0); // adjusted already to 0..n-1
+        robot.MoveJoints(jointnum, robot.cnc()->NamedJointMove["Safe"]);
+        while (robot.cnc()->IsBusy()) {
+            ros::spinOnce();
+            ros::Duration(0.01).sleep();
+        }
+    }
+
+}
 void CheckersGame::Setup() {
     //    RvizDemo rvizdemo(_nh);
     pScene->InitScene();
@@ -387,10 +426,10 @@ void CheckersGame::Play(InlineRobotCommands * red, InlineRobotCommands * black) 
         rvizgame->Game().printDisplayFancy(rvizgame->Game().Board());
         if (player == Checkers::RED) {
             LOG_DEBUG << "RED Move " << red->cnc()->Name().c_str();
-            rvizgame->PhysicalMove(*red, player, from.row, from.col, to);
+            PhysicalMove(*red, player, from.row, from.col, to);
         } else {
             LOG_DEBUG << "BLACK Move " << black->cnc()->Name().c_str();
-            rvizgame->PhysicalMove(*black, player, from.row, from.col, to);
+            PhysicalMove(*black, player, from.row, from.col, to);
         }
 
 #if 0
