@@ -1,0 +1,216 @@
+{
+	"parts" : 
+	{
+		"sku_small_gear" :
+		{
+			"type" : "primitive",
+			"metatype": "mesh",
+			"subtype" : "solid",
+			"file" : "file:///usr/local/michalos/nistfanuc_ws/src/nist_robotsnc/worldmodel/small_gear_z_lowest_zero.stl",
+			"scale": 0.0254,
+			"radius" : 0.01905,
+			"color" : "RED",
+			"gripper":
+			{
+				"offset" : [0.0, 0.0, 0.04, 0.0, 0.0, 0.0],
+				"width" : 0.04			
+			}
+	
+		},
+		"sku_small_gear_vessel" :
+		{
+			"type" : "primitive",
+			"metatype": "mesh",
+			"subtype" : "solid",
+			"file" : "file:///usr/local/michalos/nistfanuc_ws/src/nist_robotsnc/worldmodel/small_gear_holder_centeredZge0.stl",
+			"scale": 0.0254,
+			"color" : "RED",
+			"contains":
+			{
+		 		"slot1":
+				{
+				"type" : "holder",
+				"metatype": "sku_small_gear",
+				"position":[0.028575,0.028575, 0.0],
+				"rotation": 0,
+				"state" : "tobedefined"
+				},
+		 		"slot2":
+				{
+				"type" : "holder",
+				"metatype": "sku_small_gear",
+				"position":[-0.028575,0.028575, 0.0],
+				"rotation": 0,
+				"state" : "tobedefined"
+				},
+		 		"slot3":
+				{
+				"type" : "holder",
+				"metatype": "sku_small_gear",
+				"position":[0.028575,-0.028575, 0.0],
+				"rotation": 0,
+				"state" : "tobedefined"
+				},
+		 		"slot4":
+				{
+				"type" : "holder",
+				"metatype": "sku_small_gear",
+				"position":[-0.028575,-0.028575, 0.0],
+				"rotation": 0,
+				"state" : "tobedefined"
+				}
+			}
+
+		},
+		"sku_medium_gear" :
+		{
+			"type" : "primitive",
+			"metatype": "mesh",
+			"subtype" : "solid",
+			"file" : "file:///usr/local/michalos/nistfanuc_ws/src/nist_robotsnc/worldmodel/medium_gear_z_lowest_zero.stl",
+			"scale": 0.0254,
+			"radius" : 0.01905,
+			"color" : "CYAN",
+			"gripper":
+			{
+				"offset" : [0.0, 0.0, 0.04, 0.0, 0.0, 0.0],
+				"width" : 0.04			
+			}
+	
+		},
+		"sku_medium_gear_vessel" :
+		{
+			"type" : "primitive",
+			"metatype": "mesh",
+			"subtype" : "solid",
+			"file" : "file:///usr/local/michalos/nistfanuc_ws/src/nist_robotsnc/worldmodel/medium_gear_holder_centeredZposge0.stl",
+			"scale": 0.0254,
+			"color" : "CYAN",
+			"centroid": "(4.5in, 4.5in), slot (2.25in, 2.25in)",
+			"contains":
+			{
+		 		"slot1":
+				{
+				"type" : "holder",
+				"metatype": "sku_medium_gear",
+				"position":[0.0396,0.0396, 0.0],
+				"rotation": 0,
+				"state" : "tobedefined"
+				},
+		 		"slot2":
+				{
+				"type" : "holder",
+				"metatype": "sku_medium_gear",
+				"position":[-0.0396,0.0396, 0.0],
+				"rotation": 0,
+				"state" : "tobedefined"
+				},
+		 		"slot3":
+				{
+				"type" : "holder",
+				"metatype": "sku_medium_gear",
+				"position":[0.0396,-0.0396, 0.0],
+				"rotation": 0,
+				"state" : "tobedefined"
+				},
+		 		"slot4":
+				{
+				"type" : "holder",
+				"metatype": "sku_medium_gear",
+				"position":[-0.0396,-0.0396, 0.0],
+				"rotation": 0,
+				"state" : "tobedefined"
+				}
+			}
+
+		}
+	},
+	"instances":
+	{
+
+		"sku_small_gear1" :
+		{
+			"type" : "gear",
+			"metatype": "sku_small_gear",
+			"color" : "RED",
+			"position":[ 0.22989,-0.25126, 0.0],
+			"rotation": -0.82,
+			"state" : "free"
+		},
+		"sku_small_gear2" :
+		{
+			"type" : "gear",
+			"metatype": "sku_small_gear",
+			"color" : "RED",
+			"position":[ 0.51006,0.08374, 0.0],
+			"rotation": 0.28,
+			"state" : "free"
+		},
+		"sku_small_gear3" :
+		{
+			"type" : "gear",
+			"metatype": "sku_small_gear",
+			"position": [0.20986,-0.10199, 0.0],
+			"rotation": 0.35,
+			"state" : "free"
+		},
+		"sku_small_gear4" :
+		{
+			"type" : "gear",
+			"metatype": "sku_small_gear",
+			"position":[ 0.22989,0.25126, 0.0],
+			"rotation": -0.82,
+			"state" : "free"
+		},
+		"sku_medium_gear1" :
+		{
+			"type" : "gear",
+			"metatype": "sku_medium_gear",
+			"color" : "BLUE",
+			"position":[ 0.54369,0.00601, 0.0],
+			"rotation": 0.61,
+			"state" : "free"
+		},
+		"outline_sku_small_gear_vessel1" :
+		{
+			"type" : "outline",
+			"metatype": "rectangle",
+			"subtype" : "wireframe",
+			"position": [ 0.3155,0.13662, 0.0],
+			"rotation": 0.0,
+			"width" : 0.111,
+			"height" : 0.111, 
+			"color" : "GREEN"
+		},
+		"sku_small_gear_vessel1" :
+		{
+			"type" : "holder",
+			"metatype": "sku_small_gear_vessel",
+			"subtype" : "solid",
+			"position":[ 0.3155,0.13662, 0.0],
+			"rotation": -1.4,
+			"contains":
+			{ "slot1": { "state" : "empty"} ,
+			"slot2": { "state" : "empty"} ,
+			"slot3": { "state" : "empty"} ,
+			"slot4": { "state" : "empty"} 
+			}
+		},
+		"sku_medium_gear_vessel1" :
+		{
+			"type" : "holder",
+			"metatype": "sku_medium_gear_vessel",
+			"subtype" : "solid",
+			"position":[ 0.50222,-0.206, 0.0],
+			"rotation": 0.0,
+			"contains":
+			{ "slot1": { "state" : "empty"} ,
+			"slot2": { "state" : "empty"} ,
+			"slot3": { "state" : "empty"} ,
+			"slot4": { "state" : "empty"} 
+			}
+		}
+
+	}
+
+}

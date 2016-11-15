@@ -4,7 +4,7 @@
 	<arg name="bprefix" default="true"/>
   	<arg name="srdf_file" default="$(find robotduo)/config/robotduo.srdf" />
 
-	<rosparam command="load" file="$(find nist_fanuc)/config/nist_fanuc_config.yaml" />
+	<rosparam command="load" file="$(find nist_robotsnc)/config/nist_robotsnc_config.yaml" />
 	
 	<!--<param name="robot_description" command="cat $(find robotduo)/urdf/tworobot.urdf" />-->
 
@@ -15,7 +15,7 @@
   
 
 	<param name="loglevel" value="1" />
-	<param name="logfile" value="$(find robotduo)/log/nist_fanuc.log" />
+	<param name="logfile" value="$(find robotduo)/log/nist_robotsnc.log" />
 	<param name="csvlogging" value="0" />
 	<param name="csvlogfile" value="$(find robotduo)/log/nistcrcl.csv" />
 

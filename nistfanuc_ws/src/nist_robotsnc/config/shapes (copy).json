@@ -1,0 +1,125 @@
+{
+	"parts" : 
+	{
+		"sku_part_small_gear" :
+		{
+			"type" : "primitive",
+			"metatype": "mesh",
+			"subtype" : "solid",
+			"file" : "file:///usr/local/michalos/nistfanuc_ws/src/nist_fanuc/worldmodel/medium_gear.stl",
+			"scale": 0.018,
+			"radius" : 0.01905,
+			"color" : "RED"
+	
+		},
+		"outline_part_small_gear_vessel" :
+		{
+			"type" : "primitive",
+			"metatype": "rectangle",
+			"subtype" : "wireframe",
+			"scale": 1.0,
+			"width" : 0.11125,
+			"height" : 0.11125,
+			"color" : "GREEN"
+	
+		},
+		"sku_small_gear_vessel" :
+		{
+			"type" : "primitive",
+			"metatype": "mesh",
+			"subtype" : "solid",
+			"file" : "file:///usr/local/michalos/nistfanuc_ws/src/nist_fanuc/worldmodel/medium_gear_holder.stl",
+			"scale": 0.018,
+			"radius" : 0.01905,
+			"color" : "RED",
+			"contains":
+			{
+		 		"slot1":
+				{
+				"type" : "contains",
+				"metatype": "sku_part_small_gear",
+				"color" : "RED",
+				"position":[0.028575,0.028575],
+				"rotation": 0
+				},
+		 		"slot2":
+				{
+				"type" : "contains",
+				"metatype": "sku_part_small_gear",
+				"color" : "RED",
+				"position":[0.0889,0.028575],
+				"rotation": 0
+				},
+		 		"slot3":
+				{
+				"type" : "contains",
+				"metatype": "sku_part_small_gear",
+				"color" : "RED",
+				"position":[0.028575,0.0889],
+				"rotation": 0
+				},
+		 		"slot4":
+				{
+				"type" : "contains",
+				"metatype": "sku_part_small_gear",
+				"color" : "RED",
+				"position":[0.0889,0.0889],
+				"rotation": 0
+				}
+			}
+
+		}
+	},
+	"instances":
+	{
+
+		"sku_part_small_gear1" :
+		{
+			"type" : "instance",
+			"metatype": "sku_part_small_gear",
+			"color" : "RED",
+			"position":[ 229.89,-251.26],
+			"rotation": -0.82
+		},
+		"sku_part_small_gear2" :
+		{
+			"type" : "instance",
+			"metatype": "sku_part_small_gear",
+			"color" : "RED",
+			"position":[ 710.06,83.74],
+			"rotation": 0.28
+		},
+		"sku_part_small_gear3" :
+		{
+			"type" : "instance",
+			"metatype": "sku_part_small_gear",
+			"position": [709.86,-141.99],
+			"rotation": 0.35
+		},
+		"sku_part_small_gear4" :
+		{
+			"type" : "instance",
+			"metatype": "sku_part_small_gear",
+			"position":[ 229.89,-251.26],
+			"rotation": -0.82
+		},
+		"detected_part_small_gear_holder1" :
+		{
+			"type" : "instance",
+			"metatype": "outline_part_small_gear_vessel",
+			"subtype" : "wireframe",
+			"position":[ 0.3155,0.13662],
+			"rotation": 0
+		},
+		"sku_small_gear_vessel1" :
+		{
+			"type" : "instance",
+			"metatype": "sku_small_gear_vessel",
+			"subtype" : "wireframe",
+			"position":[ 0.3155,0.13662],
+			"rotation": -0.01
+		}
+
+	}
+
+}
