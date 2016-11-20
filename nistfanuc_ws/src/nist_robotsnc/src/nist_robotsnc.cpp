@@ -47,6 +47,7 @@ namespace pt = boost::property_tree;
 #include "nist_robotsnc/MotionException.h"
 #include "nist_robotsnc/Shape.h"
 
+using namespace Conversion;
 
 int main(int argc, char** argv) {
     int bPublishPoint = 0;
@@ -116,7 +117,7 @@ int main(int argc, char** argv) {
         pScene->InitScene();
         pScene->BuildScene(); // demo actually builds scene
        
-        GearDemo geardemo(nh, path, Conversion::CreatePose(tf::Vector3(0.25,0.5,0.0)));
+        GearDemo geardemo(nh, path, Convert<tf::Vector3, tf::Pose>(tf::Vector3(0.25,0.5,0.0)));
         geardemo.Setup(); // this does draw scene
         
         pScene->DrawScene();
@@ -148,8 +149,8 @@ int main(int argc, char** argv) {
                 int bCsvLogging = root.get<int>(robots[i] + ".csvlogging", 0);
 
                 ncs.push_back(boost::shared_ptr<CController>(new RCS::CController(robotname, dCycleTime)));
-                ncs[i]->SetToolOffset(Conversion::CreatePose(dtool));
-                ncs[i]->SetBaseOffset(Conversion::CreatePose(dbase));
+                ncs[i]->SetToolOffset(Convert<std::vector<double>, tf::Pose> (dtool));
+                ncs[i]->SetBaseOffset(Convert<std::vector<double>, tf::Pose> (dbase));
                 ncs[i]->QBend() = tf::Quaternion(Deg2Rad(dbend[0]), Deg2Rad(dbend[1]), Deg2Rad(dbend[2]));
                 ncs[i]->bCvsPoseLogging() = false;
                 boost::shared_ptr<IKinematics> kin;
@@ -198,12 +199,12 @@ int main(int argc, char** argv) {
                 r.sleep();
             }
         }
-#if 1
+#if 0
         CheckersGame checkers(nh);
         checkers.Setup();
         checkers.Play(&nccmds[0], &nccmds[1]);
 #endif
-#if 0
+#if 1
         do {
             for (size_t i = 1; i < 2; i++) {  // only motoman
            // for (size_t i = 0; i < ncs.size(); i++) {

@@ -1,3 +1,38 @@
+
+    // Vector conversions
+    std::vector<geometry_msgs::Pose> RcsPoses2PoseMsgs(const std::vector<tf::Pose> &src);
+    std::vector<tf::Pose> PoseMsgs2RcsPoses(const std::vector<geometry_msgs::Pose> &src);
+    std::vector<Eigen::Affine3d> PoseMsgs2AffEigenPoses(const std::vector<geometry_msgs::Pose> &src);
+    std::vector<geometry_msgs::Pose> AffEigenPoses2PoseMsgs(const std::vector<Eigen::Affine3d> &src);
+    //JointState     Vector2JointState(const  std::vector<double>  &src);
+    //------------------------------------------------
+    // vector conversions
+
+    std::vector<geometry_msgs::Pose> RcsPoses2PoseMsgs(const std::vector<tf::Pose> &src) {
+        std::vector<geometry_msgs::Pose> dest;
+        dest.resize(src.size());
+        std::transform(src.begin(), src.end(), dest.begin(), Conversion::Convert<tf::Pose, geometry_msgs::Pose> );
+    }
+
+    std::vector<tf::Pose> PoseMsgs2RcsPoses(const std::vector<geometry_msgs::Pose> &src) {
+        std::vector<tf::Pose> dest;
+        dest.resize(src.size());
+        std::transform(src.begin(), src.end(), dest.begin(), Conversion::Convert<geometry_msgs::Pose, tf::Pose>);
+    }
+
+    std::vector<Eigen::Affine3d> PoseMsgs2AffEigenPoses(const std::vector<geometry_msgs::Pose> &src) {
+        std::vector<Eigen::Affine3d> dest;
+        dest.resize(src.size());
+        std::transform(src.begin(), src.end(), dest.begin(), Conversion::GeomMsgPose2Affine3d);
+    }
+
+    std::vector<geometry_msgs::Pose> AffEigenPoses2PoseMsgs(const std::vector<Eigen::Affine3d> &src) {
+        std::vector<geometry_msgs::Pose> dest;
+        dest.resize(src.size());
+        std::transform(src.begin(), src.end(), dest.begin(), Conversion::PoseAffineToGeomMsg);
+    }
+===================================================================
+
 #if 0
     //#ifdef BOLTDEMO
     // Scene gear and gearholder objects

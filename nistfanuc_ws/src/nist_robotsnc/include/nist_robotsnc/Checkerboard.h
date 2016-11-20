@@ -49,35 +49,40 @@ using namespace Conversion;
 #define UPDOWN
 
 struct RvizCheckers {
-    //static boost::mutex _reader_mutex; /**< for mutexed reading access  */
-    static const int rows = 8;
-    static const int cols = 8;
-    double xoffset;
-    double rowoffset;
-    double yoffset;
-    double offset;
-    double radius;
-    double height;
-    Checkers::CheckersGame game;
-    int curplayer;
+    Checkers::CheckersGame game; /**< game the robots are playing */
+#ifndef ROWS
+    static const int ROWS = 8; /**< number of rows on checkerboard */
+    static const int COLS = 8; /**< number of columns on checkerboard */
+#endif
+    /** CHeckers board rviz dimensions */
+    double XOFFSET; /**< x offset from world 0,0,0 */
+    double YOFFSET; /**< y offset from world 0,0,0 */
+    //double ROWOFFSET;  /**< offset between rows on checkerboard */
+    double SQOFFSET; /**< offset between board positions on checkerboard */
+    double radius; /**< radius of checker cylinder piece */
+    double height; /**< height of checker cylinder piece */
+    int curplayer; /**< current checker player - either black or red */
+
     ros::Subscriber sub;
     ros::NodeHandle &_nh;
     bool bFlag;
 
-    Checkers::CheckersGame & Game() {
-        return game;
-    }
-
     RvizCheckers(ros::NodeHandle &nh) : _nh(nh) {
-        xoffset = -0.16;
-        rowoffset = 0.04;
-        yoffset = -0.20;
-        offset = 0.04;
+        XOFFSET = -0.16;
+        YOFFSET = -0.20;
+        //		ROWOFFSET = 0.04;
+        SQOFFSET = 0.04;
         radius = 0.025;
         height = 0.015;
+
         curplayer = Checkers::RED;
+
         sub = _nh.subscribe("clicked_point", 10, &RvizCheckers::callback, this);
         bFlag = false;
+    }
+
+    Checkers::CheckersGame & Game() {
+        return game;
     }
 
     bool & Ready() {
@@ -90,108 +95,132 @@ struct RvizCheckers {
         bFlag = true;
 
     }
-Eigen::Affine3d GetPose(int row, int col) {
+
+    Eigen::Affine3d GetPose(int row, int col) {
         // Input into this method assumes only correct row/col choices
+        assert(row < ROWS);
+        assert(col < COLS);
         assert((row + col) % 2 == 1);
+        Eigen::Vector3d v;
 #ifdef LEFTRIGHT
-        double rowoffset = xoffset + (offset * row);
-        double coloffset = yoffset + (col * offset);
-        Eigen::Affine3d pose = visual_tools->convertPointToPose((
-                Eigen::Vector3d(rowoffset + offset / 2.0, coloffset + offset / 2.0, .01))
-                );
+        double rowoffset = XOFFSET + (SQOFFSET * row);
+        double coloffset = YOFFSET + (col * SQOFFSET);
+        v =Eigen::Vector3d(rowoffset + SQOFFSET / 2.0, coloffset + SQOFFSET / 2.0, .01);
+        Eigen::Affine3d pose = Convert<Eigen::Vector3d,Eigen::Affine3d>( v );
 #elif defined(UPDOWN)
-        double rowoffset = yoffset + (offset * row);
-        double coloffset = xoffset + (col * offset);
-        Eigen::Affine3d pose = pScene->visual_tools->convertPointToPose((
-                Eigen::Vector3d(coloffset + offset / 2.0, rowoffset + offset / 2.0, .01))
-                );
+        double rowoffset = YOFFSET + (SQOFFSET * row);
+        double coloffset = XOFFSET + (col * SQOFFSET);
+        v=Eigen::Vector3d(coloffset + SQOFFSET / 2.0, rowoffset + SQOFFSET / 2.0, .01);
+        Eigen::Affine3d pose = Convert<Eigen::Vector3d,Eigen::Affine3d> ( v );
 #endif
         return pose;
     }
 
     double RowOffset(int row) {
-        //return xoffset + (offset * row)
-        return yoffset + (offset * row);
+#ifdef LEFTRIGHT
+        return XOFFSET + (SQOFFSET * row);
+#elif defined(UPDOWN)
+        return YOFFSET + (SQOFFSET * row);
+#endif
     }
 
     double ColOffset(int col) {
-        //return yoffset + (offset * col)
-        return xoffset + (offset * col);
+#ifdef LEFTRIGHT
+        return YOFFSET + (SQOFFSET * col);
+#elif defined(UPDOWN)
+        return XOFFSET + (SQOFFSET * col);
+#endif
     }
 
+    Eigen::Vector3d GetCentroid(int rowoffset, int coloffset) {
+#ifdef LEFTRIGHT               
+        return Eigen::Vector3d(rowoffset + SQOFFSET / 2.0, coloffset + SQOFFSET / 2.0, .01);
+#elif defined(UPDOWN)
+        return Eigen::Vector3d(coloffset + SQOFFSET / 2.0, rowoffset + SQOFFSET / 2.0, .01);
+#endif
+    }
 
-    void RvizSetup() {
+    tf::Vector3 GetUp(int rowoffset, int coloffset) {
+#ifdef LEFTRIGHT
+        Eigen::Vector3d up(rowoffset, coloffset, 0.01);
+#elif defined(UPDOWN)
+        Eigen::Vector3d up(coloffset, rowoffset, 0.01);
+#endif
+        return Conversion::vectorEigenToTFVector<Eigen::Vector3d>(up);
+    }
+
+    tf::Vector3 GetDown(int rowoffset, int coloffset) {
+#ifdef LEFTRIGHT
+        Eigen::Vector3d down(rowoffset + SQOFFSET, coloffset + SQOFFSET, 0.0);
+#elif defined(UPDOWN)
+        Eigen::Vector3d down(coloffset + SQOFFSET, rowoffset + SQOFFSET, 0.0);
+#endif
+        return Conversion::vectorEigenToTFVector<Eigen::Vector3d>(down);
+    }
+
+    void RvizBoardSetup() {
         tf::Quaternion qidentity(0.0, 0.0, 0.0, 1.0);
 
         for (size_t row = 0; row < ROWS; row++) {
             double rowoffset = RowOffset(row);
             for (size_t i = 0; i < COLS; i = i + 2) {
                 double coloffset = ColOffset(i);
-                if (row % 2 == 0) coloffset = coloffset + offset; // red offset at zero
-#ifdef LEFTRIGHT
-                Eigen::Vector3d up(rowoffset, coloffset, 0.01);
-                Eigen::Vector3d down(rowoffset + offset, coloffset + offset, 0.0);
-#elif defined(UPDOWN)
-                Eigen::Vector3d up(coloffset, rowoffset, 0.01);
-                Eigen::Vector3d down(coloffset + offset, rowoffset + offset, 0.0);
-#endif
+                if (row % 2 == 0) coloffset = coloffset + SQOFFSET; // red offset at zero
 
                 std::string sqname = Globals.StrFormat("Square[%d:%d]", row, i);
-                ObjectDB * checker;
                 ObjectDB * obj;
 
                 obj = pScene->CreateCuboid(sqname,
                         "Checkerboard",
-                        tfPose2Affine3d(RCS::Pose(qidentity, vectorEigenToTF<Eigen::Vector3d>(up))),
-                        tfPose2Affine3d(RCS::Pose(qidentity, vectorEigenToTF<Eigen::Vector3d>(down))),
+                        Convert<tf::Pose, Eigen::Affine3d>(tf::Pose(qidentity, GetUp(rowoffset, coloffset))),
+                        Convert<tf::Pose, Eigen::Affine3d>(tf::Pose(qidentity, GetDown(rowoffset, coloffset))),
                         "WHITE");
-#ifdef LEFTRIGHT               
-                obj->centroid = Eigen::Vector3d(rowoffset + offset / 2.0, coloffset + offset / 2.0, .01);
-#elif defined(UPDOWN)
-                obj->centroid = Eigen::Vector3d(coloffset + offset / 2.0, rowoffset + offset / 2.0, .01);
-#endif
+               
+                obj->centroid = GetCentroid(rowoffset, coloffset);
 
+                sqname = Globals.StrFormat("Square[%d:%d]", row, i + 1);
+                if (row % 2 == 0) coloffset = coloffset - SQOFFSET; // red offset at zero
+                else coloffset = coloffset + SQOFFSET;
+
+                obj = pScene->CreateCuboid(sqname,
+                        "Checkerboard",
+                        Convert<tf::Pose, Eigen::Affine3d>(tf::Pose(qidentity, GetUp(rowoffset, coloffset))),
+                        Convert<tf::Pose, Eigen::Affine3d>(tf::Pose(qidentity, GetDown(rowoffset, coloffset))),
+                        "BLACK");
+                obj->centroid = GetCentroid(rowoffset, coloffset);
+            }
+        }
+    }
+
+    void RvizPiecesSetup() {
+        tf::Quaternion qidentity(0.0, 0.0, 0.0, 1.0);
+
+        for (size_t row = 0; row < ROWS; row++) {
+            double rowoffset = RowOffset(row);
+            for (size_t i = 0; i < COLS; i = i + 2) {
+                double coloffset = ColOffset(i);
+                if (row % 2 == 0) coloffset = coloffset + SQOFFSET; // red offset at zero
+
+                ObjectDB * checker;
                 size_t checkercol;
 #ifdef LEFTRIGHT  
                 checkercol = (row % 2 == 0) ? i + 1 : i;
 #elif defined(UPDOWN)       
                 checkercol = (row % 2 == 0) ? i + 1 : i;
 #endif
-                 std::string checkercolor = "CLEAR";
-                  //rviz_visual_tools::colors checkercolor = rviz_visual_tools::CLEAR;
+                std::string checkercolor = "CLEAR";
                 if (row < 3) checkercolor = "RED";
                 if (row >= 5) checkercolor = "BLACK";
                 if (checkercolor != "CLEAR") {
                     std::string checkername = Globals.StrFormat("Checker[%d:%d]", row, checkercol);
                     checker =  pScene->CreateCylinder(checkername,
                             "Cylinder",
-                            Eigen::Affine3d(Eigen::Translation3d(obj->centroid)),//FIXME: base offset?
+                            Eigen::Affine3d(Eigen::Translation3d(GetCentroid(row, i) )), //FIXME: base offset?
                             checkercolor,
                             height,
                             radius,
                             "Cylinder");
                 }
-
-                if (row % 2 == 0) coloffset = coloffset - offset; // red offset at zero
-                else coloffset = coloffset + offset;
-#ifdef LEFTRIGHT               
-                Eigen::Vector3d bup(rowoffset, coloffset, 0.01);
-                Eigen::Vector3d bdown(rowoffset + offset, coloffset + offset, 0.0);
-#elif  defined(UPDOWN)
-                Eigen::Vector3d bup(coloffset, rowoffset, 0.01);
-                Eigen::Vector3d bdown(coloffset + offset, rowoffset + offset, 0.0);
-#endif             
-                //                sqname = Globals.StrFormat("Square[%d:%d]", row, i);
-                obj =  pScene->CreateCuboid(sqname,
-                        "Checkerboard",
-                        tfPose2Affine3d(RCS::Pose(qidentity, vectorEigenToTF<Eigen::Vector3d>(bup))),
-                        tfPose2Affine3d(RCS::Pose(qidentity, vectorEigenToTF<Eigen::Vector3d>(bdown))),
-                        "BLACK");
-#ifdef LEFTRIGHT               
-                obj->centroid = Eigen::Vector3d(rowoffset + offset / 2.0, coloffset + offset / 2.0, .01);
-#elif defined(UPDOWN)
-                obj->centroid = Eigen::Vector3d(coloffset + offset / 2.0, rowoffset + offset / 2.0, .01);
-#endif                
             }
         }
     }
@@ -209,77 +238,7 @@ Eigen::Affine3d GetPose(int row, int col) {
     bool IsAlreadyKing(Checkers::Move m) {
         return ISKING(game.Board()[m.row][m.col]);
     }
-#if 0
-    void PhysicalMove(InlineRobotCommands &robot,
-            int player,
-            int i, int j,
-            Checkers::Move m,
-            bool doublejump=false) {
-        std::string errmsg;
-        std::string typemove("move");
 
-        // If blank space there can be no actual checkername2 object
-        std::string checkername1 = Globals.StrFormat("Checker[%d:%d]", i, j);
-        std::string checkername2 = Globals.StrFormat("Checker[%d:%d]", m.row, m.col);
-        Eigen::Affine3d frompose = GetPose(i, j);
-        Eigen::Affine3d pose = GetPose(m.row, m.col);
-        ObjectDB * obj = pScene->Find(checkername1);
-
-        assert(obj != NULL);
-#ifdef DEBUG
-        LOG_DEBUG << "Move From " << Globals.StrFormat("[%d,%d]=%f,%f", i, j, frompose(0, 3), frompose(1, 3));
-        LOG_DEBUG << "Move To   " << Globals.StrFormat("[%d,%d]=%f,%f", m.row, m.col, pose(0, 3), pose(1, 3));
-        LOG_DEBUG << "tf    Checkerboard1 pose" << RCS::DumpPoseSimple(Conversion::Affine3d2RcsPose(obj-> pose));
-        LOG_DEBUG << "Eigen Checkerboard1 pose" << RCS::DumpEigenPose(obj-> pose);
-#endif
-
-        rviz_visual_tools::colors checkercolor = (ISRED(player)) ? rviz_visual_tools::RED : rviz_visual_tools::BLACK;
-        ;
-        robot.Pick(Conversion::Affine3d2RcsPose(obj-> pose), checkername1);
-        robot.Place(Conversion::Affine3d2RcsPose(pose), checkername1);
-        //MoveObject(checkername1, Conversion::Affine3d2RcsPose(pose), checkercolor);
-  
-        while(robot.cnc()->IsBusy())
-                ros::Duration(0.01).sleep();
-        
-        if (m.bJump) {
-            typemove = "jump";
-            Checkers::Move jumped = m.Diff(Checkers::Move(i, j));
-            std::string jumpedcheckername = Globals.StrFormat("Checker[%d:%d]", jumped.row, jumped.col);
-            pScene->DeleteObject(jumpedcheckername);
-        }
-        if (IsKing(m)) {
-            // Double checker height - for now 
-            // May need to delete and then create?
-            obj->height *= 2 ;
-            obj->pose = Eigen::Translation3d(Eigen::Vector3d(0, 0, 0.01)) * obj->pose;
-            robot.MoveObject(obj->name, Conversion::Affine3d2RcsPose(obj->pose), pScene->MARKERCOLOR(checkercolor));
-            ros::spinOnce();
-            ros::spinOnce();
-            ros::spinOnce();
-        }
-#if 0
-        pScene->UpdateScene(checkername1, pose, obj->color);
-#endif
-        ros::spinOnce();
-        obj->name = checkername2; // change checker name 
-        if (m.doublejumps.size() > 0) {
-            PhysicalMove(robot, player, m.row, m.col, m.doublejumps[0],true);
-        }
-
-        // Done - move to safe non-collisioin position - skip if double jump
-        if (!doublejump) {
-            std::vector<unsigned long> jointnum(robot.cnc()->Kinematics()->NumJoints());
-            std::iota(jointnum.begin(), jointnum.end(), 0); // adjusted already to 0..n-1
-            robot.MoveJoints(jointnum, robot.cnc()->NamedJointMove["Safe"]);
-            while (robot.cnc()->IsBusy()) {
-                ros::spinOnce();
-                ros::Duration(0.01).sleep();
-            }
-        }
-            
-    }
-#endif
     int Player() {
         return curplayer;
     }

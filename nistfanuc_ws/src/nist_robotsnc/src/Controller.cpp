@@ -27,6 +27,8 @@
 #include "Scene.h"
 #include "Boost.h"
 #include "MotionException.h"
+
+using namespace Conversion;
 // RCS namespace declarations
 //////////////////////////////////
 namespace RCS {
@@ -140,7 +142,7 @@ namespace RCS {
         statusmsg.crclcommandnum = status.echocmd.crclcommandnum;
         statusmsg.crclstatusnum = status.echocmd.crclcommandnum;
         status.currentpose = Kinematics()->FK(status.currentjoints.position); /**<  current robot pose */
-        Conversion::TfPose2GeometryPose(status.currentpose, statusmsg.statuspose);
+        statusmsg.statuspose=Convert<tf::Pose, geometry_msgs::Pose>(status.currentpose);
         statusmsg.statusjoints = status.currentjoints;
         statusmsg.eepercent = status.eepercent;
         crcl_status.publish(statusmsg);
@@ -252,11 +254,11 @@ namespace RCS {
                             pose,
                             pScene->MARKERCOLOR(_newcc.partcolor));
                 } else if (_newcc.crclcommand == CanonCmdType::CANON_SET_GRIPPER_POSE) {
-                    gripperPose() = Conversion::GeomMsgPose2RcsPose(_newcc.finalpose);
+                    gripperPose() = Conversion::Convert<geometry_msgs::Pose, tf::Pose>(_newcc.finalpose);
                     invGripperPose() = gripperPose().inverse();
                 }
                 else if (_newcc.crclcommand == CanonCmdType::CANON_SET_BASE_POSE) {
-                    basePose() = Conversion::GeomMsgPose2RcsPose(_newcc.finalpose);
+                    basePose() = Conversion::Convert<geometry_msgs::Pose, tf::Pose>(_newcc.finalpose);
                     invBasePose() = basePose().inverse();
                 }
                 else if (_newcc.crclcommand == CanonCmdType::CANON_FEEDHOLD) {

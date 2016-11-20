@@ -21,6 +21,7 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 #include "nist_robotsnc/MotionException.h"
 
 using namespace RCS;
+using namespace Conversion;
 
 #ifndef PI_2
 #define PI_2 1.5707963268
@@ -72,7 +73,7 @@ void InlineRobotCommands::MoveTo(RCS::Pose pose, std::string objname) {
     cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
 
     //cmd.hint = _hints.FindClosest(pose);
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(pose);
+    cmd.finalpose = Convert<tf::Pose, geometry_msgs::Pose> (pose);
     if (!objname.empty()) {
         ObjectDB * obj = pScene->Find(objname);
         cmd.partname = objname;
@@ -96,7 +97,7 @@ void InlineRobotCommands::MoveObject(std::string objname, RCS::Pose pose, std::s
     cmd.crclcommandnum = crclcommandnum++;
     cmd.partname = objname;
     cmd.partcolor = pScene->MARKERCOLOR(color);
-    cmd.finalpose = Conversion::RcsPose2GeomMsgPose(pose);
+    cmd.finalpose = Convert<tf::Pose, geometry_msgs::Pose>(pose);
     _cnc->crclcmds.AddMsgQueue(cmd);
 }
 
@@ -173,9 +174,9 @@ bool GearDemo::IssueRobotCommands(InlineRobotCommands & r, bool bSafe) {
     ObjectDB * obj = pScene->Find(instance->name);
     NC_ASSERT(obj != NULL);
 
-    Eigen::Affine3d affpose = Conversion::convertPointToPose(obj->pose.translation()); //  + obj->gripperoffset.translation());
-    tf::Pose gripperoffset = Conversion::Affine3d2RcsPose(obj->gripperoffset);
-    pickpose = RCS::Pose(r.QBend, Conversion::vectorEigenToTF(affpose.translation()))*gripperoffset;
+    Eigen::Affine3d affpose = Convert<Eigen::Vector3d, Eigen::Affine3d>(obj->pose.translation()); //  + obj->gripperoffset.translation());
+    tf::Pose gripperoffset = Convert<Eigen::Affine3d, tf::Pose>(obj->gripperoffset);
+    pickpose = RCS::Pose(r.QBend, vectorEigenToTFVector(affpose.translation()))*gripperoffset;
 
     tf::Vector3 offset = pickpose.getOrigin();
 
@@ -265,15 +266,15 @@ void GearDemo::Setup() {
         ShapeModel::Shape shape = _shapes.GetInstanceShape(instances[i]);
         ObjectDB *obj = pScene->CreateMesh(gearname, "gear",
                 pScene->gid++,
-                Conversion::tfPose2Affine3d(gearpose),
+                Convert<tf::Pose, Eigen::Affine3d>(gearpose),
                 shape.meshfile,
                 shape.color,
                 shape.scale);
         std::vector<double> graspoffset = _shapes.GetChildValues<double>("parts." + shape.name + ".gripper.offset");
-        obj->gripperoffset = Conversion::tfPose2Affine3d(Conversion::CreateRPYPose(graspoffset));
+        obj->gripperoffset = Convert<tf::Pose, Eigen::Affine3d>(Conversion::CreateRPYPose(graspoffset));
         obj->instance = instances[i];
         //        pScene->CreateMarker("maker",
-        //                Conversion::tfPose2Affine3d(gearpose * Conversion::CreatePose(tf::Vector3(0.0, 0.0, 0.04))
+        //                Convert<tf::Pose, Eigen::Affine3d>(gearpose * Conversion::CreatePose(tf::Vector3(0.0, 0.0, 0.04))
         //                ),
         //                "GREEN");
     }
@@ -294,7 +295,7 @@ void GearDemo::Setup() {
         ObjectDB *obj = pScene->CreateMesh(holdername,
                 "gearholder",
                 pScene->gid++,
-                Conversion::tfPose2Affine3d(gearpose),
+                Convert<tf::Pose, Eigen::Affine3d>(gearpose),
                 shape.meshfile,
                 shape.color,
                 shape.scale);
@@ -356,14 +357,14 @@ void CheckersGame::PhysicalMove(InlineRobotCommands &robot,
 #ifdef DEBUG
     LOG_DEBUG << "Move From " << Globals.StrFormat("[%d,%d]=%f,%f", i, j, frompose(0, 3), frompose(1, 3));
     LOG_DEBUG << "Move To   " << Globals.StrFormat("[%d,%d]=%f,%f", m.row, m.col, pose(0, 3), pose(1, 3));
-    LOG_DEBUG << "tf    Checkerboard1 pose" << RCS::DumpPoseSimple(Conversion::Affine3d2RcsPose(obj-> pose));
+    LOG_DEBUG << "tf    Checkerboard1 pose" << RCS::DumpPoseSimple(Conversion::Convert< Eigen::Affine3d,tf::Pose>(obj-> pose));
     LOG_DEBUG << "Eigen Checkerboard1 pose" << RCS::DumpEigenPose(obj-> pose);
 #endif
 
     rviz_visual_tools::colors checkercolor = (ISRED(player)) ? rviz_visual_tools::RED : rviz_visual_tools::BLACK;
     ;
-    robot.Pick(Conversion::Affine3d2RcsPose(obj-> pose), checkername1);
-    robot.Place(Conversion::Affine3d2RcsPose(pose), checkername1);
+    robot.Pick(Convert<Eigen::Affine3d, tf::Pose >(obj-> pose), checkername1);
+    robot.Place(Convert< Eigen::Affine3d, tf::Pose>(pose), checkername1);
 
     while (robot.cnc()->IsBusy())
         ros::Duration(0.01).sleep();
@@ -379,7 +380,8 @@ void CheckersGame::PhysicalMove(InlineRobotCommands &robot,
         // May need to delete and then create?
         obj->height *= 2;
         obj->pose = Eigen::Translation3d(Eigen::Vector3d(0, 0, 0.01)) * obj->pose;
-        robot.MoveObject(obj->name, Conversion::Affine3d2RcsPose(obj->pose), pScene->MARKERCOLOR(checkercolor));
+        robot.MoveObject(obj->name, Convert<Eigen::Affine3d, tf::Pose>(obj->pose), 
+                pScene->MARKERCOLOR(checkercolor));
         ros::spinOnce();
         ros::spinOnce();
         ros::spinOnce();
@@ -408,7 +410,7 @@ void CheckersGame::PhysicalMove(InlineRobotCommands &robot,
 void CheckersGame::Setup() {
     //    RvizDemo rvizdemo(_nh);
     pScene->InitScene();
-    rvizgame->RvizSetup();
+    rvizgame->RvizBoardSetup();
     pScene->DrawScene(); // Debug: LOG_DEBUG << ObjectDB::DumpDB();
 }
 

@@ -49,7 +49,7 @@ int BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd) 
             cmd.joints = _kinematics->UpdateJointState(cmd.jointnum, _nc->status.currentjoints, cmd.joints);
         } else if (cmd.crclcommand == CanonCmdType::CANON_MOVE_TO) {
             // FIXME: need to subtract off tool offset from tcp
-            RCS::Pose finalpose = Conversion::GeomMsgPose2RcsPose(cmd.finalpose);
+            RCS::Pose finalpose = Conversion::Convert<geometry_msgs::Pose, tf::Pose>(cmd.finalpose);
             RCS::Pose goalpose = finalpose * _nc->invGripperPose();
 
             LOG_DEBUG << "Final Pose " << RCS::DumpPoseSimple(finalpose).c_str();

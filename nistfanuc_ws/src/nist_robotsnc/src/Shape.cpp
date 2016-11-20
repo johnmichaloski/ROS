@@ -4,6 +4,8 @@
 #include "Boost.h"
 #include <boost/optional.hpp>
 #include "Conversions.h"
+using namespace Conversion;
+
 namespace ShapeModel {
 
 
@@ -201,7 +203,7 @@ namespace ShapeModel {
                     std::vector<double> position = GetTypes<double>(root, "parts." + shape.name + ".contains." + v3.first.data() + ".position");
                     tf::Vector3 offset(position[0], position[1], position[2]);
                     offset = centroid + offset;
-                    tf::Pose pose = Conversion::CreatePose(offset) * Conversion::CreatePose(tf::Vector3(0., 0.0, 1.), instance->rotation);
+                    tf::Pose pose = Convert<tf::Vector3, tf::Pose>(offset) * CreatePose(tf::Vector3(0., 0.0, 1.), instance->rotation);
                     poses.push_back(pose);
                 }
 
