@@ -146,7 +146,7 @@ struct RvizCheckers {
 #elif defined(UPDOWN)
         Eigen::Vector3d up(coloffset, rowoffset, 0.01);
 #endif
-        return Conversion::vectorEigenToTFVector<Eigen::Vector3d>(up);
+        return Convert<Eigen::Vector3d, tf::Vector3 >(up);
     }
 
     tf::Vector3 GetDown(int rowoffset, int coloffset) {
@@ -155,7 +155,7 @@ struct RvizCheckers {
 #elif defined(UPDOWN)
         Eigen::Vector3d down(coloffset + SQOFFSET, rowoffset + SQOFFSET, 0.0);
 #endif
-        return Conversion::vectorEigenToTFVector<Eigen::Vector3d>(down);
+        return Convert<Eigen::Vector3d, tf::Vector3 >(down);
     }
 
     void RvizBoardSetup() {

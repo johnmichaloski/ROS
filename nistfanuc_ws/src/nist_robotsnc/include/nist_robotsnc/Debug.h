@@ -17,7 +17,7 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 #include <vector>
 #include "RCS.h"
 #include "Conversions.h"
-
+using namespace Conversion;
 
 
 namespace RCS {
@@ -74,7 +74,7 @@ namespace RCS {
         s << "Translation = " << 1000.0 * pose(0, 3) << ":" << 1000.0 * pose(1, 3) << ":" << 1000.0 * pose(2, 3);
         tf::Matrix3x3 tfMatrix3x3;
         Eigen::Matrix3d e = pose.rotation();
-        tf::matrixEigenToTF(e, tfMatrix3x3);
+        tfMatrix3x3=Convert<Eigen::Matrix3d, tf::Matrix3x3>(e);
 
         double roll, pitch, yaw;
         tfMatrix3x3.getRPY(roll, pitch, yaw);

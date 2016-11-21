@@ -174,9 +174,11 @@ bool GearDemo::IssueRobotCommands(InlineRobotCommands & r, bool bSafe) {
     ObjectDB * obj = pScene->Find(instance->name);
     NC_ASSERT(obj != NULL);
 
-    Eigen::Affine3d affpose = Convert<Eigen::Vector3d, Eigen::Affine3d>(obj->pose.translation()); //  + obj->gripperoffset.translation());
+    Eigen::Affine3d affpose = Convert<Eigen::Vector3d, Eigen::Affine3d>(obj->pose.translation()); 
+    // The object gripper offset is where on the object it is to be gripped
     tf::Pose gripperoffset = Convert<Eigen::Affine3d, tf::Pose>(obj->gripperoffset);
-    pickpose = RCS::Pose(r.QBend, vectorEigenToTFVector(affpose.translation()))*gripperoffset;
+    // THe gripperoffset is the robot gripper offset back to the 0T6 equivalent
+    pickpose = RCS::Pose(r.QBend, Convert<Eigen::Vector3d,tf::Vector3>(affpose.translation()))*gripperoffset;
 
     tf::Vector3 offset = pickpose.getOrigin();
 

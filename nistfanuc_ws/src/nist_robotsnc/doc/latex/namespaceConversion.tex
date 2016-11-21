@@ -1,0 +1,659 @@
+\hypertarget{namespaceConversion}{\section{Conversion Namespace Reference}
+\label{namespaceConversion}\index{Conversion@{Conversion}}
+}
+
+
+The namespace \hyperlink{namespaceConversion}{Conversion} provides some utilities to convert from one representation into another. Representations include tf, Eigen\-::\-Affine3d, std\-::vector, geometry\-\_\-msgs\-::\-Pose, geometry\-\_\-msgs\-::\-Point, and C\-R\-C\-L.  
+
+
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename From , typename To $>$ }\\To \hyperlink{namespaceConversion_ac7f0bd2e3357937bb18ca06a40276712}{Convert} (From f)
+\begin{DoxyCompactList}\small\item\em Empty conversion of type from into type to. If called, asserts. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\tf\-::\-Pose \hyperlink{namespaceConversion_abcf96a9bf13217fe7840a99ec0fa491a}{Convert$<$ Eigen\-::\-Affine3d, tf\-::\-Pose $>$} (Eigen\-::\-Affine3d pose)
+\begin{DoxyCompactList}\small\item\em Convert Eigen\-::\-Affine3d into tf\-::\-Pose. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\tf\-::\-Pose \hyperlink{namespaceConversion_a7733ae1aea664b09b41186766db5812f}{Convert$<$ geometry\-\_\-msgs\-::\-Pose, tf\-::\-Pose $>$} (geometry\-\_\-msgs\-::\-Pose m)
+\begin{DoxyCompactList}\small\item\em Convert geometry\-\_\-msgs\-::\-Pose into tf\-::\-Pose. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\tf\-::\-Quaternion \hyperlink{namespaceConversion_ad4572622bac92a39114266c05ed4e034}{Convert$<$ Eigen\-::\-Quaterniond, tf\-::\-Quaternion $>$} (Eigen\-::\-Quaterniond e)
+\begin{DoxyCompactList}\small\item\em Convert Eigen\-::\-Quaterniond into tf\-::\-Quaternion. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\tf\-::\-Pose \hyperlink{namespaceConversion_af90de2dbc6dedc00d642e8b4e23b101d}{Convert$<$ tf\-::\-Quaternion, tf\-::\-Pose $>$} (tf\-::\-Quaternion q)
+\begin{DoxyCompactList}\small\item\em Convert tf\-::\-Quaternion into tf\-::\-Pose. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\tf\-::\-Pose \hyperlink{namespaceConversion_abdf9ed550226aaab256209a1228a4965}{Convert$<$ tf\-::\-Vector3, tf\-::\-Pose $>$} (tf\-::\-Vector3 t)
+\begin{DoxyCompactList}\small\item\em Convert tf\-::\-Vector3 into tf\-::\-Pose. \end{DoxyCompactList}\item 
+tf\-::\-Pose \hyperlink{namespaceConversion_aed5da1073f2e617a327bb6dd4b33031d}{Create\-R\-P\-Y\-Pose} (std\-::vector$<$ double $>$ ds)
+\begin{DoxyCompactList}\small\item\em Create\-R\-P\-Y\-Pose taks array of double and create a tf\-::\-Pose. \end{DoxyCompactList}\item 
+tf\-::\-Pose \hyperlink{namespaceConversion_a76a8cad78c1b68f665c5a44bcd6f9b13}{Create\-Pose} (tf\-::\-Vector3 axis, double angle)
+\begin{DoxyCompactList}\small\item\em Create Pose from a axis and angle rotation representation. \end{DoxyCompactList}\item 
+tf\-::\-Quaternion \hyperlink{namespaceConversion_a35388c46e6dd56509e1998c48e545fd6}{R\-P\-Y\-Radians} (double roll, double pitch, double yaw)
+\begin{DoxyCompactList}\small\item\em Create Quaternion from a rpy rotation representation designated in radians. \end{DoxyCompactList}\item 
+tf\-::\-Quaternion \hyperlink{namespaceConversion_ae5a5fe4357248756784a320a04cc750e}{R\-P\-Y\-Degrees} (double roll, double pitch, double yaw)
+\begin{DoxyCompactList}\small\item\em Create Quaternion from a rpy rotation representation designated in degrees. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\tf\-::\-Vector3 \hyperlink{namespaceConversion_a9628b6628e0a72b3e224861b45c1684e}{Convert$<$ Eigen\-::\-Vector3d, tf\-::\-Vector3 $>$} (Eigen\-::\-Vector3d e)
+\begin{DoxyCompactList}\small\item\em Convert geometry\-\_\-msgs\-::\-Pose into tf\-::\-Vector3. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\tf\-::\-Pose \hyperlink{namespaceConversion_a467fb25355421f26061b723953096b71}{Convert$<$ Eigen\-::\-Vector3d, tf\-::\-Pose $>$} (Eigen\-::\-Vector3d e)
+\begin{DoxyCompactList}\small\item\em Convert Eigen\-::\-Vector3d into tf\-::\-Pose. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\tf\-::\-Vector3 \hyperlink{namespaceConversion_a897add416eb33b4d1f1a9e8d0977e07c}{matrix\-Eigen\-To\-Tf\-Vector} (T e)
+\begin{DoxyCompactList}\small\item\em Convert Eigen matrix into tf\-::\-Vector3. Example\-: tf\-::\-Vector3 v = matrix\-Eigen\-To\-Tf\-Vector$<$\-Eigen\-::\-Matrix3d$>$(m);. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\tf\-::\-Matrix3x3 \hyperlink{namespaceConversion_a30a605b3e9c88baa3acce57268b8d9e2}{Convert$<$ Eigen\-::\-Matrix3d, tf\-::\-Matrix3x3 $>$} (Eigen\-::\-Matrix3d e)
+\begin{DoxyCompactList}\small\item\em Convert Eigen Matrix3d into tf\-::\-Matrix3x3. \end{DoxyCompactList}\item 
+tf\-::\-Pose \hyperlink{namespaceConversion_a6b311daa62f5258ff8682031bb6a4d7c}{Identity} ()
+\begin{DoxyCompactList}\small\item\em Create Identity Pose. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\Eigen\-::\-Affine3d \hyperlink{namespaceConversion_ab6df3e4febaddcea01517455f251d4c4}{Convert$<$ tf\-::\-Pose, Eigen\-::\-Affine3d $>$} (tf\-::\-Pose pose)
+\begin{DoxyCompactList}\small\item\em \hyperlink{namespaceConversion_ac7f0bd2e3357937bb18ca06a40276712}{Convert$<$tf\-::\-Pose, Eigen\-::\-Affine3d$>$} converts tf pose into an Eigen affine 4x4 matrix o represent the pose. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\Eigen\-::\-Affine3d \hyperlink{namespaceConversion_af74e38f38df6185e65ff99f74b37f51b}{Convert$<$ geometry\-\_\-msgs\-::\-Pose, Eigen\-::\-Affine3d $>$} (geometry\-\_\-msgs\-::\-Pose m)
+\begin{DoxyCompactList}\small\item\em Convert geometry\-\_\-msgs\-::\-Pose into an Eigen affine3d 4x4 matrix o represent the pose. Uses tf conversion utilities. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\Eigen\-::\-Translation3d \hyperlink{namespaceConversion_a2898be79c29fac349738d3deb114c139}{Convert$<$ geometry\-\_\-msgs\-::\-Pose, Eigen\-::\-Translation3d $>$} (geometry\-\_\-msgs\-::\-Pose pose)
+\begin{DoxyCompactList}\small\item\em Convert geometry\-\_\-msgs\-::\-Pose into an Eigen\-::\-Translation3d. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\Eigen\-::\-Vector3d \hyperlink{namespaceConversion_a48211512608db10bf5d310e135f478db}{Convert$<$ tf\-::\-Vector3, Eigen\-::\-Vector3d $>$} (tf\-::\-Vector3 t)
+\begin{DoxyCompactList}\small\item\em Convert tf\-::\-Vector3 into an Eigen\-::\-Vector3d. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\Eigen\-::\-Affine3d \hyperlink{namespaceConversion_af61bc8900b8c0c7937de965a1af9dd1f}{Convert$<$ Eigen\-::\-Vector3d, Eigen\-::\-Affine3d $>$} (Eigen\-::\-Vector3d translation)
+\begin{DoxyCompactList}\small\item\em Convert Eigen\-::\-Vector3d translation into an Eigen\-::\-Affine3d pose. \end{DoxyCompactList}\item 
+Eigen\-::\-Affine3d \hyperlink{namespaceConversion_a79d77925c7f4381dca2f4587923cd849}{Create\-Eigen\-Pose} (double zangle)
+\begin{DoxyCompactList}\small\item\em Create Eigen\-::\-Affine3d as an axis angle definition around z axis. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\Eigen\-::\-Affine3d \hyperlink{namespaceConversion_a13038fb5064a0b8b617e8613733203e3}{Convert$<$ Eigen\-::\-Translation3d, Eigen\-::\-Affine3d $>$} (Eigen\-::\-Translation3d trans)
+\begin{DoxyCompactList}\small\item\em Convert Eigen\-::\-Translation3d translation into an Eigen\-::\-Affine3d pose. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\Eigen\-::\-Vector3d \hyperlink{namespaceConversion_a3d51933723f132b4502aeb7bcb30195b}{Convert$<$ geometry\-\_\-msgs\-::\-Point, Eigen\-::\-Vector3d $>$} (geometry\-\_\-msgs\-::\-Point point)
+\begin{DoxyCompactList}\small\item\em Convert geometry\-\_\-msgs\-::\-Point translation into an Eigen\-::\-Vector3d vector. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\Eigen\-::\-Affine3d \hyperlink{namespaceConversion_a9280130c85d311a1a5416578cb974119}{Convert$<$ geometry\-\_\-msgs\-::\-Point, Eigen\-::\-Affine3d $>$} (geometry\-\_\-msgs\-::\-Point point)
+\begin{DoxyCompactList}\small\item\em Convert geometry\-\_\-msgs\-::\-Point translation into an Eigen\-::\-Affine3d pose. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\geometry\-\_\-msgs\-::\-Pose \hyperlink{namespaceConversion_a51517734edff084c759524c24b337011}{Convert$<$ tf\-::\-Pose, geometry\-\_\-msgs\-::\-Pose $>$} (tf\-::\-Pose m)
+\begin{DoxyCompactList}\small\item\em Convert tf\-::\-Pose pose into an geometry\-\_\-msgs\-::\-Pose pose. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\geometry\-\_\-msgs\-::\-Pose \hyperlink{namespaceConversion_a7c35f538dfd4cbfa4ae5f428af02ba2c}{Convert$<$ geometry\-\_\-msgs\-::\-Point, geometry\-\_\-msgs\-::\-Pose $>$} (geometry\-\_\-msgs\-::\-Point point)
+\begin{DoxyCompactList}\small\item\em Convert geometry\-\_\-msgs\-::\-Point point into an geometry\-\_\-msgs\-::\-Pose pose. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\geometry\-\_\-msgs\-::\-Point \hyperlink{namespaceConversion_a6826a33bcb1238949dac9a7aadea3385}{Convert$<$ Eigen\-::\-Vector3d, geometry\-\_\-msgs\-::\-Point $>$} (Eigen\-::\-Vector3d point)
+\begin{DoxyCompactList}\small\item\em Convert Eigen\-::\-Vector3d point into an geometry\-\_\-msgs\-::\-Point position vector. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\geometry\-\_\-msgs\-::\-Pose \hyperlink{namespaceConversion_a7b91904dac5c5890ddb978512a21daa5}{Convert$<$ Eigen\-::\-Affine3d, geometry\-\_\-msgs\-::\-Pose $>$} (Eigen\-::\-Affine3d e)
+\begin{DoxyCompactList}\small\item\em Convert Eigen\-::\-Affine3d pose into an geometry\-\_\-msgs\-::\-Pose pose. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\geometry\-\_\-msgs\-::\-Point \hyperlink{namespaceConversion_aafd6a17437fc2dfa296f4be4da5d2efd}{Convert$<$ Eigen\-::\-Affine3d, geometry\-\_\-msgs\-::\-Point $>$} (Eigen\-::\-Affine3d pose)
+\begin{DoxyCompactList}\small\item\em Convert Eigen\-::\-Affine3d pose into an geometry\-\_\-msgs\-::\-Point translation element. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\Joint\-State \hyperlink{namespaceConversion_aab13ef132c54134d0b2b30c21aebd435}{Convert$<$ std\-::vector$<$ double $>$, Joint\-State $>$} (std\-::vector$<$ double $>$ src)
+\begin{DoxyCompactList}\small\item\em Convert array of std\-::vector$<$double$>$ doubles into an Joint\-State position, but blanking velcity, and effort. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The namespace \hyperlink{namespaceConversion}{Conversion} provides some utilities to convert from one representation into another. Representations include tf, Eigen\-::\-Affine3d, std\-::vector, geometry\-\_\-msgs\-::\-Pose, geometry\-\_\-msgs\-::\-Point, and C\-R\-C\-L. Clearly there may be faster const references, but they require special line to convert, cannot be done in line since you cannot pass a const reference to a constructor on the stack in g++ unless you override a warning.
+
+For g++, compilation would be faster if these conversion routines were placed in source file (cpp) O\-R you used precompiled header in g++. here is a \char`\"{}silent\char`\"{} error when exceeding precompiled header limits in g++. (Or was at one time). 
+
+\subsection{Function Documentation}
+\hypertarget{namespaceConversion_ac7f0bd2e3357937bb18ca06a40276712}{\index{Conversion@{Conversion}!Convert@{Convert}}
+\index{Convert@{Convert}!Conversion@{Conversion}}
+\subsubsection[{Convert}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename From , typename To $>$ To Conversion\-::\-Convert (
+\begin{DoxyParamCaption}
+\item[{From}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_ac7f0bd2e3357937bb18ca06a40276712}
+
+
+Empty conversion of type from into type to. If called, asserts. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em from} & is defined in the template corresponding typename. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+to is defined in the template corresponding typename 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_aafd6a17437fc2dfa296f4be4da5d2efd}{\index{Conversion@{Conversion}!Convert$<$ Eigen\-::\-Affine3d, geometry\-\_\-msgs\-::\-Point $>$@{Convert$<$ Eigen\-::\-Affine3d, geometry\-\_\-msgs\-::\-Point $>$}}
+\index{Convert$<$ Eigen\-::\-Affine3d, geometry\-\_\-msgs\-::\-Point $>$@{Convert$<$ Eigen\-::\-Affine3d, geometry\-\_\-msgs\-::\-Point $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ Eigen\-::\-Affine3d, geometry\-\_\-msgs\-::\-Point $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ geometry\-\_\-msgs\-::\-Point {\bf Conversion\-::\-Convert}$<$ Eigen\-::\-Affine3d, geometry\-\_\-msgs\-::\-Point $>$ (
+\begin{DoxyParamCaption}
+\item[{Eigen\-::\-Affine3d}]{pose}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_aafd6a17437fc2dfa296f4be4da5d2efd}
+
+
+Convert Eigen\-::\-Affine3d pose into an geometry\-\_\-msgs\-::\-Point translation element. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & is Eigen\-::\-Affine3d defining pose. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+geometry\-\_\-msgs\-::\-Point translation element. 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_a7b91904dac5c5890ddb978512a21daa5}{\index{Conversion@{Conversion}!Convert$<$ Eigen\-::\-Affine3d, geometry\-\_\-msgs\-::\-Pose $>$@{Convert$<$ Eigen\-::\-Affine3d, geometry\-\_\-msgs\-::\-Pose $>$}}
+\index{Convert$<$ Eigen\-::\-Affine3d, geometry\-\_\-msgs\-::\-Pose $>$@{Convert$<$ Eigen\-::\-Affine3d, geometry\-\_\-msgs\-::\-Pose $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ Eigen\-::\-Affine3d, geometry\-\_\-msgs\-::\-Pose $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ geometry\-\_\-msgs\-::\-Pose {\bf Conversion\-::\-Convert}$<$ Eigen\-::\-Affine3d, geometry\-\_\-msgs\-::\-Pose $>$ (
+\begin{DoxyParamCaption}
+\item[{Eigen\-::\-Affine3d}]{e}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_a7b91904dac5c5890ddb978512a21daa5}
+
+
+Convert Eigen\-::\-Affine3d pose into an geometry\-\_\-msgs\-::\-Pose pose. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & is Eigen\-::\-Affine3d defining equivalent pose. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+geometry\-\_\-msgs\-::\-Pose pose. 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_abcf96a9bf13217fe7840a99ec0fa491a}{\index{Conversion@{Conversion}!Convert$<$ Eigen\-::\-Affine3d, tf\-::\-Pose $>$@{Convert$<$ Eigen\-::\-Affine3d, tf\-::\-Pose $>$}}
+\index{Convert$<$ Eigen\-::\-Affine3d, tf\-::\-Pose $>$@{Convert$<$ Eigen\-::\-Affine3d, tf\-::\-Pose $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ Eigen\-::\-Affine3d, tf\-::\-Pose $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ tf\-::\-Pose {\bf Conversion\-::\-Convert}$<$ Eigen\-::\-Affine3d, tf\-::\-Pose $>$ (
+\begin{DoxyParamCaption}
+\item[{Eigen\-::\-Affine3d}]{pose}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_abcf96a9bf13217fe7840a99ec0fa491a}
+
+
+Convert Eigen\-::\-Affine3d into tf\-::\-Pose. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pose} & is copy constructor of Eigen\-::\-Affine3d. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+tf\-::\-Pose 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_a30a605b3e9c88baa3acce57268b8d9e2}{\index{Conversion@{Conversion}!Convert$<$ Eigen\-::\-Matrix3d, tf\-::\-Matrix3x3 $>$@{Convert$<$ Eigen\-::\-Matrix3d, tf\-::\-Matrix3x3 $>$}}
+\index{Convert$<$ Eigen\-::\-Matrix3d, tf\-::\-Matrix3x3 $>$@{Convert$<$ Eigen\-::\-Matrix3d, tf\-::\-Matrix3x3 $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ Eigen\-::\-Matrix3d, tf\-::\-Matrix3x3 $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ tf\-::\-Matrix3x3 {\bf Conversion\-::\-Convert}$<$ Eigen\-::\-Matrix3d, tf\-::\-Matrix3x3 $>$ (
+\begin{DoxyParamCaption}
+\item[{Eigen\-::\-Matrix3d}]{e}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_a30a605b3e9c88baa3acce57268b8d9e2}
+
+
+Convert Eigen Matrix3d into tf\-::\-Matrix3x3. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & is copy constructor of Eigen Matrix3d, a 3x3 double matrix. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+tf\-::\-Matrix3x3 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_ad4572622bac92a39114266c05ed4e034}{\index{Conversion@{Conversion}!Convert$<$ Eigen\-::\-Quaterniond, tf\-::\-Quaternion $>$@{Convert$<$ Eigen\-::\-Quaterniond, tf\-::\-Quaternion $>$}}
+\index{Convert$<$ Eigen\-::\-Quaterniond, tf\-::\-Quaternion $>$@{Convert$<$ Eigen\-::\-Quaterniond, tf\-::\-Quaternion $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ Eigen\-::\-Quaterniond, tf\-::\-Quaternion $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ tf\-::\-Quaternion {\bf Conversion\-::\-Convert}$<$ Eigen\-::\-Quaterniond, tf\-::\-Quaternion $>$ (
+\begin{DoxyParamCaption}
+\item[{Eigen\-::\-Quaterniond}]{e}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_ad4572622bac92a39114266c05ed4e034}
+
+
+Convert Eigen\-::\-Quaterniond into tf\-::\-Quaternion. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & is copy constructor of Eigen\-::\-Quaterniond. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+tf\-::\-Quaternion 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_a13038fb5064a0b8b617e8613733203e3}{\index{Conversion@{Conversion}!Convert$<$ Eigen\-::\-Translation3d, Eigen\-::\-Affine3d $>$@{Convert$<$ Eigen\-::\-Translation3d, Eigen\-::\-Affine3d $>$}}
+\index{Convert$<$ Eigen\-::\-Translation3d, Eigen\-::\-Affine3d $>$@{Convert$<$ Eigen\-::\-Translation3d, Eigen\-::\-Affine3d $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ Eigen\-::\-Translation3d, Eigen\-::\-Affine3d $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ Eigen\-::\-Affine3d {\bf Conversion\-::\-Convert}$<$ Eigen\-::\-Translation3d, Eigen\-::\-Affine3d $>$ (
+\begin{DoxyParamCaption}
+\item[{Eigen\-::\-Translation3d}]{trans}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_a13038fb5064a0b8b617e8613733203e3}
+
+
+Convert Eigen\-::\-Translation3d translation into an Eigen\-::\-Affine3d pose. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & is translation defined as a Eigen\-::\-Translation3d. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Eigen\-::\-Affine3d pose 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_af61bc8900b8c0c7937de965a1af9dd1f}{\index{Conversion@{Conversion}!Convert$<$ Eigen\-::\-Vector3d, Eigen\-::\-Affine3d $>$@{Convert$<$ Eigen\-::\-Vector3d, Eigen\-::\-Affine3d $>$}}
+\index{Convert$<$ Eigen\-::\-Vector3d, Eigen\-::\-Affine3d $>$@{Convert$<$ Eigen\-::\-Vector3d, Eigen\-::\-Affine3d $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ Eigen\-::\-Vector3d, Eigen\-::\-Affine3d $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ Eigen\-::\-Affine3d {\bf Conversion\-::\-Convert}$<$ Eigen\-::\-Vector3d, Eigen\-::\-Affine3d $>$ (
+\begin{DoxyParamCaption}
+\item[{Eigen\-::\-Vector3d}]{translation}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_af61bc8900b8c0c7937de965a1af9dd1f}
+
+
+Convert Eigen\-::\-Vector3d translation into an Eigen\-::\-Affine3d pose. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em translation} & is defined as a Eigen\-::\-Vector3d. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Eigen\-::\-Affine3d pose 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_a6826a33bcb1238949dac9a7aadea3385}{\index{Conversion@{Conversion}!Convert$<$ Eigen\-::\-Vector3d, geometry\-\_\-msgs\-::\-Point $>$@{Convert$<$ Eigen\-::\-Vector3d, geometry\-\_\-msgs\-::\-Point $>$}}
+\index{Convert$<$ Eigen\-::\-Vector3d, geometry\-\_\-msgs\-::\-Point $>$@{Convert$<$ Eigen\-::\-Vector3d, geometry\-\_\-msgs\-::\-Point $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ Eigen\-::\-Vector3d, geometry\-\_\-msgs\-::\-Point $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ geometry\-\_\-msgs\-::\-Point {\bf Conversion\-::\-Convert}$<$ Eigen\-::\-Vector3d, geometry\-\_\-msgs\-::\-Point $>$ (
+\begin{DoxyParamCaption}
+\item[{Eigen\-::\-Vector3d}]{point}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_a6826a33bcb1238949dac9a7aadea3385}
+
+
+Convert Eigen\-::\-Vector3d point into an geometry\-\_\-msgs\-::\-Point position vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em point} & Eigen\-::\-Vector3d is translation. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+geometry\-\_\-msgs\-::\-Point position vector. 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_a467fb25355421f26061b723953096b71}{\index{Conversion@{Conversion}!Convert$<$ Eigen\-::\-Vector3d, tf\-::\-Pose $>$@{Convert$<$ Eigen\-::\-Vector3d, tf\-::\-Pose $>$}}
+\index{Convert$<$ Eigen\-::\-Vector3d, tf\-::\-Pose $>$@{Convert$<$ Eigen\-::\-Vector3d, tf\-::\-Pose $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ Eigen\-::\-Vector3d, tf\-::\-Pose $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ tf\-::\-Pose {\bf Conversion\-::\-Convert}$<$ Eigen\-::\-Vector3d, tf\-::\-Pose $>$ (
+\begin{DoxyParamCaption}
+\item[{Eigen\-::\-Vector3d}]{e}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_a467fb25355421f26061b723953096b71}
+
+
+Convert Eigen\-::\-Vector3d into tf\-::\-Pose. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & is copy constructor of Eigen\-::\-Vector3d. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+tf\-::\-Pose 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_a9628b6628e0a72b3e224861b45c1684e}{\index{Conversion@{Conversion}!Convert$<$ Eigen\-::\-Vector3d, tf\-::\-Vector3 $>$@{Convert$<$ Eigen\-::\-Vector3d, tf\-::\-Vector3 $>$}}
+\index{Convert$<$ Eigen\-::\-Vector3d, tf\-::\-Vector3 $>$@{Convert$<$ Eigen\-::\-Vector3d, tf\-::\-Vector3 $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ Eigen\-::\-Vector3d, tf\-::\-Vector3 $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ tf\-::\-Vector3 {\bf Conversion\-::\-Convert}$<$ Eigen\-::\-Vector3d, tf\-::\-Vector3 $>$ (
+\begin{DoxyParamCaption}
+\item[{Eigen\-::\-Vector3d}]{e}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_a9628b6628e0a72b3e224861b45c1684e}
+
+
+Convert geometry\-\_\-msgs\-::\-Pose into tf\-::\-Vector3. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & is copy constructor of Eigen\-::\-Vector3d. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+tf\-::\-Vector3 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_a9280130c85d311a1a5416578cb974119}{\index{Conversion@{Conversion}!Convert$<$ geometry\-\_\-msgs\-::\-Point, Eigen\-::\-Affine3d $>$@{Convert$<$ geometry\-\_\-msgs\-::\-Point, Eigen\-::\-Affine3d $>$}}
+\index{Convert$<$ geometry\-\_\-msgs\-::\-Point, Eigen\-::\-Affine3d $>$@{Convert$<$ geometry\-\_\-msgs\-::\-Point, Eigen\-::\-Affine3d $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ geometry\-\_\-msgs\-::\-Point, Eigen\-::\-Affine3d $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ Eigen\-::\-Affine3d {\bf Conversion\-::\-Convert}$<$ geometry\-\_\-msgs\-::\-Point, Eigen\-::\-Affine3d $>$ (
+\begin{DoxyParamCaption}
+\item[{geometry\-\_\-msgs\-::\-Point}]{point}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_a9280130c85d311a1a5416578cb974119}
+
+
+Convert geometry\-\_\-msgs\-::\-Point translation into an Eigen\-::\-Affine3d pose. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em point} & is translation defined as a geometry\-\_\-msgs\-::\-Point. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Eigen\-::\-Affine3d pose 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_a3d51933723f132b4502aeb7bcb30195b}{\index{Conversion@{Conversion}!Convert$<$ geometry\-\_\-msgs\-::\-Point, Eigen\-::\-Vector3d $>$@{Convert$<$ geometry\-\_\-msgs\-::\-Point, Eigen\-::\-Vector3d $>$}}
+\index{Convert$<$ geometry\-\_\-msgs\-::\-Point, Eigen\-::\-Vector3d $>$@{Convert$<$ geometry\-\_\-msgs\-::\-Point, Eigen\-::\-Vector3d $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ geometry\-\_\-msgs\-::\-Point, Eigen\-::\-Vector3d $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ Eigen\-::\-Vector3d {\bf Conversion\-::\-Convert}$<$ geometry\-\_\-msgs\-::\-Point, Eigen\-::\-Vector3d $>$ (
+\begin{DoxyParamCaption}
+\item[{geometry\-\_\-msgs\-::\-Point}]{point}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_a3d51933723f132b4502aeb7bcb30195b}
+
+
+Convert geometry\-\_\-msgs\-::\-Point translation into an Eigen\-::\-Vector3d vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em point} & is translation defined as a geometry\-\_\-msgs\-::\-Point. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Eigen\-::\-Vector3d vector 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_a7c35f538dfd4cbfa4ae5f428af02ba2c}{\index{Conversion@{Conversion}!Convert$<$ geometry\-\_\-msgs\-::\-Point, geometry\-\_\-msgs\-::\-Pose $>$@{Convert$<$ geometry\-\_\-msgs\-::\-Point, geometry\-\_\-msgs\-::\-Pose $>$}}
+\index{Convert$<$ geometry\-\_\-msgs\-::\-Point, geometry\-\_\-msgs\-::\-Pose $>$@{Convert$<$ geometry\-\_\-msgs\-::\-Point, geometry\-\_\-msgs\-::\-Pose $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ geometry\-\_\-msgs\-::\-Point, geometry\-\_\-msgs\-::\-Pose $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ geometry\-\_\-msgs\-::\-Pose {\bf Conversion\-::\-Convert}$<$ geometry\-\_\-msgs\-::\-Point, geometry\-\_\-msgs\-::\-Pose $>$ (
+\begin{DoxyParamCaption}
+\item[{geometry\-\_\-msgs\-::\-Point}]{point}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_a7c35f538dfd4cbfa4ae5f428af02ba2c}
+
+
+Convert geometry\-\_\-msgs\-::\-Point point into an geometry\-\_\-msgs\-::\-Pose pose. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em point} & geometry\-\_\-msgs\-::\-Point is translation. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+geometry\-\_\-msgs\-::\-Pose pose. 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_af74e38f38df6185e65ff99f74b37f51b}{\index{Conversion@{Conversion}!Convert$<$ geometry\-\_\-msgs\-::\-Pose, Eigen\-::\-Affine3d $>$@{Convert$<$ geometry\-\_\-msgs\-::\-Pose, Eigen\-::\-Affine3d $>$}}
+\index{Convert$<$ geometry\-\_\-msgs\-::\-Pose, Eigen\-::\-Affine3d $>$@{Convert$<$ geometry\-\_\-msgs\-::\-Pose, Eigen\-::\-Affine3d $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ geometry\-\_\-msgs\-::\-Pose, Eigen\-::\-Affine3d $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ Eigen\-::\-Affine3d {\bf Conversion\-::\-Convert}$<$ geometry\-\_\-msgs\-::\-Pose, Eigen\-::\-Affine3d $>$ (
+\begin{DoxyParamCaption}
+\item[{geometry\-\_\-msgs\-::\-Pose}]{m}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_af74e38f38df6185e65ff99f74b37f51b}
+
+
+Convert geometry\-\_\-msgs\-::\-Pose into an Eigen affine3d 4x4 matrix o represent the pose. Uses tf conversion utilities. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & is defined as a geometry\-\_\-msgs\-::\-Pose.. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Eigen Affine3d pose 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_a2898be79c29fac349738d3deb114c139}{\index{Conversion@{Conversion}!Convert$<$ geometry\-\_\-msgs\-::\-Pose, Eigen\-::\-Translation3d $>$@{Convert$<$ geometry\-\_\-msgs\-::\-Pose, Eigen\-::\-Translation3d $>$}}
+\index{Convert$<$ geometry\-\_\-msgs\-::\-Pose, Eigen\-::\-Translation3d $>$@{Convert$<$ geometry\-\_\-msgs\-::\-Pose, Eigen\-::\-Translation3d $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ geometry\-\_\-msgs\-::\-Pose, Eigen\-::\-Translation3d $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ Eigen\-::\-Translation3d {\bf Conversion\-::\-Convert}$<$ geometry\-\_\-msgs\-::\-Pose, Eigen\-::\-Translation3d $>$ (
+\begin{DoxyParamCaption}
+\item[{geometry\-\_\-msgs\-::\-Pose}]{pose}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_a2898be79c29fac349738d3deb114c139}
+
+
+Convert geometry\-\_\-msgs\-::\-Pose into an Eigen\-::\-Translation3d. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pose} & is defined as a geometry\-\_\-msgs\-::\-Pose.. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Eigen\-::\-Translation3d vector 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_a7733ae1aea664b09b41186766db5812f}{\index{Conversion@{Conversion}!Convert$<$ geometry\-\_\-msgs\-::\-Pose, tf\-::\-Pose $>$@{Convert$<$ geometry\-\_\-msgs\-::\-Pose, tf\-::\-Pose $>$}}
+\index{Convert$<$ geometry\-\_\-msgs\-::\-Pose, tf\-::\-Pose $>$@{Convert$<$ geometry\-\_\-msgs\-::\-Pose, tf\-::\-Pose $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ geometry\-\_\-msgs\-::\-Pose, tf\-::\-Pose $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ tf\-::\-Pose {\bf Conversion\-::\-Convert}$<$ geometry\-\_\-msgs\-::\-Pose, tf\-::\-Pose $>$ (
+\begin{DoxyParamCaption}
+\item[{geometry\-\_\-msgs\-::\-Pose}]{m}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_a7733ae1aea664b09b41186766db5812f}
+
+
+Convert geometry\-\_\-msgs\-::\-Pose into tf\-::\-Pose. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pose} & is copy constructor of geometry\-\_\-msgs\-::\-Pose. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+tf\-::\-Pose 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_aab13ef132c54134d0b2b30c21aebd435}{\index{Conversion@{Conversion}!Convert$<$ std\-::vector$<$ double $>$, Joint\-State $>$@{Convert$<$ std\-::vector$<$ double $>$, Joint\-State $>$}}
+\index{Convert$<$ std\-::vector$<$ double $>$, Joint\-State $>$@{Convert$<$ std\-::vector$<$ double $>$, Joint\-State $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ std\-::vector$<$ double $>$, Joint\-State $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ Joint\-State {\bf Conversion\-::\-Convert}$<$ std\-::vector$<$ double $>$, Joint\-State $>$ (
+\begin{DoxyParamCaption}
+\item[{std\-::vector$<$ double $>$}]{src}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_aab13ef132c54134d0b2b30c21aebd435}
+
+
+Convert array of std\-::vector$<$double$>$ doubles into an Joint\-State position, but blanking velcity, and effort. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em src} & is a std\-::vector of doubles defining the value for each joint. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+sensor\-\_\-msgs\-::\-Joint\-State\-\_\-$<$std\-::allocator$<$void$>$ $>$ definition. 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_ab6df3e4febaddcea01517455f251d4c4}{\index{Conversion@{Conversion}!Convert$<$ tf\-::\-Pose, Eigen\-::\-Affine3d $>$@{Convert$<$ tf\-::\-Pose, Eigen\-::\-Affine3d $>$}}
+\index{Convert$<$ tf\-::\-Pose, Eigen\-::\-Affine3d $>$@{Convert$<$ tf\-::\-Pose, Eigen\-::\-Affine3d $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ tf\-::\-Pose, Eigen\-::\-Affine3d $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ Eigen\-::\-Affine3d {\bf Conversion\-::\-Convert}$<$ tf\-::\-Pose, Eigen\-::\-Affine3d $>$ (
+\begin{DoxyParamCaption}
+\item[{tf\-::\-Pose}]{pose}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_ab6df3e4febaddcea01517455f251d4c4}
+
+
+\hyperlink{namespaceConversion_ac7f0bd2e3357937bb18ca06a40276712}{Convert$<$tf\-::\-Pose, Eigen\-::\-Affine3d$>$} converts tf pose into an Eigen affine 4x4 matrix o represent the pose. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pose} & is the tf pose with position and orientation. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Eigen Affine3d pose 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_a51517734edff084c759524c24b337011}{\index{Conversion@{Conversion}!Convert$<$ tf\-::\-Pose, geometry\-\_\-msgs\-::\-Pose $>$@{Convert$<$ tf\-::\-Pose, geometry\-\_\-msgs\-::\-Pose $>$}}
+\index{Convert$<$ tf\-::\-Pose, geometry\-\_\-msgs\-::\-Pose $>$@{Convert$<$ tf\-::\-Pose, geometry\-\_\-msgs\-::\-Pose $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ tf\-::\-Pose, geometry\-\_\-msgs\-::\-Pose $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ geometry\-\_\-msgs\-::\-Pose {\bf Conversion\-::\-Convert}$<$ tf\-::\-Pose, geometry\-\_\-msgs\-::\-Pose $>$ (
+\begin{DoxyParamCaption}
+\item[{tf\-::\-Pose}]{m}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_a51517734edff084c759524c24b337011}
+
+
+Convert tf\-::\-Pose pose into an geometry\-\_\-msgs\-::\-Pose pose. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & is a tf\-::\-Pose transform matrix. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+geometry\-\_\-msgs\-::\-Pose pose 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_af90de2dbc6dedc00d642e8b4e23b101d}{\index{Conversion@{Conversion}!Convert$<$ tf\-::\-Quaternion, tf\-::\-Pose $>$@{Convert$<$ tf\-::\-Quaternion, tf\-::\-Pose $>$}}
+\index{Convert$<$ tf\-::\-Quaternion, tf\-::\-Pose $>$@{Convert$<$ tf\-::\-Quaternion, tf\-::\-Pose $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ tf\-::\-Quaternion, tf\-::\-Pose $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ tf\-::\-Pose {\bf Conversion\-::\-Convert}$<$ tf\-::\-Quaternion, tf\-::\-Pose $>$ (
+\begin{DoxyParamCaption}
+\item[{tf\-::\-Quaternion}]{q}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_af90de2dbc6dedc00d642e8b4e23b101d}
+
+
+Convert tf\-::\-Quaternion into tf\-::\-Pose. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em q} & rotation is converted into a tf\-::\-Pose. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+tf\-::\-Pose 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_a48211512608db10bf5d310e135f478db}{\index{Conversion@{Conversion}!Convert$<$ tf\-::\-Vector3, Eigen\-::\-Vector3d $>$@{Convert$<$ tf\-::\-Vector3, Eigen\-::\-Vector3d $>$}}
+\index{Convert$<$ tf\-::\-Vector3, Eigen\-::\-Vector3d $>$@{Convert$<$ tf\-::\-Vector3, Eigen\-::\-Vector3d $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ tf\-::\-Vector3, Eigen\-::\-Vector3d $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ Eigen\-::\-Vector3d {\bf Conversion\-::\-Convert}$<$ tf\-::\-Vector3, Eigen\-::\-Vector3d $>$ (
+\begin{DoxyParamCaption}
+\item[{tf\-::\-Vector3}]{t}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_a48211512608db10bf5d310e135f478db}
+
+
+Convert tf\-::\-Vector3 into an Eigen\-::\-Vector3d. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & is translation is defined as a tf\-::\-Vector3.. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Eigen\-::\-Vector3d vector 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_abdf9ed550226aaab256209a1228a4965}{\index{Conversion@{Conversion}!Convert$<$ tf\-::\-Vector3, tf\-::\-Pose $>$@{Convert$<$ tf\-::\-Vector3, tf\-::\-Pose $>$}}
+\index{Convert$<$ tf\-::\-Vector3, tf\-::\-Pose $>$@{Convert$<$ tf\-::\-Vector3, tf\-::\-Pose $>$}!Conversion@{Conversion}}
+\subsubsection[{Convert$<$ tf\-::\-Vector3, tf\-::\-Pose $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ tf\-::\-Pose {\bf Conversion\-::\-Convert}$<$ tf\-::\-Vector3, tf\-::\-Pose $>$ (
+\begin{DoxyParamCaption}
+\item[{tf\-::\-Vector3}]{t}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_abdf9ed550226aaab256209a1228a4965}
+
+
+Convert tf\-::\-Vector3 into tf\-::\-Pose. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & is translation is converted into a tf\-::\-Pose. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+tf\-::\-Pose 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_a79d77925c7f4381dca2f4587923cd849}{\index{Conversion@{Conversion}!Create\-Eigen\-Pose@{Create\-Eigen\-Pose}}
+\index{Create\-Eigen\-Pose@{Create\-Eigen\-Pose}!Conversion@{Conversion}}
+\subsubsection[{Create\-Eigen\-Pose}]{\setlength{\rightskip}{0pt plus 5cm}Eigen\-::\-Affine3d Conversion\-::\-Create\-Eigen\-Pose (
+\begin{DoxyParamCaption}
+\item[{double}]{zangle}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_a79d77925c7f4381dca2f4587923cd849}
+
+
+Create Eigen\-::\-Affine3d as an axis angle definition around z axis. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em zangle} & is angle of rotation in radians around Z. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Eigen\-::\-Affine3d pose 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_a76a8cad78c1b68f665c5a44bcd6f9b13}{\index{Conversion@{Conversion}!Create\-Pose@{Create\-Pose}}
+\index{Create\-Pose@{Create\-Pose}!Conversion@{Conversion}}
+\subsubsection[{Create\-Pose}]{\setlength{\rightskip}{0pt plus 5cm}tf\-::\-Pose Conversion\-::\-Create\-Pose (
+\begin{DoxyParamCaption}
+\item[{tf\-::\-Vector3}]{axis, }
+\item[{double}]{angle}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_a76a8cad78c1b68f665c5a44bcd6f9b13}
+
+
+Create Pose from a axis and angle rotation representation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em axis} & is the unit vector to rotation around. \\
+\hline
+{\em angle} & is the angle of rotation in radians. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+tf\-::\-Pose 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_aed5da1073f2e617a327bb6dd4b33031d}{\index{Conversion@{Conversion}!Create\-R\-P\-Y\-Pose@{Create\-R\-P\-Y\-Pose}}
+\index{Create\-R\-P\-Y\-Pose@{Create\-R\-P\-Y\-Pose}!Conversion@{Conversion}}
+\subsubsection[{Create\-R\-P\-Y\-Pose}]{\setlength{\rightskip}{0pt plus 5cm}tf\-::\-Pose Conversion\-::\-Create\-R\-P\-Y\-Pose (
+\begin{DoxyParamCaption}
+\item[{std\-::vector$<$ double $>$}]{ds}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_aed5da1073f2e617a327bb6dd4b33031d}
+
+
+Create\-R\-P\-Y\-Pose taks array of double and create a tf\-::\-Pose. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ds} & is a std array of 6 doubles to create pose (rpy + xyz). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+tf\-::\-Pose 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_a6b311daa62f5258ff8682031bb6a4d7c}{\index{Conversion@{Conversion}!Identity@{Identity}}
+\index{Identity@{Identity}!Conversion@{Conversion}}
+\subsubsection[{Identity}]{\setlength{\rightskip}{0pt plus 5cm}tf\-::\-Pose Conversion\-::\-Identity (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_a6b311daa62f5258ff8682031bb6a4d7c}
+
+
+Create Identity Pose. 
+
+\begin{DoxyReturn}{Returns}
+tf\-::\-Pose 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_a897add416eb33b4d1f1a9e8d0977e07c}{\index{Conversion@{Conversion}!matrix\-Eigen\-To\-Tf\-Vector@{matrix\-Eigen\-To\-Tf\-Vector}}
+\index{matrix\-Eigen\-To\-Tf\-Vector@{matrix\-Eigen\-To\-Tf\-Vector}!Conversion@{Conversion}}
+\subsubsection[{matrix\-Eigen\-To\-Tf\-Vector}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ tf\-::\-Vector3 Conversion\-::matrix\-Eigen\-To\-Tf\-Vector (
+\begin{DoxyParamCaption}
+\item[{T}]{e}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_a897add416eb33b4d1f1a9e8d0977e07c}
+
+
+Convert Eigen matrix into tf\-::\-Vector3. Example\-: tf\-::\-Vector3 v = matrix\-Eigen\-To\-Tf\-Vector$<$\-Eigen\-::\-Matrix3d$>$(m);. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & is copy constructor of Eigen Matrix, either 3x3, 4x4, double or float. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+tf\-::\-Vector3 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_ae5a5fe4357248756784a320a04cc750e}{\index{Conversion@{Conversion}!R\-P\-Y\-Degrees@{R\-P\-Y\-Degrees}}
+\index{R\-P\-Y\-Degrees@{R\-P\-Y\-Degrees}!Conversion@{Conversion}}
+\subsubsection[{R\-P\-Y\-Degrees}]{\setlength{\rightskip}{0pt plus 5cm}tf\-::\-Quaternion Conversion\-::\-R\-P\-Y\-Degrees (
+\begin{DoxyParamCaption}
+\item[{double}]{roll, }
+\item[{double}]{pitch, }
+\item[{double}]{yaw}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_ae5a5fe4357248756784a320a04cc750e}
+
+
+Create Quaternion from a rpy rotation representation designated in degrees. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em roll} & rotation around x axis in degrees. \\
+\hline
+{\em pitch} & rotation around y axis in degrees. \\
+\hline
+{\em yaw} & rotation around z axis in degrees. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+tf\-::\-Quaternion 
+\end{DoxyReturn}
+\hypertarget{namespaceConversion_a35388c46e6dd56509e1998c48e545fd6}{\index{Conversion@{Conversion}!R\-P\-Y\-Radians@{R\-P\-Y\-Radians}}
+\index{R\-P\-Y\-Radians@{R\-P\-Y\-Radians}!Conversion@{Conversion}}
+\subsubsection[{R\-P\-Y\-Radians}]{\setlength{\rightskip}{0pt plus 5cm}tf\-::\-Quaternion Conversion\-::\-R\-P\-Y\-Radians (
+\begin{DoxyParamCaption}
+\item[{double}]{roll, }
+\item[{double}]{pitch, }
+\item[{double}]{yaw}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{namespaceConversion_a35388c46e6dd56509e1998c48e545fd6}
+
+
+Create Quaternion from a rpy rotation representation designated in radians. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em roll} & rotation around x axis in radians. \\
+\hline
+{\em pitch} & rotation around y axis in radians. \\
+\hline
+{\em yaw} & rotation around z axis in radians. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+tf\-::\-Quaternion 
+\end{DoxyReturn}

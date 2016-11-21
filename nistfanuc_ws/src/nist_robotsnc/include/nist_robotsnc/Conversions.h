@@ -1,12 +1,7 @@
+#ifndef Conversion_Header
+#define Conversion_Header
 
-
-
-// Must webs:
-// http://docs.ros.org/kinetic/api/tf_conversions/html/c++/tf__eigen_8cpp_source.html
-
-#pragma once
-
-/*
+/**
 DISCLAIMER:
 This software was produced by the National Institute of Standards
 and Technology (NIST), an agency of the U.S. government, and by statute is
@@ -17,18 +12,23 @@ maintenance, and subsequent redistribution.
 See NIST Administration Manual 4.09.07 b and Appendix I.
  */
 
-// Eigen
-#include <Eigen/Core>
-#include <Eigen/Geometry>
+
+#include "tf/transform_datatypes.h"
+#include "Eigen/Core"
+#include "Eigen/Geometry"
 
 // ROS messages
-#include "geometry_msgs/PointStamped.h"
-#include "geometry_msgs/Point32.h"
-#include "geometry_msgs/PoseStamped.h"
+#include <geometry_msgs/Point.h>
+#include <geometry_msgs/Pose.h>
+#include <geometry_msgs/Quaternion.h>
+#include <geometry_msgs/Transform.h>
+#include <geometry_msgs/Twist.h>
+#include <geometry_msgs/Vector3.h>
+#include <geometry_msgs/Wrench.h>
 
 // Conversions
-#include <tf_conversions/tf_eigen.h>
-#include <eigen_conversions/eigen_msg.h>
+//#include <tf_conversions/tf_eigen.h>
+//#include <eigen_conversions/eigen_msg.h>
 
 // CRCL representations
 #include "RCS.h"
@@ -151,7 +151,7 @@ namespace Conversion {
 
     /*!
      * \brief Convert tf::Vector3 into tf::Pose.
-     * \param a t translation is converted into a tf::Pose.
+     * \param  t is translation is converted into a tf::Pose.
      * \return tf::Pose 
      */
     template<>
@@ -161,7 +161,7 @@ namespace Conversion {
 
     /*!
      * \brief CreateRPYPose taks array of double and create a tf::Pose.
-     * \param a std array of 6 doubles to create pose (rpy + xyz).
+     * \param ds is a  std array of 6 doubles to create pose (rpy + xyz).
      * \return tf::Pose 
      */
     inline tf::Pose CreateRPYPose(std::vector<double> ds) {
@@ -180,48 +180,98 @@ namespace Conversion {
     }
 
     /*!
-     * \brief Create Pose from a rpy rotation representation designated in radians.
+     * \brief Create Quaternion from a rpy rotation representation designated in radians.
      * \param roll rotation around x axis in radians.
      * \param pitch rotation around y axis in radians.
      * \param yaw rotation around z axis in radians.
-     * \return tf::Pose 
+     * \return tf::Quaternion 
      */
     inline tf::Quaternion RPYRadians(double roll, double pitch, double yaw) {
         return tf::Quaternion(yaw, pitch, roll);
     }
 
     /*!
-     * \brief Create Pose from a rpy rotation representation designated in degrees.
+     * \brief Create Quaternion from a rpy rotation representation designated in degrees.
      * \param roll rotation around x axis in degrees.
      * \param pitch rotation around y axis in degrees.
      * \param yaw rotation around z axis in degrees.
-     * \return tf::Pose 
+     * \return tf::Quaternion 
      */
     inline tf::Quaternion RPYDegrees(double roll, double pitch, double yaw) {
         return tf::Quaternion(Deg2Rad(yaw), Deg2Rad(pitch), Deg2Rad(roll));
     }
 
-    template<typename T>
-    inline tf::Vector3 vectorEigenToTFVector(T e) {
+    /*!
+     * \brief Convert geometry_msgs::Pose into tf::Vector3.
+     * \param e is copy constructor of Eigen::Vector3d.
+     * \return tf::Vector3 
+     */
+    template<>
+    inline tf::Vector3 Convert<Eigen::Vector3d, tf::Vector3> (Eigen::Vector3d e) {
         return tf::Vector3(e(0), e(1), e(2));
     }
 
-    template<typename T>
-    inline tf::Pose vectorEigenToTF(T e) {
+    /*!
+     * \brief Convert Eigen::Vector3d into tf::Pose.
+     * \param e is copy constructor of Eigen::Vector3d.
+     * \return tf::Pose 
+     */
+    template<>
+    inline tf::Pose Convert<Eigen::Vector3d, tf::Pose> (Eigen::Vector3d e) {
         return tf::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0), tf::Vector3(e(0), e(1), e(2)));
     }
 
+    /*!
+     * \brief Convert Eigen matrix into tf::Vector3.
+     * Example: tf::Vector3 v = matrixEigenToTfVector<Eigen::Matrix3d>(m);
+     * \param e is copy constructor of Eigen Matrix, either 3x3, 4x4, double or float.
+     * \return tf::Vector3 
+     */
     template<typename T>
     inline tf::Vector3 matrixEigenToTfVector(T e) {
         return tf::Vector3(e(0, 3), e(1, 3), e(2, 3));
     }
 
+    /*!
+     * \brief Convert Eigen Matrix3d into tf::Matrix3x3.
+     * \param e is copy constructor of Eigen Matrix3d, a 3x3 double matrix.
+     * \return tf::Matrix3x3 
+     */
+    template<>
+    inline tf::Matrix3x3 Convert<Eigen::Matrix3d, tf::Matrix3x3> (Eigen::Matrix3d e) {
+        tf::Matrix3x3 t;
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                t[i][j] = e(i, j);
+        return t;
+    }
+
+    /*!
+     * \brief Create Identity Pose
+     * \return tf::Pose 
+     */
     inline tf::Pose Identity() {
         tf::Transform t;
         t.setIdentity();
         return t;
     }
+#if 0
+    // This is a repeat of conversion from affine3d to tf::pose
 
+    /*!
+     * \brief Create Affine Pose matrix into tf Transform.
+     * \param e is a Eigen affine3d matrix.
+     * \return tf::Transform 
+     */
+    template<>
+    inline tf::Transform Convert<Eigen::Affine3d, tf::Transform> (Eigen::Affine3d e) {
+        tf::Transform t;
+        t.setOrigin(tf::Vector3(e.matrix()(0, 3), e.matrix()(1, 3), e.matrix()(2, 3)));
+        t.setBasis(tf::Matrix3x3(e.matrix()(0, 0), e.matrix()(0, 1), e.matrix()(0, 2),
+                e.matrix()(1, 0), e.matrix()(1, 1), e.matrix()(1, 2),
+                e.matrix()(2, 0), e.matrix()(2, 1), e.matrix()(2, 2)));
+    }
+#endif
     // Eigen
 
     /*!
@@ -248,14 +298,19 @@ namespace Conversion {
     /*!
      * \brief Convert geometry_msgs::Pose into an  Eigen affine3d 4x4 matrix  o represent the pose.
      * Uses tf conversion utilities.
-     * \param pose is defined as a geometry_msgs::Pose..
+     * \param m is defined as a geometry_msgs::Pose..
      * \return  Eigen Affine3d pose 
      */
     template<>
-    inline Eigen::Affine3d Convert<geometry_msgs::Pose, Eigen::Affine3d> (geometry_msgs::Pose pose) {
-        Eigen::Affine3d local_;
-        tf::poseMsgToEigen(pose, local_);
-        return local_;
+    inline Eigen::Affine3d Convert<geometry_msgs::Pose, Eigen::Affine3d> (geometry_msgs::Pose m) {
+        Eigen::Affine3d e = Eigen::Translation3d(m.position.x,
+                m.position.y,
+                m.position.z) *
+                Eigen::Quaternion<double>(m.orientation.w,
+                m.orientation.x,
+                m.orientation.y,
+                m.orientation.z);
+        return e;
     }
 
     /*!
@@ -271,7 +326,7 @@ namespace Conversion {
 
     /*!
      * \brief Convert tf::Vector3 into an  Eigen::Vector3d.
-     * \param translation is defined as a tf::Vector3..
+     * \param t is translation is defined as a tf::Vector3..
      * \return  Eigen::Vector3d vector 
      */
     template<>
@@ -302,7 +357,7 @@ namespace Conversion {
 
     /*!
      * \brief Convert Eigen::Translation3d translation into an  Eigen::Affine3d pose.
-     * \param translation is defined as a Eigen::Translation3d.
+     * \param t is translation  defined as a Eigen::Translation3d.
      * \return  Eigen::Affine3d pose 
      */
     template<>
@@ -311,32 +366,27 @@ namespace Conversion {
     }
 
     /*!
-     * \brief Convert geometry_msgs::Point32 translation into an  Eigen::Vector3d vector.
-     * \param point is translation  defined as a geometry_msgs::Point32.
+     * \brief Convert geometry_msgs::Point translation into an  Eigen::Vector3d vector.
+     * \param point is translation  defined as a geometry_msgs::Point.
      * \return  Eigen::Vector3d vector 
      */
     template<>
-    inline Eigen::Vector3d Convert<geometry_msgs::Point32, Eigen::Vector3d>(geometry_msgs::Point32 point) {
+    inline Eigen::Vector3d Convert<geometry_msgs::Point, Eigen::Vector3d>(geometry_msgs::Point point) {
         return Eigen::Vector3d(point.x, point.y, point.z);
     }
 
     /*!
-     * \brief Convert geometry_msgs::Point32 translation into an  Eigen::Affine3d pose.
-     * \param point is translation  defined as a geometry_msgs::Point32.
+     * \brief Convert geometry_msgs::Point translation into an  Eigen::Affine3d pose.
+     * \param point is translation  defined as a geometry_msgs::Point.
      * \return  Eigen::Affine3d pose 
      */
     template<>
-    inline Eigen::Affine3d Convert<geometry_msgs::Point32, Eigen::Affine3d>(geometry_msgs::Point32 point) {
+    inline Eigen::Affine3d Convert<geometry_msgs::Point, Eigen::Affine3d>(geometry_msgs::Point point) {
         return Eigen::Affine3d::Identity() * Eigen::Translation3d(point.x, point.y, point.z);
     }
 
-    //Eigen::Affine3d GeomMsgPose2Affine3d(const geometry_msgs::Pose &m);
-    //Eigen::Affine3d convertPose(const geometry_msgs::Pose &pose);
-    //   Eigen::Affine3d tfPose2Affine3d(const tf::Pose pose);
-    //   Eigen::Affine3d poseTFToEigen(const tf::Pose t);
 
-
-    // geometry_msgs - constructor hell.
+    // geometry_msgs - constructor nightmare.
 
     /*!
      * \brief Convert tf::Pose pose into an  geometry_msgs::Pose pose.
@@ -371,23 +421,6 @@ namespace Conversion {
         shared_pose_msg_.position = point;
         return shared_pose_msg_;
     }
-    //geometry_msgs::Pose convertPointToPose(const geometry_msgs::Point &point);
-    geometry_msgs::Point convertPoint(const geometry_msgs::Vector3 &point);
-    //geometry_msgs::Pose convertPose(const Eigen::Affine3d &pose);
-    geometry_msgs::Point convertPoseToPoint(const Eigen::Affine3d &pose);
-    //geometry_msgs::Point convertPoint(const Eigen::Vector3d &point);
-    geometry_msgs::Pose PoseAffineToGeomMsg(const Eigen::Affine3d &e);
-    // geometry_msgs constructor nightmare
-#if 1
-    //    template<>
-    //    geometry_msgs::Point Convert<Eigen::Vector3d, geometry_msgs::Point >(Eigen::Vector3d point) {
-    //        return geometry_msgs::Point(point[0], point[1], point[2]);
-    //    }
-
-    //    template<>
-    //    geometry_msgs::Point Convert< geometry_msgs::Point, geometry_msgs::Vector3>(geometry_msgs::Vector3 point) {
-    //        return geometry_msgs::Point(point.x, point.y, point.z);
-    //     }
 
     /*!
      * \brief Convert Eigen::Vector3d point into an geometry_msgs::Point position vector.
@@ -402,37 +435,49 @@ namespace Conversion {
         pt.z = point.z();
         return pt;
     }
-#endif
 
-    /*!
+        /*!
      * \brief Convert Eigen::Affine3d pose into an geometry_msgs::Pose pose.
-     * \param Eigen::Affine3d is equivalent pose.
+     * \param e is Eigen::Affine3d defining equivalent pose.
      * \return  geometry_msgs::Pose pose.
      */
     template<>
-    inline geometry_msgs::Pose Convert <Eigen::Affine3d, geometry_msgs::Pose> (Eigen::Affine3d pose) {
-        geometry_msgs::Pose local_msg;
-        tf::poseEigenToMsg(pose, local_msg);
-        return local_msg;
+    inline geometry_msgs::Pose Convert <Eigen::Affine3d, geometry_msgs::Pose> (Eigen::Affine3d e) {
+        geometry_msgs::Pose m;
+        m.position.x = e.translation()[0];
+        m.position.y = e.translation()[1];
+        m.position.z = e.translation()[2];
+        Eigen::Quaterniond q = (Eigen::Quaterniond)e.linear();
+        m.orientation.x = q.x();
+        m.orientation.y = q.y();
+        m.orientation.z = q.z();
+        m.orientation.w = q.w();
+        if (m.orientation.w < 0) {
+            m.orientation.x *= -1;
+            m.orientation.y *= -1;
+            m.orientation.z *= -1;
+            m.orientation.w *= -1;
+        }
+        return m;
     }
 
     /*!
      * \brief Convert Eigen::Affine3d pose into an geometry_msgs::Point translation element.
-     * \param Eigen::Affine3d is pose.
+     * \param e is Eigen::Affine3d defining pose.
      * \return  geometry_msgs::Point translation element.
      */
     template<>
     inline geometry_msgs::Point Convert<Eigen::Affine3d, geometry_msgs::Point> (Eigen::Affine3d pose) {
-        geometry_msgs::Pose shared_pose_msg_;
-        tf::poseEigenToMsg(pose, shared_pose_msg_);
-        return shared_pose_msg_.position;
+        geometry_msgs::Pose msg = Convert <Eigen::Affine3d, geometry_msgs::Pose> (pose);
+        //tf::poseEigenToMsg(pose, shared_pose_msg_);
+        return msg.position;
     }
     // CRCL
     // typdef sensor_msgs::JointState_<std::allocator<void> > JointState;
 
     /*!
      * \brief Convert array of std::vector<double> doubles into an JointState position, but blanking velcity, and effort.
-     * \param Estd::vector<double>> of doubles for each joint.
+     * \param src is a std::vector of doubles defining the value for each joint.
      * \return  sensor_msgs::JointState_<std::allocator<void> > definition.
      */
     template<>
@@ -444,3 +489,4 @@ namespace Conversion {
         return joints;
     }
 }
+#endif

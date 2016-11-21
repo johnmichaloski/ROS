@@ -248,8 +248,7 @@ namespace RCS {
                     Eigen::Affine3d& pose = pScene->FindPose(_newcc.partname);
                     pScene->UpdateScene(_newcc.partname, pose, "CLEAR");
                 } else if (_newcc.crclcommand == CanonCmdType::CANON_DRAW_OBJECT) {
-                    Eigen::Affine3d pose;
-                    tf::poseMsgToEigen(_newcc.finalpose, pose);
+                    Eigen::Affine3d pose= Convert<geometry_msgs::Pose, Eigen::Affine3d> (_newcc.finalpose);
                     pScene->UpdateScene(_newcc.partname,
                             pose,
                             pScene->MARKERCOLOR(_newcc.partcolor));

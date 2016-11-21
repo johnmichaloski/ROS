@@ -42,35 +42,4 @@ namespace Conversion {
             e.matrix()(3, col) = 0;
         e.matrix()(3, 3) = 1;
     }
-
-
-
-    ////////////////////////////////////////////////////////////////////////////
-
-    geometry_msgs::Pose PoseAffineToGeomMsg(const Eigen::Affine3d &e) {
-        geometry_msgs::Pose m;
-        m.position.x = e.translation().x();
-        m.position.y = e.translation().y();
-        m.position.z = e.translation().z();
-        // This is a column major vs row major matrice faux pas!
-#if 0
-        MatrixEXd em = e.rotation();
-
-        Eigen::Quaterniond q = EMatrix2Quaternion(em);
-#endif
-        Eigen::Quaterniond q(e.rotation());
-        m.orientation.x = q.x();
-        m.orientation.y = q.y();
-        m.orientation.z = q.z();
-        m.orientation.w = q.w();
-#if 0
-        if (m.orientation.w < 0) {
-            m.orientation.x *= -1;
-            m.orientation.y *= -1;
-            m.orientation.z *= -1;
-            m.orientation.w *= -1;
-        }
-#endif
-    }
-
 }
