@@ -43,6 +43,7 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 // Checkers makes move 
 #include "Checkers.h"
 #include "Controller.h"
+#include "Debug.h"
 //#include "Demo.h"
 
 using namespace Conversion;
@@ -132,7 +133,7 @@ struct RvizCheckers {
 #endif
     }
 
-    Eigen::Vector3d GetCentroid(int rowoffset, int coloffset) {
+    Eigen::Vector3d GetCentroid(double rowoffset, double coloffset) {
 #ifdef LEFTRIGHT               
         return Eigen::Vector3d(rowoffset + SQOFFSET / 2.0, coloffset + SQOFFSET / 2.0, .01);
 #elif defined(UPDOWN)
@@ -140,7 +141,7 @@ struct RvizCheckers {
 #endif
     }
 
-    tf::Vector3 GetUp(int rowoffset, int coloffset) {
+    tf::Vector3 GetUp(double rowoffset, double coloffset) {
 #ifdef LEFTRIGHT
         Eigen::Vector3d up(rowoffset, coloffset, 0.01);
 #elif defined(UPDOWN)
@@ -149,7 +150,7 @@ struct RvizCheckers {
         return Convert<Eigen::Vector3d, tf::Vector3 >(up);
     }
 
-    tf::Vector3 GetDown(int rowoffset, int coloffset) {
+    tf::Vector3 GetDown(double rowoffset, double coloffset) {
 #ifdef LEFTRIGHT
         Eigen::Vector3d down(rowoffset + SQOFFSET, coloffset + SQOFFSET, 0.0);
 #elif defined(UPDOWN)
@@ -166,14 +167,19 @@ struct RvizCheckers {
             for (size_t i = 0; i < COLS; i = i + 2) {
                 double coloffset = ColOffset(i);
                 if (row % 2 == 0) coloffset = coloffset + SQOFFSET; // red offset at zero
+                //LOG_DEBUG << "Rowoffset="<<rowoffset << " Coloffset="<<coloffset << "\n";
 
                 std::string sqname = Globals.StrFormat("Square[%d:%d]", row, i);
                 ObjectDB * obj;
-
+                //Eigen::Affine3d eup = Convert<tf::Pose, Eigen::Affine3d>(tf::Pose(qidentity, GetUp(rowoffset, coloffset)));
+                //Eigen::Affine3d edn = Convert<tf::Pose, Eigen::Affine3d>(tf::Pose(qidentity, GetDown(rowoffset, coloffset)));
+                //LOG_DEBUG << "Eigen UP Pose " << RCS::DumpEigenPose(eup).c_str() << "\n";
+               // LOG_DEBUG << "Eigen DN Pose " << RCS::DumpEigenPose(edn).c_str() << "\n";
+ 
                 obj = pScene->CreateCuboid(sqname,
                         "Checkerboard",
-                        Convert<tf::Pose, Eigen::Affine3d>(tf::Pose(qidentity, GetUp(rowoffset, coloffset))),
-                        Convert<tf::Pose, Eigen::Affine3d>(tf::Pose(qidentity, GetDown(rowoffset, coloffset))),
+                         Convert<tf::Pose, Eigen::Affine3d>(tf::Pose(qidentity, GetUp(rowoffset, coloffset))),
+                         Convert<tf::Pose, Eigen::Affine3d>(tf::Pose(qidentity, GetDown(rowoffset, coloffset))),
                         "WHITE");
                
                 obj->centroid = GetCentroid(rowoffset, coloffset);
@@ -192,9 +198,8 @@ struct RvizCheckers {
         }
     }
 
-    void RvizPiecesSetup() {
-        tf::Quaternion qidentity(0.0, 0.0, 0.0, 1.0);
-
+    void RvizPiecesSetup() {     
+        LOG_DEBUG << Game().printDisplayFancy(this->Game().Board()).c_str();
         for (size_t row = 0; row < ROWS; row++) {
             double rowoffset = RowOffset(row);
             for (size_t i = 0; i < COLS; i = i + 2) {
@@ -202,22 +207,27 @@ struct RvizCheckers {
                 if (row % 2 == 0) coloffset = coloffset + SQOFFSET; // red offset at zero
 
                 ObjectDB * checker;
-                size_t checkercol;
-#ifdef LEFTRIGHT  
-                checkercol = (row % 2 == 0) ? i + 1 : i;
-#elif defined(UPDOWN)       
-                checkercol = (row % 2 == 0) ? i + 1 : i;
-#endif
+                double checkerheight = height;
+                size_t checkercol = (row % 2 == 0) ? i + 1 : i;
                 std::string checkercolor = "CLEAR";
-                if (row < 3) checkercolor = "RED";
-                if (row >= 5) checkercolor = "BLACK";
+                
+                int piece = this->Game().Board()[row][checkercol];
+                if (ISRED(piece)) 
+                    checkercolor = "RED";
+                if (ISBLACK(piece)) 
+                    checkercolor = "BLACK";
+                if (ISKING(piece)) 
+                    checkerheight *= 2;
+
                 if (checkercolor != "CLEAR") {
+                    Eigen::Affine3d epose = Eigen::Affine3d(Eigen::Translation3d(GetCentroid(rowoffset, coloffset)));
+                    LOG_DEBUG << "Eigen EPose " << RCS::DumpEigenPose(epose).c_str() << "\n";
                     std::string checkername = Globals.StrFormat("Checker[%d:%d]", row, checkercol);
-                    checker =  pScene->CreateCylinder(checkername,
+                    checker = pScene->CreateCylinder(checkername,
                             "Cylinder",
-                            Eigen::Affine3d(Eigen::Translation3d(GetCentroid(row, i) )), //FIXME: base offset?
+                            epose, //FIXME: base offset?
                             checkercolor,
-                            height,
+                            checkerheight,
                             radius,
                             "Cylinder");
                 }

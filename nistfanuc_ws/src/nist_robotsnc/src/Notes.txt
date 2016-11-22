@@ -1,3 +1,89 @@
+
+Tue 22 Nov 2016 11:35:35 AM EST 
+  +---+---+---+---+---+---+---+---+
+0 |   | r |   | B |   | r |   | r |
+  +---+---+---+---+---+---+---+---+
+1 |   |   |   |   |   |   | r |   |
+  +---+---+---+---+---+---+---+---+
+2 |   |   |   |   |   | r |   |   |
+  +---+---+---+---+---+---+---+---+
+3 |   |   | r |   |   |   |   |   |
+  +---+---+---+---+---+---+---+---+
+4 |   |   |   |   |   | b |   | b |
+  +---+---+---+---+---+---+---+---+
+5 |   |   |   |   |   |   |   |   |
+  +---+---+---+---+---+---+---+---+
+6 |   | b |   | b |   |   |   | b |
+  +---+---+---+---+---+---+---+---+
+7 | b |   |   |   |   |   | b |   |
+  +---+---+---+---+---+---+---+---+
+    0   1   2   3   4   5   6   7
+
+Move:
+       friend        bool operator < (const Move &left, const Move &other )
+       {
+             return(   (left.row*8+left.col)< (other.row*8 + other.col));
+       }
+       // For serialization
+       friend std::ostream & operator<<(std::ostream & output_out, const Move & move_in)
+       {
+             return output_out << move_in.player<<"\t" <<  move_in.srow  <<"\t" << move_in.scol  <<"\t"
+                    << move_in.row  <<"\t" << move_in.col  <<"\t" << move_in.bJump ;
+       }
+       friend std::istream& operator>>(std::istream& s_in, Move & move_out)
+    {
+        s_in >> move_out.player >> move_out.srow>> move_out.scol >> move_out.row >> move_out.col >> move_out.bJump ;
+        return s_in;
+    }
+ 
+struct Checkers
+{
+. . .
+ 
+       Checkers::BoardType outboard;
+        std::stringstream str;
+        str<< rvizgame.Game().TestBoard();
+#if 1
+        LOG_DEBUG << str.str().c_str();
+        rvizgame.Game().Deserialize(str, outboard);
+         LOG_DEBUG << rvizgame.Game().printDisplayFancy(outboard).c_str();
+ 
+ 
+ 
+       void Restore(std::string filename, std::vector<Move> & moves )
+       {
+             std::ifstream f( filename.c_str() );
+             if(!f)
+                    throw std::exception(std::string("Checkers game could not open file : " + filename + " for reading!").c_str());
+             moves.clear();
+             std::copy(std::istream_iterator<Move>(f), std::istream_iterator<Move>(), std::back_inserter(moves));
+       }
+       void Save(std::string filename)
+       {
+             std::ofstream f( filename.c_str() );
+             if(!f)
+                    throw std::exception(std::string("Checkers game could not open file : " + filename + " for writing!").c_str());
+             std::ostream_iterator<Move> out_it (f,"\n");
+             std::copy ( allmoves.begin(), allmoves.end(), out_it );
+       }
+       void Dump(std::ostream &str, const Move move)
+       {
+             std::string typemove = move.bJump ? "jump" : "move";
+             std::string splayer = ISBLACK(move.player) ? "BLACK" : "RED";
+             str <<  StrFormat("%s %s from %d,%d to %d,%d\n",splayer.c_str(), typemove.c_str(), move.srow, move.scol, move.row, move.col);
+ 
+       }
+       void Dump(std::ostream &str, const std::vector<Move> &moves)
+       {
+             for(size_t i=0; i< moves.size() ; i++)
+             {
+                    std::string typemove = moves[i].bJump ? "jump" : "move";
+                    std::string splayer = ISBLACK(moves[i].player) ? "BLACK" : "RED";
+                    str <<  StrFormat("%s %s from %d,%d to %d,%d\n",splayer.c_str(), typemove.c_str(), moves[i].srow, moves[i].scol, moves[i].row, moves[i].col);
+            
+             }
+       }
+================================================
 Mon 21 Nov 2016 01:49:56 PM EST
     //geometry_msgs::Pose convertPointToPose(const geometry_msgs::Point &point);
     geometry_msgs::Point convertPoint(const geometry_msgs::Vector3 &point);

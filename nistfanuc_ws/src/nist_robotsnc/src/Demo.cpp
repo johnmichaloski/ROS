@@ -413,6 +413,7 @@ void CheckersGame::Setup() {
     //    RvizDemo rvizdemo(_nh);
     pScene->InitScene();
     rvizgame->RvizBoardSetup();
+    rvizgame->RvizPiecesSetup();
     pScene->DrawScene(); // Debug: LOG_DEBUG << ObjectDB::DumpDB();
 }
 

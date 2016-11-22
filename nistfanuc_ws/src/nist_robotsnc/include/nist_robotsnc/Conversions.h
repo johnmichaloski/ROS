@@ -33,6 +33,10 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 // CRCL representations
 #include "RCS.h"
 
+// Error at compile time for non handled convert
+#include <boost/static_assert.hpp>
+
+
 #ifndef Deg2Rad
 #define Deg2Rad(Ang)    ( (double) ( Ang * M_PI / 180.0 ) )
 #define Rad2Deg(Ang)    ( (double) ( Ang * 180.0 / M_PI ) )
@@ -63,11 +67,12 @@ namespace Conversion {
 
     /*!
      * \brief Empty conversion of type from into type to. If called, asserts.
-     * \param from is defined in the template corresponding typename.
-     * \return to is defined in the template corresponding typename
+     * \param f is defined in the template corresponding to the "From" typename.
+     * \return to is defined in the template corresponding "To"  typename
      */
     template<typename From, typename To>
     inline To Convert(From f) {
+        BOOST_STATIC_ASSERT(sizeof(To) == 0);
         assert(0);
     }
 
@@ -80,8 +85,9 @@ namespace Conversion {
      */
     template<>
     inline tf::Pose Convert<Eigen::Affine3d, tf::Pose>(Eigen::Affine3d pose) {
-#if 0
-        return tf::Pose(tf::Quaternion(pose.rotation().x(), pose.rotation().y(), pose.rotation().z(), pose.rotation().w()),
+#if 1
+        Eigen::Quaterniond q(pose.rotation());
+        return tf::Pose(tf::Quaternion(q.x(), q.y(), q.z(), q.w()),
                 tf::Vector3(pose.translation().x(), pose.translation().y(), pose.translation().z()));
 #else
         tf::Pose p;
@@ -312,7 +318,15 @@ namespace Conversion {
                 m.orientation.z);
         return e;
     }
-
+    /*!
+     * \brief Convert tf::Quaternion into an  Eigen::Quaterniond.
+     * \param q is defined as a tf::Quaternion..
+     * \return  Eigen::Quaterniond vector 
+     */
+    template<>
+    inline Eigen::Quaterniond Convert<tf::Quaternion, Eigen::Quaterniond>(tf::Quaternion q) {
+         return Eigen::Quaterniond(q.w(), q.x(), q.y(), q.z());
+    }
     /*!
      * \brief Convert geometry_msgs::Pose into an  Eigen::Translation3d.
      * \param pose is defined as a geometry_msgs::Pose..

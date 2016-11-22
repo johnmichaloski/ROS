@@ -23,7 +23,7 @@
 #include <boost/format.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 namespace pt = boost::property_tree;
-
+#include <boost/algorithm/string.hpp>
 
 #include <ros/package.h>
 #include <ros/console.h>
@@ -189,6 +189,7 @@ int main(int argc, char** argv) {
             LOG_FATAL << e.what();
         }
 
+        
         // Move robots to "safe position"
         for (size_t j = 0; j < ncs.size(); j++) {
             ncs[j]->Start(); // start the Controller Session thread
@@ -201,8 +202,30 @@ int main(int argc, char** argv) {
         }
 #if 0
         CheckersGame checkers(nh);
+        Checkers::BoardType outboard;
+        std::string filename(path + "/config/" + "Checkers.txt");
+        Checkers::CheckersGame & game = checkers.RvizGame()->Game();
+#if 0
+        // This might be cleaner, but the \r problem from windows is disconcerting
+        std::ifstream checkersIss(filename);
+         LOG_DEBUG << iss.str().c_str();
+        if (!checkersIss.fail()) {
+            game.Deserialize(iss, outboard);
+            LOG_DEBUG << checkers.RvizGame()->Game().printDisplayFancy(outboard).c_str();
+            game.Board() = outboard;
+        }
+#else
+        std::string contents;
+        Globals.ReadFile(filename, contents);
+        boost::replace_all(contents, "\r", "");
+
+        std::stringstream iss;
+        iss << contents;
+        game.Deserialize(iss, outboard);
+        game.Board() = outboard;
+#endif
         checkers.Setup();
-        checkers.Play(&nccmds[0], &nccmds[1]);
+        //checkers.Play(&nccmds[0], &nccmds[1]);
 #endif
 #if 1
         do {

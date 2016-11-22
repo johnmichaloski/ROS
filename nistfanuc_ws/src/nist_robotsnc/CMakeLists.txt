@@ -151,7 +151,11 @@ ${catkin_LIBRARIES}
 ${Boost_LIBRARIES}
 )
 
-#catkin_add_gtest(crclmathunittest test/crclmathtest.cpp)
+catkin_add_gtest(crclmathunittest test/crclmathtest.cpp)
+
+catkin_add_gtest(conversionTest test/conversiontests.cpp)
+add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --verbose)
+target_link_libraries(conversionTest ${catkin_LIBRARIES} ${Boost_LIBRARIES} )
 
 #############
 ## Install ##
@@ -166,3 +170,7 @@ install(TARGETS ${PROJECT_NAME}
 install(
     DIRECTORY include/${PROJECT_NAME}/
     DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+    
+    
+    
+    

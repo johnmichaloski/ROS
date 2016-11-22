@@ -270,6 +270,8 @@ namespace Checkers {
                 std::getline(s_in, line);
                 if (line.size() < 1)
                     continue;
+                if(line[0]=='+')
+                    continue;
                 ReplaceAll(line, "   ", " @ ");
                 std::cout << line << "\n";
                 // blank characters are skipped if leading space in front of %c

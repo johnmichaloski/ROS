@@ -254,6 +254,7 @@ public:
 	std::string   GetTimeStamp (TimeFormat format = GMT_UV_SEC);
 
 	// -----------------------------------------
+        // Application specifie parameters
 	std::map< std::string, std::string> _appproperties; /**<map of application properties, e.g., ["prop"]="value" */
 	//int &       Debug;
 	std::string ExeDirectory; /**< the path to directory where exe is located  */

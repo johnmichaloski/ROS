@@ -212,4 +212,5 @@ public:
             bool doublejump=false);
     void Setup();
     void Play(InlineRobotCommands *,InlineRobotCommands *);
+     boost::shared_ptr<RvizCheckers> RvizGame() { return rvizgame; }
 };
