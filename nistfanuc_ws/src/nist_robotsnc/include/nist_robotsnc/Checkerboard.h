@@ -171,10 +171,6 @@ struct RvizCheckers {
 
                 std::string sqname = Globals.StrFormat("Square[%d:%d]", row, i);
                 ObjectDB * obj;
-                //Eigen::Affine3d eup = Convert<tf::Pose, Eigen::Affine3d>(tf::Pose(qidentity, GetUp(rowoffset, coloffset)));
-                //Eigen::Affine3d edn = Convert<tf::Pose, Eigen::Affine3d>(tf::Pose(qidentity, GetDown(rowoffset, coloffset)));
-                //LOG_DEBUG << "Eigen UP Pose " << RCS::DumpEigenPose(eup).c_str() << "\n";
-               // LOG_DEBUG << "Eigen DN Pose " << RCS::DumpEigenPose(edn).c_str() << "\n";
  
                 obj = pScene->CreateCuboid(sqname,
                         "Checkerboard",
@@ -221,8 +217,7 @@ struct RvizCheckers {
 
                 if (checkercolor != "CLEAR") {
                     Eigen::Affine3d epose = Eigen::Affine3d(Eigen::Translation3d(GetCentroid(rowoffset, coloffset)));
-                    LOG_DEBUG << "Eigen EPose " << RCS::DumpEigenPose(epose).c_str() << "\n";
-                    std::string checkername = Globals.StrFormat("Checker[%d:%d]", row, checkercol);
+                     std::string checkername = Globals.StrFormat("Checker[%d:%d]", row, checkercol);
                     checker = pScene->CreateCylinder(checkername,
                             "Cylinder",
                             epose, //FIXME: base offset?
