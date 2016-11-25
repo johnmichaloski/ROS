@@ -58,7 +58,6 @@ struct RvizCheckers {
     /** CHeckers board rviz dimensions */
     double XOFFSET; /**< x offset from world 0,0,0 */
     double YOFFSET; /**< y offset from world 0,0,0 */
-    //double ROWOFFSET;  /**< offset between rows on checkerboard */
     double SQOFFSET; /**< offset between board positions on checkerboard */
     double radius; /**< radius of checker cylinder piece */
     double height; /**< height of checker cylinder piece */
@@ -71,7 +70,6 @@ struct RvizCheckers {
     RvizCheckers(ros::NodeHandle &nh) : _nh(nh) {
         XOFFSET = -0.16;
         YOFFSET = -0.20;
-        //		ROWOFFSET = 0.04;
         SQOFFSET = 0.04;
         radius = 0.025;
         height = 0.015;
@@ -279,12 +277,13 @@ struct RvizCheckers {
         game.Dump(std::cout, m2);
         game.Board() = game.MakeMove(game.Board(), player, m1.row, m1.col, m2);
         //game.printDisplayFancy(game.Board());
+
+        from = m1;
+        to = m2;
         if (game.IsWin(game.Board(), player)) {
             winner = player;
             return true;
         }
-        from = m1;
-        to = m2;
         NextPlayer();
         return false;
     }

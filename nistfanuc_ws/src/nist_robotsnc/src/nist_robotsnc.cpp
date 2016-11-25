@@ -200,7 +200,7 @@ int main(int argc, char** argv) {
                 r.sleep();
             }
         }
-#if 0
+#if 1
         CheckersGame checkers(nh);
         Checkers::BoardType outboard;
         std::string filename(path + "/config/" + "Checkers.txt");
@@ -225,9 +225,9 @@ int main(int argc, char** argv) {
         game.Board() = outboard;
 #endif
         checkers.Setup();
-        //checkers.Play(&nccmds[0], &nccmds[1]);
+        checkers.Play(&nccmds[0], &nccmds[1]);
 #endif
-#if 1
+#if 0
         do {
             for (size_t i = 1; i < 2; i++) {  // only motoman
            // for (size_t i = 0; i < ncs.size(); i++) {

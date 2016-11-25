@@ -426,8 +426,8 @@ void CheckersGame::Play(InlineRobotCommands * red, InlineRobotCommands * black) 
     Checkers::Move from, to;
     int player;
     for (size_t i = 0; i < 40; i++) {
-        if (rvizgame->CheckersMove(player, from, to))
-            break;
+        bool bQuit = rvizgame->CheckersMove(player, from, to);
+           
         rvizgame->Game().printDisplayFancy(rvizgame->Game().Board());
         if (player == Checkers::RED) {
             LOG_DEBUG << "RED Move " << red->cnc()->Name().c_str();
@@ -436,6 +436,8 @@ void CheckersGame::Play(InlineRobotCommands * red, InlineRobotCommands * black) 
             LOG_DEBUG << "BLACK Move " << black->cnc()->Name().c_str();
             PhysicalMove(*black, player, from.row, from.col, to);
         }
+        if(bQuit)
+            break;
 
 #if 0
         // Synchronize with rviz let PublishPoint pause execution
