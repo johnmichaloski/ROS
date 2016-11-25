@@ -30,6 +30,9 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 //#include <tf_conversions/tf_eigen.h>
 //#include <eigen_conversions/eigen_msg.h>
 
+// URDF
+#include <urdf/model.h>
+
 // CRCL representations
 #include "RCS.h"
 
@@ -72,7 +75,7 @@ namespace Conversion {
      */
     template<typename From, typename To>
     inline To Convert(From f) {
-        BOOST_STATIC_ASSERT(sizeof(To) == 0);
+        BOOST_STATIC_ASSERT(sizeof (To) == 0);
         assert(0);
     }
 
@@ -163,6 +166,21 @@ namespace Conversion {
     template<>
     inline tf::Pose Convert<tf::Vector3, tf::Pose>(tf::Vector3 t) {
         return tf::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0), t);
+    }
+
+    /*!
+     * \brief Convert Eigen::Matrix4d into tf::Pose.
+     * \param  m is Eigen 4x4 matrix to be converted into a tf::Pose.
+     * \return tf::Pose 
+     */
+    template<>
+    inline tf::Pose Convert<Eigen::Matrix4d, tf::Pose>(Eigen::Matrix4d m) {
+        tf::Pose pose;
+        Eigen::Vector3d trans(m.block<3, 1>(0, 3));
+        Eigen::Quaterniond q(m.block<3, 3>(0, 0));
+        pose.setRotation(tf::Quaternion(q.x(), q.y(), q.z(), q.w())); // pose.getRotation());
+        pose.setOrigin(tf::Vector3(trans.x(), trans.y(), trans.z()));
+        return pose;
     }
 
     /*!
@@ -318,6 +336,7 @@ namespace Conversion {
                 m.orientation.z);
         return e;
     }
+
     /*!
      * \brief Convert tf::Quaternion into an  Eigen::Quaterniond.
      * \param q is defined as a tf::Quaternion..
@@ -325,8 +344,9 @@ namespace Conversion {
      */
     template<>
     inline Eigen::Quaterniond Convert<tf::Quaternion, Eigen::Quaterniond>(tf::Quaternion q) {
-         return Eigen::Quaterniond(q.w(), q.x(), q.y(), q.z());
+        return Eigen::Quaterniond(q.w(), q.x(), q.y(), q.z());
     }
+
     /*!
      * \brief Convert geometry_msgs::Pose into an  Eigen::Translation3d.
      * \param pose is defined as a geometry_msgs::Pose..
@@ -450,7 +470,7 @@ namespace Conversion {
         return pt;
     }
 
-        /*!
+    /*!
      * \brief Convert Eigen::Affine3d pose into an geometry_msgs::Pose pose.
      * \param e is Eigen::Affine3d defining equivalent pose.
      * \return  geometry_msgs::Pose pose.
@@ -486,6 +506,32 @@ namespace Conversion {
         //tf::poseEigenToMsg(pose, shared_pose_msg_);
         return msg.position;
     }
+
+    // URDF
+
+    /*!
+     * \brief Convert urdf::Vector into an Eigen vector.
+     * \param v is a urdf::Vector3t.
+     * \return  Eigen::Vector3d vector.
+     */
+    template<>
+    inline Eigen::Vector3d Convert<urdf::Vector3, Eigen::Vector3d> (urdf::Vector3 v) {
+        return Eigen::Vector3d(v.x, v.y, v.z);
+    }
+
+    /*!
+     * \brief Convert urdf::Pose into an Eigen affine3d.
+     * \param pose is a urdf::Pose.
+     * \return  Eigen::Affine3d pose.
+     */
+    template<>
+    inline Eigen::Affine3d Convert<urdf::Pose, Eigen::Affine3d>(urdf::Pose pose) {
+        // http://answers.ros.org/question/193286/some-precise-definition-or-urdfs-originrpy-attribute/
+        Eigen::Quaterniond q(pose.rotation.w, pose.rotation.x, pose.rotation.y, pose.rotation.z);
+        Eigen::Affine3d af(Eigen::Translation3d(pose.position.x, pose.position.y, pose.position.z) * q.toRotationMatrix());
+        return af;
+    }
+
     // CRCL
     // typdef sensor_msgs::JointState_<std::allocator<void> > JointState;
 

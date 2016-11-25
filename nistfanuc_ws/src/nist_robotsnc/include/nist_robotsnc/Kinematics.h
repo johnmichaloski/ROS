@@ -105,14 +105,25 @@ public:
  * */
 class IKinematics {
 protected:
+    // URDF Derived knowledge
     std::vector<std::string> joint_names;
     std::vector<std::string> link_names;
     std::vector< double> jointvalues;
     std::vector< double> joint_min;
     std::vector< double> joint_max;
     std::vector< bool> joint_has_limits;
-    std::vector< double> hint;
+
+    std::vector<Eigen::Vector3d> axis;
+    std::vector<Eigen::Vector3d> xyzorigin;
+    std::vector<Eigen::Vector3d> rpyorigin;
+    Eigen::Matrix4d ComputeUrdfTransform(double angle,
+        Eigen::Vector3d axis,
+        Eigen::Vector3d origin,
+        Eigen::Vector3d rotation);
+    
+
     size_t num_joints;
+    std::vector< double> hint;
     std::string _groupname;
     std::string _tiplinkname;
     std::string _rootlinkname;
@@ -121,7 +132,7 @@ protected:
     bool ParseURDF(std::string xml_string, std::string base_frame);
 
 public:
-
+    std::string DumpUrdfJoint();
     
     std::string getRootLink() {
         return _rootlinkname;
@@ -170,6 +181,13 @@ public:
     virtual void SetJointValues(std::vector<double> joint_values) {
         jointvalues = joint_values;
     }
+    /*!
+     * \brief ComputeAllFk performs the forward kinematics using the joint values of the robot provided 
+     * and provides each joint position from 0..n.
+     * \param vector of all robot joint values in doubles.
+     * \return vector of Cartesian robot pose of each joint.
+     */
+    virtual std::vector<tf::Pose> ComputeAllFk(std::vector<double> thetas);
     /*!
      * \brief FK performs the forward kinematics using the joint values of the robot provided.
      * \param vector of all robot joint values in doubles.

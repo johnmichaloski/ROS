@@ -15,8 +15,11 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 
 #include <stdarg.h>
 #include <vector>
+#include <boost/format.hpp>
+
 #include "RCS.h"
 #include "Conversions.h"
+
 using namespace Conversion;
 
 
@@ -57,7 +60,7 @@ namespace RCS {
      * Can be used as std::cout << DumpPose(pose); 
 
      */
-    inline std::string DumpPose(RCS::Pose & pose) {
+    inline std::string DumpPose(tf::Pose & pose) {
         std::stringstream s;
 
         s << "Translation = " << 1000.0 * pose.getOrigin().x() << ":" << 1000.0 * pose.getOrigin().y() << ":" << 1000.0 * pose.getOrigin().z() << std::endl;
@@ -84,7 +87,7 @@ namespace RCS {
     }
     //inline std::string DumpPoseSimple(RCS::Pose & pose) {
 
-    inline std::string DumpPoseSimple(RCS::Pose pose) {
+    inline std::string DumpPoseSimple(tf::Pose pose) {
         std::stringstream s;
 
         s << "Translation = " << 1000.0 * pose.getOrigin().x() << ":" << 1000.0 * pose.getOrigin().y() << ":" << 1000.0 * pose.getOrigin().z();
@@ -94,6 +97,18 @@ namespace RCS {
         s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw);
         return s.str();
     }
+    
+        /*!
+     * \brief DumpEPosition generates a debug string for an Eigen Vector. 
+     * Can be used as std::cout << DumpEPosition(v); 
+     */
+
+    inline std::string DumpEVector(const Eigen::Vector3d & v) {
+        std::stringstream s;
+        s << boost::format("%8.5f") % v(0) << boost::format("%8.5f") % v(1) << boost::format("%8.5f") % v(2) << "\n";
+        return s.str();
+    }
+
 
     /*!
      * \brief DumpJoints takes a list of joints and generates a string describing pose. 

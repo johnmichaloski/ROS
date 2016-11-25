@@ -271,6 +271,9 @@ namespace RCS {
                    LOG_DEBUG << "Current Joints " << RCS::VectorDump<double>(_newcc.joints.position).c_str();
                     status.currentjoints = _newcc.joints;
                     status.currentpose = Kinematics()->FK(status.currentjoints.position); /**<  current robot pose */
+                    std::vector<tf::Pose> poses = Kinematics()->ComputeAllFk(status.currentjoints.position);
+                    for (size_t k = 0; k < poses.size(); k++)
+                        LOG_DEBUG << "Joint Pose " << k << " = " << DumpPoseSimple(poses[k]).c_str();
                     status.currentjoints.header.stamp = ros::Time(0);
                     LOG_DEBUG << "Current Pose " << DumpPoseSimple(status.currentpose).c_str();
 #if 0
