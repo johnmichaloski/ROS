@@ -1,0 +1,41 @@
+\hypertarget{structgomotion_1_1go__position}{\section{gomotion\-:\-:go\-\_\-position Struct Reference}
+\label{structgomotion_1_1go__position}\index{gomotion\-::go\-\_\-position@{gomotion\-::go\-\_\-position}}
+}
+
+
+Container for a joint position or Cartesian position. Depending upon whether you are doing joint interpolation or world coordinate interpolation (as specified by your call to go\-\_\-motion\-\_\-queue\-\_\-set\-\_\-type()), fill in joint\mbox{[}\mbox{]} or pose accordingly.  
+
+
+
+
+{\ttfamily \#include $<$gomotion.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structgomotion_1_1go__position_af075d5442765600dd50494b47161db4b}{void {\bfseries zero\-\_\-joints} ()}\label{structgomotion_1_1go__position_af075d5442765600dd50494b47161db4b}
+
+\item 
+\hypertarget{structgomotion_1_1go__position_ab319ce59146e5f8313bdb5d1b7001617}{void {\bfseries zero\-\_\-pose} ()}\label{structgomotion_1_1go__position_ab319ce59146e5f8313bdb5d1b7001617}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structgomotion_1_1go__position_a54de5215a676f5e6bc004ec15803a2cb}{\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+union \{\\
+\hypertarget{uniongomotion_1_1go__position_1_1@1_abe054c50898120fd6b1b260edf8f0074}{\>go\_real {\bfseries joint} \mbox{[}GO\_MOTION\_JOINT\_NUM\mbox{]}\\
+\hypertarget{uniongomotion_1_1go__position_1_1@1_a52e09e22901615c1ca71757ea57215ca}{\>go\_pose {\bfseries pose}\\
+\} {\bfseries u}}\label{structgomotion_1_1go__position_a54de5215a676f5e6bc004ec15803a2cb}
+\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Container for a joint position or Cartesian position. Depending upon whether you are doing joint interpolation or world coordinate interpolation (as specified by your call to go\-\_\-motion\-\_\-queue\-\_\-set\-\_\-type()), fill in joint\mbox{[}\mbox{]} or pose accordingly. 
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+/usr/local/michalos/nistfanuc\-\_\-ws/src/gomotion/include/gomotion/\hyperlink{gomotion_8h}{gomotion.\-h}\end{DoxyCompactItemize}

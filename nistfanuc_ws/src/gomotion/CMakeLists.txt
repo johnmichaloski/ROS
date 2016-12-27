@@ -69,6 +69,11 @@ add_library(gomotion ${GOMOTION_LIB_SOURCES})
 
 link_directories(/usr/lib/x86_64-linux-gnu/)
 
+catkin_add_gtest(gomotionTest test/gomotiontest.cpp)
+add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --verbose)
+target_link_libraries(gomotionTest ${catkin_LIBRARIES} ${Boost_LIBRARIES} gomotion)
+
+
 target_link_libraries(gomotion
 ${catkin_LIBRARIES}
 ${Boost_LIBRARIES}

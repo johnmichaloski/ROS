@@ -34,11 +34,14 @@ std::map<std::string, std::string> ObjectDB::_typemapping =
 ("Cylinder", "Cylinder")
 ("trayoutline", "WireframeCuboid")
 ("marker", "Mark")
+("confetti","confetti")
 ;
-
+CMath Math;
 std::size_t Scene::gid = 1;
+std::vector<Piece*> Piece::pieces;
 //std::vector<ObjectDB*> Scen::objects;
 ObjectDB * Scene::dummy = new ObjectDB("dummy", "nevermatch", (std::size_t) 0);
+int Piece::n=0;
 
 int Scene::MARKERCOLOR(std::string X) {
     boost::to_upper(X);
@@ -166,6 +169,27 @@ ObjectDB * Scene::CreateCylinder(std::string name,
     Save(obj);
     return obj;
 }
+
+
+// Line
+ObjectDB * Scene::CreateLine(std::string name,
+        std::string metatype,
+        Eigen::Vector3d point1, 
+        Eigen::Vector3d point2,
+        std_msgs::ColorRGBA color, 
+        double radius){
+    ObjectDB* obj = new ObjectDB();
+    obj->name = name;
+    obj->metatype = metatype;
+    obj->pose = Convert<Eigen::Vector3d, Eigen::Affine3d>(point1);
+    obj->adjacentpose = Convert<Eigen::Vector3d, Eigen::Affine3d>(point2);
+    obj->rawcolor = color;
+    obj->radius = radius;
+    obj->id =  gid++;
+    Save(obj);
+    return obj;   
+}
+
 // wireframe cuboid
 
 ObjectDB* Scene::CreateWireframeCuboid(std::string name,
@@ -234,6 +258,8 @@ Scene::Scene() {
 void Scene::ClearScene() {
     assert(visual_tools != NULL);
     visual_tools->deleteAllMarkers();
+    ros::spinOnce();
+    ros::spinOnce();
     gid = 1;
     objects.clear(); // leak?
 }
@@ -242,13 +268,16 @@ void Scene::InitScene() {
     visual_tools = boost::shared_ptr<RvizVisualTools>(new RvizVisualTools("world", "/visualization_marker_array"));
     //visual_tools = boost::shared_ptr<SonOfRvizVisualTools>(new SonOfRvizVisualTools("base_link"));
     visual_tools->enableBatchPublishing(false);
+    global_scale_ = 1.0;
 
     Globals.Sleep(10000);
 
     ClearScene();
 
+    std::string base_frame_("world");
+    
     // Setup up triangle_marker_ for wall drawing
-    triangle_marker_.header.frame_id = "world";
+    triangle_marker_.header.frame_id = base_frame_;
 
     triangle_marker_.ns = "Triangle";
     triangle_marker_.action = visualization_msgs::Marker::ADD;
@@ -256,12 +285,25 @@ void Scene::InitScene() {
     triangle_marker_.lifetime = ros::Duration(0.0);
 
     // Load Cylinder ----------------------------------------------------
-    cylinder_marker_.header.frame_id = "world";
+    cylinder_marker_.header.frame_id = base_frame_;
     cylinder_marker_.ns = "Cylinder";
     cylinder_marker_.action = visualization_msgs::Marker::ADD;
     cylinder_marker_.type = visualization_msgs::Marker::CYLINDER;
     cylinder_marker_.lifetime = ros::Duration(0.0);
     cylinder_marker_.id = 1;
+
+
+    line_strip_marker_.header.frame_id = base_frame_;
+    // Set the namespace and id for this marker.  This serves to create a unique
+    // ID
+    line_strip_marker_.ns = "Line";
+    // Set the marker type.
+    line_strip_marker_.type = visualization_msgs::Marker::LINE_STRIP;
+    // Set the marker action.  Options are ADD and DELETE
+    line_strip_marker_.action = visualization_msgs::Marker::ADD;
+    // Lifetime
+    line_strip_marker_.lifetime = ros::Duration(0.0);
+    line_strip_marker_.id = 1;
 }
 void Scene::BuildScene() {
 
@@ -306,6 +348,14 @@ void Scene::NewScene() {
 }
 
 // Initialize Eigen::Affine3d http://stackoverflow.com/questions/25504397/eigen-combine-rotation-and-translation-into-one-matrix
+
+void Scene::UpdateScene(ObjectDB * obj) {
+//        rviz_visual_tools::colors color) {
+    if (obj == NULL)
+        throw std::runtime_error("Gak UpdateScene!");
+    DrawObject(obj);
+    visual_tools->triggerBatchPublish();
+}
 
 void Scene::UpdateScene(std::string objname, Eigen::Affine3d pose, std::string color) {
 //        rviz_visual_tools::colors color) {
@@ -377,20 +427,27 @@ bool Scene::DrawObject(ObjectDB *obj) {
                 type.c_str(),
                 obj->id);
 #endif
-    }
-     else if (type == "Mark") {
+    } else if (type == "Mark") {
         b = visual_tools->publishSphere(obj->pose,
-                 MARKERCOLOR(obj->color),
-                 rviz_visual_tools::LARGE,
-                 "Sphere", 
+                MARKERCOLOR(obj->color),
+                rviz_visual_tools::LARGE,
+                "Sphere",
                 obj->id);
-        
-    }
 
+    } else if (type == "confetti") {
+        b = publishLine(
+                Convert<Eigen::Affine3d, Eigen::Vector3d>(obj->pose),
+                Convert<Eigen::Affine3d, Eigen::Vector3d>(obj->adjacentpose),
+                obj->rawcolor,
+                obj->radius,
+                obj->id);
+    }
 
     visual_tools->triggerBatchPublish();
     // BOOST_ASSERT_MSG(b == 0, "Failed to publish object");
-    LOG_DEBUG << "Draw " << obj->name << "="<< RCS::DumpEigenPose(obj->pose).c_str();
+#if defined(LogScene)
+    ofsScene << "Draw " << obj->name << "="<< RCS::DumpEigenPose(obj->pose).c_str()<<"\n"<< std::flush;
+#endif
     ros::spinOnce();
     ros::spinOnce();
     ros::spinOnce();
@@ -399,6 +456,22 @@ bool Scene::DrawObject(ObjectDB *obj) {
     return b;
 }
 
+
+void Scene::MakeConfetti() {
+
+    for (size_t i = 0; i < 20; i++) {
+        
+        double x = ((double) i)*.01;
+        CreateLine("confetti1", "confetti",
+                Eigen::Vector3d(x, 0.0, 1.0), Eigen::Vector3d(x, 0.0, 1.005),
+                pScene->make_rawcolor(Random(0.0, 128.0),
+                Random(0.0, 128.0),
+                Random(0.0, 128.0),
+                1.0),
+                .005);
+
+    }
+}
 void Scene::DrawScene() {
     for (size_t i = 0; i < objects.size(); i++) {
         ObjectDB *obj = objects[i];
@@ -453,4 +526,30 @@ bool Scene::publishCylinder(Eigen::Affine3d pose,
     // Helper for publishing rviz markers
     bWorked = visual_tools->publishMarker(cylinder_marker_);
     return bWorked;
+}
+
+bool Scene::publishLine(const Eigen::Vector3d &point1, 
+        const Eigen::Vector3d &point2,
+        const std_msgs::ColorRGBA &color, 
+        double radius,
+         size_t &id) {
+    
+    // Set the timestamp
+    line_strip_marker_.header.stamp = ros::Time::now();
+
+    geometry_msgs::Vector3 scale;
+    scale.x = radius * global_scale_;
+    scale.y = radius * global_scale_;
+    scale.z = radius * global_scale_;
+
+    line_strip_marker_.id=id;
+    line_strip_marker_.color = color;
+    line_strip_marker_.scale = scale;
+
+    line_strip_marker_.points.clear();
+    line_strip_marker_.points.push_back(Convert<Eigen::Vector3d, geometry_msgs::Point>(point1));
+    line_strip_marker_.points.push_back(Convert<Eigen::Vector3d, geometry_msgs::Point>(point2));
+
+    // Helper for publishing rviz markers
+    return visual_tools->publishMarker(line_strip_marker_);
 }

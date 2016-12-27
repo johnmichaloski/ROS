@@ -12,24 +12,35 @@
 //#pragma message "Compiling " __FILE__ 
 
 #include "RvizMarker.h"
+static int CRvizMarker::_id = 1;
 
-CRvizMarker::CRvizMarker( ros::NodeHandle & nh ): n(nh) {
-    _id = 0;
+CRvizMarker::CRvizMarker(ros::NodeHandle & nh) : n(nh) {
     scalex = scaley = scalez = 0.005;
     // Set our initial shape type to be a cube
     shape = visualization_msgs::Marker::SPHERE;
-    r= 1.0;  g=0.0;  b=0.0;  a=1.0;
+    r = 1.0;
+    g = 0.0;
+    b = 0.0;
+    a = 1.0;
 }
-void CRvizMarker::Init()
-{
-   _id=0;
-   marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker", 1);
+
+void CRvizMarker::Init() {
+    marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker", 1);
 }
-int CRvizMarker::Send(RCS::Pose p)
-  {
+
+void CRvizMarker::Clear() {
+    visualization_msgs::Marker reset_marker_;
+    reset_marker_.header.frame_id = "world";
+    reset_marker_.header.stamp = ros::Time();
+    reset_marker_.ns = "deleteAllMarkers"; // helps during debugging
+    reset_marker_.action = 3;
+    marker_pub.publish(reset_marker_);
+    
+}
+int CRvizMarker::Send(RCS::Pose p) {
     visualization_msgs::Marker marker;
     // Set the frame ID and timestamp.  See the TF tutorials for information on these.
-    marker.header.frame_id = "/base_link";
+    marker.header.frame_id = "/world";
     marker.header.stamp = ros::Time::now();
 
     // Set the namespace and id for this marker.  This serves to create a unique ID
@@ -62,7 +73,7 @@ int CRvizMarker::Send(RCS::Pose p)
     marker.pose.orientation.w = p.getRotation().w();
 
     // Set the scale of the marker -- 1x1x1 here means 1m on a side!!!
-    marker.scale.x = scalex;  
+    marker.scale.x = scalex;
     marker.scale.y = scaley;
     marker.scale.z = scalez;
 
@@ -72,35 +83,39 @@ int CRvizMarker::Send(RCS::Pose p)
     marker.color.b = b;
     marker.color.a = a;
 
-    marker.lifetime = ros::Duration();
+    marker.lifetime = ros::Duration(0.0);
 
     // Publish the marker
     marker_pub.publish(marker);
+    ros::spinOnce();
+    ros::spinOnce();
 
-	return 0;
+    return 0;
 }
-void CRvizMarker::SetColor(double r, double g, double b, double a)
-{
-    this->r=r; this->g=g; this->b=b; this->a=a;
+
+void CRvizMarker::SetColor(double r, double g, double b, double a) {
+    this->r = r;
+    this->g = g;
+    this->b = b;
+    this->a = a;
 }
-uint32_t CRvizMarker::SetShape(uint32_t shape)
-{
-	uint32_t oldshape=this->shape;
+
+uint32_t CRvizMarker::SetShape(uint32_t shape) {
+    uint32_t oldshape = this->shape;
     // Cycle between different shapes
-    switch (shape)
-    {
-    case visualization_msgs::Marker::CUBE:
-      this->shape = visualization_msgs::Marker::SPHERE;
-      break;
-    case visualization_msgs::Marker::SPHERE:
-      this->shape = visualization_msgs::Marker::ARROW;
-      break;
-    case visualization_msgs::Marker::ARROW:
-      this->shape = visualization_msgs::Marker::CYLINDER;
-      break;
-    case visualization_msgs::Marker::CYLINDER:
-      this->shape = visualization_msgs::Marker::CUBE;
-      break;
+    switch (shape) {
+        case visualization_msgs::Marker::CUBE:
+            this->shape = visualization_msgs::Marker::SPHERE;
+            break;
+        case visualization_msgs::Marker::SPHERE:
+            this->shape = visualization_msgs::Marker::ARROW;
+            break;
+        case visualization_msgs::Marker::ARROW:
+            this->shape = visualization_msgs::Marker::CYLINDER;
+            break;
+        case visualization_msgs::Marker::CYLINDER:
+            this->shape = visualization_msgs::Marker::CUBE;
+            break;
     }
-	return oldshape;
+    return oldshape;
 }

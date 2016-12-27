@@ -22,8 +22,35 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 
 using namespace Conversion;
 
+// Debug Flags for more debugging information:
+// Log gomotion move joint command
+// #define DebugJointCommand
+// Log controller action loop for robot servo/joint moves
+// #define RobotCNCJointMove
+// Log controller action loop for robot servo of world cartesian move
+// #define DebugWorldCommand
+// Log scene information
+#define LogScene
 
 namespace RCS {
+
+    inline double ToDegree(double ang) {
+        return ang * 180.0 / M_PI;
+    }
+
+    inline double Nop(double d) {
+        return d;
+    }
+
+    template<typename OP> //double (*F)(double ) = Nil>
+    inline std::string FcnVectorDump(std::vector<double> v, OP op=Nop) {
+        std::stringstream s;
+
+        for (size_t i = 0; i < v.size(); i++) {
+            s << op(v[i]) << ":";
+        }
+        return s.str();
+    }
 
     template<typename T>
     inline std::string VectorDump(std::vector<T> v) {
@@ -32,10 +59,18 @@ namespace RCS {
         for (size_t i = 0; i < v.size(); i++) {
             s << v[i] << ":";
         }
-        s << std::endl;
         return s.str();
     }
 
+    template<>
+    inline std::string VectorDump(std::vector<double> v) {
+        std::stringstream s;
+
+        for (size_t i = 0; i < v.size(); i++) {
+            s << boost::format("%5.2f") % v[i] << ":";
+        }
+        return s.str();
+    }
     static const char * sCmd[] = {"CANON_NOOP",
         "CANON_INIT_CANON ",
         "CANON_END_CANON",
@@ -63,11 +98,11 @@ namespace RCS {
     inline std::string DumpPose(tf::Pose & pose) {
         std::stringstream s;
 
-        s << "Translation = " << 1000.0 * pose.getOrigin().x() << ":" << 1000.0 * pose.getOrigin().y() << ":" << 1000.0 * pose.getOrigin().z() << std::endl;
+        s << "T   = " << 1000.0 * pose.getOrigin().x() << ":" << 1000.0 * pose.getOrigin().y() << ":" << 1000.0 * pose.getOrigin().z() << std::endl;
         double roll, pitch, yaw;
         getRPY(pose, roll, pitch, yaw);
-        s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw) << std::endl;
-        s << "Quaternion = " << pose.getRotation().x() << ":" << pose.getRotation().y() << ":" << pose.getRotation().z() << ":" << pose.getRotation().w();
+        s << "RPY = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw) << "\n";
+        s << "Q   = " << pose.getRotation().x() << ":" << pose.getRotation().y() << ":" << pose.getRotation().z() << ":" << pose.getRotation().w();
         //s << Crcl::DumpRotationAsCrcl(pose)<< std::endl;
         return s.str();
     }
@@ -77,7 +112,7 @@ namespace RCS {
         s << "Translation = " << 1000.0 * pose(0, 3) << ":" << 1000.0 * pose(1, 3) << ":" << 1000.0 * pose(2, 3);
         tf::Matrix3x3 tfMatrix3x3;
         Eigen::Matrix3d e = pose.rotation();
-        tfMatrix3x3=Convert<Eigen::Matrix3d, tf::Matrix3x3>(e);
+        tfMatrix3x3 = Convert<Eigen::Matrix3d, tf::Matrix3x3>(e);
 
         double roll, pitch, yaw;
         tfMatrix3x3.getRPY(roll, pitch, yaw);
@@ -90,26 +125,36 @@ namespace RCS {
     inline std::string DumpPoseSimple(tf::Pose pose) {
         std::stringstream s;
 
-        s << "Translation = " << 1000.0 * pose.getOrigin().x() << ":" << 1000.0 * pose.getOrigin().y() << ":" << 1000.0 * pose.getOrigin().z();
+        s << boost::format("%7.2f") % (1000.0 * pose.getOrigin().x()) << ":" <<
+                boost::format("%7.2f") % (1000.0 * pose.getOrigin().y()) << ":" <<
+                boost::format("%7.2f") % (1000.0 * pose.getOrigin().z()) << "|";
         double roll, pitch, yaw;
         //getRPY(pose, roll, pitch, yaw);
         tf::Matrix3x3(pose.getRotation()).getRPY(roll, pitch, yaw);
-        s << "Rotation = " << Rad2Deg(roll) << ":" << Rad2Deg(pitch) << ":" << Rad2Deg(yaw);
+        s << boost::format("%5.2f") % Rad2Deg(roll) << ":" <<
+                boost::format("%5.2f") % Rad2Deg(pitch) << ":" <<
+                boost::format("%5.2f") % Rad2Deg(yaw);
         return s.str();
     }
-    
-        /*!
+
+    /*!
      * \brief DumpEPosition generates a debug string for an Eigen Vector. 
      * Can be used as std::cout << DumpEPosition(v); 
      */
 
-    inline std::string DumpEVector(const Eigen::Vector3d & v) {
+//    inline std::string DumpEVector(const Eigen::Vector3d & v) {
+//        std::stringstream s;
+//        s << boost::format("%8.5f") % v(0) << boost::format("%8.5f") % v(1) << boost::format("%8.5f") % v(2) << "\n";
+//        return s.str();
+//    }
+
+    template<typename T>
+    inline std::string DumpEVector(const T & v) {
         std::stringstream s;
-        s << boost::format("%8.5f") % v(0) << boost::format("%8.5f") % v(1) << boost::format("%8.5f") % v(2) << "\n";
+        for (int i = 0; i < v.size(); i++)
+            s << boost::format("%8.5f:") % v(i);
         return s.str();
     }
-
-
     /*!
      * \brief DumpJoints takes a list of joints and generates a string describing pose. 
      * Can be used as std::cout << DumpPose(pose); 

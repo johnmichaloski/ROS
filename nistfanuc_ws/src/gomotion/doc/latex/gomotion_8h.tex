@@ -1,0 +1,51 @@
+\hypertarget{gomotion_8h}{\section{/usr/local/michalos/nistfanuc\-\_\-ws/src/gomotion/include/gomotion/gomotion.h File Reference}
+\label{gomotion_8h}\index{/usr/local/michalos/nistfanuc\-\_\-ws/src/gomotion/include/gomotion/gomotion.\-h@{/usr/local/michalos/nistfanuc\-\_\-ws/src/gomotion/include/gomotion/gomotion.\-h}}
+}
+
+
+Declarations for motion queue manipulation.  
+
+
+{\ttfamily \#include \char`\"{}gomotion/gotypes.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}gomotion/gomath.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}gomotion/gotraj.\-h\char`\"{}}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structgomotion_1_1go__position}{gomotion\-::go\-\_\-position}
+\begin{DoxyCompactList}\small\item\em Container for a joint position or Cartesian position. Depending upon whether you are doing joint interpolation or world coordinate interpolation (as specified by your call to go\-\_\-motion\-\_\-queue\-\_\-set\-\_\-type()), fill in joint\mbox{[}\mbox{]} or pose accordingly. \end{DoxyCompactList}\item 
+struct \hyperlink{structgomotion_1_1go__motion__params}{gomotion\-::go\-\_\-motion\-\_\-params}
+\item 
+struct \hyperlink{structgomotion_1_1go__motion__linear__params}{gomotion\-::go\-\_\-motion\-\_\-linear\-\_\-params}
+\item 
+struct \hyperlink{structgomotion_1_1go__motion__circular__params}{gomotion\-::go\-\_\-motion\-\_\-circular\-\_\-params}
+\item 
+struct \hyperlink{structgomotion_1_1go__motion__spec}{gomotion\-::go\-\_\-motion\-\_\-spec}
+\item 
+struct \hyperlink{structgomotion_1_1go__scale__spec}{gomotion\-::go\-\_\-scale\-\_\-spec}
+\item 
+struct \hyperlink{structgomotion_1_1go__motion__queue}{gomotion\-::go\-\_\-motion\-\_\-queue}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{gomotion_8h_ac7b4e696e30d95d9a3d178233eabed55}{\#define {\bfseries G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-J\-O\-I\-N\-T\-\_\-\-N\-U\-M}~8 /$\ast$$\ast$ number of joints supported $\ast$/}\label{gomotion_8h_ac7b4e696e30d95d9a3d178233eabed55}
+
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ \\*
+{\bfseries gomotion\-::\-G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-N\-O\-N\-E}, 
+{\bfseries G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-J\-O\-I\-N\-T}, 
+{\bfseries G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-U\-J\-O\-I\-N\-T}, 
+{\bfseries G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-W\-O\-R\-L\-D}, 
+\\*
+{\bfseries gomotion\-::\-G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-L\-I\-N\-E\-A\-R}, 
+{\bfseries G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-C\-I\-R\-C\-U\-L\-A\-R}
+ \}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Declarations for motion queue manipulation. 

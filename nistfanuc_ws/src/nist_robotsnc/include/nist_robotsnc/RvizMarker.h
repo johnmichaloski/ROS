@@ -76,11 +76,15 @@ public:
      * \param red, green. blue and alpha are the values used herein.
      */
     void SetColor(double r, double g, double b, double a);
+    /*!
+     *\brief Clear all markers that have been created.
+     */   
+    void Clear();
     /////////////////////////////////
     ros::Publisher marker_pub;
     ros::NodeHandle & n;
     uint32_t shape;
-    int _id;
+    static int _id;
     double scalex, scaley, scalez;
     double r, g, b, a;
 };

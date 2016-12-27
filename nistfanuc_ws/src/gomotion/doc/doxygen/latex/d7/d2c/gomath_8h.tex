@@ -1,0 +1,706 @@
+\hypertarget{gomath_8h}{\section{/usr/local/michalos/nistfanuc\-\_\-ws/src/gomotion/include/gomotion/gomath.h File Reference}
+\label{gomath_8h}\index{/usr/local/michalos/nistfanuc\-\_\-ws/src/gomotion/include/gomotion/gomath.\-h@{/usr/local/michalos/nistfanuc\-\_\-ws/src/gomotion/include/gomotion/gomath.\-h}}
+}
+
+
+Declarations for pose math functions.  
+
+
+{\ttfamily \#include $<$stddef.\-h$>$}\\*
+{\ttfamily \#include $<$math.\-h$>$}\\*
+{\ttfamily \#include $<$float.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}gomotion/gotypes.\-h\char`\"{}}\\*
+Include dependency graph for gomath.\-h\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d2/d73/gomath_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{de/d60/gomath_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structgomotion_1_1go__cart}{gomotion\-::go\-\_\-cart}
+\item 
+struct \hyperlink{structgomotion_1_1go__sph}{gomotion\-::go\-\_\-sph}
+\item 
+struct \hyperlink{structgomotion_1_1go__cyl}{gomotion\-::go\-\_\-cyl}
+\item 
+struct \hyperlink{structgomotion_1_1go__rvec}{gomotion\-::go\-\_\-rvec}
+\item 
+struct \hyperlink{structgomotion_1_1go__mat}{gomotion\-::go\-\_\-mat}
+\item 
+struct \hyperlink{structgomotion_1_1go__quat}{gomotion\-::go\-\_\-quat}
+\item 
+struct \hyperlink{structgomotion_1_1go__zyz}{gomotion\-::go\-\_\-zyz}
+\item 
+struct \hyperlink{structgomotion_1_1go__zyx}{gomotion\-::go\-\_\-zyx}
+\item 
+struct \hyperlink{structgomotion_1_1go__xyz}{gomotion\-::go\-\_\-xyz}
+\item 
+struct \hyperlink{structgomotion_1_1go__rpy}{gomotion\-::go\-\_\-rpy}
+\item 
+struct \hyperlink{structgomotion_1_1go__uxz}{gomotion\-::go\-\_\-uxz}
+\item 
+struct \hyperlink{structgomotion_1_1go__pose}{gomotion\-::go\-\_\-pose}
+\item 
+struct \hyperlink{structgomotion_1_1go__vel}{gomotion\-::go\-\_\-vel}
+\item 
+struct \hyperlink{structgomotion_1_1go__hom}{gomotion\-::go\-\_\-hom}
+\item 
+struct \hyperlink{structgomotion_1_1go__line}{gomotion\-::go\-\_\-line}
+\item 
+struct \hyperlink{structgomotion_1_1go__plane}{gomotion\-::go\-\_\-plane}
+\item 
+struct \hyperlink{structgomotion_1_1go__matrix}{gomotion\-::go\-\_\-matrix}
+\item 
+struct \hyperlink{structgomotion_1_1go__dh}{gomotion\-::go\-\_\-dh}
+\item 
+struct \hyperlink{structgomotion_1_1go__pk}{gomotion\-::go\-\_\-pk}
+\item 
+struct \hyperlink{structgomotion_1_1go__pp}{gomotion\-::go\-\_\-pp}
+\item 
+struct \hyperlink{structgomotion_1_1go__body}{gomotion\-::go\-\_\-body}
+\item 
+struct \hyperlink{structgomotion_1_1go__link}{gomotion\-::go\-\_\-link}
+\item 
+struct \hyperlink{structgomotion_1_1go__complex}{gomotion\-::go\-\_\-complex}
+\item 
+struct \hyperlink{structgomotion_1_1go__quadratic}{gomotion\-::go\-\_\-quadratic}
+\item 
+struct \hyperlink{structgomotion_1_1go__cubic}{gomotion\-::go\-\_\-cubic}
+\item 
+struct \hyperlink{structgomotion_1_1go__quartic}{gomotion\-::go\-\_\-quartic}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{namespacegomotion}{gomotion}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{gomath_8h_a073619c46f05f2b4180948f5e67328aa}{go\-\_\-sq}(x)~((x)$\ast$(x))
+\item 
+\#define \hyperlink{gomath_8h_a7b945d7ec90e4d34073e15a23b26dc11}{go\-\_\-cub}(x)~((x)$\ast$(x)$\ast$(x))
+\item 
+\#define \hyperlink{gomath_8h_a8f92c90d4eca20e4519c3cce423c0b14}{go\-\_\-qua}(x)~((x)$\ast$(x)$\ast$(x)$\ast$(x))
+\item 
+\#define \hyperlink{gomath_8h_a52cc993e19bca5c01e117b6bd840de0d}{G\-O\-\_\-\-P\-I}~3.\-14159265358979323846
+\item 
+\#define \hyperlink{gomath_8h_aa826db35de339d014c00c259b4b932f5}{G\-O\-\_\-2\-\_\-\-P\-I}~(2.\-0$\ast$\hyperlink{gomath_8h_a52cc993e19bca5c01e117b6bd840de0d}{G\-O\-\_\-\-P\-I})
+\item 
+\#define \hyperlink{gomath_8h_a75f159bb4031d698794771824e92540a}{G\-O\-\_\-\-P\-I\-\_\-2}~1.\-57079632679489661923
+\item 
+\#define \hyperlink{gomath_8h_ad02346b33ded3bb4f6a3d795f372f0c2}{G\-O\-\_\-\-P\-I\-\_\-4}~0.\-78539816339744830962
+\item 
+\#define \hyperlink{gomath_8h_ab49e228fd567903d32654564c81a606f}{G\-O\-\_\-\-T\-O\-\_\-\-D\-E\-G}(rad)~((rad)$\ast$57.\-295779513082323)
+\item 
+\#define \hyperlink{gomath_8h_a257fd1bdbb4294c1bf1d2c34bfeaba42}{G\-O\-\_\-\-T\-O\-\_\-\-R\-A\-D}(deg)~((deg)$\ast$0.\-0174532925199432952)
+\item 
+\#define \hyperlink{gomath_8h_ab72173c33a8f16e8ecec3b552d2f5ba2}{G\-O\-\_\-\-T\-R\-A\-N\-\_\-\-C\-L\-O\-S\-E}(x, y)~(fabs((x)-\/(y)) $<$ \hyperlink{gotypes_8h_a565feef8b688896bae12bba085027170}{G\-O\-\_\-\-R\-E\-A\-L\-\_\-\-E\-P\-S\-I\-L\-O\-N})
+\item 
+\#define \hyperlink{gomath_8h_a9a43e1f84698a4a207443d40f885ecd6}{G\-O\-\_\-\-T\-R\-A\-N\-\_\-\-S\-M\-A\-L\-L}(x)~(fabs(x) $<$ \hyperlink{gotypes_8h_a565feef8b688896bae12bba085027170}{G\-O\-\_\-\-R\-E\-A\-L\-\_\-\-E\-P\-S\-I\-L\-O\-N})
+\item 
+\#define \hyperlink{gomath_8h_a05cedbcc55d6939a67c17c1e3b71d488}{G\-O\-\_\-\-R\-O\-T\-\_\-\-C\-L\-O\-S\-E}(x, y)~(fabs((x)-\/(y)) $<$ \hyperlink{gotypes_8h_a565feef8b688896bae12bba085027170}{G\-O\-\_\-\-R\-E\-A\-L\-\_\-\-E\-P\-S\-I\-L\-O\-N})
+\item 
+\#define \hyperlink{gomath_8h_a94c8163e4f01c4adf33baa8eb995433d}{G\-O\-\_\-\-R\-O\-T\-\_\-\-S\-M\-A\-L\-L}(x)~(fabs(x) $<$ \hyperlink{gotypes_8h_a565feef8b688896bae12bba085027170}{G\-O\-\_\-\-R\-E\-A\-L\-\_\-\-E\-P\-S\-I\-L\-O\-N})
+\item 
+\#define \hyperlink{gomath_8h_a2dbfee2dbb4523cc08316fd2080d4299}{G\-O\-\_\-\-C\-L\-O\-S\-E}(x, y)~(fabs((x)-\/(y)) $<$ \hyperlink{gotypes_8h_a565feef8b688896bae12bba085027170}{G\-O\-\_\-\-R\-E\-A\-L\-\_\-\-E\-P\-S\-I\-L\-O\-N})
+\item 
+\#define \hyperlink{gomath_8h_acccd2104a7cee68bf586057facfea5d5}{G\-O\-\_\-\-S\-M\-A\-L\-L}(x)~(fabs(x) $<$ \hyperlink{gotypes_8h_a565feef8b688896bae12bba085027170}{G\-O\-\_\-\-R\-E\-A\-L\-\_\-\-E\-P\-S\-I\-L\-O\-N})
+\item 
+\#define \hyperlink{gomath_8h_ac29f0652fd2215fe0713d7b473a72343}{G\-O\-\_\-\-M\-A\-T\-R\-I\-X\-\_\-\-D\-E\-C\-L\-A\-R\-E}(M, Mspace, \-\_\-rows, \-\_\-cols)
+\item 
+\#define \hyperlink{gomath_8h_a83429625babfbf9dd959fda081191b44}{I\-S\-I\-Z\-E\-O\-F}(x)~((int) sizeof(x))
+\item 
+\#define \hyperlink{gomath_8h_a68b54c3bb7c9bbf14f68336cf474a5a3}{go\-\_\-matrix\-\_\-init}(M, Mspace, \-\_\-rows, \-\_\-cols)
+\item 
+\#define \hyperlink{gomath_8h_a0d434996426b71e86dbff3ec483ee5f9}{go\-\_\-body\-\_\-init}(b)
+\item 
+\#define \hyperlink{gomath_8h_a927bcd9bd678cacb06596c4e9aad7eb4}{go\-\_\-body\-\_\-copy}(src, dst)
+\item 
+\#define \hyperlink{gomath_8h_a7fbee1dbcd46c80fe1b6f67550b4d1d3}{go\-\_\-link\-\_\-to\-\_\-string}(L)
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} \hyperlink{namespacegomotion_a5739eac588a6a458ed9258bae0a3fc80}{gomotion\-::go\-\_\-vector}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ \hyperlink{namespacegomotion_a5b5a03fc09c09e262c6941325f7beb17afd19d6aee8f10a912a656a2e01650b62}{gomotion\-::\-G\-O\-\_\-\-L\-I\-N\-K\-\_\-\-D\-H} = 1, 
+\hyperlink{namespacegomotion_a5b5a03fc09c09e262c6941325f7beb17a7b78cd6a637ea7ae037ec521ef34b8ab}{gomotion\-::\-G\-O\-\_\-\-L\-I\-N\-K\-\_\-\-P\-K}, 
+\hyperlink{namespacegomotion_a5b5a03fc09c09e262c6941325f7beb17acbaa1fd4ed04f6ed93cc5296baaf6b78}{gomotion\-::\-G\-O\-\_\-\-L\-I\-N\-K\-\_\-\-P\-P}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{namespacegomotion_a085a19f481a6f3f319f644b6dc5fca4b}{gomotion\-::go\-\_\-sincos} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} t, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$s, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$c)
+\item 
+\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} \hyperlink{namespacegomotion_a11b672dbc5c887c373bd7421c4d74744}{gomotion\-::go\-\_\-cbrt} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} x)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a8bf33ee1ceabf5861cb6d8f7fe685880}{gomotion\-::go\-\_\-asines} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} s, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$asp, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$asn)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a763dfb5f3ead47a101119bc4ef7a9822}{gomotion\-::go\-\_\-acoses} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} c, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$acp, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$acn)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a6af3a55c31db0c4b47aa157de48ae829}{gomotion\-::go\-\_\-atans} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} t, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$atp, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$atn)
+\item 
+go\-\_\-pose \hyperlink{namespacegomotion_a71730b5182346e2fe15337c358013fca}{gomotion\-::go\-\_\-pose\-\_\-this} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} x, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} y, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} z, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} rs, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} rx, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} ry, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} rz)
+\item 
+go\-\_\-cart \hyperlink{namespacegomotion_aadcf705cf7a6b2a33fb3fb65f5b1a517}{gomotion\-::go\-\_\-cart\-\_\-zero} (void)
+\item 
+go\-\_\-quat \hyperlink{namespacegomotion_abfb9197b7cceb73fdd68bad553cba624}{gomotion\-::go\-\_\-quat\-\_\-identity} (void)
+\item 
+go\-\_\-pose \hyperlink{namespacegomotion_ab1257b2f7a291d528ea01466abff5ac8}{gomotion\-::go\-\_\-pose\-\_\-identity} (void)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_aac937b55b391d0b7565719d301389bc6}{gomotion\-::go\-\_\-line\-\_\-from\-\_\-point\-\_\-direction} (const go\-\_\-cart $\ast$point, const go\-\_\-cart $\ast$direction, go\-\_\-line $\ast$line)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a13ea203461728105546fe4af4083f6ba}{gomotion\-::go\-\_\-line\-\_\-from\-\_\-points} (const go\-\_\-cart $\ast$point1, const go\-\_\-cart $\ast$point2, go\-\_\-line $\ast$line)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a239960b865134d678928490b91100702}{gomotion\-::go\-\_\-line\-\_\-from\-\_\-planes} (const go\-\_\-plane $\ast$plane1, const go\-\_\-plane $\ast$plane2, go\-\_\-line $\ast$line)
+\item 
+\hyperlink{gotypes_8h_ae890d9a0ddecc0d3073622cc4312092d}{go\-\_\-flag} \hyperlink{namespacegomotion_a5b409973e65746e7698f0afbcf9183de}{gomotion\-::go\-\_\-line\-\_\-line\-\_\-compare} (const go\-\_\-line $\ast$line1, const go\-\_\-line $\ast$line2)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a301c198b3225ff73ad5598c046166a4a}{gomotion\-::go\-\_\-line\-\_\-evaluate} (const go\-\_\-line $\ast$line, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} d, go\-\_\-cart $\ast$point)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a2144eb2d183b1aaf60549d66ae7dfcf6}{gomotion\-::go\-\_\-point\-\_\-line\-\_\-distance} (const go\-\_\-cart $\ast$point, const go\-\_\-line $\ast$line, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$distance)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a36bd2c5167f64cc51da6bdf3dbdb4116}{gomotion\-::go\-\_\-point\-\_\-line\-\_\-proj} (const go\-\_\-cart $\ast$point, const go\-\_\-line $\ast$line, go\-\_\-cart $\ast$pout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a79d749aa4142b2ee2e135f46a6656f21}{gomotion\-::go\-\_\-point\-\_\-plane\-\_\-proj} (const go\-\_\-cart $\ast$point, const go\-\_\-plane $\ast$plane, go\-\_\-cart $\ast$proj)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a120a912e2b439a904744d980b62867aa}{gomotion\-::go\-\_\-line\-\_\-plane\-\_\-proj} (const go\-\_\-line $\ast$line, const go\-\_\-plane $\ast$plane, go\-\_\-line $\ast$proj)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_abffde2f69bd2e58d2b099558e892661e}{gomotion\-::go\-\_\-plane\-\_\-from\-\_\-point\-\_\-normal} (const go\-\_\-cart $\ast$point, const go\-\_\-cart $\ast$normal, go\-\_\-plane $\ast$plane)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a62472d69cf3770531052efa51d42d139}{gomotion\-::go\-\_\-plane\-\_\-from\-\_\-abcd} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} A, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} B, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} C, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} D, go\-\_\-plane $\ast$plane)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_aebc299a30f9b6bab3221df9381691a7a}{gomotion\-::go\-\_\-plane\-\_\-from\-\_\-points} (const go\-\_\-cart $\ast$point1, const go\-\_\-cart $\ast$point2, const go\-\_\-cart $\ast$point3, go\-\_\-plane $\ast$plane)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a3f05dac5f9be2e82ec390a70d03ea058}{gomotion\-::go\-\_\-plane\-\_\-from\-\_\-point\-\_\-line} (const go\-\_\-cart $\ast$point, const go\-\_\-line $\ast$line, go\-\_\-plane $\ast$plane)
+\item 
+\hyperlink{gotypes_8h_ae890d9a0ddecc0d3073622cc4312092d}{go\-\_\-flag} \hyperlink{namespacegomotion_a522b91008a97b01ef46291dcd5bcb2e0}{gomotion\-::go\-\_\-plane\-\_\-plane\-\_\-compare} (const go\-\_\-plane $\ast$plane1, const go\-\_\-plane $\ast$plane2)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a9e922da92de4833b51a5867e8fd99cca}{gomotion\-::go\-\_\-point\-\_\-plane\-\_\-distance} (const go\-\_\-cart $\ast$point, const go\-\_\-plane $\ast$plane, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$distance)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a45d26171e087d7b1abf3664a127d7006}{gomotion\-::go\-\_\-plane\-\_\-evaluate} (const go\-\_\-plane $\ast$plane, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} u, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} v, go\-\_\-cart $\ast$point)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a07b423b2ecb498fbdc2cc810ae52980c}{gomotion\-::go\-\_\-line\-\_\-plane\-\_\-intersect} (const go\-\_\-line $\ast$line, const go\-\_\-plane $\ast$plane, go\-\_\-cart $\ast$point, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$distance)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a83b84d0103b59f7ec48a5d50d3633b0d}{gomotion\-::go\-\_\-cart\-\_\-sph\-\_\-convert} (const go\-\_\-cart $\ast$v, go\-\_\-sph $\ast$s)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a7647c5352af65cc2c74b6ec1543f16dd}{gomotion\-::go\-\_\-cart\-\_\-cyl\-\_\-convert} (const go\-\_\-cart $\ast$v, go\-\_\-cyl $\ast$c)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a36a8f262d1a993877a8d31f07eff7889}{gomotion\-::go\-\_\-sph\-\_\-cart\-\_\-convert} (const go\-\_\-sph $\ast$s, go\-\_\-cart $\ast$v)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_af03af2d32b5e62c1ead37c2349cc2f46}{gomotion\-::go\-\_\-sph\-\_\-cyl\-\_\-convert} (const go\-\_\-sph $\ast$s, go\-\_\-cyl $\ast$c)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_abeed59a4cd9519af1b4aaed3c116bd39}{gomotion\-::go\-\_\-cyl\-\_\-cart\-\_\-convert} (const go\-\_\-cyl $\ast$c, go\-\_\-cart $\ast$v)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_ab0bdb87e30818c0fb99166f66f04f847}{gomotion\-::go\-\_\-cyl\-\_\-sph\-\_\-convert} (const go\-\_\-cyl $\ast$c, go\-\_\-sph $\ast$s)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a5241e24d5f0f0202cc947b7abe59c94d}{gomotion\-::go\-\_\-rvec\-\_\-quat\-\_\-convert} (const go\-\_\-rvec $\ast$r, go\-\_\-quat $\ast$q)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_adf77bee641ddc2ab262b5a7c1037b5fb}{gomotion\-::go\-\_\-rvec\-\_\-mat\-\_\-convert} (const go\-\_\-rvec $\ast$r, go\-\_\-mat $\ast$m)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a55405939228fa6cf1b4e417361e31cf1}{gomotion\-::go\-\_\-rvec\-\_\-zyz\-\_\-convert} (const go\-\_\-rvec $\ast$rvec, go\-\_\-zyz $\ast$zyz)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a1ba2b7da6d49b4ead52117a0d424cbb0}{gomotion\-::go\-\_\-rvec\-\_\-zyx\-\_\-convert} (const go\-\_\-rvec $\ast$rvec, go\-\_\-zyx $\ast$zyx)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a0241f448104df5bf2349d5378c4b0741}{gomotion\-::go\-\_\-rvec\-\_\-xyz\-\_\-convert} (const go\-\_\-rvec $\ast$, go\-\_\-xyz $\ast$)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a9eec26c29c252c49373f7871e573a3ad}{gomotion\-::go\-\_\-rvec\-\_\-rpy\-\_\-convert} (const go\-\_\-rvec $\ast$r, go\-\_\-rpy $\ast$rpy)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_aba2fc0381e9085e8bedcde7c543a0b1a}{gomotion\-::go\-\_\-quat\-\_\-rvec\-\_\-convert} (const go\-\_\-quat $\ast$q, go\-\_\-rvec $\ast$r)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_adb5fb3eb9abe8e8e6a96ec2c5bdf3857}{gomotion\-::go\-\_\-quat\-\_\-mat\-\_\-convert} (const go\-\_\-quat $\ast$q, go\-\_\-mat $\ast$m)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a7465dd12350d9c9fc9b59ef619796071}{gomotion\-::go\-\_\-quat\-\_\-zyz\-\_\-convert} (const go\-\_\-quat $\ast$q, go\-\_\-zyz $\ast$zyz)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a4e32c0da5973b4a837a29bcd4f46a166}{gomotion\-::go\-\_\-quat\-\_\-zyx\-\_\-convert} (const go\-\_\-quat $\ast$q, go\-\_\-zyx $\ast$zyx)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a163a10f7d3fef90a12477d42d48e0a3f}{gomotion\-::go\-\_\-quat\-\_\-xyz\-\_\-convert} (const go\-\_\-quat $\ast$, go\-\_\-xyz $\ast$)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a8c4bdba65a6b7ff8b6201e84ddde1fe2}{gomotion\-::go\-\_\-quat\-\_\-rpy\-\_\-convert} (const go\-\_\-quat $\ast$q, go\-\_\-rpy $\ast$rpy)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a0ece2b09a5698233266153dad1cc1896}{gomotion\-::go\-\_\-mat\-\_\-rvec\-\_\-convert} (const go\-\_\-mat $\ast$m, go\-\_\-rvec $\ast$r)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a56227bf3fda923a384a50d848d2c2314}{gomotion\-::go\-\_\-mat\-\_\-quat\-\_\-convert} (const go\-\_\-mat $\ast$m, go\-\_\-quat $\ast$q)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_aad03f6a80af4b6d8f8c39e5af91484bc}{gomotion\-::go\-\_\-mat\-\_\-zyz\-\_\-convert} (const go\-\_\-mat $\ast$m, go\-\_\-zyz $\ast$zyz)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_ab6def00d51644dc86a0aad564b029ce3}{gomotion\-::go\-\_\-mat\-\_\-zyx\-\_\-convert} (const go\-\_\-mat $\ast$m, go\-\_\-zyx $\ast$zyx)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_ac8969285bc78a45cc21064577803c758}{gomotion\-::go\-\_\-mat\-\_\-xyz\-\_\-convert} (const go\-\_\-mat $\ast$m, go\-\_\-xyz $\ast$xyz)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_ae3d47ff3b11c3be6ec86196b5acca01f}{gomotion\-::go\-\_\-mat\-\_\-rpy\-\_\-convert} (const go\-\_\-mat $\ast$m, go\-\_\-rpy $\ast$rpy)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_ad53feb4160060f91e636345961c12c1d}{gomotion\-::go\-\_\-zyz\-\_\-rvec\-\_\-convert} (const go\-\_\-zyz $\ast$zyz, go\-\_\-rvec $\ast$r)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_ad0211d9ce3c6f9e8fbbe80a184b15d9e}{gomotion\-::go\-\_\-zyz\-\_\-quat\-\_\-convert} (const go\-\_\-zyz $\ast$zyz, go\-\_\-quat $\ast$q)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a4d8ad1df8907c07480486bc9284f3cfa}{gomotion\-::go\-\_\-zyz\-\_\-mat\-\_\-convert} (const go\-\_\-zyz $\ast$zyz, go\-\_\-mat $\ast$m)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a132d8bf451632c63d152a70ac9e55824}{gomotion\-::go\-\_\-zyz\-\_\-zyx\-\_\-convert} (const go\-\_\-zyz $\ast$zyz, go\-\_\-zyx $\ast$zyx)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a97c3fe1a698a6ab2e62d35ac585ea61d}{gomotion\-::go\-\_\-zyz\-\_\-xyz\-\_\-convert} (const go\-\_\-zyz $\ast$, go\-\_\-xyz $\ast$)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a186e9aa386fc471351cc8f3d819730f7}{gomotion\-::go\-\_\-zyz\-\_\-rpy\-\_\-convert} (const go\-\_\-zyz $\ast$zyz, go\-\_\-rpy $\ast$rpy)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a9c449c8dc1828671f0acc40ace796d68}{gomotion\-::go\-\_\-zyx\-\_\-rvec\-\_\-convert} (const go\-\_\-zyx $\ast$zyx, go\-\_\-rvec $\ast$r)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a0f27fd09f8d74304db6e9ca8185a9623}{gomotion\-::go\-\_\-zyx\-\_\-quat\-\_\-convert} (const go\-\_\-zyx $\ast$zyx, go\-\_\-quat $\ast$q)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a70010a8b112dc746b53c5e8e6afa9637}{gomotion\-::go\-\_\-zyx\-\_\-mat\-\_\-convert} (const go\-\_\-zyx $\ast$zyx, go\-\_\-mat $\ast$m)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a586afaa4f9497b0525555968aa3ae0b5}{gomotion\-::go\-\_\-zyx\-\_\-zyz\-\_\-convert} (const go\-\_\-zyx $\ast$zyx, go\-\_\-zyz $\ast$zyz)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_aecbc4863eca55a6362892393a6d47c7f}{gomotion\-::go\-\_\-zyx\-\_\-xyz\-\_\-convert} (const go\-\_\-zyx $\ast$, go\-\_\-xyz $\ast$)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a484efc550824656f71a960fc3cab296d}{gomotion\-::go\-\_\-zyx\-\_\-rpy\-\_\-convert} (const go\-\_\-zyx $\ast$zyx, go\-\_\-rpy $\ast$rpy)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a1d301c981e4d8a8ec07f3f579b747643}{gomotion\-::go\-\_\-xyz\-\_\-rvec\-\_\-convert} (const go\-\_\-xyz $\ast$, go\-\_\-rvec $\ast$)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_af35d3696c7183664e1da6bf05a921544}{gomotion\-::go\-\_\-xyz\-\_\-quat\-\_\-convert} (const go\-\_\-xyz $\ast$, go\-\_\-quat $\ast$)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_adb2a7f9cf2609a75afa30093009c58f9}{gomotion\-::go\-\_\-xyz\-\_\-mat\-\_\-convert} (const go\-\_\-xyz $\ast$xyz, go\-\_\-mat $\ast$m)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a5cdb8320640cc16adfae3d1eb61b7dfd}{gomotion\-::go\-\_\-xyz\-\_\-zyz\-\_\-convert} (const go\-\_\-xyz $\ast$, go\-\_\-zyz $\ast$)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_aaeed16341e7cf5f28acc394cc112cfa6}{gomotion\-::go\-\_\-xyz\-\_\-zyx\-\_\-convert} (const go\-\_\-xyz $\ast$, go\-\_\-zyx $\ast$)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a4c871682cb23c401e167643d05a6f6db}{gomotion\-::go\-\_\-xyz\-\_\-rpy\-\_\-convert} (const go\-\_\-xyz $\ast$, go\-\_\-rpy $\ast$)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_ac5ffecbde0428a84dbb839ed6d19600c}{gomotion\-::go\-\_\-rpy\-\_\-rvec\-\_\-convert} (const go\-\_\-rpy $\ast$rpy, go\-\_\-rvec $\ast$rvec)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a220f82039af859bfd9413107e7fbdf13}{gomotion\-::go\-\_\-rpy\-\_\-quat\-\_\-convert} (const go\-\_\-rpy $\ast$rpy, go\-\_\-quat $\ast$quat)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a40757f3f8ff59d8879108d052ed087aa}{gomotion\-::go\-\_\-rpy\-\_\-mat\-\_\-convert} (const go\-\_\-rpy $\ast$rpy, go\-\_\-mat $\ast$m)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_ab5c106fe70eeb7dcf83243f83b08bb98}{gomotion\-::go\-\_\-rpy\-\_\-zyz\-\_\-convert} (const go\-\_\-rpy $\ast$rpy, go\-\_\-zyz $\ast$zyz)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_abd91c890da5def1b8d92ecea36d35361}{gomotion\-::go\-\_\-rpy\-\_\-zyx\-\_\-convert} (const go\-\_\-rpy $\ast$rpy, go\-\_\-zyx $\ast$zyx)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_aef277eea6bd1f630b83f90d7cef869cf}{gomotion\-::go\-\_\-rpy\-\_\-xyz\-\_\-convert} (const go\-\_\-rpy $\ast$, go\-\_\-xyz $\ast$)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a6d4f9130f4b766bf3e1c9023fe61c9ae}{gomotion\-::go\-\_\-uxz\-\_\-mat\-\_\-convert} (const go\-\_\-uxz $\ast$uxz, go\-\_\-mat $\ast$mat)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_ada32e9e6e533e94cc1dafaa88d584578}{gomotion\-::go\-\_\-mat\-\_\-uxz\-\_\-convert} (const go\-\_\-mat $\ast$mat, go\-\_\-uxz $\ast$uxz)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_ae9423c9f1b2aaf9c6939ed15588f2f25}{gomotion\-::go\-\_\-pose\-\_\-hom\-\_\-convert} (const go\-\_\-pose $\ast$p, go\-\_\-hom $\ast$h)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a869b48a3a49883c182f73645cc0d2f9e}{gomotion\-::go\-\_\-hom\-\_\-pose\-\_\-convert} (const go\-\_\-hom $\ast$h, go\-\_\-pose $\ast$p)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a055754ba16cfa9577b99cbe659373308}{gomotion\-::go\-\_\-cart\-\_\-rvec\-\_\-convert} (const go\-\_\-cart $\ast$cart, go\-\_\-rvec $\ast$rvec)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a20ddc08f42a87ab4d96a53e0670a4384}{gomotion\-::go\-\_\-rvec\-\_\-cart\-\_\-convert} (const go\-\_\-rvec $\ast$rvec, go\-\_\-cart $\ast$cart)
+\item 
+\hyperlink{gotypes_8h_ae890d9a0ddecc0d3073622cc4312092d}{go\-\_\-flag} \hyperlink{namespacegomotion_aa971bf43a465567a0dd24c4ff38d8054}{gomotion\-::go\-\_\-cart\-\_\-cart\-\_\-compare} (const go\-\_\-cart $\ast$v1, const go\-\_\-cart $\ast$v2)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_aaa7f752392e7056e3636924a001a8731}{gomotion\-::go\-\_\-cart\-\_\-cart\-\_\-dot} (const go\-\_\-cart $\ast$v1, const go\-\_\-cart $\ast$v2, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$d)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_af03c22a87699451903458ebab6fa9027}{gomotion\-::go\-\_\-cart\-\_\-cart\-\_\-cross} (const go\-\_\-cart $\ast$v1, const go\-\_\-cart $\ast$v2, go\-\_\-cart $\ast$vout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a03050d33c64c2a687e282ceb53645235}{gomotion\-::go\-\_\-cart\-\_\-mag} (const go\-\_\-cart $\ast$v, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$d)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_aa1876c9e617115a9c17664697606f907}{gomotion\-::go\-\_\-cart\-\_\-magsq} (const go\-\_\-cart $\ast$v, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$d)
+\item 
+\hyperlink{gotypes_8h_ae890d9a0ddecc0d3073622cc4312092d}{go\-\_\-flag} \hyperlink{namespacegomotion_a4d4b8ab00527c875ca629e6d14b3d94b}{gomotion\-::go\-\_\-cart\-\_\-cart\-\_\-par} (const go\-\_\-cart $\ast$v1, const go\-\_\-cart $\ast$v2)
+\item 
+\hyperlink{gotypes_8h_ae890d9a0ddecc0d3073622cc4312092d}{go\-\_\-flag} \hyperlink{namespacegomotion_a6b5b67f7dd77ae8de4b73793b8a12ebb}{gomotion\-::go\-\_\-cart\-\_\-cart\-\_\-perp} (const go\-\_\-cart $\ast$v1, const go\-\_\-cart $\ast$v2)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a2530a89b71ef809648025aff2374021d}{gomotion\-::go\-\_\-cart\-\_\-cart\-\_\-disp} (const go\-\_\-cart $\ast$v1, const go\-\_\-cart $\ast$v2, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$d)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a52109f281a73888cae9a5c91b192d06d}{gomotion\-::go\-\_\-cart\-\_\-cart\-\_\-add} (const go\-\_\-cart $\ast$v1, const go\-\_\-cart $\ast$v2, go\-\_\-cart $\ast$vout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a967e5544042ebcc17f55e15d406d703c}{gomotion\-::go\-\_\-cart\-\_\-cart\-\_\-sub} (const go\-\_\-cart $\ast$v1, const go\-\_\-cart $\ast$v2, go\-\_\-cart $\ast$vout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_ae93c6dcde94e08e775a1ef34d0b2b2bc}{gomotion\-::go\-\_\-cart\-\_\-scale\-\_\-mult} (const go\-\_\-cart $\ast$v1, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} d, go\-\_\-cart $\ast$vout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a8180073b70336b3d2d4191502b443eeb}{gomotion\-::go\-\_\-cart\-\_\-neg} (const go\-\_\-cart $\ast$v1, go\-\_\-cart $\ast$vout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_abca14b53436057a03c29ca458e8850c1}{gomotion\-::go\-\_\-cart\-\_\-unit} (const go\-\_\-cart $\ast$v, go\-\_\-cart $\ast$vout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a28374e45a3f7ec79b8ca7b84efe6617d}{gomotion\-::go\-\_\-cart\-\_\-cart\-\_\-rot} (const go\-\_\-cart $\ast$v1, const go\-\_\-cart $\ast$v2, go\-\_\-quat $\ast$quat)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a1645b058c53e30ced09d3a3823d2f75e}{gomotion\-::go\-\_\-cart\-\_\-cart\-\_\-proj} (const go\-\_\-cart $\ast$v1, const go\-\_\-cart $\ast$v2, go\-\_\-cart $\ast$vout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a8cbb71ceb17e1a4b1894cdcc784f1ad5}{gomotion\-::go\-\_\-cart\-\_\-plane\-\_\-proj} (const go\-\_\-cart $\ast$v, const go\-\_\-cart $\ast$normal, go\-\_\-cart $\ast$vout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a86e6cb45fa60161e2c4bf66cbde1db81}{gomotion\-::go\-\_\-cart\-\_\-cart\-\_\-angle} (const go\-\_\-cart $\ast$v1, const go\-\_\-cart $\ast$v2, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$a)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a3fb48637adc447f5c57555e71c0b2fc6}{gomotion\-::go\-\_\-cart\-\_\-normal} (const go\-\_\-cart $\ast$v, go\-\_\-cart $\ast$vout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a63a410189d7c9ab683eaf974e43c3129}{gomotion\-::go\-\_\-cart\-\_\-centroid} (const go\-\_\-cart $\ast$varray, \hyperlink{gotypes_8h_a7d30f606bb0f58ffe2b3bd71e5c8af5c}{go\-\_\-integer} num, go\-\_\-cart $\ast$centroid)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_ae454fe1815fbe1762ffa012bf0c80f20}{gomotion\-::go\-\_\-cart\-\_\-centroidize} (const go\-\_\-cart $\ast$vinarray, \hyperlink{gotypes_8h_a7d30f606bb0f58ffe2b3bd71e5c8af5c}{go\-\_\-integer} num, go\-\_\-cart $\ast$centroid, go\-\_\-cart $\ast$voutarray)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a78b82d69510763b3c86c26bca614e22e}{gomotion\-::go\-\_\-cart\-\_\-cart\-\_\-pose} (const go\-\_\-cart $\ast$v1, const go\-\_\-cart $\ast$v2, go\-\_\-cart $\ast$v1c, go\-\_\-cart $\ast$v2c, \hyperlink{gotypes_8h_a7d30f606bb0f58ffe2b3bd71e5c8af5c}{go\-\_\-integer} num, go\-\_\-pose $\ast$pout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a9444ada761a6e8be2db14846b955e276}{gomotion\-::go\-\_\-cart\-\_\-trilaterate} (const go\-\_\-cart $\ast$c1, const go\-\_\-cart $\ast$c2, const go\-\_\-cart $\ast$c3, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} l1, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} l2, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} l3, go\-\_\-cart $\ast$out1, go\-\_\-cart $\ast$out2)
+\item 
+\hyperlink{gotypes_8h_ae890d9a0ddecc0d3073622cc4312092d}{go\-\_\-flag} \hyperlink{namespacegomotion_a5c86ff088b7e2a5281cb54d083bfada4}{gomotion\-::go\-\_\-quat\-\_\-quat\-\_\-compare} (const go\-\_\-quat $\ast$q1, const go\-\_\-quat $\ast$q2)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a16e13bdbbe8c3adb4a8c7f30e12a35fa}{gomotion\-::go\-\_\-quat\-\_\-mag} (const go\-\_\-quat $\ast$quat, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$d)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a61694fed512375ade28ae77c1ef36f6d}{gomotion\-::go\-\_\-quat\-\_\-unit} (const go\-\_\-quat $\ast$q1, go\-\_\-quat $\ast$qout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_aa4e00f7f0a0c499da767458ac55269a3}{gomotion\-::go\-\_\-quat\-\_\-norm} (const go\-\_\-quat $\ast$q1, go\-\_\-quat $\ast$qout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_aa10a1f4ea91bf33c82fa1e687c35acaa}{gomotion\-::go\-\_\-quat\-\_\-inv} (const go\-\_\-quat $\ast$q1, go\-\_\-quat $\ast$qout)
+\item 
+\hyperlink{gotypes_8h_ae890d9a0ddecc0d3073622cc4312092d}{go\-\_\-flag} \hyperlink{namespacegomotion_a0320bf206aa58e6f3587be2069704de8}{gomotion\-::go\-\_\-quat\-\_\-is\-\_\-norm} (const go\-\_\-quat $\ast$q1)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a8ecc295000058285ea22d2f2c8bafb5a}{gomotion\-::go\-\_\-quat\-\_\-scale\-\_\-mult} (const go\-\_\-quat $\ast$q, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} s, go\-\_\-quat $\ast$qout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_ac32c196f6f682de23e5e828c601977a6}{gomotion\-::go\-\_\-quat\-\_\-quat\-\_\-mult} (const go\-\_\-quat $\ast$q1, const go\-\_\-quat $\ast$q2, go\-\_\-quat $\ast$qout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a7d60b7e9ba5faa7e59486698407dae20}{gomotion\-::go\-\_\-quat\-\_\-cart\-\_\-mult} (const go\-\_\-quat $\ast$q1, const go\-\_\-cart $\ast$v2, go\-\_\-cart $\ast$vout)
+\item 
+\hyperlink{gotypes_8h_ae890d9a0ddecc0d3073622cc4312092d}{go\-\_\-flag} \hyperlink{namespacegomotion_a170969f552d3a76100734d6664069c02}{gomotion\-::go\-\_\-rvec\-\_\-rvec\-\_\-compare} (const go\-\_\-rvec $\ast$r1, const go\-\_\-rvec $\ast$r2)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a4cb3d0febaa9707a5e2978609d195d01}{gomotion\-::go\-\_\-rvec\-\_\-scale\-\_\-mult} (const go\-\_\-rvec $\ast$r, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} s, go\-\_\-rvec $\ast$rout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_ac89b091b7958b0916f0bfffc89022751}{gomotion\-::go\-\_\-rpy\-\_\-cart\-\_\-mult} (const go\-\_\-rpy $\ast$rpy, const go\-\_\-cart $\ast$in, go\-\_\-cart $\ast$out)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_afb64295d1befa9e078204687259d3b6f}{gomotion\-::go\-\_\-mat\-\_\-norm} (const go\-\_\-mat $\ast$mat, go\-\_\-mat $\ast$mout)
+\item 
+\hyperlink{gotypes_8h_ae890d9a0ddecc0d3073622cc4312092d}{go\-\_\-flag} \hyperlink{namespacegomotion_ad1aa76bab71411b00ce892a6ccd5c046}{gomotion\-::go\-\_\-mat\-\_\-is\-\_\-norm} (const go\-\_\-mat $\ast$m)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a5a177297f36536f9e1f6c5dcd8564336}{gomotion\-::go\-\_\-mat\-\_\-inv} (const go\-\_\-mat $\ast$m, go\-\_\-mat $\ast$mout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a7363f6dc600af28879b1ebaf69d20e5e}{gomotion\-::go\-\_\-mat\-\_\-cart\-\_\-mult} (const go\-\_\-mat $\ast$m, const go\-\_\-cart $\ast$v, go\-\_\-cart $\ast$vout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a8d1faf309408b9c06432ddfba0f5bf8f}{gomotion\-::go\-\_\-mat\-\_\-mat\-\_\-mult} (const go\-\_\-mat $\ast$m1, const go\-\_\-mat $\ast$m2, go\-\_\-mat $\ast$mout)
+\item 
+\hyperlink{gotypes_8h_ae890d9a0ddecc0d3073622cc4312092d}{go\-\_\-flag} \hyperlink{namespacegomotion_a3fb737a5f90354bd0809963797573769}{gomotion\-::go\-\_\-pose\-\_\-pose\-\_\-compare} (const go\-\_\-pose $\ast$p1, const go\-\_\-pose $\ast$p2)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a7659bf73ec87a38607995939ca405cc5}{gomotion\-::go\-\_\-pose\-\_\-inv} (const go\-\_\-pose $\ast$p1, go\-\_\-pose $\ast$p2)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a8fddcbebee69b64a2536721c33087e3c}{gomotion\-::go\-\_\-pose\-\_\-cart\-\_\-mult} (const go\-\_\-pose $\ast$p1, const go\-\_\-cart $\ast$v2, go\-\_\-cart $\ast$vout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a67d9fb285388234b9ea790849952b965}{gomotion\-::go\-\_\-pose\-\_\-pose\-\_\-mult} (const go\-\_\-pose $\ast$p1, const go\-\_\-pose $\ast$p2, go\-\_\-pose $\ast$pout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a1cca8106f4bb9eb3822b5fb356164c3e}{gomotion\-::go\-\_\-pose\-\_\-scale\-\_\-mult} (const go\-\_\-pose $\ast$p1, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} s, go\-\_\-pose $\ast$pout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a4662e2daf4c61f269935131eefda1d2a}{gomotion\-::go\-\_\-pose\-\_\-pose\-\_\-interp} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} t1, const go\-\_\-pose $\ast$p1, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} t2, const go\-\_\-pose $\ast$p2, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} t3, go\-\_\-pose $\ast$p3)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_aafe2ece40a4ac948cd8d07c069ef0434}{gomotion\-::go\-\_\-hom\-\_\-inv} (const go\-\_\-hom $\ast$h1, go\-\_\-hom $\ast$h2)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a7b65e9509700ef5c058f152c21b5643c}{gomotion\-::go\-\_\-hom\-\_\-hom\-\_\-mult} (const go\-\_\-hom $\ast$h1, const go\-\_\-hom $\ast$h2, go\-\_\-hom $\ast$hout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a02133a76965d9e2111eca88ef5961f81}{gomotion\-::go\-\_\-pose\-\_\-vel\-\_\-mult} (const go\-\_\-pose $\ast$pose, const go\-\_\-vel $\ast$vel, go\-\_\-vel $\ast$out)
+\item 
+\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} \hyperlink{namespacegomotion_ac58aa8880f6ed18a0ad78b356f579698}{gomotion\-::go\-\_\-get\-\_\-singular\-\_\-epsilon} (void)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a19aaf652f4b2c5c8c3ea1829d0e2cc99}{gomotion\-::go\-\_\-set\-\_\-singular\-\_\-epsilon} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} epsilon)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a6c08b09d52c128f06eef43e3a566e0f0}{gomotion\-::ludcmp} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$$\ast$a, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$scratchrow, \hyperlink{gotypes_8h_a7d30f606bb0f58ffe2b3bd71e5c8af5c}{go\-\_\-integer} n, \hyperlink{gotypes_8h_a7d30f606bb0f58ffe2b3bd71e5c8af5c}{go\-\_\-integer} $\ast$indx, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$d)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_ae0171663e44ea6cee7e420762f3b2b49}{gomotion\-::lubksb} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$$\ast$a, \hyperlink{gotypes_8h_a7d30f606bb0f58ffe2b3bd71e5c8af5c}{go\-\_\-integer} n, \hyperlink{gotypes_8h_a7d30f606bb0f58ffe2b3bd71e5c8af5c}{go\-\_\-integer} $\ast$indx, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$b)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_aa657300121fea0ab47d52c6d7cedc8f7}{gomotion\-::go\-\_\-cart\-\_\-vector\-\_\-convert} (const go\-\_\-cart $\ast$c, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$v)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_aadbfd671a04f0859d83633fb3884adba}{gomotion\-::go\-\_\-vector\-\_\-cart\-\_\-convert} (const \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$v, go\-\_\-cart $\ast$c)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_aea94351199e643eb32f62ee992e4b2a9}{gomotion\-::go\-\_\-quat\-\_\-matrix\-\_\-convert} (const go\-\_\-quat $\ast$quat, go\-\_\-matrix $\ast$matrix)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a7fb86f9067e1a6a057ac7244bb06a50c}{gomotion\-::go\-\_\-mat\-\_\-matrix\-\_\-convert} (const go\-\_\-mat $\ast$mat, go\-\_\-matrix $\ast$matrix)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_af1d2ab626e727673e3a170e236b27f27}{gomotion\-::go\-\_\-matrix\-\_\-matrix\-\_\-add} (const go\-\_\-matrix $\ast$a, const go\-\_\-matrix $\ast$b, go\-\_\-matrix $\ast$apb)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a3812b238fd3884974d1c02c34772d256}{gomotion\-::go\-\_\-matrix\-\_\-matrix\-\_\-copy} (const go\-\_\-matrix $\ast$src, go\-\_\-matrix $\ast$dst)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a6183caffbd0d82718f15155b31656f0e}{gomotion\-::go\-\_\-matrix\-\_\-matrix\-\_\-mult} (const go\-\_\-matrix $\ast$a, const go\-\_\-matrix $\ast$b, go\-\_\-matrix $\ast$ab)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_aadef0b21be67d00a35d979661ca05b71}{gomotion\-::go\-\_\-matrix\-\_\-vector\-\_\-mult} (const go\-\_\-matrix $\ast$a, const go\-\_\-vector $\ast$v, go\-\_\-vector $\ast$axv)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_af513072af00a07811c442f8a98e93a9c}{gomotion\-::go\-\_\-matrix\-\_\-vector\-\_\-cross} (const go\-\_\-matrix $\ast$a, const go\-\_\-vector $\ast$v, go\-\_\-matrix $\ast$axv)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a249bea0e6ffc14a6274681b595ad738d}{gomotion\-::go\-\_\-matrix\-\_\-transpose} (const go\-\_\-matrix $\ast$a, go\-\_\-matrix $\ast$at)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a3e08f14b7f0ace90e71f7526e35a7463}{gomotion\-::go\-\_\-matrix\-\_\-inv} (const go\-\_\-matrix $\ast$m, go\-\_\-matrix $\ast$minv)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_ad60afe8680a8b58625d3b6c104d77bbd}{gomotion\-::go\-\_\-mat3\-\_\-inv} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} a\mbox{[}3\mbox{]}\mbox{[}3\mbox{]}, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} ainv\mbox{[}3\mbox{]}\mbox{[}3\mbox{]})
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_aec10cf06c1177abebc9b55c77fb6d662}{gomotion\-::go\-\_\-mat3\-\_\-mat3\-\_\-mult} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} a\mbox{[}3\mbox{]}\mbox{[}3\mbox{]}, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} b\mbox{[}3\mbox{]}\mbox{[}3\mbox{]}, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} axb\mbox{[}3\mbox{]}\mbox{[}3\mbox{]})
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a2f3046912ba704f1aba092455a073172}{gomotion\-::go\-\_\-mat3\-\_\-vec3\-\_\-mult} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} a\mbox{[}3\mbox{]}\mbox{[}3\mbox{]}, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} v\mbox{[}3\mbox{]}, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} axv\mbox{[}3\mbox{]})
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a85fbe89cb8863fc4dc9d674c56780e8a}{gomotion\-::go\-\_\-mat4\-\_\-inv} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} a\mbox{[}4\mbox{]}\mbox{[}4\mbox{]}, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} ainv\mbox{[}4\mbox{]}\mbox{[}4\mbox{]})
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a05e897fff802f77058a689e1dd3c5211}{gomotion\-::go\-\_\-mat4\-\_\-mat4\-\_\-mult} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} a\mbox{[}4\mbox{]}\mbox{[}4\mbox{]}, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} b\mbox{[}4\mbox{]}\mbox{[}4\mbox{]}, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} axb\mbox{[}4\mbox{]}\mbox{[}4\mbox{]})
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a1253a2e409550fa643fff3ecbf9909b8}{gomotion\-::go\-\_\-mat4\-\_\-vec4\-\_\-mult} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} a\mbox{[}4\mbox{]}\mbox{[}4\mbox{]}, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} v\mbox{[}4\mbox{]}, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} axv\mbox{[}4\mbox{]})
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a6949f4b722debfa65cf5a2b84dc27a87}{gomotion\-::go\-\_\-mat6\-\_\-inv} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} a\mbox{[}6\mbox{]}\mbox{[}6\mbox{]}, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} ainv\mbox{[}6\mbox{]}\mbox{[}6\mbox{]})
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a8508fd2b999bdb9dc69e4394b42befe1}{gomotion\-::go\-\_\-mat6\-\_\-transpose} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} a\mbox{[}6\mbox{]}\mbox{[}6\mbox{]}, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} at\mbox{[}6\mbox{]}\mbox{[}6\mbox{]})
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a95d11938285c9d68ae2816f8659624d4}{gomotion\-::go\-\_\-mat6\-\_\-mat6\-\_\-mult} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} a\mbox{[}6\mbox{]}\mbox{[}6\mbox{]}, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} b\mbox{[}6\mbox{]}\mbox{[}6\mbox{]}, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} axb\mbox{[}6\mbox{]}\mbox{[}6\mbox{]})
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_af5fb43481097fbb11023ccc2465ca810}{gomotion\-::go\-\_\-mat6\-\_\-vec6\-\_\-mult} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} a\mbox{[}6\mbox{]}\mbox{[}6\mbox{]}, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} v\mbox{[}6\mbox{]}, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} axv\mbox{[}6\mbox{]})
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_afae46e4b13e18450c29190115f3b00cd}{gomotion\-::go\-\_\-dh\-\_\-hom\-\_\-convert} (const go\-\_\-dh $\ast$dh, go\-\_\-hom $\ast$h)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a14d7b8bcef4c4687c3df39767d5b43b5}{gomotion\-::go\-\_\-dh\-\_\-pose\-\_\-convert} (const go\-\_\-dh $\ast$dh, go\-\_\-pose $\ast$p)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a50ed052e0f5e1f8cf7ebbd88bb625529}{gomotion\-::go\-\_\-pose\-\_\-dh\-\_\-convert} (const go\-\_\-pose $\ast$p, go\-\_\-dh $\ast$dh)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a0a74226c6cb3bb8179462ddcf13071c0}{gomotion\-::go\-\_\-hom\-\_\-dh\-\_\-convert} (const go\-\_\-hom $\ast$h, go\-\_\-dh $\ast$dh)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a3ad7a9d8622d81c4643767f386e65c7b}{gomotion\-::go\-\_\-link\-\_\-joint\-\_\-set} (const go\-\_\-link $\ast$link, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} joint, go\-\_\-link $\ast$linkout)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_aab8aefb3568a017fce0b6746433f1e71}{gomotion\-::go\-\_\-link\-\_\-pose\-\_\-build} (const go\-\_\-link $\ast$link\-\_\-params, \hyperlink{gotypes_8h_a7d30f606bb0f58ffe2b3bd71e5c8af5c}{go\-\_\-integer} num, go\-\_\-pose $\ast$pose)
+\item 
+go\-\_\-complex \hyperlink{namespacegomotion_aba19101511a09bb95ed8ea329200e9fb}{gomotion\-::go\-\_\-complex\-\_\-add} (go\-\_\-complex z1, go\-\_\-complex z2)
+\item 
+go\-\_\-complex \hyperlink{namespacegomotion_a1141cb8b10a9d940b608b3d94a097a87}{gomotion\-::go\-\_\-complex\-\_\-sub} (go\-\_\-complex z1, go\-\_\-complex z2)
+\item 
+go\-\_\-complex \hyperlink{namespacegomotion_a874b524e16324e61277ed6d622868c0e}{gomotion\-::go\-\_\-complex\-\_\-mult} (go\-\_\-complex z1, go\-\_\-complex z2)
+\item 
+go\-\_\-complex \hyperlink{namespacegomotion_abd437ae7226e562aeb05bca496b40daf}{gomotion\-::go\-\_\-complex\-\_\-inv} (go\-\_\-complex z, \hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} $\ast$result)
+\item 
+go\-\_\-complex \hyperlink{namespacegomotion_aacd8a8f522f7134163ab18985900e799}{gomotion\-::go\-\_\-complex\-\_\-div} (go\-\_\-complex z1, go\-\_\-complex z2, \hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} $\ast$result)
+\item 
+go\-\_\-complex \hyperlink{namespacegomotion_a1052957c9cdfb254dd12c69297f5eb42}{gomotion\-::go\-\_\-complex\-\_\-sq} (go\-\_\-complex z)
+\item 
+go\-\_\-complex \hyperlink{namespacegomotion_a39801dd54fa663a05160c44e50931d88}{gomotion\-::go\-\_\-complex\-\_\-scale} (go\-\_\-complex z, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} scale)
+\item 
+\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} \hyperlink{namespacegomotion_ad9cb32ab0226fd47d5aa44067896259b}{gomotion\-::go\-\_\-complex\-\_\-mag} (go\-\_\-complex z)
+\item 
+\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} \hyperlink{namespacegomotion_aae2a14a55f37184edfa00e1cf3233a81}{gomotion\-::go\-\_\-complex\-\_\-magsq} (go\-\_\-complex z)
+\item 
+\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} \hyperlink{namespacegomotion_a2087eb4a9b3f9a81574b28466cfff247}{gomotion\-::go\-\_\-complex\-\_\-arg} (go\-\_\-complex z)
+\item 
+void \hyperlink{namespacegomotion_a83691499b7c3d7ab3003a73532d89f2c}{gomotion\-::go\-\_\-complex\-\_\-sqrt} (go\-\_\-complex z, go\-\_\-complex $\ast$z1, go\-\_\-complex $\ast$z2)
+\item 
+void \hyperlink{namespacegomotion_aa82cab05f61afb7c64c622f9810d6fc0}{gomotion\-::go\-\_\-complex\-\_\-cbrt} (go\-\_\-complex z, go\-\_\-complex $\ast$z1, go\-\_\-complex $\ast$z2, go\-\_\-complex $\ast$z3)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_ad3de720de88b3adacfa18b1d87cfdebb}{gomotion\-::go\-\_\-quadratic\-\_\-solve} (const go\-\_\-quadratic $\ast$quad, go\-\_\-complex $\ast$z1, go\-\_\-complex $\ast$z2)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a9ac60820934c5a8b4ae3c05c7e125d41}{gomotion\-::go\-\_\-cubic\-\_\-solve} (const go\-\_\-cubic $\ast$cub, go\-\_\-complex $\ast$z1, go\-\_\-complex $\ast$z2, go\-\_\-complex $\ast$z3)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a3e71624097e1cbd2dced92058930ddf4}{gomotion\-::go\-\_\-quartic\-\_\-solve} (const go\-\_\-quartic $\ast$quart, go\-\_\-complex $\ast$z1, go\-\_\-complex $\ast$z2, go\-\_\-complex $\ast$z3, go\-\_\-complex $\ast$z4)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a7cb3e7889225e10a664f3a18a4544b6a}{gomotion\-::go\-\_\-tridiag\-\_\-reduce} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$$\ast$a, \hyperlink{gotypes_8h_a7d30f606bb0f58ffe2b3bd71e5c8af5c}{go\-\_\-integer} n, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$d, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$e)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a8cdb1cdd1aa1fe79e05cdce767172a43}{gomotion\-::go\-\_\-tridiag\-\_\-ql} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$d, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$e, \hyperlink{gotypes_8h_a7d30f606bb0f58ffe2b3bd71e5c8af5c}{go\-\_\-integer} n, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$$\ast$z)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{namespacegomotion_a2f4017a309177fcfd725465ff6d0652b}{gomotion\-::go\-\_\-linear\-\_\-cos\-\_\-sin\-\_\-solve} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} a, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} b, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$th1, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$th2)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Declarations for pose math functions. 
+
+\subsection{Macro Definition Documentation}
+\hypertarget{gomath_8h_aa826db35de339d014c00c259b4b932f5}{\index{gomath.\-h@{gomath.\-h}!G\-O\-\_\-2\-\_\-\-P\-I@{G\-O\-\_\-2\-\_\-\-P\-I}}
+\index{G\-O\-\_\-2\-\_\-\-P\-I@{G\-O\-\_\-2\-\_\-\-P\-I}!gomath.h@{gomath.\-h}}
+\subsubsection[{G\-O\-\_\-2\-\_\-\-P\-I}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\-O\-\_\-2\-\_\-\-P\-I~(2.\-0$\ast${\bf G\-O\-\_\-\-P\-I})}}\label{gomath_8h_aa826db35de339d014c00c259b4b932f5}
+The value of twice Pi. \hypertarget{gomath_8h_a927bcd9bd678cacb06596c4e9aad7eb4}{\index{gomath.\-h@{gomath.\-h}!go\-\_\-body\-\_\-copy@{go\-\_\-body\-\_\-copy}}
+\index{go\-\_\-body\-\_\-copy@{go\-\_\-body\-\_\-copy}!gomath.h@{gomath.\-h}}
+\subsubsection[{go\-\_\-body\-\_\-copy}]{\setlength{\rightskip}{0pt plus 5cm}\#define go\-\_\-body\-\_\-copy(
+\begin{DoxyParamCaption}
+\item[{}]{src, }
+\item[{}]{dst}
+\end{DoxyParamCaption}
+)}}\label{gomath_8h_a927bcd9bd678cacb06596c4e9aad7eb4}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+(dst)->mass = (src)->mass;                      \(\backslash\)
+(dst)->inertia[0][0] = (src)->inertia[0][0];    \(\backslash\)
+(dst)->inertia[0][1] = (src)->inertia[0][1];    \(\backslash\)
+(dst)->inertia[0][2] = (src)->inertia[0][2];    \(\backslash\)
+(dst)->inertia[1][0] = (src)->inertia[1][0];    \(\backslash\)
+(dst)->inertia[1][1] = (src)->inertia[1][1];    \(\backslash\)
+(dst)->inertia[1][2] = (src)->inertia[1][2];    \(\backslash\)
+(dst)->inertia[2][0] = (src)->inertia[2][0];    \(\backslash\)
+(dst)->inertia[2][1] = (src)->inertia[2][1];    \(\backslash\)
+(dst)->inertia[2][2] = (src)->inertia[2][2]
+\end{DoxyCode}
+\hypertarget{gomath_8h_a0d434996426b71e86dbff3ec483ee5f9}{\index{gomath.\-h@{gomath.\-h}!go\-\_\-body\-\_\-init@{go\-\_\-body\-\_\-init}}
+\index{go\-\_\-body\-\_\-init@{go\-\_\-body\-\_\-init}!gomath.h@{gomath.\-h}}
+\subsubsection[{go\-\_\-body\-\_\-init}]{\setlength{\rightskip}{0pt plus 5cm}\#define go\-\_\-body\-\_\-init(
+\begin{DoxyParamCaption}
+\item[{}]{b}
+\end{DoxyParamCaption}
+)}}\label{gomath_8h_a0d434996426b71e86dbff3ec483ee5f9}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+(b)->mass = 1;                                  \(\backslash\)
+(b)->inertia[0][0] = 1;                         \(\backslash\)
+(b)->inertia[0][1] = 0;                         \(\backslash\)
+(b)->inertia[0][2] = 0;                         \(\backslash\)
+(b)->inertia[1][0] = 0;                         \(\backslash\)
+(b)->inertia[1][1] = 1;                         \(\backslash\)
+(b)->inertia[1][2] = 0;                         \(\backslash\)
+(b)->inertia[2][0] = 0;                         \(\backslash\)
+(b)->inertia[2][1] = 0;                         \(\backslash\)
+(b)->inertia[2][2] = 1
+\end{DoxyCode}
+\hypertarget{gomath_8h_a2dbfee2dbb4523cc08316fd2080d4299}{\index{gomath.\-h@{gomath.\-h}!G\-O\-\_\-\-C\-L\-O\-S\-E@{G\-O\-\_\-\-C\-L\-O\-S\-E}}
+\index{G\-O\-\_\-\-C\-L\-O\-S\-E@{G\-O\-\_\-\-C\-L\-O\-S\-E}!gomath.h@{gomath.\-h}}
+\subsubsection[{G\-O\-\_\-\-C\-L\-O\-S\-E}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\-O\-\_\-\-C\-L\-O\-S\-E(
+\begin{DoxyParamCaption}
+\item[{}]{x, }
+\item[{}]{y}
+\end{DoxyParamCaption}
+)~(fabs((x)-\/(y)) $<$ {\bf G\-O\-\_\-\-R\-E\-A\-L\-\_\-\-E\-P\-S\-I\-L\-O\-N})}}\label{gomath_8h_a2dbfee2dbb4523cc08316fd2080d4299}
+How close general quantities must be to be equal. Use this when you have something other than translational or rotational quantities, otherwise use one of {\itshape G\-O\-\_\-\-T\-R\-A\-N},R\-O\-T\-\_\-\-C\-L\-O\-S\-E. \hypertarget{gomath_8h_a7b945d7ec90e4d34073e15a23b26dc11}{\index{gomath.\-h@{gomath.\-h}!go\-\_\-cub@{go\-\_\-cub}}
+\index{go\-\_\-cub@{go\-\_\-cub}!gomath.h@{gomath.\-h}}
+\subsubsection[{go\-\_\-cub}]{\setlength{\rightskip}{0pt plus 5cm}\#define go\-\_\-cub(
+\begin{DoxyParamCaption}
+\item[{}]{x}
+\end{DoxyParamCaption}
+)~((x)$\ast$(x)$\ast$(x))}}\label{gomath_8h_a7b945d7ec90e4d34073e15a23b26dc11}
+Returns the cube of {\itshape x}. \hypertarget{gomath_8h_a7fbee1dbcd46c80fe1b6f67550b4d1d3}{\index{gomath.\-h@{gomath.\-h}!go\-\_\-link\-\_\-to\-\_\-string@{go\-\_\-link\-\_\-to\-\_\-string}}
+\index{go\-\_\-link\-\_\-to\-\_\-string@{go\-\_\-link\-\_\-to\-\_\-string}!gomath.h@{gomath.\-h}}
+\subsubsection[{go\-\_\-link\-\_\-to\-\_\-string}]{\setlength{\rightskip}{0pt plus 5cm}\#define go\-\_\-link\-\_\-to\-\_\-string(
+\begin{DoxyParamCaption}
+\item[{}]{L}
+\end{DoxyParamCaption}
+)}}\label{gomath_8h_a7fbee1dbcd46c80fe1b6f67550b4d1d3}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+(L) == \hyperlink{namespacegomotion_a5b5a03fc09c09e262c6941325f7beb17afd19d6aee8f10a912a656a2e01650b62}{GO\_LINK\_DH} ? \textcolor{stringliteral}{"DH"} :            \(\backslash\)
+(L) == \hyperlink{namespacegomotion_a5b5a03fc09c09e262c6941325f7beb17a7b78cd6a637ea7ae037ec521ef34b8ab}{GO\_LINK\_PK} ? \textcolor{stringliteral}{"PK"} :            \(\backslash\)
+(L) == \hyperlink{namespacegomotion_a5b5a03fc09c09e262c6941325f7beb17acbaa1fd4ed04f6ed93cc5296baaf6b78}{GO\_LINK\_PP} ? \textcolor{stringliteral}{"PP"} : \textcolor{stringliteral}{"None"}
+\end{DoxyCode}
+\hypertarget{gomath_8h_ac29f0652fd2215fe0713d7b473a72343}{\index{gomath.\-h@{gomath.\-h}!G\-O\-\_\-\-M\-A\-T\-R\-I\-X\-\_\-\-D\-E\-C\-L\-A\-R\-E@{G\-O\-\_\-\-M\-A\-T\-R\-I\-X\-\_\-\-D\-E\-C\-L\-A\-R\-E}}
+\index{G\-O\-\_\-\-M\-A\-T\-R\-I\-X\-\_\-\-D\-E\-C\-L\-A\-R\-E@{G\-O\-\_\-\-M\-A\-T\-R\-I\-X\-\_\-\-D\-E\-C\-L\-A\-R\-E}!gomath.h@{gomath.\-h}}
+\subsubsection[{G\-O\-\_\-\-M\-A\-T\-R\-I\-X\-\_\-\-D\-E\-C\-L\-A\-R\-E}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\-O\-\_\-\-M\-A\-T\-R\-I\-X\-\_\-\-D\-E\-C\-L\-A\-R\-E(
+\begin{DoxyParamCaption}
+\item[{}]{M, }
+\item[{}]{Mspace, }
+\item[{}]{\-\_\-rows, }
+\item[{}]{\-\_\-cols}
+\end{DoxyParamCaption}
+)}}\label{gomath_8h_ac29f0652fd2215fe0713d7b473a72343}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+go\_matrix M = \{0, 0, 0, 0, 0, 0\}; \(\backslash\)
+struct \{ \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{\(\backslash\)}
+\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{  go\_real} *el[\_rows]; \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{\(\backslash\)}
+\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{  go\_real} *elcpy[\_rows]; \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{\(\backslash\)}
+\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{  go\_real} stg[\_rows][\_cols]; \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{\(\backslash\)}
+\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{  go\_real} stgcpy[\_rows][\_cols]; \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{\(\backslash\)}
+\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{  go\_real} v[\_rows]; \hyperlink{gotypes_8h_a7d30f606bb0f58ffe2b3bd71e5c8af5c}{\(\backslash\)}
+\hyperlink{gotypes_8h_a7d30f606bb0f58ffe2b3bd71e5c8af5c}{  go\_integer} index[\_rows]; \(\backslash\)
+\} Mspace
+\end{DoxyCode}
+\hypertarget{gomath_8h_a68b54c3bb7c9bbf14f68336cf474a5a3}{\index{gomath.\-h@{gomath.\-h}!go\-\_\-matrix\-\_\-init@{go\-\_\-matrix\-\_\-init}}
+\index{go\-\_\-matrix\-\_\-init@{go\-\_\-matrix\-\_\-init}!gomath.h@{gomath.\-h}}
+\subsubsection[{go\-\_\-matrix\-\_\-init}]{\setlength{\rightskip}{0pt plus 5cm}\#define go\-\_\-matrix\-\_\-init(
+\begin{DoxyParamCaption}
+\item[{}]{M, }
+\item[{}]{Mspace, }
+\item[{}]{\-\_\-rows, }
+\item[{}]{\-\_\-cols}
+\end{DoxyParamCaption}
+)}}\label{gomath_8h_a68b54c3bb7c9bbf14f68336cf474a5a3}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+M.el = Mspace.el;                                   \(\backslash\)
+M.elcpy = Mspace.elcpy;                             \(\backslash\)
+ for (M.rows = 0; M.rows < (\_rows) && M.rows < \hyperlink{gomath_8h_a83429625babfbf9dd959fda081191b44}{ISIZEOF}(Mspace.el)/\hyperlink{gomath_8h_a83429625babfbf9dd959fda081191b44}{ISIZEOF}(*(Mspace.el)); M.
+      rows++) \{ \(\backslash\)
+  M.el[M.rows] = Mspace.stg[M.rows];        \(\backslash\)
+  M.elcpy[M.rows] = Mspace.stgcpy[M.rows];          \(\backslash\)
+\} \(\backslash\)
+M.cols = (\_cols) < \hyperlink{gomath_8h_a83429625babfbf9dd959fda081191b44}{ISIZEOF}(Mspace.stg[0])/\hyperlink{gomath_8h_a83429625babfbf9dd959fda081191b44}{ISIZEOF}(*(Mspace.stg[0])) ? (\_cols) : 
+      \hyperlink{gomath_8h_a83429625babfbf9dd959fda081191b44}{ISIZEOF}(Mspace.stg[0])/\hyperlink{gomath_8h_a83429625babfbf9dd959fda081191b44}{ISIZEOF}(*(Mspace.stg[0])); \(\backslash\)
+M.v = Mspace.v; \(\backslash\)
+M.index = Mspace.index
+\end{DoxyCode}
+\hypertarget{gomath_8h_a52cc993e19bca5c01e117b6bd840de0d}{\index{gomath.\-h@{gomath.\-h}!G\-O\-\_\-\-P\-I@{G\-O\-\_\-\-P\-I}}
+\index{G\-O\-\_\-\-P\-I@{G\-O\-\_\-\-P\-I}!gomath.h@{gomath.\-h}}
+\subsubsection[{G\-O\-\_\-\-P\-I}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\-O\-\_\-\-P\-I~3.\-14159265358979323846}}\label{gomath_8h_a52cc993e19bca5c01e117b6bd840de0d}
+The value of Pi. \hypertarget{gomath_8h_a75f159bb4031d698794771824e92540a}{\index{gomath.\-h@{gomath.\-h}!G\-O\-\_\-\-P\-I\-\_\-2@{G\-O\-\_\-\-P\-I\-\_\-2}}
+\index{G\-O\-\_\-\-P\-I\-\_\-2@{G\-O\-\_\-\-P\-I\-\_\-2}!gomath.h@{gomath.\-h}}
+\subsubsection[{G\-O\-\_\-\-P\-I\-\_\-2}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\-O\-\_\-\-P\-I\-\_\-2~1.\-57079632679489661923}}\label{gomath_8h_a75f159bb4031d698794771824e92540a}
+The value of half of Pi. \hypertarget{gomath_8h_ad02346b33ded3bb4f6a3d795f372f0c2}{\index{gomath.\-h@{gomath.\-h}!G\-O\-\_\-\-P\-I\-\_\-4@{G\-O\-\_\-\-P\-I\-\_\-4}}
+\index{G\-O\-\_\-\-P\-I\-\_\-4@{G\-O\-\_\-\-P\-I\-\_\-4}!gomath.h@{gomath.\-h}}
+\subsubsection[{G\-O\-\_\-\-P\-I\-\_\-4}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\-O\-\_\-\-P\-I\-\_\-4~0.\-78539816339744830962}}\label{gomath_8h_ad02346b33ded3bb4f6a3d795f372f0c2}
+The value of one-\/fourth of Pi. \hypertarget{gomath_8h_a8f92c90d4eca20e4519c3cce423c0b14}{\index{gomath.\-h@{gomath.\-h}!go\-\_\-qua@{go\-\_\-qua}}
+\index{go\-\_\-qua@{go\-\_\-qua}!gomath.h@{gomath.\-h}}
+\subsubsection[{go\-\_\-qua}]{\setlength{\rightskip}{0pt plus 5cm}\#define go\-\_\-qua(
+\begin{DoxyParamCaption}
+\item[{}]{x}
+\end{DoxyParamCaption}
+)~((x)$\ast$(x)$\ast$(x)$\ast$(x))}}\label{gomath_8h_a8f92c90d4eca20e4519c3cce423c0b14}
+Returns {\itshape x} to the fourth power. \hypertarget{gomath_8h_a05cedbcc55d6939a67c17c1e3b71d488}{\index{gomath.\-h@{gomath.\-h}!G\-O\-\_\-\-R\-O\-T\-\_\-\-C\-L\-O\-S\-E@{G\-O\-\_\-\-R\-O\-T\-\_\-\-C\-L\-O\-S\-E}}
+\index{G\-O\-\_\-\-R\-O\-T\-\_\-\-C\-L\-O\-S\-E@{G\-O\-\_\-\-R\-O\-T\-\_\-\-C\-L\-O\-S\-E}!gomath.h@{gomath.\-h}}
+\subsubsection[{G\-O\-\_\-\-R\-O\-T\-\_\-\-C\-L\-O\-S\-E}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\-O\-\_\-\-R\-O\-T\-\_\-\-C\-L\-O\-S\-E(
+\begin{DoxyParamCaption}
+\item[{}]{x, }
+\item[{}]{y}
+\end{DoxyParamCaption}
+)~(fabs((x)-\/(y)) $<$ {\bf G\-O\-\_\-\-R\-E\-A\-L\-\_\-\-E\-P\-S\-I\-L\-O\-N})}}\label{gomath_8h_a05cedbcc55d6939a67c17c1e3b71d488}
+How close rotational quantities must be to be equal. \hypertarget{gomath_8h_a94c8163e4f01c4adf33baa8eb995433d}{\index{gomath.\-h@{gomath.\-h}!G\-O\-\_\-\-R\-O\-T\-\_\-\-S\-M\-A\-L\-L@{G\-O\-\_\-\-R\-O\-T\-\_\-\-S\-M\-A\-L\-L}}
+\index{G\-O\-\_\-\-R\-O\-T\-\_\-\-S\-M\-A\-L\-L@{G\-O\-\_\-\-R\-O\-T\-\_\-\-S\-M\-A\-L\-L}!gomath.h@{gomath.\-h}}
+\subsubsection[{G\-O\-\_\-\-R\-O\-T\-\_\-\-S\-M\-A\-L\-L}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\-O\-\_\-\-R\-O\-T\-\_\-\-S\-M\-A\-L\-L(
+\begin{DoxyParamCaption}
+\item[{}]{x}
+\end{DoxyParamCaption}
+)~(fabs(x) $<$ {\bf G\-O\-\_\-\-R\-E\-A\-L\-\_\-\-E\-P\-S\-I\-L\-O\-N})}}\label{gomath_8h_a94c8163e4f01c4adf33baa8eb995433d}
+How small a rotational quantity must be to be zero. \hypertarget{gomath_8h_acccd2104a7cee68bf586057facfea5d5}{\index{gomath.\-h@{gomath.\-h}!G\-O\-\_\-\-S\-M\-A\-L\-L@{G\-O\-\_\-\-S\-M\-A\-L\-L}}
+\index{G\-O\-\_\-\-S\-M\-A\-L\-L@{G\-O\-\_\-\-S\-M\-A\-L\-L}!gomath.h@{gomath.\-h}}
+\subsubsection[{G\-O\-\_\-\-S\-M\-A\-L\-L}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\-O\-\_\-\-S\-M\-A\-L\-L(
+\begin{DoxyParamCaption}
+\item[{}]{x}
+\end{DoxyParamCaption}
+)~(fabs(x) $<$ {\bf G\-O\-\_\-\-R\-E\-A\-L\-\_\-\-E\-P\-S\-I\-L\-O\-N})}}\label{gomath_8h_acccd2104a7cee68bf586057facfea5d5}
+How small a general quantity must be to be zero. Use this when you have something other than a translational or rotational quantity, otherwise use one of {\itshape G\-O\-\_\-\-T\-R\-A\-N},R\-O\-T\-\_\-\-S\-M\-A\-L\-L. \hypertarget{gomath_8h_a073619c46f05f2b4180948f5e67328aa}{\index{gomath.\-h@{gomath.\-h}!go\-\_\-sq@{go\-\_\-sq}}
+\index{go\-\_\-sq@{go\-\_\-sq}!gomath.h@{gomath.\-h}}
+\subsubsection[{go\-\_\-sq}]{\setlength{\rightskip}{0pt plus 5cm}\#define go\-\_\-sq(
+\begin{DoxyParamCaption}
+\item[{}]{x}
+\end{DoxyParamCaption}
+)~((x)$\ast$(x))}}\label{gomath_8h_a073619c46f05f2b4180948f5e67328aa}
+Returns the square of {\itshape x}. \hypertarget{gomath_8h_ab49e228fd567903d32654564c81a606f}{\index{gomath.\-h@{gomath.\-h}!G\-O\-\_\-\-T\-O\-\_\-\-D\-E\-G@{G\-O\-\_\-\-T\-O\-\_\-\-D\-E\-G}}
+\index{G\-O\-\_\-\-T\-O\-\_\-\-D\-E\-G@{G\-O\-\_\-\-T\-O\-\_\-\-D\-E\-G}!gomath.h@{gomath.\-h}}
+\subsubsection[{G\-O\-\_\-\-T\-O\-\_\-\-D\-E\-G}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\-O\-\_\-\-T\-O\-\_\-\-D\-E\-G(
+\begin{DoxyParamCaption}
+\item[{}]{rad}
+\end{DoxyParamCaption}
+)~((rad)$\ast$57.\-295779513082323)}}\label{gomath_8h_ab49e228fd567903d32654564c81a606f}
+Returns {\itshape rad} in radians as its value in degrees. \hypertarget{gomath_8h_a257fd1bdbb4294c1bf1d2c34bfeaba42}{\index{gomath.\-h@{gomath.\-h}!G\-O\-\_\-\-T\-O\-\_\-\-R\-A\-D@{G\-O\-\_\-\-T\-O\-\_\-\-R\-A\-D}}
+\index{G\-O\-\_\-\-T\-O\-\_\-\-R\-A\-D@{G\-O\-\_\-\-T\-O\-\_\-\-R\-A\-D}!gomath.h@{gomath.\-h}}
+\subsubsection[{G\-O\-\_\-\-T\-O\-\_\-\-R\-A\-D}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\-O\-\_\-\-T\-O\-\_\-\-R\-A\-D(
+\begin{DoxyParamCaption}
+\item[{}]{deg}
+\end{DoxyParamCaption}
+)~((deg)$\ast$0.\-0174532925199432952)}}\label{gomath_8h_a257fd1bdbb4294c1bf1d2c34bfeaba42}
+Returns {\itshape deg} in degrees as its value in radians. \hypertarget{gomath_8h_ab72173c33a8f16e8ecec3b552d2f5ba2}{\index{gomath.\-h@{gomath.\-h}!G\-O\-\_\-\-T\-R\-A\-N\-\_\-\-C\-L\-O\-S\-E@{G\-O\-\_\-\-T\-R\-A\-N\-\_\-\-C\-L\-O\-S\-E}}
+\index{G\-O\-\_\-\-T\-R\-A\-N\-\_\-\-C\-L\-O\-S\-E@{G\-O\-\_\-\-T\-R\-A\-N\-\_\-\-C\-L\-O\-S\-E}!gomath.h@{gomath.\-h}}
+\subsubsection[{G\-O\-\_\-\-T\-R\-A\-N\-\_\-\-C\-L\-O\-S\-E}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\-O\-\_\-\-T\-R\-A\-N\-\_\-\-C\-L\-O\-S\-E(
+\begin{DoxyParamCaption}
+\item[{}]{x, }
+\item[{}]{y}
+\end{DoxyParamCaption}
+)~(fabs((x)-\/(y)) $<$ {\bf G\-O\-\_\-\-R\-E\-A\-L\-\_\-\-E\-P\-S\-I\-L\-O\-N})}}\label{gomath_8h_ab72173c33a8f16e8ecec3b552d2f5ba2}
+How close translational quantities must be to be equal. \hypertarget{gomath_8h_a9a43e1f84698a4a207443d40f885ecd6}{\index{gomath.\-h@{gomath.\-h}!G\-O\-\_\-\-T\-R\-A\-N\-\_\-\-S\-M\-A\-L\-L@{G\-O\-\_\-\-T\-R\-A\-N\-\_\-\-S\-M\-A\-L\-L}}
+\index{G\-O\-\_\-\-T\-R\-A\-N\-\_\-\-S\-M\-A\-L\-L@{G\-O\-\_\-\-T\-R\-A\-N\-\_\-\-S\-M\-A\-L\-L}!gomath.h@{gomath.\-h}}
+\subsubsection[{G\-O\-\_\-\-T\-R\-A\-N\-\_\-\-S\-M\-A\-L\-L}]{\setlength{\rightskip}{0pt plus 5cm}\#define G\-O\-\_\-\-T\-R\-A\-N\-\_\-\-S\-M\-A\-L\-L(
+\begin{DoxyParamCaption}
+\item[{}]{x}
+\end{DoxyParamCaption}
+)~(fabs(x) $<$ {\bf G\-O\-\_\-\-R\-E\-A\-L\-\_\-\-E\-P\-S\-I\-L\-O\-N})}}\label{gomath_8h_a9a43e1f84698a4a207443d40f885ecd6}
+How small a translational quantity must be to be zero. \hypertarget{gomath_8h_a83429625babfbf9dd959fda081191b44}{\index{gomath.\-h@{gomath.\-h}!I\-S\-I\-Z\-E\-O\-F@{I\-S\-I\-Z\-E\-O\-F}}
+\index{I\-S\-I\-Z\-E\-O\-F@{I\-S\-I\-Z\-E\-O\-F}!gomath.h@{gomath.\-h}}
+\subsubsection[{I\-S\-I\-Z\-E\-O\-F}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\-S\-I\-Z\-E\-O\-F(
+\begin{DoxyParamCaption}
+\item[{}]{x}
+\end{DoxyParamCaption}
+)~((int) sizeof(x))}}\label{gomath_8h_a83429625babfbf9dd959fda081191b44}

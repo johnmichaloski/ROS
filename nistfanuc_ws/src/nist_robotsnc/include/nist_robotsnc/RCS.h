@@ -58,7 +58,13 @@ inline void sincos(double x, double *sx, double *cx) {
 }
 #endif
 
+inline double SIGN(double x) {
+    return ( x >= 0.0f) ? +1.0f : -1.0f;
+}
 
+inline double NORM(double a, double b, double c, double d) {
+    return sqrt(a * a + b * b + c * c + d * d);
+}
 
 // ToVector calling parameters MUSTt match e.g., double or long depending on template, OR wont work
 template<typename T>
@@ -289,6 +295,8 @@ namespace RCS {
         static const int CANON_PAUSED = 2;
         static const int CANON_ABORT = 4;
         static const int CANON_WAITING = 5;
+        static const int CANON_STOP = 6;
+        static const int CANON_NOTIMPLEMENTED = 7;
     }; 
 
     /**
@@ -401,6 +409,7 @@ namespace RCS {
 	VAR(ConfigMin, std::vector<double>);
 	VAR(ConfigMax, std::vector<double>);
 
+        uint64_t & CommandNum() { return this->crclcommandnum;}
         static unsigned long long _cmdid;
 
         bool IsMotionCmd();
@@ -488,11 +497,17 @@ namespace RCS {
      */
     class IRCSInterpreter {
     public:
-        virtual int ParseCommand(RCS::CanonCmd incmd, RCS::CanonCmd  &outcmd) = 0;
+
+        virtual int ParseCommand(RCS::CanonCmd incmd, RCS::CanonCmd &outcmd,
+                RCS::CanonWorldModel instatus, RCS::CanonWorldModel &outstatus) {
+            return -1;
+        }
         virtual void SetRange(std::vector<double> minrange, std::vector<double> maxrange) {
         }
-    };
-};
+        virtual void Init(std::vector<double> jnts) {
+        }
+   };
+}; 
 
 
 

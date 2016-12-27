@@ -12,10 +12,11 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
  */
 
 #include <boost/assign.hpp>
+#include <boost/locale.hpp>
 
 #include "nist_robotsnc/MotionException.h"
 #include "nist_robotsnc/Globals.h"
-#include "nist_robotsnc/Config.h"
+#include "nist_robotsnc/NIST/Config.h"
 
 using namespace boost::assign;
 

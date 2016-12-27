@@ -124,6 +124,7 @@ src/motomansia20dkinematics.cpp
 src/fanuclrmate200idkinematics.cpp
 src/MotionException.cpp
 src/Shape.cpp
+src/JointTrajectory.cpp
 )
 
 #Add all files in subdirectories of the project in

@@ -44,9 +44,7 @@ TrajectoryMaker::TrajectoryMaker() {
 #endif
 }
 
-std::vector<JointState> TrajectoryMaker::GetJtsPlan() {
-    return plannedjts;
-}
+
 
 std::vector<RCS::Pose> TrajectoryMaker::GetPosesPlan() {
     return plannedposes;
@@ -56,9 +54,7 @@ void TrajectoryMaker::setRates(IRate rates) {
     currates = rates;
 }
 
-bool TrajectoryMaker::Plan(JointState curjoints, JointState goaljoints) {
-    return makeJointPositionTrajectory(currates, curjoints, goaljoints);
-}
+
 
 bool TrajectoryMaker::Plan(RCS::Pose & curpose, RCS::Pose & goalpose) {
     plannedposes = makeCartesianTrajectory(currates, curpose, goalpose);
@@ -85,60 +81,7 @@ std::vector<double> TrajectoryMaker::makePositionRamp(double maxVel, double maxA
      return ramp; //  std::accumulate(ramp.begin(), ramp.end(), 0.0);
 }
 
-bool TrajectoryMaker::makeJointPositionTrajectory(IRate rates, JointState & curjoints, JointState & goaljoints) {
-    assert(curjoints.position.size() == goaljoints.position.size());
-    std::vector<std::vector<double> > displacements;
-    for (size_t i = 0; i < curjoints.position.size(); i++)
-    {
-        std::vector<double> d = makeJointTrajectory(curjoints.position[i], goaljoints.position[i]);
-        displacements.push_back(d);
-    }
-    updateJointCommands(curjoints.position, displacements);
-    return true;
 
-}
-
-bool TrajectoryMaker::makeJointPositionTrajectory(IRate rates, std::vector<double> & curjoints, std::vector<double> & goaljoints) {
-    assert(curjoints.size() == goaljoints.size());
-    std::vector<std::vector<double> > displacements;
-    for (size_t i = 0; i < curjoints.size(); i++) {
-        std::vector<double> d = makeJointTrajectory(curjoints[i], goaljoints[i]);
-        displacements.push_back(d);
-    }
-    updateJointCommands(curjoints, displacements);
-    return true;
-}
-
-void TrajectoryMaker::updateJointCommands(std::vector<double> & curjoints, std::vector<std::vector<double> > & displacements) {
-    // imax ends up being the number of new motion commands
-    size_t imax = 0;
-    plannedjts.clear();
-    for (size_t i = 0; i < displacements.size(); i++) {
-        imax = std::max(imax, displacements[i].size());
-    }
-
-    std::vector<double> lastjoints = curjoints;
-    JointState joint;
-    joint.position = curjoints;
-    plannedjts.push_back(joint);
-
-    for (size_t i = 0; i < imax; i++) {
-        JointState joint;
-        // initialize last joint position
-        joint.position.insert(joint.position.begin(), lastjoints.begin(), lastjoints.end());
-
-        // update new joint position
-        for (size_t j = 0; j < displacements.size(); j++) {
-            if ((displacements[j].size() > 0) && (displacements[j].size() <= imax)) {
-                joint.position[j] += displacements[j][i];
-            }
-        }
-        lastjoints = joint.position; // save last joint positions
-        plannedjts.push_back(joint);
-        //std::cout << "Joint Displacements" << RCS::VectorDump<double> (joint.position);
-    }
-   
-}
 
 // ! A member function that takes four double arguments and returns a vector
 // ! of doubles.
@@ -238,44 +181,6 @@ std::vector<double> TrajectoryMaker::makePositionVector(std::vector<double> myra
         }
     }
     //std::cout << "Displacements" << RCS::VectorDump<double> (displacements);
-    return displacements;
-}
-
-std::vector<double> TrajectoryMaker::makeJointValues(double current, std::vector<double> displacements) {
-    for (size_t i = 0; i < displacements.size(); i++) {
-        displacements[i] += current;
-    }
-    return displacements;
-}
-
-std::vector<double> TrajectoryMaker::makeJointTrajectory( double current, double goal) {
-    std::vector<double> r = makePositionRamp(currates.MaximumVelocity(),currates.MaximumAccel(),currates.CycleTime());
-    std::vector<double> v = makePositionVector(r, current, goal);
-    return v;
-}
-// Which way is joint moving
-
-std::vector<double> TrajectoryMaker::makeStopJointTrajectory(double startingVelocity,
-        double finalVelocity,
-        double maxAcc,
-        double cycleTime,
-        double current) {
-    std::vector<double> declRamp;
-    double distance = makeDeclRamp(startingVelocity, 0.0, maxAcc, cycleTime, declRamp); // RCS::MOVE_JOINT);
-    // std::vector<double> v = makePositionVector(current, current+distance,acclRamp,declRamp);
-    double start = current, end = current + distance;
-    double distanceToMove = fabs(start - end);
-    bool reverse = (start > end) ? true : false;
-    std::vector<double> displacements;
-    displacements.insert(displacements.begin(), declRamp.begin(), declRamp.end());
-
-
-    // reverse if necessary
-    if (reverse) {
-        std::transform(displacements.begin(), displacements.end(), displacements.begin(),
-                std::bind1st(std::multiplies<double>(), -1));
-    }
-
     return displacements;
 }
 

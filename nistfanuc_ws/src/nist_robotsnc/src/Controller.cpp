@@ -48,13 +48,12 @@ namespace RCS {
 
     CController::CController(std::string name, double cycletime) : _Name(name), RCS::Thread(cycletime) {
         //IfDebug(LOG_DEBUG << "CController::CController"); // not initialized until after main :()
-        eJointMotionPlanner = NOPLANNER;
-        eCartesianMotionPlanner = NOPLANNER;
         bCvsPoseLogging() = false;
         bMarker() = false;
         bSimulation() = true;
         gripperPose() = RCS::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0, 0, 0));
         invGripperPose() = gripperPose().inverse();
+        _robotcmd=0;
 
     }
 
@@ -86,6 +85,9 @@ namespace RCS {
             bRvizPubSetup = true;
         }
 
+        RvizMarker() = boost::shared_ptr<CRvizMarker>(new CRvizMarker(nh));
+        RvizMarker()->Init();
+        
         status.currentjoints = RCS::ZeroJointState(Kinematics()->JointNames().size());
         status.currentjoints.name = Kinematics()->JointNames();
         gripper.init(nh, prefix);
@@ -169,6 +171,7 @@ namespace RCS {
     int CController::Action() {
         try {
 
+            // FIXME Muddling of crcl and joint cmd, crcl and joint status
             // STOP untested
             // Check for STOP MOTION - interrupts any commands and stops motion and clears message queue
 
@@ -186,29 +189,60 @@ namespace RCS {
                 // Translate into Cnc.cmds 
                 // FIXME: this is an upcast
                 RCS::CanonCmd cc, newcc;
-                
+                laststatus= status;
                 nistcrcl::CrclCommandMsg msg = crclcmds.PeekFrontMsgQueue();
-                //nistcrcl::CrclCommandMsg msg = crclcmds.PopFrontMsgQueue();
-                LOG_DEBUG << "Command = " << RCS::sCmd[msg.crclcommand];
+nextposition:
+                ofsMotionTrace << Name().c_str() << " Command = " << RCS::sCmd[msg.crclcommand]<< "\n";
                 cc.Set(msg);
                 LOG_TRACE << "Msg Joints " << RCS::VectorDump<double>(msg.joints.position).c_str();
                 LOG_TRACE << "CC Joints " << RCS::VectorDump<double>(cc.joints.position).c_str();
 
-                int status = _interpreter->ParseCommand(cc, newcc);
+                newcc=cc;  // in case interpreter does not handle, e.g., dwell
+                int cmdstatus = Interpreter()->ParseCommand(cc, newcc, laststatus, status);
+                newcc.CommandID()=_robotcmd++; 
                 robotcmds.AddMsgQueue(newcc);
                 // Signals done with canon command
-                if(status== CanonStatusType::CANON_DONE) 
+                if(cmdstatus==CanonStatusType::CANON_WORKING){
+                
+                }
+                else if(cmdstatus== CanonStatusType::CANON_DONE) 
                 {
                     crclcmds.PopFrontMsgQueue();
                 }
-                else if(status== CanonStatusType::CANON_ERROR )
+                else if(cmdstatus== CanonStatusType::CANON_STOP){
+                    // assume last command was world, joint or ujoint motion
+                    // stop inserted in front of queue. We are done. Messy? Yes.
+                    crclcmds.PopFrontMsgQueue(); // pop stop command
+                    if (crclcmds.SizeMsgQueue() > 0) {
+                        msg = crclcmds.PeekFrontMsgQueue();
+                        crclcmds.ClearMsgQueue();
+
+                        // if motion command need to stop motion gracefully
+                        if (msg.crclcommand == CanonCmdType::CANON_MOVE_JOINT ||
+                                msg.crclcommand == CanonCmdType::CANON_MOVE_TO) {
+                            crclcmds.AddMsgQueue(msg);
+                            goto nextposition;
+                        }
+                    }
+                }
+                else if(cmdstatus== CanonStatusType::CANON_ERROR )
                 {
                     crclcmds.ClearMsgQueue();
-
                 }
+                else if(cmdstatus== CanonStatusType::CANON_NOTIMPLEMENTED )
+                {
+                    LOG_DEBUG << "Canon Command not handled";
+                    assert(0);
+                }               
+             else 
+                {
+                    LOG_DEBUG << "Command not handled";
+                    assert(0);
+                }  
             }
 
-            // Motion commands to robot - only joint at this point
+            ///////////////////////////////////////////////////////
+            // Motion commands to robot - only commanded joints  at this point
             if (robotcmds.SizeMsgQueue() == 0) {
                 _lastcc.status = CanonStatusType::CANON_DONE;
                 status.crclcommandstatus = CanonStatusType::CANON_DONE;
@@ -227,9 +261,10 @@ namespace RCS {
                 if (_newcc.crclcommand == CanonCmdType::CANON_DWELL) {
                     // This isn't very exact, as there will some time wasted until we are here
                     // Thread cycle time already adjusted to seconds
+                    // FIXME: should subtract off processing time so far not just cycletime
                     _newcc.dwell_seconds -= ((double) CycleTime());
                     if (_newcc.dwell_seconds > 0.0) {
-                        robotcmds.InsertFrontMsgQueue(_newcc);
+                        crclcmds.InsertFrontMsgQueue(_newcc);
                     }
                 } else if (_newcc.crclcommand == CanonCmdType::CANON_SET_GRIPPER) {
                     sensor_msgs::JointState gripperjoints;
@@ -265,33 +300,42 @@ namespace RCS {
                 } else if (_newcc.crclcommand == CanonCmdType::CANON_STOP_MOTION) {
                     LOG_DEBUG << "STOP Controller ";
                 }
-
                 else {
-                    // Should have been updated by interpreter - and many more of them
-                   LOG_DEBUG << "Current Joints " << RCS::VectorDump<double>(_newcc.joints.position).c_str();
                     status.currentjoints = _newcc.joints;
+                    status.currentjoints.name=Kinematics()->JointNames();
+                    // FIXME: this is only the current pose of the robot arm, not including base offset of gripper
                     status.currentpose = Kinematics()->FK(status.currentjoints.position); /**<  current robot pose */
                     std::vector<tf::Pose> poses = Kinematics()->ComputeAllFk(status.currentjoints.position);
+#if defined(RobotCNCJointMove)
+                    LOG_DEBUG << Name().c_str() << " MOVE ROBOT JOINTS\n";
+                    LOG_DEBUG << "     Current Joints " << RCS::VectorDump<double>(_newcc.joints.position).c_str();
                     for (size_t k = 0; k < poses.size(); k++)
-                        LOG_DEBUG << "Joint Pose " << k << " = " << DumpPoseSimple(poses[k]).c_str();
-                    status.currentjoints.header.stamp = ros::Time(0);
-                    LOG_DEBUG << "Current Pose " << DumpPoseSimple(status.currentpose).c_str();
+                        LOG_DEBUG << "    Joint Pose " << k << " = " << DumpPoseSimple(poses[k]).c_str();
+                    LOG_DEBUG << "    Current Pose " << DumpPoseSimple(status.currentpose).c_str();
+#endif
+                    
 #if 0
-                    // Fixme
+                    // Fixme" this does not work
                     std::vector<int> outofbounds;
                     std::string msg;
                     if (Kinematics()->CheckJointPositionLimits(status.currentjoints.position, outofbounds, msg)) {
                         throw MotionException(1000, msg.c_str());
                     }
 #endif
+                     status.currentjoints.header.stamp = ros::Time(0);
+                   // Debugging rviz communication via joint publisher 
+                    // rostopic echo joint_states 
+                    // rostopic echo  nist_controller/robot/joint_states
+                    
+                     
                     rviz_jntcmd.publish(status.currentjoints);
                     rviz_jntcmd.publish(status.currentjoints);
                     ros::spinOnce();
                     ros::spinOnce();
 #if 1
                     if (!_newcc.partname.empty()) {
-                        Eigen::Translation3d trans(_newcc.finalpose.position.x, _newcc.finalpose.position.y, _newcc.finalpose.position.z);
-                        Eigen::Affine3d pose = Eigen::Affine3d::Identity() * trans;
+                        Eigen::Affine3d pose = Eigen::Affine3d::Identity() *
+                                Eigen::Translation3d(_newcc.finalpose.position.x, _newcc.finalpose.position.y, _newcc.finalpose.position.z);
                         pScene->UpdateScene(_newcc.partname,
                                 pose,
                                 pScene->MARKERCOLOR(_newcc.partcolor));
@@ -301,10 +345,13 @@ namespace RCS {
                     ros::spinOnce();
                     if (bMarker()) {
                         RCS::Pose goalpose = Kinematics()->FK(_newcc.joints.position);
-                        //RCS::Pose goalpose = EEPoseReader()->GetLinkValue(links.back());
-                        LOG_DEBUG << "Marker Pose " << DumpPose(goalpose).c_str();
+                        goalpose = basePose() * goalpose;
                         RvizMarker()->Send(goalpose);
                     }
+                    ofsMotionTrace << Name().c_str() << " MOVE ROBOT JOINTS\n";
+                    ofsMotionTrace << "  World Pose    =" << RCS::DumpPoseSimple(basePose() * status.currentpose).c_str() << "\n";
+                    ofsMotionTrace << "  Robot Pose    =" << RCS::DumpPoseSimple(status.currentpose).c_str() << "\n";
+                    ofsMotionTrace << "  Goal Joints   =" << VectorDump<double>(_newcc.joints.position).c_str() << "\n" << std::flush;
                 }
 
             }

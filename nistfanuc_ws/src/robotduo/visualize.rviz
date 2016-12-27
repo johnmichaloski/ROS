@@ -6,6 +6,10 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /RobotModel1
+        - /MarkerArray1
+        - /Marker1
+        - /Marker1/Namespaces1
       Splitter Ratio: 0.5
     Tree Height: 565
   - Class: rviz/Selection
@@ -256,7 +260,20 @@ Visualization Manager:
       Marker Topic: visualization_marker_array
       Name: MarkerArray
       Namespaces:
+        Cuboid: true
         Cylinder: true
+        Line: true
+      Queue Size: 100
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: visualization_marker
+      Name: Marker
+      Namespaces:
+        Cuboid: true
+        Cylinder: true
+        Line: true
+        nist_fanuc: true
       Queue Size: 100
       Value: true
   Enabled: true
@@ -283,7 +300,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 3.38444
+      Distance: 1.71138
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
@@ -295,10 +312,10 @@ Visualization Manager:
         Z: 0
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.705398
+      Pitch: 0.275397
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.0422384
+      Yaw: 0.097245
     Saved: ~
 Window Geometry:
   Displays:
@@ -316,5 +333,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1200
-  X: 55
-  Y: 123
+  X: 89
+  Y: 140

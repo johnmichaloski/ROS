@@ -1,0 +1,77 @@
+\hypertarget{structgomotion_1_1go__position}{\section{gomotion\-:\-:go\-\_\-position Struct Reference}
+\label{structgomotion_1_1go__position}\index{gomotion\-::go\-\_\-position@{gomotion\-::go\-\_\-position}}
+}
+
+
+Depending upon whether you are doing joint interpolation or world coordinate interpolation (as specified by your call to go\-\_\-motion\-\_\-queue\-\_\-set\-\_\-type()), fill in joint\mbox{[}\mbox{]} or pose accordingly.  
+
+
+
+
+{\ttfamily \#include $<$gomotion.\-h$>$}
+
+
+
+Collaboration diagram for gomotion\-:\-:go\-\_\-position\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=285pt]{dc/d93/structgomotion_1_1go__position__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{structgomotion_1_1go__position_af075d5442765600dd50494b47161db4b}{zero\-\_\-joints} ()
+\item 
+void \hyperlink{structgomotion_1_1go__position_ab319ce59146e5f8313bdb5d1b7001617}{zero\-\_\-pose} ()
+\end{DoxyCompactItemize}
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+union \{\\
+\>\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\_real} \hyperlink{structgomotion_1_1go__position_abe054c50898120fd6b1b260edf8f0074}{joint} \mbox{[}\hyperlink{gomotion_8h_ac7b4e696e30d95d9a3d178233eabed55}{GO\_MOTION\_JOINT\_NUM}\mbox{]}\\
+\>\hyperlink{structgomotion_1_1go__pose}{go\_pose} \hyperlink{structgomotion_1_1go__position_a52e09e22901615c1ca71757ea57215ca}{pose}\\
+\} \hyperlink{structgomotion_1_1go__position_a9c36a514458a3a87eb49cbf1df68ed21}{u}\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Depending upon whether you are doing joint interpolation or world coordinate interpolation (as specified by your call to go\-\_\-motion\-\_\-queue\-\_\-set\-\_\-type()), fill in joint\mbox{[}\mbox{]} or pose accordingly. 
+
+\subsection{Member Function Documentation}
+\hypertarget{structgomotion_1_1go__position_af075d5442765600dd50494b47161db4b}{\index{gomotion\-::go\-\_\-position@{gomotion\-::go\-\_\-position}!zero\-\_\-joints@{zero\-\_\-joints}}
+\index{zero\-\_\-joints@{zero\-\_\-joints}!gomotion::go_position@{gomotion\-::go\-\_\-position}}
+\subsubsection[{zero\-\_\-joints}]{\setlength{\rightskip}{0pt plus 5cm}void gomotion\-::go\-\_\-position\-::zero\-\_\-joints (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{structgomotion_1_1go__position_af075d5442765600dd50494b47161db4b}
+\hypertarget{structgomotion_1_1go__position_ab319ce59146e5f8313bdb5d1b7001617}{\index{gomotion\-::go\-\_\-position@{gomotion\-::go\-\_\-position}!zero\-\_\-pose@{zero\-\_\-pose}}
+\index{zero\-\_\-pose@{zero\-\_\-pose}!gomotion::go_position@{gomotion\-::go\-\_\-position}}
+\subsubsection[{zero\-\_\-pose}]{\setlength{\rightskip}{0pt plus 5cm}void gomotion\-::go\-\_\-position\-::zero\-\_\-pose (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{structgomotion_1_1go__position_ab319ce59146e5f8313bdb5d1b7001617}
+
+
+\subsection{Field Documentation}
+\hypertarget{structgomotion_1_1go__position_abe054c50898120fd6b1b260edf8f0074}{\index{gomotion\-::go\-\_\-position@{gomotion\-::go\-\_\-position}!joint@{joint}}
+\index{joint@{joint}!gomotion::go_position@{gomotion\-::go\-\_\-position}}
+\subsubsection[{joint}]{\setlength{\rightskip}{0pt plus 5cm}{\bf go\-\_\-real} gomotion\-::go\-\_\-position\-::joint\mbox{[}{\bf G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-J\-O\-I\-N\-T\-\_\-\-N\-U\-M}\mbox{]}}}\label{structgomotion_1_1go__position_abe054c50898120fd6b1b260edf8f0074}
+\hypertarget{structgomotion_1_1go__position_a52e09e22901615c1ca71757ea57215ca}{\index{gomotion\-::go\-\_\-position@{gomotion\-::go\-\_\-position}!pose@{pose}}
+\index{pose@{pose}!gomotion::go_position@{gomotion\-::go\-\_\-position}}
+\subsubsection[{pose}]{\setlength{\rightskip}{0pt plus 5cm}{\bf go\-\_\-pose} gomotion\-::go\-\_\-position\-::pose}}\label{structgomotion_1_1go__position_a52e09e22901615c1ca71757ea57215ca}
+\hypertarget{structgomotion_1_1go__position_a9c36a514458a3a87eb49cbf1df68ed21}{\index{gomotion\-::go\-\_\-position@{gomotion\-::go\-\_\-position}!u@{u}}
+\index{u@{u}!gomotion::go_position@{gomotion\-::go\-\_\-position}}
+\subsubsection[{u}]{\setlength{\rightskip}{0pt plus 5cm}union \{ ... \}   gomotion\-::go\-\_\-position\-::u}}\label{structgomotion_1_1go__position_a9c36a514458a3a87eb49cbf1df68ed21}
+
+
+The documentation for this struct was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+/usr/local/michalos/nistfanuc\-\_\-ws/src/gomotion/include/gomotion/\hyperlink{gomotion_8h}{gomotion.\-h}\item 
+/usr/local/michalos/nistfanuc\-\_\-ws/src/gomotion/src/\hyperlink{gomotion_8cpp}{gomotion.\-cpp}\end{DoxyCompactItemize}

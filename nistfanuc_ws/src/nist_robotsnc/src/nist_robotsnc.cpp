@@ -27,7 +27,7 @@ namespace pt = boost::property_tree;
 
 #include <ros/package.h>
 #include <ros/console.h>
-
+#include <NIST/Boost.h>
 
 #include "MotionControl.h"
 #include "Globals.h"
@@ -94,8 +94,10 @@ int main(int argc, char** argv) {
 
         boostlogfile = nh.param<std::string>("logfile", "/home/isd/michalos/Documents/example.log");
         boostloglevel = (boost::log::v2_mt_posix::trivial::severity_level) nh.param<int>("loglevel", 0); // 0 = debug
+        
         bPublishPoint = nh.param<int>("PublishPoint", 0);
 
+        Globals.DebugSetup();
         // THIS DOESN'T WORK
 #if 0
         int rosloglevel = nh.param<int>("~rosloglevel", 0); // 0 = debug
@@ -116,12 +118,22 @@ int main(int argc, char** argv) {
 
         pScene->InitScene();
         pScene->BuildScene(); // demo actually builds scene
-       
-        GearDemo geardemo(nh, path, Convert<tf::Vector3, tf::Pose>(tf::Vector3(0.25,0.5,0.0)));
+
+        GearDemo geardemo(nh, path, Convert<tf::Vector3, tf::Pose>(tf::Vector3(0.25, 0.5, 0.0)));
+#if 0    
         geardemo.Setup(); // this does draw scene
-        
+#endif
+        // Confetti
+#if 0
+        for (size_t i = 0; i < 20; i++) {
+            double x = ((double) i)*.01;
+            Piece * p = new Piece(pScene);
+            p->launch(x, 0.0, 1.0);
+
+        }
+#endif
         pScene->DrawScene();
-    
+
         Globals._appproperties[ROSPACKAGENAME] = path;
         MotionException::Load();
         std::vector<boost::shared_ptr<CController> > ncs;
@@ -136,6 +148,7 @@ int main(int argc, char** argv) {
 
             std::vector<std::string> robots = GetIniTypes<std::string>(root, "system.robots");
             for (size_t i = 0; i < robots.size(); i++) {
+                ofsRobotURDF << "============================================================\n";
                 std::string robotname = root.get<std::string>(robots[i] + ".longname");
                 double dCycleTime = root.get<double>(robots[i] + ".cycletime", 10.0);
                 std::string prefix = root.get<std::string>(robots[i] + ".prefix", "");
@@ -147,6 +160,7 @@ int main(int argc, char** argv) {
                 std::string kinsolver = root.get<std::string>(robots[i] + ".kinsolver", "");
                 std::vector<std::string> jointmovenames = GetIniTypes<std::string>(root, robots[i] + ".jointmovenames");
                 int bCsvLogging = root.get<int>(robots[i] + ".csvlogging", 0);
+                int bMarker = root.get<int>(robots[i] + ".markers", 0);
 
                 ncs.push_back(boost::shared_ptr<CController>(new RCS::CController(robotname, dCycleTime)));
                 ncs[i]->SetToolOffset(Convert<std::vector<double>, tf::Pose> (dtool));
@@ -155,6 +169,7 @@ int main(int argc, char** argv) {
                 ncs[i]->bCvsPoseLogging() = false;
                 boost::shared_ptr<IKinematics> kin;
                 ncs[i]->CycleTime() = dCycleTime;
+                ncs[i]->bMarker()=bMarker;
 
                 if (kinsolver == "FanucLRMate200idFastKinematics")
                     kin = boost::shared_ptr<IKinematics>(new FanucLRMate200idFastKinematics(ncs[i]));
@@ -164,35 +179,70 @@ int main(int argc, char** argv) {
                 kin->Init(nh);
                 ncs[i]->Kinematics() = kin;
                 ncs[i]->Setup(nh, prefix);
+                //ncs[i]->status.currentjoints.name= kin->JointNames();
 
                 // This should be selectable
-                ncs[i]->_interpreter = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter(ncs[i], kin));
-
-                //    ncs[i]->NamedJointMove["Safe"] = ToVector<double>(6, 1.49, -0.17, -1.14, 0.11, -0.45, -1.67);
+                //ncs[i]->Interpreter() = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter(ncs[i], kin));
+                ncs[i]->Interpreter() = boost::shared_ptr<IRCSInterpreter>(new RCS::GoInterpreter(ncs[i], kin));
                 for (size_t j = 0; j < jointmovenames.size(); j++) {
                     ds = GetIniTypes<double>(root, robots[i] + "." + jointmovenames[j]);
                     ncs[i]->NamedJointMove[jointmovenames[j]] = ds;
                 }
+                ncs[i]->Interpreter()->Init(ncs[i]->NamedJointMove["Home"]);
                 nccmds.push_back(InlineRobotCommands(ncs[i])); // , fanuchints);
+                ofsRobotURDF << "NC " << ncs[i]->Name().c_str() << "\n";
+                ofsRobotURDF << "base link " << ncs[i]->Kinematics()->getRootLink().c_str() << "\n";
+                ofsRobotURDF << "ee link " << ncs[i]->Kinematics()->getTipLink().c_str() << "\n";
+                ofsRobotURDF << "num joints " << ncs[i]->Kinematics()->NumJoints() << "\n";
+                ofsRobotURDF << "baseoffset " << RCS::DumpPoseSimple(ncs[i]->basePose()).c_str() << "\n";
+                ofsRobotURDF << "tooloffset " << RCS::DumpPoseSimple(ncs[i]->gripperPose()).c_str() << "\n";
+                ofsRobotURDF << "Joint names " << VectorDump<std::string>(ncs[i]->Kinematics()->JointNames()).c_str() << "\n" << std::flush;
+                ofsRobotURDF <<  kin->DumpUrdfJoint().c_str()<< "\n";
 
-                LOG_DEBUG << "NC " << ncs[i]->Name().c_str();
-                LOG_DEBUG << "base link " << ncs[i]->Kinematics()->getRootLink().c_str();
-                LOG_DEBUG << "ee link " << ncs[i]->Kinematics()->getTipLink().c_str();
-                LOG_DEBUG << "num joints " << ncs[i]->Kinematics()->NumJoints();
-                LOG_DEBUG << "baseoffset " << RCS::DumpPoseSimple(ncs[i]->basePose()).c_str();
-                LOG_DEBUG << "tooloffset " << RCS::DumpPoseSimple(ncs[i]->gripperPose()).c_str();
-                LOG_DEBUG << "safe " << VectorDump<double>(ncs[i]->NamedJointMove["Safe"]).c_str();
-                LOG_DEBUG << "Joint names " << VectorDump<std::string>(ncs[i]->Kinematics()->JointNames()).c_str();
-                //LOG_DEBUG << "cycletime " << ncs[i]->Name();
-            }
+                for (std::map<std::string, std::vector<double>>::iterator it = ncs[i]->NamedJointMove.begin(); it != ncs[i]->NamedJointMove.end(); it++)
+                    ofsRobotURDF << (*it).first<< "=" << VectorDump<double>(ncs[i]->NamedJointMove[(*it).first]).c_str() << "\n";
+                //ofsRobotURDF << "cycletime " << ncs[i]->Name();
+                ofsRobotURDF << "Cycletime   " << ncs[i]->CycleTime() << "\n" ;
+                ofsRobotURDF << "Markers     " <<  ncs[i]->bMarker() << "\n" ;
+                ofsRobotURDF << std::flush;
+           }
         } catch (std::exception &e) {
             LOG_FATAL << e.what();
         }
-
+#if 0
+        ExerciseDemo exercise(nh);
+        exercise.Exercise(&nccmds[0]);
+#endif
+#if 0
+        JointTrajectoryMaker jointmaker(0.1);
+        JointState here,there,next,last;
+        here.position = ncs[0]->NamedJointMove["Home"];
+        there.position = ncs[0]->NamedJointMove["Safe"];
+        last=here;
+        bool bFlag=false;
+        do {
+            bFlag=jointmaker.evalJointPositionTrajectory(ncs[0]->Kinematics()->JointVelMax(), here, here, there,  next);
+            last=here;
+            here = next;
+        } while (!bFlag);
+#endif   
+        // start the Controller Session thread
+        for (size_t j = 0; j < ncs.size(); j++) {
+            ncs[j]->Start(); 
+        }
+         
+        // Move robots to "home position"
+        for (size_t j = 0; j < ncs.size(); j++) {
+            nccmds[j].MoveJoints(ncs[j]->Kinematics()->AllJointNumbers(), ncs[j]->NamedJointMove["Home"]);
+            while (ncs[j]->IsBusy()) {
+                ros::spinOnce();
+                ros::spinOnce();
+                r.sleep();
+            }
+        }
         
         // Move robots to "safe position"
         for (size_t j = 0; j < ncs.size(); j++) {
-            ncs[j]->Start(); // start the Controller Session thread
             nccmds[j].MoveJoints(ncs[j]->Kinematics()->AllJointNumbers(), ncs[j]->NamedJointMove["Safe"]);
             while (ncs[j]->IsBusy()) {
                 ros::spinOnce();
@@ -208,7 +258,7 @@ int main(int argc, char** argv) {
 #if 0
         // This might be cleaner, but the \r problem from windows is disconcerting
         std::ifstream checkersIss(filename);
-         LOG_DEBUG << iss.str().c_str();
+        LOG_DEBUG << iss.str().c_str();
         if (!checkersIss.fail()) {
             game.Deserialize(iss, outboard);
             LOG_DEBUG << checkers.RvizGame()->Game().printDisplayFancy(outboard).c_str();
@@ -229,10 +279,10 @@ int main(int argc, char** argv) {
 #endif
 #if 0
         do {
-            for (size_t i = 1; i < 2; i++) {  // only motoman
-           // for (size_t i = 0; i < ncs.size(); i++) {
-               geardemo.Cycle(ncs[i], nccmds[i]);
-               geardemo.Reset();
+            for (size_t i = 1; i < 2; i++) { // only motoman
+                // for (size_t i = 0; i < ncs.size(); i++) {
+                geardemo.Cycle(ncs[i], nccmds[i]);
+                geardemo.Reset();
             }
             r.sleep();
         } while (ros::ok());

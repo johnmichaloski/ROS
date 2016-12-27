@@ -32,14 +32,24 @@ AM_CXXFLAGS += -std=c++11 -DBOOST_LOG_DYN_LINK
 */
 
 
-#include "Boost.h"
+#include "NIST/Boost.h"
+#include "Globals.h"
+// http://pastebin.com/e3qDQ8tT
 
 namespace attrs   = boost::log::attributes;
 namespace expr    = boost::log::expressions;
 namespace logging = boost::log;
+namespace src = boost::log::sources;
+namespace sinks = boost::log::sinks;
+namespace keywords = boost::log::keywords;
+
 std::string boostlogfile = "/var/log/example.log";
 boost::log::trivial::severity_level boostloglevel=logging::trivial::info;
 
+boost::shared_ptr<sinks::text_ostream_backend> backend_;
+boost::shared_ptr<std::ostream> current_stream_;
+  
+  
 //Defines a global logger initialization routine
 BOOST_LOG_GLOBAL_LOGGER_INIT(my_logger, logger_t)
 {
@@ -69,6 +79,14 @@ BOOST_LOG_GLOBAL_LOGGER_INIT(my_logger, logger_t)
     (
         logging::trivial::severity >= logging::trivial::debug
     );
-
+    backend_ = boost::make_shared<sinks::text_ostream_backend>();
+    backend_->auto_flush(true);
     return lg;
+}
+
+void set_log_file(const char* filename) {
+    std::string file = Globals.ExeDirectory + filename;
+    backend_->remove_stream(current_stream_);
+    current_stream_.reset(new std::ofstream(file.c_str()));
+    backend_->add_stream(current_stream_);
 }

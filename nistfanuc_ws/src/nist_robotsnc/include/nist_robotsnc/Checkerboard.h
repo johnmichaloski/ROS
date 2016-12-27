@@ -55,6 +55,7 @@ struct RvizCheckers {
     static const int ROWS = 8; /**< number of rows on checkerboard */
     static const int COLS = 8; /**< number of columns on checkerboard */
 #endif
+    static const double HEIGHT= 0.015; /**< rviz height of single checker */
     /** CHeckers board rviz dimensions */
     double XOFFSET; /**< x offset from world 0,0,0 */
     double YOFFSET; /**< y offset from world 0,0,0 */
@@ -72,7 +73,7 @@ struct RvizCheckers {
         YOFFSET = -0.20;
         SQOFFSET = 0.04;
         radius = 0.025;
-        height = 0.015;
+        height = HEIGHT;
 
         curplayer = Checkers::RED;
 

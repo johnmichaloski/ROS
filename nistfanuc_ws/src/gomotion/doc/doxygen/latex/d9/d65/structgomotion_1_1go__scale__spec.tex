@@ -1,0 +1,150 @@
+\hypertarget{structgomotion_1_1go__scale__spec}{\section{gomotion\-:\-:go\-\_\-scale\-\_\-spec Struct Reference}
+\label{structgomotion_1_1go__scale__spec}\index{gomotion\-::go\-\_\-scale\-\_\-spec@{gomotion\-::go\-\_\-scale\-\_\-spec}}
+}
+
+
+{\ttfamily \#include $<$gomotion.\-h$>$}
+
+
+
+Collaboration diagram for gomotion\-:\-:go\-\_\-scale\-\_\-spec\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=212pt]{d0/dd3/structgomotion_1_1go__scale__spec__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{structgomotion_1_1go__scale__spec_ab10fecb573317c67528eb4d370705129}{init} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} \hyperlink{structgomotion_1_1go__scale__spec_a592f5bd1c5d775d30e25b798900a2c30}{scale})
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{structgomotion_1_1go__scale__spec_af98067c5057e4a27be45c932d40b1ee3}{set} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} \hyperlink{structgomotion_1_1go__scale__spec_a592f5bd1c5d775d30e25b798900a2c30}{scale}, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} scale\-\_\-v, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} scale\-\_\-a)
+\item 
+\hyperlink{gotypes_8h_a55d48b38cd959f63c7e8db8337a9792a}{go\-\_\-result} \hyperlink{structgomotion_1_1go__scale__spec_a8eaf5f40d5b5ee430ae70a1f4fbcff1e}{eval} (\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} deltat, \hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} $\ast$\hyperlink{structgomotion_1_1go__scale__spec_a592f5bd1c5d775d30e25b798900a2c30}{scale})
+\end{DoxyCompactItemize}
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structgomotion_1_1go__traj__ca__spec}{go\-\_\-traj\-\_\-ca\-\_\-spec} \hyperlink{structgomotion_1_1go__scale__spec_a09627b5c232ccc27aa4a9876c7fd6edb}{scale\-\_\-spec}
+\item 
+\hyperlink{gotypes_8h_ae890d9a0ddecc0d3073622cc4312092d}{go\-\_\-flag} \hyperlink{structgomotion_1_1go__scale__spec_ab692a7752aa08649020c990b4bea3c84}{scaling}
+\begin{DoxyCompactList}\small\item\em non-\/zero means we're scaling time \end{DoxyCompactList}\item 
+\hyperlink{gotypes_8h_ae890d9a0ddecc0d3073622cc4312092d}{go\-\_\-flag} \hyperlink{structgomotion_1_1go__scale__spec_af13cc2a23a17aba5aae5fbafc47a8428}{scale\-\_\-dir}
+\begin{DoxyCompactList}\small\item\em non-\/zero means add scale to scale\-\_\-b \end{DoxyCompactList}\item 
+\hyperlink{gotypes_8h_ae890d9a0ddecc0d3073622cc4312092d}{go\-\_\-flag} \hyperlink{structgomotion_1_1go__scale__spec_abd719098dc45e827d7349e8eb682f2c2}{scale\-\_\-isneg}
+\begin{DoxyCompactList}\small\item\em non-\/zero means negative scale \end{DoxyCompactList}\item 
+\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} \hyperlink{structgomotion_1_1go__scale__spec_ac734b7e45bc1da45992fdf6f1fdc792d}{scale\-\_\-b}
+\begin{DoxyCompactList}\small\item\em original base scale factor \end{DoxyCompactList}\item 
+\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} \hyperlink{structgomotion_1_1go__scale__spec_a592f5bd1c5d775d30e25b798900a2c30}{scale}
+\begin{DoxyCompactList}\small\item\em current scale factor \end{DoxyCompactList}\item 
+\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} \hyperlink{structgomotion_1_1go__scale__spec_ab141b03f6bb455d94cbeebf6c9de5cc3}{scale\-\_\-next}
+\begin{DoxyCompactList}\small\item\em pending scale factor \end{DoxyCompactList}\item 
+\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} \hyperlink{structgomotion_1_1go__scale__spec_a72b34038e403e2efffd083765389c5f2}{scale\-\_\-v\-\_\-next}
+\begin{DoxyCompactList}\small\item\em pending d(scale)/dt \end{DoxyCompactList}\item 
+\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} \hyperlink{structgomotion_1_1go__scale__spec_a1786056a5451cb1841cf42f23f079c61}{scale\-\_\-a\-\_\-next}
+\begin{DoxyCompactList}\small\item\em pending d$^\wedge$2(scale)/dt$^\wedge$2 \end{DoxyCompactList}\item 
+\hyperlink{gotypes_8h_afd666a2393eebd71ee455846ac9def9b}{go\-\_\-real} \hyperlink{structgomotion_1_1go__scale__spec_a7496e98c2084abd59d74c803b1d7dbec}{scale\-\_\-t}
+\begin{DoxyCompactList}\small\item\em time into scaling \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{structgomotion_1_1go__scale__spec_a8eaf5f40d5b5ee430ae70a1f4fbcff1e}{\index{gomotion\-::go\-\_\-scale\-\_\-spec@{gomotion\-::go\-\_\-scale\-\_\-spec}!eval@{eval}}
+\index{eval@{eval}!gomotion::go_scale_spec@{gomotion\-::go\-\_\-scale\-\_\-spec}}
+\subsubsection[{eval}]{\setlength{\rightskip}{0pt plus 5cm}{\bf go\-\_\-result} gomotion\-::go\-\_\-scale\-\_\-spec\-::eval (
+\begin{DoxyParamCaption}
+\item[{{\bf go\-\_\-real}}]{deltat, }
+\item[{{\bf go\-\_\-real} $\ast$}]{scale}
+\end{DoxyParamCaption}
+)}}\label{structgomotion_1_1go__scale__spec_a8eaf5f40d5b5ee430ae70a1f4fbcff1e}
+\hypertarget{structgomotion_1_1go__scale__spec_ab10fecb573317c67528eb4d370705129}{\index{gomotion\-::go\-\_\-scale\-\_\-spec@{gomotion\-::go\-\_\-scale\-\_\-spec}!init@{init}}
+\index{init@{init}!gomotion::go_scale_spec@{gomotion\-::go\-\_\-scale\-\_\-spec}}
+\subsubsection[{init}]{\setlength{\rightskip}{0pt plus 5cm}{\bf go\-\_\-result} gomotion\-::go\-\_\-scale\-\_\-spec\-::init (
+\begin{DoxyParamCaption}
+\item[{{\bf go\-\_\-real}}]{scale}
+\end{DoxyParamCaption}
+)}}\label{structgomotion_1_1go__scale__spec_ab10fecb573317c67528eb4d370705129}
+\hypertarget{structgomotion_1_1go__scale__spec_af98067c5057e4a27be45c932d40b1ee3}{\index{gomotion\-::go\-\_\-scale\-\_\-spec@{gomotion\-::go\-\_\-scale\-\_\-spec}!set@{set}}
+\index{set@{set}!gomotion::go_scale_spec@{gomotion\-::go\-\_\-scale\-\_\-spec}}
+\subsubsection[{set}]{\setlength{\rightskip}{0pt plus 5cm}{\bf go\-\_\-result} gomotion\-::go\-\_\-scale\-\_\-spec\-::set (
+\begin{DoxyParamCaption}
+\item[{{\bf go\-\_\-real}}]{scale, }
+\item[{{\bf go\-\_\-real}}]{scale\-\_\-v, }
+\item[{{\bf go\-\_\-real}}]{scale\-\_\-a}
+\end{DoxyParamCaption}
+)}}\label{structgomotion_1_1go__scale__spec_af98067c5057e4a27be45c932d40b1ee3}
+
+
+\subsection{Field Documentation}
+\hypertarget{structgomotion_1_1go__scale__spec_a592f5bd1c5d775d30e25b798900a2c30}{\index{gomotion\-::go\-\_\-scale\-\_\-spec@{gomotion\-::go\-\_\-scale\-\_\-spec}!scale@{scale}}
+\index{scale@{scale}!gomotion::go_scale_spec@{gomotion\-::go\-\_\-scale\-\_\-spec}}
+\subsubsection[{scale}]{\setlength{\rightskip}{0pt plus 5cm}{\bf go\-\_\-real} gomotion\-::go\-\_\-scale\-\_\-spec\-::scale}}\label{structgomotion_1_1go__scale__spec_a592f5bd1c5d775d30e25b798900a2c30}
+
+
+current scale factor 
+
+\hypertarget{structgomotion_1_1go__scale__spec_a1786056a5451cb1841cf42f23f079c61}{\index{gomotion\-::go\-\_\-scale\-\_\-spec@{gomotion\-::go\-\_\-scale\-\_\-spec}!scale\-\_\-a\-\_\-next@{scale\-\_\-a\-\_\-next}}
+\index{scale\-\_\-a\-\_\-next@{scale\-\_\-a\-\_\-next}!gomotion::go_scale_spec@{gomotion\-::go\-\_\-scale\-\_\-spec}}
+\subsubsection[{scale\-\_\-a\-\_\-next}]{\setlength{\rightskip}{0pt plus 5cm}{\bf go\-\_\-real} gomotion\-::go\-\_\-scale\-\_\-spec\-::scale\-\_\-a\-\_\-next}}\label{structgomotion_1_1go__scale__spec_a1786056a5451cb1841cf42f23f079c61}
+
+
+pending d$^\wedge$2(scale)/dt$^\wedge$2 
+
+\hypertarget{structgomotion_1_1go__scale__spec_ac734b7e45bc1da45992fdf6f1fdc792d}{\index{gomotion\-::go\-\_\-scale\-\_\-spec@{gomotion\-::go\-\_\-scale\-\_\-spec}!scale\-\_\-b@{scale\-\_\-b}}
+\index{scale\-\_\-b@{scale\-\_\-b}!gomotion::go_scale_spec@{gomotion\-::go\-\_\-scale\-\_\-spec}}
+\subsubsection[{scale\-\_\-b}]{\setlength{\rightskip}{0pt plus 5cm}{\bf go\-\_\-real} gomotion\-::go\-\_\-scale\-\_\-spec\-::scale\-\_\-b}}\label{structgomotion_1_1go__scale__spec_ac734b7e45bc1da45992fdf6f1fdc792d}
+
+
+original base scale factor 
+
+\hypertarget{structgomotion_1_1go__scale__spec_af13cc2a23a17aba5aae5fbafc47a8428}{\index{gomotion\-::go\-\_\-scale\-\_\-spec@{gomotion\-::go\-\_\-scale\-\_\-spec}!scale\-\_\-dir@{scale\-\_\-dir}}
+\index{scale\-\_\-dir@{scale\-\_\-dir}!gomotion::go_scale_spec@{gomotion\-::go\-\_\-scale\-\_\-spec}}
+\subsubsection[{scale\-\_\-dir}]{\setlength{\rightskip}{0pt plus 5cm}{\bf go\-\_\-flag} gomotion\-::go\-\_\-scale\-\_\-spec\-::scale\-\_\-dir}}\label{structgomotion_1_1go__scale__spec_af13cc2a23a17aba5aae5fbafc47a8428}
+
+
+non-\/zero means add scale to scale\-\_\-b 
+
+\hypertarget{structgomotion_1_1go__scale__spec_abd719098dc45e827d7349e8eb682f2c2}{\index{gomotion\-::go\-\_\-scale\-\_\-spec@{gomotion\-::go\-\_\-scale\-\_\-spec}!scale\-\_\-isneg@{scale\-\_\-isneg}}
+\index{scale\-\_\-isneg@{scale\-\_\-isneg}!gomotion::go_scale_spec@{gomotion\-::go\-\_\-scale\-\_\-spec}}
+\subsubsection[{scale\-\_\-isneg}]{\setlength{\rightskip}{0pt plus 5cm}{\bf go\-\_\-flag} gomotion\-::go\-\_\-scale\-\_\-spec\-::scale\-\_\-isneg}}\label{structgomotion_1_1go__scale__spec_abd719098dc45e827d7349e8eb682f2c2}
+
+
+non-\/zero means negative scale 
+
+\hypertarget{structgomotion_1_1go__scale__spec_ab141b03f6bb455d94cbeebf6c9de5cc3}{\index{gomotion\-::go\-\_\-scale\-\_\-spec@{gomotion\-::go\-\_\-scale\-\_\-spec}!scale\-\_\-next@{scale\-\_\-next}}
+\index{scale\-\_\-next@{scale\-\_\-next}!gomotion::go_scale_spec@{gomotion\-::go\-\_\-scale\-\_\-spec}}
+\subsubsection[{scale\-\_\-next}]{\setlength{\rightskip}{0pt plus 5cm}{\bf go\-\_\-real} gomotion\-::go\-\_\-scale\-\_\-spec\-::scale\-\_\-next}}\label{structgomotion_1_1go__scale__spec_ab141b03f6bb455d94cbeebf6c9de5cc3}
+
+
+pending scale factor 
+
+\hypertarget{structgomotion_1_1go__scale__spec_a09627b5c232ccc27aa4a9876c7fd6edb}{\index{gomotion\-::go\-\_\-scale\-\_\-spec@{gomotion\-::go\-\_\-scale\-\_\-spec}!scale\-\_\-spec@{scale\-\_\-spec}}
+\index{scale\-\_\-spec@{scale\-\_\-spec}!gomotion::go_scale_spec@{gomotion\-::go\-\_\-scale\-\_\-spec}}
+\subsubsection[{scale\-\_\-spec}]{\setlength{\rightskip}{0pt plus 5cm}{\bf go\-\_\-traj\-\_\-ca\-\_\-spec} gomotion\-::go\-\_\-scale\-\_\-spec\-::scale\-\_\-spec}}\label{structgomotion_1_1go__scale__spec_a09627b5c232ccc27aa4a9876c7fd6edb}
+\hypertarget{structgomotion_1_1go__scale__spec_a7496e98c2084abd59d74c803b1d7dbec}{\index{gomotion\-::go\-\_\-scale\-\_\-spec@{gomotion\-::go\-\_\-scale\-\_\-spec}!scale\-\_\-t@{scale\-\_\-t}}
+\index{scale\-\_\-t@{scale\-\_\-t}!gomotion::go_scale_spec@{gomotion\-::go\-\_\-scale\-\_\-spec}}
+\subsubsection[{scale\-\_\-t}]{\setlength{\rightskip}{0pt plus 5cm}{\bf go\-\_\-real} gomotion\-::go\-\_\-scale\-\_\-spec\-::scale\-\_\-t}}\label{structgomotion_1_1go__scale__spec_a7496e98c2084abd59d74c803b1d7dbec}
+
+
+time into scaling 
+
+\hypertarget{structgomotion_1_1go__scale__spec_a72b34038e403e2efffd083765389c5f2}{\index{gomotion\-::go\-\_\-scale\-\_\-spec@{gomotion\-::go\-\_\-scale\-\_\-spec}!scale\-\_\-v\-\_\-next@{scale\-\_\-v\-\_\-next}}
+\index{scale\-\_\-v\-\_\-next@{scale\-\_\-v\-\_\-next}!gomotion::go_scale_spec@{gomotion\-::go\-\_\-scale\-\_\-spec}}
+\subsubsection[{scale\-\_\-v\-\_\-next}]{\setlength{\rightskip}{0pt plus 5cm}{\bf go\-\_\-real} gomotion\-::go\-\_\-scale\-\_\-spec\-::scale\-\_\-v\-\_\-next}}\label{structgomotion_1_1go__scale__spec_a72b34038e403e2efffd083765389c5f2}
+
+
+pending d(scale)/dt 
+
+\hypertarget{structgomotion_1_1go__scale__spec_ab692a7752aa08649020c990b4bea3c84}{\index{gomotion\-::go\-\_\-scale\-\_\-spec@{gomotion\-::go\-\_\-scale\-\_\-spec}!scaling@{scaling}}
+\index{scaling@{scaling}!gomotion::go_scale_spec@{gomotion\-::go\-\_\-scale\-\_\-spec}}
+\subsubsection[{scaling}]{\setlength{\rightskip}{0pt plus 5cm}{\bf go\-\_\-flag} gomotion\-::go\-\_\-scale\-\_\-spec\-::scaling}}\label{structgomotion_1_1go__scale__spec_ab692a7752aa08649020c990b4bea3c84}
+
+
+non-\/zero means we're scaling time 
+
+
+
+The documentation for this struct was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+/usr/local/michalos/nistfanuc\-\_\-ws/src/gomotion/include/gomotion/\hyperlink{gomotion_8h}{gomotion.\-h}\item 
+/usr/local/michalos/nistfanuc\-\_\-ws/src/gomotion/src/\hyperlink{gomotion_8cpp}{gomotion.\-cpp}\end{DoxyCompactItemize}

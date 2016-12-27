@@ -418,7 +418,16 @@ namespace Conversion {
     inline Eigen::Affine3d Convert<geometry_msgs::Point, Eigen::Affine3d>(geometry_msgs::Point point) {
         return Eigen::Affine3d::Identity() * Eigen::Translation3d(point.x, point.y, point.z);
     }
-
+    
+    /*!
+     * \brief Convert Eigen::Affine3d  into an  Eigen::Vector3d vector.
+     * \param e is  pose defined as a Eigen Affine3d.
+     * \return  Eigen::Vector3d vector 
+     */
+    template<>
+    inline Eigen::Vector3d Convert<Eigen::Affine3d, Eigen::Vector3d>(Eigen::Affine3d e) {
+        return Eigen::Vector3d(e.matrix()(0, 3), e.matrix()(1, 3), e.matrix()(2, 3));
+    }
 
     // geometry_msgs - constructor nightmare.
 
@@ -547,6 +556,24 @@ namespace Conversion {
         joints.velocity.resize(src.size(), 0.0);
         joints.effort.resize(src.size(), 0.0);
         return joints;
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+    template<>
+    inline Eigen::VectorXd Convert<std::vector<double>, Eigen::VectorXd>(std::vector<double> v) {
+        Eigen::VectorXd p(v.size());
+        for (size_t i = 0; i < v.size(); i++)
+            p(i) = v[i];
+        return p;
+    }
+
+    template<>
+    inline std::vector<double> Convert<Eigen::VectorXd, std::vector<double>>(Eigen::VectorXd ev) {
+        std::vector<double> v;
+        for (int i = 0; i < ev.size(); i++)
+            v.push_back(ev(i));
+        return v;
     }
 }
 #endif

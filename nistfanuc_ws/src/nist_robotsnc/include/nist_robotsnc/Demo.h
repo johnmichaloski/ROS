@@ -98,7 +98,7 @@ public:
      * \param cnc is pointer to CController instance.
      */
     InlineRobotCommands(boost::shared_ptr<RCS::CController> cnc) : _cnc(cnc) {
-        mydwell = .10;
+        mydwell = .50;
         QBend = cnc->QBend();
     }
 
@@ -172,8 +172,22 @@ public:
 
 
 };
+#include "RvizMarker.h"
 
+struct ExerciseDemo {
 
+    ExerciseDemo(ros::NodeHandle & nh) {
+        RvizMarker() = boost::shared_ptr<CRvizMarker>(new CRvizMarker(nh));
+        RvizMarker()->Init();
+
+    }
+    void MarkPose(int flag, tf::Pose pose);
+    void Exercise(InlineRobotCommands *robot);
+    VAR(RvizMarker, boost::shared_ptr<CRvizMarker>)
+    VAR(Robot, InlineRobotCommands*)
+
+    
+};
 
 // Gear Demo 
 #include "Shape.h"

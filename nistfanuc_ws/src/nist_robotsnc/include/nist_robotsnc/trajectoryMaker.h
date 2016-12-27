@@ -185,4 +185,36 @@ private:
     IRate currates;
 };
 
+struct JointTrajectoryMaker {
+    double _cycletime;
+public:
+    JointTrajectoryMaker(double cycletime){
+        _cycletime=cycletime; 
+    }
+    bool evalJointPositionTrajectory(const std::vector<double> &max_vel,
+            const JointState & curjoints,
+            const JointState & lastjoints,
+            const JointState & goaljoints,
+            JointState & nextjoints);
+    bool stopJointPositionTrajectory(CanonStopMotionType stoptype, const std::vector<double> &max_vel,
+        const JointState & curjoints,
+        const JointState & lastjoints,
+        const JointState & goaljoints,
+        JointState & nextjoints);
+   
+};
+
+struct WorldTrajectoryMaker {
+    double _cycletime;
+public:
+    WorldTrajectoryMaker(double cycletime){
+        _cycletime=cycletime; 
+    }
+    bool evalWorldTrajectory(const double &max_vel,
+            const tf::Pose & curpose,
+            const tf::Pose & lastpose,
+            const tf::Pose & goalpose,
+            tf::Pose & nextpose);
+  
+};    
 #endif

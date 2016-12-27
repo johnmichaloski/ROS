@@ -1,0 +1,15 @@
+\hypertarget{group___t_r_a_j}{\section{Trajectory Planning Algorithms}
+\label{group___t_r_a_j}\index{Trajectory Planning Algorithms@{Trajectory Planning Algorithms}}
+}
+
+
+gotraj.\-c  
+
+
+gotraj.\-c Trajectory planning functions
+
+C\-V means constant velocity, C\-A means constant acceleration, C\-J means constant jerk. !
+
+The Go Motion trajectory planning algorithms are based on smooth velocity profiling with bounded speed, acceleration and jerk, called \char`\"{}constant jerk\char`\"{} or \char`\"{}\-S-\/curve\char`\"{} velocity profiling. This gives smoother control than \char`\"{}trapezoidal\char`\"{} velocity profiling, which transitions instantaneously between acceleration and no acceleration and incurs spikes in unbounded jerk.
+
+Constant-\/jerk (C\-J) profiling is shown in Figure 1, a plot of the speed versus time. There are 7 phases to the motion. Phase 1 is a jerk phase, where the acceleration varies smoothly from 0 at time 0 to {\itshape a1} at time {\itshape t1} following the jerk (change in acceleration per unit time) {\itshape j0}. Phase 2 is an acceleration phase, with constant acceleration {\itshape a1} throughout. Phase 3 is a jerk phase (or de-\/jerk phase) with constant (negative) jerk slowing down the acceleration from {\itshape a1} to 0. Phase 4 is a constant speed phase at speed {\itshape v3}. Phase 5 is a constant-\/jerk counterpart to phase 3, where the deceleration varies smoothly from 0 to {\itshape -\/a1}. Phase 6 is a constant-\/acceleration counterpart to phase 2. Phase 7 is a constant-\/jerk counterpart to phase 1, where the deceleration varies smoothly from {\itshape -\/a1} to 0 and motion stops.  Figure 1. Constant jerk velocity profiling. 

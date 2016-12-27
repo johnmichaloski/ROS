@@ -16,9 +16,48 @@
 #include <map>
 #include <iostream>
 CGlobals Globals;
-//ALogger LogFile;
+std::ofstream    ofsRobotURDF;
+std::ofstream    ofsRobotMoveJoint;
+std::ofstream    ofsRobotMoveTo;
+std::ofstream    ofsScene;
+std::ofstream    ofsMotionTrace;
+std::ofstream    ofsRobotExercise;
+std::ofstream    ofsIkFast;
 void DebugBreak() {
     assert(0);
+}
+
+CGlobals::CGlobals()
+{
+    SocketPort = "64444";
+    srand((unsigned int) time(NULL)); //activates the simple randome number generator
+
+}
+
+CGlobals::~CGlobals() {
+    ofsRobotURDF.close();
+    ofsRobotMoveJoint.close();
+    ofsRobotMoveTo.close();
+    ofsScene.close();
+    ofsMotionTrace.close();
+    ofsRobotExercise.close();
+    ofsIkFast.close();
+}
+void CGlobals::DebugSetup()
+{
+    ofsRobotURDF.open(this->ExeDirectory+"RobotUrdf.log", std::ofstream::out);
+    ofsRobotMoveJoint.open(this->ExeDirectory+"MoveJoint.log", std::ofstream::out);
+    ofsScene.open(this->ExeDirectory+"Scene.log", std::ofstream::out);
+    ofsMotionTrace.open(this->ExeDirectory + "Trace.log", std::ofstream::out);
+    //ofsRobotMoveTo.open(this->ExeDirectory + "Moveto.log", std::ofstream::out);
+    ofsRobotMoveTo.copyfmt(ofsMotionTrace); //1
+    ofsRobotMoveTo.clear(ofsMotionTrace.rdstate()); //2
+    ofsRobotMoveTo.basic_ios<char>::rdbuf(ofsMotionTrace.rdbuf());           //3
+    ofsRobotExercise.open(this->ExeDirectory+"Exercise.log", std::ofstream::out);
+    ofsIkFast.copyfmt(ofsRobotExercise);
+    ofsIkFast.clear(ofsRobotExercise.rdstate()); //2
+    ofsIkFast.basic_ios<char>::rdbuf(ofsRobotExercise.rdbuf());           //3
+   
 }
 
 static std::string  LeftTrim (std::string  str)

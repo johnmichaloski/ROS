@@ -379,14 +379,16 @@ void CheckersGame::PhysicalMove(InlineRobotCommands &robot,
     }
     if (rvizgame->IsKing(m)) {
         // Double checker height - for now 
-        // May need to delete and then create?
-        obj->height *= 2;
-        obj->pose = Eigen::Translation3d(Eigen::Vector3d(0, 0, 0.01)) * obj->pose;
-        robot.MoveObject(obj->name, Convert<Eigen::Affine3d, tf::Pose>(obj->pose), 
-                pScene->MARKERCOLOR(checkercolor));
-        ros::spinOnce();
-        ros::spinOnce();
-        ros::spinOnce();
+        // Only 2* level for king
+         if (obj->height == RvizCheckers::HEIGHT) {
+            obj->height *= 2;
+            obj->pose = Eigen::Translation3d(Eigen::Vector3d(0, 0, 0.01)) * obj->pose;
+            robot.MoveObject(obj->name, Convert<Eigen::Affine3d, tf::Pose>(obj->pose),
+                    pScene->MARKERCOLOR(checkercolor));
+            ros::spinOnce();
+            ros::spinOnce();
+            ros::spinOnce();
+        }
     }
 #if 0
     pScene->UpdateScene(checkername1, pose, obj->color);
@@ -459,4 +461,29 @@ void CheckersGame::Play(InlineRobotCommands * red, InlineRobotCommands * black) 
         ros::spinOnce();
         ros::Duration(0.2).sleep();
     }
+}
+
+void ExerciseDemo::MarkPose(int flag, tf::Pose pose) {
+    pose = Robot()->cnc()->basePose() * pose;
+    if (flag == 1)
+        RvizMarker()->SetColor(0.0, 1.0, 0.0, 1.0);
+    else if (flag == 0)
+        RvizMarker()->SetColor(1.0, 0.0, 0.0, 1.0);
+    else if (flag == -1)
+        RvizMarker()->SetColor(1.0, 1.0, 1.0, 1.0);
+    RvizMarker()->Send(pose);
+}
+#include <boost/bind.hpp>
+
+void ExerciseDemo::Exercise(InlineRobotCommands *robot) {
+    pScene->ClearScene();
+    RvizMarker()->Clear();
+    ros::spinOnce();
+    ros::spinOnce();
+    ros::spinOnce();
+    ros::spinOnce();
+    Globals.Sleep(1000);
+    Robot() = robot;
+    Robot()->cnc()->Kinematics()->ENormalize(- M_PI,  M_PI);
+    Robot()->cnc()->Kinematics()->VerifyKinematics(0.25, boost::bind(&ExerciseDemo::MarkPose, this, _1, _2));
 }

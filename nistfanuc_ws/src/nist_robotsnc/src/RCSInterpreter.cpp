@@ -19,21 +19,22 @@
 #include "RCSInterpreter.h"
 #include "Controller.h"
 #include "Globals.h"
-#include "trajectoryMaker.h"
+//#include "trajectoryMaker.h"
 #include "Conversions.h"
 #include "Debug.h"
 #include "nist_robotsnc/MotionException.h"
 
 
-#include "gomotion/gomove.h"
+#define WORLDLOG  std::cout
+//#define WORLDLOG  ofsRobotMoveTo
+#define DebugWorldCommand
 
 using namespace RCS;
 using namespace sensor_msgs;
 
 BangBangInterpreter::BangBangInterpreter(boost::shared_ptr<RCS::CController> nc,
         IKinematicsSharedPtr k)
-//        NearestJointsLookup &hints)
-: _nc(nc), _kinematics(k) { // , _hints(hints) {
+: _nc(nc), _kinematics(k) {
 }
 
 void BangBangInterpreter::SetRange(std::vector<double> minrange, std::vector<double> maxrange) {
@@ -41,7 +42,8 @@ void BangBangInterpreter::SetRange(std::vector<double> minrange, std::vector<dou
     this->maxrange = maxrange;
 }
 
-int BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd) {
+int BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
+        RCS::CanonWorldModel instatus, RCS::CanonWorldModel &outstatus) {
 
     try {
         if (cmd.crclcommand == CanonCmdType::CANON_MOVE_JOINT) {
@@ -82,4 +84,219 @@ int BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd) 
     outcmd = cmd;
     return CanonStatusType::CANON_DONE;
 
+}
+////////////////////////////////////////////////////////////////////////
+
+GoInterpreter::GoInterpreter(boost::shared_ptr<RCS::CController> nc,
+        IKinematicsSharedPtr k)
+: _nc(nc), _kinematics(k), _lastcmdid(-1) {
+    _go = boost::shared_ptr<GoMotion> (new GoMotion());
+}
+
+void GoInterpreter::Init(std::vector<double> initjts) {
+    JointState jts = RCS::EmptyJointState(initjts.size());
+    jts.position = initjts;
+    _go->Init(jts, this->_nc->CycleTime());
+}
+
+void GoInterpreter::SetRange(std::vector<double> minrange, std::vector<double> maxrange) {
+    this->minrange = minrange;
+    this->maxrange = maxrange;
+}
+
+int GoInterpreter::ParseJointCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
+        RCS::CanonWorldModel instatus, RCS::CanonWorldModel &outstatus) {
+    try {
+        cmd.joints = _kinematics->UpdateJointState(cmd.jointnum, instatus.currentjoints, cmd.joints);
+
+#if defined(DEBUG)  &&  defined(DebugJointCommand)
+        ofsRobotMoveJoint << _nc->Name().c_str() << "CANON_MOVE_JOINT: " << "\n";
+        ofsRobotMoveJoint << "  Current Joints " << RCS::VectorDump<double>(instatus.currentjoints.position).c_str() << "\n";
+        ofsRobotMoveJoint << "  Goal Joints " << RCS::VectorDump<double>(cmd.joints.position).c_str() << "\n";
+        ofsRobotMoveJoint << "  Command Num " << cmd.CommandNum() << "\n" << std::flush;
+#endif
+        if (cmd.CommandNum() != _lastcmdid) {
+            _lastcmdid = cmd.CommandNum();
+            _go->InitJoints(instatus.currentjoints, cmd.joints, this->_nc->CycleTime(),
+                    gomotion::GoMotionParams(1.0, 10.0, 100.0)); // 1 meter/sec
+
+        }
+
+        outcmd = cmd;
+        outcmd.joints = _go->NextJoints();
+#if defined(DEBUG)    &&  defined(DebugJointCommand)
+        LOG_DEBUG << "  Next Joints " << RCS::VectorDump<double>(outcmd.joints.position).c_str();
+#endif 
+    } catch (MotionException & e) {
+        LOG_DEBUG << "Exception in  GoInterpreter::ParseCommand() thread: " << e.what() << "\n";
+        cmd.crclcommand = CanonCmdType::CANON_STOP_MOTION;
+        cmd.opmessage = e.what();
+        cmd.stoptype = CanonStopMotionType::NORMAL;
+        outcmd = cmd;
+        return CanonStatusType::CANON_ERROR;
+    } catch (std::exception & e) {
+        LOG_DEBUG << "Exception in  GoInterpreter::ParseCommand() thread: " << e.what() << "\n";
+        cmd.crclcommand = CanonCmdType::CANON_STOP_MOTION;
+        cmd.opmessage = e.what();
+        cmd.stoptype = CanonStopMotionType::NORMAL;
+        outcmd = cmd;
+        return CanonStatusType::CANON_ERROR;
+    }
+
+    if (_go->IsDone())
+        return CanonStatusType::CANON_DONE;
+    else
+        return CanonStatusType::CANON_WORKING;
+}
+
+int GoInterpreter::ParseWorldCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
+        RCS::CanonWorldModel instatus, RCS::CanonWorldModel &outstatus) {
+    try {
+        tf::Pose finalpose = Conversion::Convert<geometry_msgs::Pose, tf::Pose>(cmd.finalpose);
+        // Need to subtract off tool offset from robot wrist or final tcp
+        //tf::Pose goalpose = finalpose * _nc->invGripperPose();
+        // Need to translate goal pose from world coordinates into robot coordinates
+        //goalpose = _nc->invBasePose() * goalpose;
+        //tf::Pose goalpose = finalpose;
+        tf::Pose lastpose=_kinematics->FK(_nc->status.currentjoints.position);
+        tf::Pose curpose=_nc->basePose() *
+                     lastpose *
+                    _nc->gripperPose();
+        if (cmd.CommandNum() != _lastcmdid) {
+            _lastcmdid = cmd.CommandNum();
+            _go->InitPose(curpose, finalpose, this->_nc->CycleTime(),
+                    gomotion::GoMotionParams(1.0, 10.0, 100.0),
+                    gomotion::GoMotionParams(.1, 1.0, 10.0)); // 1 meter/sec
+            // _go->AppendPose(lastpose);  // NO WAY~!
+
+        }
+        //tf::Pose nextpose = _nc->invGripperPose() * _go->NextPose() * _nc->invBasePose();
+        //tf::Pose goalpose =_nc->invGripperPose() * finalpose * _nc->invBasePose();
+        //tf::Pose nextpose = _nc->invBasePose() * _go->NextPose() * _nc->invGripperPose();
+        tf::Pose goalpose =_nc->invBasePose() * finalpose * _nc->invGripperPose();
+        tf::Pose gopose =  _go->NextPose() ;
+        tf::Pose nextpose = _nc->invBasePose() * gopose * _nc->invGripperPose();
+        
+        WORLDLOG << _nc->Name().c_str() << ": CANON_MOVE_TO" << "\n";
+        WORLDLOG << "WORLD COORDINATES\n";
+        WORLDLOG << "    Final Pose    = " << RCS::DumpPoseSimple(finalpose).c_str() << "\n";
+        WORLDLOG << "    Cur  Pose     = " << RCS::DumpPoseSimple(curpose).c_str() << "\n";
+        WORLDLOG << "    Go      Pose  = " << RCS::DumpPoseSimple(gopose).c_str() << "\n";
+        WORLDLOG << "ROBOT COORDINATES\n";
+        WORLDLOG << "    GoalRobot Pose= " << RCS::DumpPoseSimple(goalpose).c_str() << "\n";
+        WORLDLOG << "    Current   Pose= " << RCS::DumpPoseSimple(lastpose).c_str() << "\n";
+        WORLDLOG << "    NextRobot Pose= " << RCS::DumpPoseSimple(nextpose).c_str() << "\n";
+ 
+        // ikfast solution based on 0,0,0 origin not base offset origin
+        //cmd.joints.position = Cnc.Kinematics()->IK(goalpose, cmd.ConfigMin(), cmd.ConfigMax());
+        JointState goaljoints;
+        goaljoints.position = _kinematics->IK(goalpose, Subset(_nc->status.currentjoints.position, _nc->Kinematics()->NumJoints()));
+        cmd.joints.position = _kinematics->IK(nextpose, Subset(_nc->status.currentjoints.position, _nc->Kinematics()->NumJoints()));
+         _kinematics->IK(lastpose, Subset(_nc->status.currentjoints.position, _nc->Kinematics()->NumJoints()));
+        WORLDLOG << "    Goal Joints     =" << VectorDump<double>(goaljoints.position).c_str() << "\n";
+        WORLDLOG << "    Current Joints  =" << VectorDump<double>(_nc->status.currentjoints.position).c_str() << "\n";
+        WORLDLOG << "    Commanded Joints=" << VectorDump<double>(cmd.joints.position).c_str() << "\n";
+
+#ifdef IKTEST
+        std::vector<std::vector<double> > newjoints;
+        size_t k = _kinematics->AllIK(nextpose, newjoints);
+        WORLDLOG << _nc->Name().c_str() << ": CANON_MOVE_TO" << "\n";
+        for (size_t j = 0; j < k; j++)
+            WORLDLOG << "    IK   Joints   =" << VectorDump<double>(newjoints[j]).c_str() << "\n";
+        WORLDLOG << "    Next Joints   =" << VectorDump<double>(cmd.joinParsets.position).c_str() << "\n";
+        WORLDLOG << "    Next De Joints=" << FcnVectorDump(cmd.joints.position, RCS::ToDegree).c_str() << "\n";
+#endif       
+#if defined(DEBUG)    &&  defined(DebugWorldCommand1)
+        WORLDLOG << _nc->Name().c_str() << ": CANON_MOVE_TO" << "\n";
+        WORLDLOG << "    Final Pose    = " << RCS::DumpPoseSimple(finalpose).c_str() << "\n";
+        WORLDLOG << "    Next  Pose    = " << RCS::DumpPoseSimple(nextpose).c_str() << "\n";
+        WORLDLOG << "    Goal Joints   =" << VectorDump<double>(goaljoints.position).c_str() << "\n";
+        WORLDLOG << "    Current Joints=" << VectorDump<double>(_nc->status.currentjoints.position).c_str() << "\n";
+        WORLDLOG << "    Next Joints   =" << VectorDump<double>(cmd.joints.position).c_str() << "\n";
+#endif        
+        cmd.joints.name = _kinematics->JointNames();
+        cmd.crclcommand = CanonCmdType::CANON_MOVE_JOINT;
+        outcmd = cmd;
+        if (_go->IsDone())
+            return CanonStatusType::CANON_DONE;
+        else
+            return CanonStatusType::CANON_WORKING;
+
+
+    } catch (MotionException & e) {
+        LOG_DEBUG << "Exception in  GoInterpreter::ParseCommand() thread: " << e.what() << "\n";
+        cmd.crclcommand = CanonCmdType::CANON_STOP_MOTION;
+        cmd.opmessage = e.what();
+        cmd.stoptype = CanonStopMotionType::NORMAL;
+        outcmd = cmd;
+        return CanonStatusType::CANON_ERROR;
+    } catch (std::exception & e) {
+        LOG_DEBUG << "Exception in  GoInterpreter::ParseCommand() thread: " << e.what() << "\n";
+        cmd.crclcommand = CanonCmdType::CANON_STOP_MOTION;
+        cmd.opmessage = e.what();
+        cmd.stoptype = CanonStopMotionType::NORMAL;
+        outcmd = cmd;
+        return CanonStatusType::CANON_ERROR;
+    }
+}
+
+int GoInterpreter::ParseStopCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
+        RCS::CanonWorldModel instatus, RCS::CanonWorldModel &outstatus) {
+    try {
+
+        // FIXME: save last command type, then do until done
+        if (cmd.CommandNum() != _lastcmdid) {
+            _lastcmdid = cmd.CommandNum();
+            _go->InitStop();
+        }
+        return CanonStatusType::CANON_STOP;
+        // ??????????????????
+    } catch (MotionException & e) {
+        LOG_DEBUG << "Exception in  GoInterpreter::ParseCommand() thread: " << e.what() << "\n";
+        cmd.crclcommand = CanonCmdType::CANON_STOP_MOTION;
+        cmd.opmessage = e.what();
+        cmd.stoptype = CanonStopMotionType::NORMAL;
+        outcmd = cmd;
+        return CanonStatusType::CANON_ERROR;
+    } catch (std::exception & e) {
+        LOG_DEBUG << "Exception in  GoInterpreter::ParseCommand() thread: " << e.what() << "\n";
+        cmd.crclcommand = CanonCmdType::CANON_STOP_MOTION;
+        cmd.opmessage = e.what();
+        cmd.stoptype = CanonStopMotionType::NORMAL;
+        outcmd = cmd;
+        return CanonStatusType::CANON_ERROR;
+    }
+}
+
+int GoInterpreter::ParseCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
+        RCS::CanonWorldModel instatus, RCS::CanonWorldModel &outstatus) {
+
+    try {
+        if (cmd.crclcommand == CanonCmdType::CANON_MOVE_JOINT) {
+            return ParseJointCommand(cmd, outcmd, instatus, outstatus);
+        } else if (cmd.crclcommand == CanonCmdType::CANON_MOVE_TO) {
+            return ParseWorldCommand(cmd, outcmd, instatus, outstatus);
+        } else if (cmd.crclcommand == CanonCmdType::CANON_STOP_MOTION) {
+            return ParseStopCommand(cmd, outcmd, instatus, outstatus);
+        } else if (cmd.crclcommand == CanonCmdType::CANON_DWELL ||
+                cmd.crclcommand == CanonCmdType::CANON_SET_GRIPPER ||
+                cmd.crclcommand == CanonCmdType::CANON_OPEN_GRIPPER ||
+                cmd.crclcommand == CanonCmdType::CANON_CLOSE_GRIPPER) {
+            outcmd = cmd;
+            return CanonStatusType::CANON_DONE;
+        } else if (cmd.crclcommand == CanonCmdType::CANON_DRAW_OBJECT ||
+                cmd.crclcommand == CanonCmdType::CANON_ERASE_OBJECT) {
+            outcmd = cmd;
+            return CanonStatusType::CANON_DONE;
+        }
+    } catch (MotionException & e) {
+        LOG_DEBUG << "Exception in  GoInterpreter::ParseCommand() thread: " << e.what() << "\n";
+        cmd.crclcommand = CanonCmdType::CANON_STOP_MOTION;
+        cmd.opmessage = e.what();
+        cmd.stoptype = CanonStopMotionType::NORMAL;
+        outcmd = cmd;
+        return CanonStatusType::CANON_ERROR;
+    }
+    // Eventually should never get here 
+    return CanonStatusType::CANON_NOTIMPLEMENTED;
 }

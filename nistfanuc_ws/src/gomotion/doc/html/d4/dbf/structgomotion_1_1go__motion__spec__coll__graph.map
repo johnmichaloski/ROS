@@ -1,0 +1,6 @@
+<map id="gomotion::go_motion_spec" name="gomotion::go_motion_spec">
+<area shape="rect" id="node2" href="$d0/d59/structgomotion_1_1go__motion__circular__params.html" title="gomotion::go_motion\l_circular_params" alt="" coords="8,5,149,46"/>
+<area shape="rect" id="node3" href="$d6/dd5/structgomotion_1_1go__motion__linear__params.html" title="In the following comments, LIN, CIR and ALL refer to linear moves, circular moves and both..." alt="" coords="8,70,149,111"/>
+<area shape="rect" id="node4" href="$d1/d55/structgomotion_1_1go__position.html" title="Container for a joint position or Cartesian position. Depending upon whether you are doing joint inte..." alt="" coords="5,137,152,164"/>
+<area shape="rect" id="node5" href="$d6/d14/structgomotion_1_1go__motion__params.html" title="gomotion::go_motion\l_params" alt="" coords="8,189,149,230"/>
+</map>

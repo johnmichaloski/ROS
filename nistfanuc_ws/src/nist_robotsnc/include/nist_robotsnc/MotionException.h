@@ -18,7 +18,6 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 #include <map>
 #include <stdarg.h>
 
-#include <boost/locale.hpp>
 
 //#include <locale>
 // IKFAST std::runtime_error("max solutions for joint not initialized")

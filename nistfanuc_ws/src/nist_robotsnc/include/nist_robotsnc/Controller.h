@@ -61,12 +61,6 @@ namespace RCS {
 
         ~CController(void);
         bool IsBusy();
-        RCS::CanonWorldModel status; /**< current status of controller */
-        RCS::CanonWorldModel laststatus; /**< last status of controller */
-        RCS::CMessageQueue<nistcrcl::CrclCommandMsg > crclcmds; /**< queue of commands interpreted from Crcl messages */
-        std::list<RCS::CanonCmd> donecmds; /**< list of commands interpreted from Crcl messages that have completed*/
-        RCS::CMessageQueue<RCS::CanonCmd> robotcmds; /**< list of commands to be sent to robot */
-
         /*!
          *\brief Verifies that all the pointer references in the controller have been instantiated (i.e., not null).
          */
@@ -92,8 +86,72 @@ namespace RCS {
          *\brief Creates a header line containing names of comma separated string fields that describes the current state of robot. (Can use other separator). 
          */
         std::string DumpHeader(std::string separator = ",");
+         /*!
+         *\brief Set tool (or end effector) offset, i.e., pose at end of robot arm
+         */               
+        void SetToolOffset(RCS::Pose offset) {
+            _gripperPose = offset;
+            _invGripperPose = offset.inverse();
+        }
+         /*!
+         *\brief Set base offset from world into robot coordinate system as pose (or homogeneous matrice)
+         */  
+        void SetBaseOffset(RCS::Pose offset) {
+            _basePose = offset;
+            _invBasePose = offset.inverse();
+        }
+        
+        // CRCL interface
+        ros::Publisher crcl_status; /**< ros publisher information used for crcl status updates */
+        ros::Subscriber crcl_cmd; /**< ros subscriber information used for crcl command updates */
+        void CmdCallback(const nistcrcl::CrclCommandMsg::ConstPtr& cmdmsg);
+        void PublishCrclStatus();
+         /*!
+         *\brief Logs last robot pose and position to file. (if enabled).
+         */ 
+        void MotionLogging();
+
+        /*!
+         *\brief Routine to set the kinematics reference pointer. Uses the interface class IKinematics, but can have any implementation instance. 
+         */
+        void SetKinematics(boost::shared_ptr<IKinematics> k) {
+            Kinematics() = k;
+            //          _interpreter->_kinematics = k;
+        }
+
+        RCS::CanonCmd GetLastRobotCommand();
+
+        /*!
+         *\brief Get the last joint state, if no motion, last actual joint reading, else last joints on robot motion queue. 
+         */
+        JointState GetLastJointState();
+
+        /*!
+         *\brief Get the last commanded , if no motion, use last actual joint reading to compute FK, 
+         * else use last joints on robot motion queue to compute FK. 
+         */
+        RCS::Pose GetLastCommandedPose();
+
+        ////////////////////////////////////////////////
+        static ros::Publisher rviz_jntcmd; /**< ros publisher information for joint_publisher */
+        static bool bRvizPubSetup;
+
+        std::map<std::string, std::vector<double>> NamedJointMove;
+        GripperInterface gripper;
+
+        RCS::CanonWorldModel status; /**< current status of controller */
+        RCS::CanonWorldModel laststatus; /**< last status of controller */
+        RCS::CMessageQueue<nistcrcl::CrclCommandMsg > crclcmds; /**< queue of commands interpreted from Crcl messages */
+        
+        unsigned long _robotcmd;
+        RCS::CMessageQueue<RCS::CanonCmd> robotcmds; /**< list of commands to be sent to robot */
+        std::list<RCS::CanonCmd> donecmds; /**< list of commands interpreted from Crcl messages that have completed*/
+
+        NVAR(NewCC, RCS::CanonCmd, _newcc);/**<  current new canon command to interpret*/
+        NVAR(LastCC, RCS::CanonCmd, _lastcc); /**<  last canon command interpreted */
 
         VAR(Name, std::string);
+        VAR(Interpreter, boost::shared_ptr<IRCSInterpreter>);
         VAR(Kinematics, boost::shared_ptr<IKinematics>);
         VAR(JointWriter, boost::shared_ptr<CJointWriter>);
         VAR(RvizMarker, boost::shared_ptr<CRvizMarker>)
@@ -110,71 +168,15 @@ namespace RCS {
         VAR(invBasePose, RCS::Pose);
         VAR(QBend, tf::Quaternion);
 
-
         ros::NodeHandle *_nh;
-
-        void SetToolOffset(RCS::Pose offset) {
-            _gripperPose = offset;
-            _invGripperPose = offset.inverse();
-        }
-
-        void SetBaseOffset(RCS::Pose offset) {
-            _basePose = offset;
-            _invBasePose = offset.inverse();
-        }
-        ros::Publisher crcl_status; /**< ros publisher information used for crcl status updates */
-        ros::Subscriber crcl_cmd; /**< ros subscriber information used for crcl command updates */
-        void CmdCallback(const nistcrcl::CrclCommandMsg::ConstPtr& cmdmsg);
-
-        static ros::Publisher rviz_jntcmd; /**< ros publisher information for joint_publisher */
-        static bool bRvizPubSetup;
-
-        std::map<std::string, std::vector<double>> NamedJointMove;
-        GripperInterface gripper;
-        void MotionLogging();
-        void PublishCrclStatus();
-
-
-
-        //VAR(NearestJoints, NearestJointsLookup);
-
-        /*!
-         *\brief Routine to set the kinematics reference pointer. Uses the interface class IKinematics, but can have any implementation instance. 
-         */
-        void SetKinematics(boost::shared_ptr<IKinematics> k) {
-            Kinematics() = k;
-            //          _interpreter->_kinematics = k;
-        }
-
-        boost::shared_ptr<IRCSInterpreter> _interpreter; /**<  interprets canon commands into robot commands */
-
-        /**<  current new canon command to interpret*/
-        NVAR(NewCC, RCS::CanonCmd, _newcc);
-
-        /**<  last canon command interpreted */
-        NVAR(LastCC, RCS::CanonCmd, _lastcc);
-
-        RCS::CanonCmd GetLastRobotCommand();
-
-        /*!
-         *\brief Get the last joint state, if no motion, last actual joint reading, else last joints on robot motion queue. 
-         */
-        JointState GetLastJointState();
-
-        /*!
-         *\brief Get the last commanded , if no motion, use last actual joint reading to compute FK, 
-         * else use last joints on robot motion queue to compute FK. 
-         */
-        RCS::Pose GetLastCommandedPose();
-
 
         //         static unsigned long _csvlogFlag;
 
-        enum MotionPlannerEnum {
-            NOPLANNER = 0, MOVEIT, DESCARTES, BASIC, WAYPOINT, GOMOTION
-        };
-        MotionPlannerEnum eCartesianMotionPlanner; /**< type of cartesian motion to use */
-        MotionPlannerEnum eJointMotionPlanner; /**< type of joint motion to use */
+//        enum MotionPlannerEnum {
+//            NOPLANNER = 0, MOVEIT, DESCARTES, BASIC, WAYPOINT, GOMOTION
+//        };
+//        MotionPlannerEnum eCartesianMotionPlanner; /**< type of cartesian motion to use */
+//        MotionPlannerEnum eJointMotionPlanner; /**< type of joint motion to use */
     };
     //extern CController Fnc; /**< global declaration of Fanuc controller */
     // extern CController Mnc; /**< global declaration of Motoman controller */

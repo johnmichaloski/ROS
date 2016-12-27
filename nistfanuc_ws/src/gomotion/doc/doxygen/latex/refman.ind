@@ -1,0 +1,2325 @@
+\begin{theindex}
+
+  \item {/usr/local/michalos/nistfanuc\discretionary {-}{}{}\_\discretionary {-}{}{}ws/src/gomotion/include/gomotion/gointerp.\discretionary {-}{}{}h}, 
+		\hyperpage{85}
+  \item {/usr/local/michalos/nistfanuc\discretionary {-}{}{}\_\discretionary {-}{}{}ws/src/gomotion/include/gomotion/gomath.\discretionary {-}{}{}h}, 
+		\hyperpage{86}
+  \item {/usr/local/michalos/nistfanuc\discretionary {-}{}{}\_\discretionary {-}{}{}ws/src/gomotion/include/gomotion/gomotion.\discretionary {-}{}{}h}, 
+		\hyperpage{95}
+  \item {/usr/local/michalos/nistfanuc\discretionary {-}{}{}\_\discretionary {-}{}{}ws/src/gomotion/include/gomotion/gomove.\discretionary {-}{}{}h}, 
+		\hyperpage{97}
+  \item {/usr/local/michalos/nistfanuc\discretionary {-}{}{}\_\discretionary {-}{}{}ws/src/gomotion/include/gomotion/gotraj.\discretionary {-}{}{}h}, 
+		\hyperpage{99}
+  \item {/usr/local/michalos/nistfanuc\discretionary {-}{}{}\_\discretionary {-}{}{}ws/src/gomotion/include/gomotion/gotypes.\discretionary {-}{}{}h}, 
+		\hyperpage{101}
+  \item {/usr/local/michalos/nistfanuc\discretionary {-}{}{}\_\discretionary {-}{}{}ws/src/gomotion/src/gointerp.\discretionary {-}{}{}cpp}, 
+		\hyperpage{105}
+  \item {/usr/local/michalos/nistfanuc\discretionary {-}{}{}\_\discretionary {-}{}{}ws/src/gomotion/src/gomath.\discretionary {-}{}{}cpp}, 
+		\hyperpage{106}
+  \item {/usr/local/michalos/nistfanuc\discretionary {-}{}{}\_\discretionary {-}{}{}ws/src/gomotion/src/gomotion.\discretionary {-}{}{}cpp}, 
+		\hyperpage{110}
+  \item {/usr/local/michalos/nistfanuc\discretionary {-}{}{}\_\discretionary {-}{}{}ws/src/gomotion/src/gomove.\discretionary {-}{}{}cpp}, 
+		\hyperpage{112}
+  \item {/usr/local/michalos/nistfanuc\discretionary {-}{}{}\_\discretionary {-}{}{}ws/src/gomotion/src/gotraj.\discretionary {-}{}{}cpp}, 
+		\hyperpage{112}
+  \item {/usr/local/michalos/nistfanuc\discretionary {-}{}{}\_\discretionary {-}{}{}ws/src/gomotion/src/gotypes.\discretionary {-}{}{}c}, 
+		\hyperpage{114}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}deltat}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}interface}, 
+		\hyperpage{53}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}end}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}endptr}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}gmq}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}interface}, 
+		\hyperpage{53}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}gms}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}interface}, 
+		\hyperpage{53}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}here}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{59}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}id}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}interface}, 
+		\hyperpage{53}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}joint\discretionary {-}{}{}\_\discretionary {-}{}{}num}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{59}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}last\discretionary {-}{}{}\_\discretionary {-}{}{}id}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{59}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}number}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{59}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}position}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}interface}, 
+		\hyperpage{53}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}queuesize}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}interface}, 
+		\hyperpage{53}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}size}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{59}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}space}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}interface}, 
+		\hyperpage{54}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}start}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{59}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}startptr}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{59}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}there}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{59}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}time}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{59}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}timescale}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{59}
+  \item {\discretionary {-}{}{}\_\discretionary {-}{}{}type}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}interface}, 
+		\hyperpage{54}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{59}
+
+  \indexspace
+
+  \item {a}
+    \subitem {gomotion\discretionary {-}{}{}::coeff}, \hyperpage{39}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}cubic}, 
+		\hyperpage{41}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}dh}, 
+		\hyperpage{42}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{46}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}quadratic}, 
+		\hyperpage{68}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}quartic}, 
+		\hyperpage{68}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}interp\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{78}
+  \item {acc}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{55}
+    \subitem {gomotion\discretionary {-}{}{}::\discretionary {-}{}{}Go\discretionary {-}{}{}Motion\discretionary {-}{}{}Params}, 
+		\hyperpage{83}
+  \item {add\discretionary {-}{}{}\_\discretionary {-}{}{}constant}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{45}
+  \item {add\discretionary {-}{}{}\_\discretionary {-}{}{}cubic\discretionary {-}{}{}\_\discretionary {-}{}{}pdv}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{45}
+  \item {add\discretionary {-}{}{}\_\discretionary {-}{}{}cubic\discretionary {-}{}{}\_\discretionary {-}{}{}pf}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{45}
+  \item {add\discretionary {-}{}{}\_\discretionary {-}{}{}cubic\discretionary {-}{}{}\_\discretionary {-}{}{}pv}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{45}
+  \item {add\discretionary {-}{}{}\_\discretionary {-}{}{}func}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{45}
+  \item {add\discretionary {-}{}{}\_\discretionary {-}{}{}linear}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{45}
+  \item {add\discretionary {-}{}{}\_\discretionary {-}{}{}quintic\discretionary {-}{}{}\_\discretionary {-}{}{}pdva}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{45}
+  \item {add\discretionary {-}{}{}\_\discretionary {-}{}{}quintic\discretionary {-}{}{}\_\discretionary {-}{}{}pf}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{45}
+  \item {add\discretionary {-}{}{}\_\discretionary {-}{}{}quintic\discretionary {-}{}{}\_\discretionary {-}{}{}pva}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{45}
+  \item {add\discretionary {-}{}{}\_\discretionary {-}{}{}quintic\discretionary {-}{}{}\_\discretionary {-}{}{}pvda}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{45}
+  \item {alpha}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}dh}, 
+		\hyperpage{42}
+  \item {append}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{57}
+  \item {append\discretionary {-}{}{}\_\discretionary {-}{}{}joint}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{57}
+  \item {append\discretionary {-}{}{}\_\discretionary {-}{}{}ujoint}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{57}
+  \item {append\discretionary {-}{}{}\_\discretionary {-}{}{}world}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{57}
+  \item {at0}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{74}
+  \item {at1}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{76}
+
+  \indexspace
+
+  \item {b}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}cubic}, 
+		\hyperpage{41}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}quadratic}, 
+		\hyperpage{68}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}quartic}, 
+		\hyperpage{68}
+  \item {base}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}pk}, 
+		\hyperpage{63}
+  \item {body}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}link}, 
+		\hyperpage{48}
+
+  \indexspace
+
+  \item {c}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}cubic}, 
+		\hyperpage{41}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}quartic}, 
+		\hyperpage{68}
+  \item {C\-O\-E\-F\-F\-\_\-\-M\-A\-X}
+    \subitem {gomotion}, \hyperpage{21}
+  \item {C\discretionary {-}{}{}B\discretionary {-}{}{}R\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}I\discretionary {-}{}{}S\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}P\discretionary {-}{}{}O\discretionary {-}{}{}W}
+    \subitem {gomath.\discretionary {-}{}{}cpp}, \hyperpage{110}
+  \item {C\discretionary {-}{}{}O\discretionary {-}{}{}L\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}I\discretionary {-}{}{}S\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}U\discretionary {-}{}{}N\discretionary {-}{}{}I\discretionary {-}{}{}T}
+    \subitem {gomath.\discretionary {-}{}{}cpp}, \hyperpage{110}
+  \item {calc\discretionary {-}{}{}\_\discretionary {-}{}{}coeff\discretionary {-}{}{}\_\discretionary {-}{}{}bc}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{45}
+  \item {calc\discretionary {-}{}{}\_\discretionary {-}{}{}coeff\discretionary {-}{}{}\_\discretionary {-}{}{}constant}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{45}
+  \item {calc\discretionary {-}{}{}\_\discretionary {-}{}{}coeff\discretionary {-}{}{}\_\discretionary {-}{}{}cubic\discretionary {-}{}{}\_\discretionary {-}{}{}bc}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{45}
+  \item {calc\discretionary {-}{}{}\_\discretionary {-}{}{}coeff\discretionary {-}{}{}\_\discretionary {-}{}{}cubic\discretionary {-}{}{}\_\discretionary {-}{}{}pf}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{46}
+  \item {calc\discretionary {-}{}{}\_\discretionary {-}{}{}coeff\discretionary {-}{}{}\_\discretionary {-}{}{}linear}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{46}
+  \item {calc\discretionary {-}{}{}\_\discretionary {-}{}{}coeff\discretionary {-}{}{}\_\discretionary {-}{}{}pf}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{46}
+  \item {calc\discretionary {-}{}{}\_\discretionary {-}{}{}coeff\discretionary {-}{}{}\_\discretionary {-}{}{}quintic\discretionary {-}{}{}\_\discretionary {-}{}{}bc}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{46}
+  \item {calc\discretionary {-}{}{}\_\discretionary {-}{}{}coeff\discretionary {-}{}{}\_\discretionary {-}{}{}quintic\discretionary {-}{}{}\_\discretionary {-}{}{}pf}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{46}
+  \item {center}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}circular\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{52}
+  \item {cj}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{61}
+  \item {cols}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix}, 
+		\hyperpage{50}
+  \item {cpar}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{61}
+
+  \indexspace
+
+  \item {d}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}dh}, 
+		\hyperpage{42}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}pk}, 
+		\hyperpage{63}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}plane}, 
+		\hyperpage{64}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}quartic}, 
+		\hyperpage{68}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}interp\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{78}
+  \item {dh}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}link}, 
+		\hyperpage{48}
+  \item {direction}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}line}, 
+		\hyperpage{47}
+  \item {drop\discretionary {-}{}{}\_\discretionary {-}{}{}pending}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{57}
+  \item {dt1}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{74}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{76}
+  \item {dt2}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{74}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{76}
+  \item {dt3}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{76}
+  \item {dt4}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{76}
+  \item {dt5}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{76}
+  \item {dt6}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{76}
+  \item {dtend}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{74}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{76}
+
+  \indexspace
+
+  \item {el}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix}, 
+		\hyperpage{50}
+  \item {elcpy}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix}, 
+		\hyperpage{50}
+  \item {end}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{61}
+  \item {erase}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{57}
+  \item {eval}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{72}
+  \item {eval\discretionary {-}{}{}\_\discretionary {-}{}{}constant}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{46}
+  \item {eval\discretionary {-}{}{}\_\discretionary {-}{}{}cubic}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{46}
+  \item {eval\discretionary {-}{}{}\_\discretionary {-}{}{}func}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{45}
+  \item {eval\discretionary {-}{}{}\_\discretionary {-}{}{}linear}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{46}
+  \item {eval\discretionary {-}{}{}\_\discretionary {-}{}{}quintic}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{46}
+
+  \indexspace
+
+  \item {G\-O\-\_\-\-L\-I\-N\-K\-\_\-\-D\-H}
+    \subitem {gomotion}, \hyperpage{21}
+  \item {G\-O\-\_\-\-L\-I\-N\-K\-\_\-\-P\-K}
+    \subitem {gomotion}, \hyperpage{21}
+  \item {G\-O\-\_\-\-L\-I\-N\-K\-\_\-\-P\-P}
+    \subitem {gomotion}, \hyperpage{21}
+  \item {G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-C\-I\-R\-C\-U\-L\-A\-R}
+    \subitem {gomotion}, \hyperpage{22}
+  \item {G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-J\-O\-I\-N\-T}
+    \subitem {gomotion}, \hyperpage{22}
+  \item {G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-L\-I\-N\-E\-A\-R}
+    \subitem {gomotion}, \hyperpage{22}
+  \item {G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-N\-O\-N\-E}
+    \subitem {gomotion}, \hyperpage{22}
+  \item {G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-U\-J\-O\-I\-N\-T}
+    \subitem {gomotion}, \hyperpage{22}
+  \item {G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-W\-O\-R\-L\-D}
+    \subitem {gomotion}, \hyperpage{22}
+  \item {G\-O\-\_\-\-Q\-U\-A\-N\-T\-I\-T\-Y\-\_\-\-A\-N\-G\-L\-E}
+    \subitem {gotypes.\-h}, \hyperpage{104}
+  \item {G\-O\-\_\-\-Q\-U\-A\-N\-T\-I\-T\-Y\-\_\-\-L\-E\-N\-G\-T\-H}
+    \subitem {gotypes.\-h}, \hyperpage{104}
+  \item {G\-O\-\_\-\-Q\-U\-A\-N\-T\-I\-T\-Y\-\_\-\-N\-O\-N\-E}
+    \subitem {gotypes.\-h}, \hyperpage{104}
+  \item {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-B\-A\-D\-\_\-\-A\-R\-G\-S}
+    \subitem {gotypes.\-h}, \hyperpage{104}
+  \item {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-B\-U\-G}
+    \subitem {gotypes.\-h}, \hyperpage{104}
+  \item {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-D\-I\-V\-\_\-\-E\-R\-R\-O\-R}
+    \subitem {gotypes.\-h}, \hyperpage{104}
+  \item {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-D\-O\-M\-A\-I\-N\-\_\-\-E\-R\-R\-O\-R}
+    \subitem {gotypes.\-h}, \hyperpage{104}
+  \item {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-E\-M\-P\-T\-Y}
+    \subitem {gotypes.\-h}, \hyperpage{104}
+  \item {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-E\-R\-R\-O\-R}
+    \subitem {gotypes.\-h}, \hyperpage{104}
+  \item {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-I\-G\-N\-O\-R\-E\-D}
+    \subitem {gotypes.\-h}, \hyperpage{104}
+  \item {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-I\-M\-P\-L\-\_\-\-E\-R\-R\-O\-R}
+    \subitem {gotypes.\-h}, \hyperpage{104}
+  \item {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-N\-O\-\_\-\-S\-P\-A\-C\-E}
+    \subitem {gotypes.\-h}, \hyperpage{104}
+  \item {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-N\-O\-R\-M\-\_\-\-E\-R\-R\-O\-R}
+    \subitem {gotypes.\-h}, \hyperpage{104}
+  \item {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-O\-K}
+    \subitem {gotypes.\-h}, \hyperpage{104}
+  \item {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-R\-A\-N\-G\-E\-\_\-\-E\-R\-R\-O\-R}
+    \subitem {gotypes.\-h}, \hyperpage{104}
+  \item {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-S\-I\-N\-G\-U\-L\-A\-R}
+    \subitem {gotypes.\-h}, \hyperpage{104}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}2\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}P\discretionary {-}{}{}I}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{93}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}C\discretionary {-}{}{}L\discretionary {-}{}{}O\discretionary {-}{}{}S\discretionary {-}{}{}E}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{93}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}F\discretionary {-}{}{}L\discretionary {-}{}{}A\discretionary {-}{}{}G}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{103}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}F\discretionary {-}{}{}L\discretionary {-}{}{}A\discretionary {-}{}{}G\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}U\discretionary {-}{}{}C\discretionary {-}{}{}H\discretionary {-}{}{}A\discretionary {-}{}{}R}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{103}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}I\discretionary {-}{}{}N\discretionary {-}{}{}F}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{103}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}I\discretionary {-}{}{}N\discretionary {-}{}{}T\discretionary {-}{}{}E\discretionary {-}{}{}G\discretionary {-}{}{}E\discretionary {-}{}{}R}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{103}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}I\discretionary {-}{}{}N\discretionary {-}{}{}T\discretionary {-}{}{}E\discretionary {-}{}{}G\discretionary {-}{}{}E\discretionary {-}{}{}R\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}I\discretionary {-}{}{}N\discretionary {-}{}{}T}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{103}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}I\discretionary {-}{}{}N\discretionary {-}{}{}T\discretionary {-}{}{}E\discretionary {-}{}{}G\discretionary {-}{}{}E\discretionary {-}{}{}R\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}M\discretionary {-}{}{}A\discretionary {-}{}{}X}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{103}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}M\discretionary {-}{}{}A\discretionary {-}{}{}T\discretionary {-}{}{}R\discretionary {-}{}{}I\discretionary {-}{}{}X\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}D\discretionary {-}{}{}E\discretionary {-}{}{}C\discretionary {-}{}{}L\discretionary {-}{}{}A\discretionary {-}{}{}R\discretionary {-}{}{}E}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{93}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}P\discretionary {-}{}{}I}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{94}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}P\discretionary {-}{}{}I\discretionary {-}{}{}\_\discretionary {-}{}{}2}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{94}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}P\discretionary {-}{}{}I\discretionary {-}{}{}\_\discretionary {-}{}{}4}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{94}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}E\discretionary {-}{}{}A\discretionary {-}{}{}L}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{103}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}E\discretionary {-}{}{}A\discretionary {-}{}{}L\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}D\discretionary {-}{}{}O\discretionary {-}{}{}U\discretionary {-}{}{}B\discretionary {-}{}{}L\discretionary {-}{}{}E}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{103}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}E\discretionary {-}{}{}A\discretionary {-}{}{}L\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}E\discretionary {-}{}{}P\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}L\discretionary {-}{}{}O\discretionary {-}{}{}N}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{103}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}E\discretionary {-}{}{}A\discretionary {-}{}{}L\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}M\discretionary {-}{}{}A\discretionary {-}{}{}X}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{103}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}E\discretionary {-}{}{}A\discretionary {-}{}{}L\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}M\discretionary {-}{}{}I\discretionary {-}{}{}N}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{103}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}E\discretionary {-}{}{}S\discretionary {-}{}{}U\discretionary {-}{}{}L\discretionary {-}{}{}T}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{103}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}E\discretionary {-}{}{}S\discretionary {-}{}{}U\discretionary {-}{}{}L\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}I\discretionary {-}{}{}N\discretionary {-}{}{}T}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{103}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}O\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}C\discretionary {-}{}{}L\discretionary {-}{}{}O\discretionary {-}{}{}S\discretionary {-}{}{}E}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{94}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}O\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}M\discretionary {-}{}{}A\discretionary {-}{}{}L\discretionary {-}{}{}L}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{94}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}M\discretionary {-}{}{}A\discretionary {-}{}{}L\discretionary {-}{}{}L}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{94}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}T\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}D\discretionary {-}{}{}E\discretionary {-}{}{}G}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{95}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}T\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}A\discretionary {-}{}{}D}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{95}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}T\discretionary {-}{}{}R\discretionary {-}{}{}A\discretionary {-}{}{}N\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}C\discretionary {-}{}{}L\discretionary {-}{}{}O\discretionary {-}{}{}S\discretionary {-}{}{}E}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{95}
+  \item {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}T\discretionary {-}{}{}R\discretionary {-}{}{}A\discretionary {-}{}{}N\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}M\discretionary {-}{}{}A\discretionary {-}{}{}L\discretionary {-}{}{}L}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{95}
+  \item {get\discretionary {-}{}{}\_\discretionary {-}{}{}id}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{61}
+  \item {get\discretionary {-}{}{}\_\discretionary {-}{}{}joint\discretionary {-}{}{}\_\discretionary {-}{}{}number}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{57}
+  \item {get\discretionary {-}{}{}\_\discretionary {-}{}{}type}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{57}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{61}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}acoses}
+    \subitem {gomotion}, \hyperpage{22}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}asines}
+    \subitem {gomotion}, \hyperpage{22}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}atans}
+    \subitem {gomotion}, \hyperpage{22}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}body\discretionary {-}{}{}\_\discretionary {-}{}{}copy}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{93}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}body\discretionary {-}{}{}\_\discretionary {-}{}{}init}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{93}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}add}
+    \subitem {gomotion}, \hyperpage{22}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}angle}
+    \subitem {gomotion}, \hyperpage{22}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}compare}
+    \subitem {gomotion}, \hyperpage{22}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cross}
+    \subitem {gomotion}, \hyperpage{22}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}disp}
+    \subitem {gomotion}, \hyperpage{22}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}dot}
+    \subitem {gomotion}, \hyperpage{22}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}par}
+    \subitem {gomotion}, \hyperpage{22}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}perp}
+    \subitem {gomotion}, \hyperpage{22}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}pose}
+    \subitem {gomotion}, \hyperpage{22}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}proj}
+    \subitem {gomotion}, \hyperpage{23}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}rot}
+    \subitem {gomotion}, \hyperpage{23}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}sub}
+    \subitem {gomotion}, \hyperpage{23}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}centroid}
+    \subitem {gomotion}, \hyperpage{23}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}centroidize}
+    \subitem {gomotion}, \hyperpage{23}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cyl\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{23}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}is\discretionary {-}{}{}\_\discretionary {-}{}{}norm}
+    \subitem {gomotion}, \hyperpage{23}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}mag}
+    \subitem {gomotion}, \hyperpage{23}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}magsq}
+    \subitem {gomotion}, \hyperpage{23}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}neg}
+    \subitem {gomotion}, \hyperpage{23}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}normal}
+    \subitem {gomotion}, \hyperpage{23}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}proj}
+    \subitem {gomotion}, \hyperpage{23}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{23}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{23}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}sph\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{23}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}trilaterate}
+    \subitem {gomotion}, \hyperpage{23}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}unit}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}vector\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}zero}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cbrt}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}add}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}arg}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}cbrt}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}div}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}inv}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}mag}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}magsq}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}scale}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}sq}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}sqrt}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}sub}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cub}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{93}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cubic\discretionary {-}{}{}\_\discretionary {-}{}{}solve}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cyl\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}cyl\discretionary {-}{}{}\_\discretionary {-}{}{}sph\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}dh\discretionary {-}{}{}\_\discretionary {-}{}{}hom\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{24}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}dh\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{25}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}exit}
+    \subitem {gotraj.\discretionary {-}{}{}cpp}, \hyperpage{113}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}flag}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{104}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}flag\discretionary {-}{}{}\_\discretionary {-}{}{}uchar}
+    \subitem {gotraj.\discretionary {-}{}{}cpp}, \hyperpage{113}
+    \subitem {gotypes.\discretionary {-}{}{}c}, \hyperpage{114}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{105}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}get\discretionary {-}{}{}\_\discretionary {-}{}{}singular\discretionary {-}{}{}\_\discretionary {-}{}{}epsilon}
+    \subitem {gomotion}, \hyperpage{25}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}hom\discretionary {-}{}{}\_\discretionary {-}{}{}dh\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{25}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}hom\discretionary {-}{}{}\_\discretionary {-}{}{}hom\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{25}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}hom\discretionary {-}{}{}\_\discretionary {-}{}{}inv}
+    \subitem {gomotion}, \hyperpage{25}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}hom\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{25}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}init}
+    \subitem {gotraj.\discretionary {-}{}{}cpp}, \hyperpage{113}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}integer}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{104}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}integer\discretionary {-}{}{}\_\discretionary {-}{}{}int}
+    \subitem {gotraj.\discretionary {-}{}{}cpp}, \hyperpage{114}
+    \subitem {gotypes.\discretionary {-}{}{}c}, \hyperpage{114}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{105}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}evaluate}
+    \subitem {gomotion}, \hyperpage{25}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}from\discretionary {-}{}{}\_\discretionary {-}{}{}planes}
+    \subitem {gomotion}, \hyperpage{25}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}from\discretionary {-}{}{}\_\discretionary {-}{}{}point\discretionary {-}{}{}\_\discretionary {-}{}{}direction}
+    \subitem {gomotion}, \hyperpage{25}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}from\discretionary {-}{}{}\_\discretionary {-}{}{}points}
+    \subitem {gomotion}, \hyperpage{25}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}compare}
+    \subitem {gomotion}, \hyperpage{25}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}intersect}
+    \subitem {gomotion}, \hyperpage{25}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}proj}
+    \subitem {gomotion}, \hyperpage{25}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}linear\discretionary {-}{}{}\_\discretionary {-}{}{}cos\discretionary {-}{}{}\_\discretionary {-}{}{}sin\discretionary {-}{}{}\_\discretionary {-}{}{}solve}
+    \subitem {gomotion}, \hyperpage{26}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}link\discretionary {-}{}{}\_\discretionary {-}{}{}joint\discretionary {-}{}{}\_\discretionary {-}{}{}set}
+    \subitem {gomotion}, \hyperpage{26}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}link\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}build}
+    \subitem {gomotion}, \hyperpage{26}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}link\discretionary {-}{}{}\_\discretionary {-}{}{}to\discretionary {-}{}{}\_\discretionary {-}{}{}string}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{93}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat3\discretionary {-}{}{}\_\discretionary {-}{}{}inv}
+    \subitem {gomotion}, \hyperpage{26}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat3\discretionary {-}{}{}\_\discretionary {-}{}{}mat3\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{26}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat3\discretionary {-}{}{}\_\discretionary {-}{}{}vec3\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{26}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat4\discretionary {-}{}{}\_\discretionary {-}{}{}inv}
+    \subitem {gomotion}, \hyperpage{26}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat4\discretionary {-}{}{}\_\discretionary {-}{}{}mat4\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{26}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat4\discretionary {-}{}{}\_\discretionary {-}{}{}vec4\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{26}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat6\discretionary {-}{}{}\_\discretionary {-}{}{}inv}
+    \subitem {gomotion}, \hyperpage{26}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat6\discretionary {-}{}{}\_\discretionary {-}{}{}mat6\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{26}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat6\discretionary {-}{}{}\_\discretionary {-}{}{}transpose}
+    \subitem {gomotion}, \hyperpage{26}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat6\discretionary {-}{}{}\_\discretionary {-}{}{}vec6\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{26}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{26}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}inv}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}is\discretionary {-}{}{}\_\discretionary {-}{}{}norm}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}norm}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}uxz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}init}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{94}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}inv}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}add}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}copy}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}transpose}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}vector\discretionary {-}{}{}\_\discretionary {-}{}{}cross}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}vector\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}evaluate}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}from\discretionary {-}{}{}\_\discretionary {-}{}{}abcd}
+    \subitem {gomotion}, \hyperpage{27}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}from\discretionary {-}{}{}\_\discretionary {-}{}{}point\discretionary {-}{}{}\_\discretionary {-}{}{}line}
+    \subitem {gomotion}, \hyperpage{28}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}from\discretionary {-}{}{}\_\discretionary {-}{}{}point\discretionary {-}{}{}\_\discretionary {-}{}{}normal}
+    \subitem {gomotion}, \hyperpage{28}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}from\discretionary {-}{}{}\_\discretionary {-}{}{}points}
+    \subitem {gomotion}, \hyperpage{28}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}compare}
+    \subitem {gomotion}, \hyperpage{28}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}point\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}distance}
+    \subitem {gomotion}, \hyperpage{28}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}point\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}proj}
+    \subitem {gomotion}, \hyperpage{28}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}point\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}distance}
+    \subitem {gomotion}, \hyperpage{28}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}point\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}proj}
+    \subitem {gomotion}, \hyperpage{28}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{28}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}dh\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{28}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}hom\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{29}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}identity}
+    \subitem {gomotion}, \hyperpage{29}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}inv}
+    \subitem {gomotion}, \hyperpage{29}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}compare}
+    \subitem {gomotion}, \hyperpage{29}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}interp}
+    \subitem {gomotion}, \hyperpage{29}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{29}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{29}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}this}
+    \subitem {gomotion}, \hyperpage{29}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}vel\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{29}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}qua}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{94}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quadratic\discretionary {-}{}{}\_\discretionary {-}{}{}solve}
+    \subitem {gomotion}, \hyperpage{29}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quantity\discretionary {-}{}{}\_\discretionary {-}{}{}to\discretionary {-}{}{}\_\discretionary {-}{}{}string}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{103}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quartic\discretionary {-}{}{}\_\discretionary {-}{}{}solve}
+    \subitem {gomotion}, \hyperpage{29}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{29}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}identity}
+    \subitem {gomotion}, \hyperpage{29}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}inv}
+    \subitem {gomotion}, \hyperpage{29}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}is\discretionary {-}{}{}\_\discretionary {-}{}{}norm}
+    \subitem {gomotion}, \hyperpage{29}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}mag}
+    \subitem {gomotion}, \hyperpage{29}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}norm}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}compare}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}unit}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}real}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{104}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}real\discretionary {-}{}{}\_\discretionary {-}{}{}double}
+    \subitem {gotraj.\discretionary {-}{}{}cpp}, \hyperpage{114}
+    \subitem {gotypes.\discretionary {-}{}{}c}, \hyperpage{115}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{105}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}result}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{104}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}result\discretionary {-}{}{}\_\discretionary {-}{}{}int}
+    \subitem {gotraj.\discretionary {-}{}{}cpp}, \hyperpage{114}
+    \subitem {gotypes.\discretionary {-}{}{}c}, \hyperpage{115}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{105}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}result\discretionary {-}{}{}\_\discretionary {-}{}{}to\discretionary {-}{}{}\_\discretionary {-}{}{}string}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{103}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}compare}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}mult}
+    \subitem {gomotion}, \hyperpage{30}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{31}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{31}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{31}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}set\discretionary {-}{}{}\_\discretionary {-}{}{}singular\discretionary {-}{}{}\_\discretionary {-}{}{}epsilon}
+    \subitem {gomotion}, \hyperpage{31}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}sincos}
+    \subitem {gomotion}, \hyperpage{31}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}sph\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{31}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}sph\discretionary {-}{}{}\_\discretionary {-}{}{}cyl\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{31}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}sq}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{95}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}compute}
+    \subitem {gomotion}, \hyperpage{31}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}extend}
+    \subitem {gomotion}, \hyperpage{31}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}generate}
+    \subitem {gomotion}, \hyperpage{31}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}interp}
+    \subitem {gomotion}, \hyperpage{31}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}scale}
+    \subitem {gomotion}, \hyperpage{32}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}stop}
+    \subitem {gomotion}, \hyperpage{32}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}compute}
+    \subitem {gomotion}, \hyperpage{32}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}compute\discretionary {-}{}{}\_\discretionary {-}{}{}tees\discretionary {-}{}{}\_\discretionary {-}{}{}a\discretionary {-}{}{}\_\discretionary {-}{}{}c}
+    \subitem {gomotion}, \hyperpage{33}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}compute\discretionary {-}{}{}\_\discretionary {-}{}{}tees\discretionary {-}{}{}\_\discretionary {-}{}{}a\discretionary {-}{}{}\_\discretionary {-}{}{}nc}
+    \subitem {gomotion}, \hyperpage{33}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}compute\discretionary {-}{}{}\_\discretionary {-}{}{}tees\discretionary {-}{}{}\_\discretionary {-}{}{}na\discretionary {-}{}{}\_\discretionary {-}{}{}c}
+    \subitem {gomotion}, \hyperpage{33}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}compute\discretionary {-}{}{}\_\discretionary {-}{}{}tees\discretionary {-}{}{}\_\discretionary {-}{}{}na\discretionary {-}{}{}\_\discretionary {-}{}{}nc}
+    \subitem {gomotion}, \hyperpage{34}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}compute\discretionary {-}{}{}\_\discretionary {-}{}{}the\discretionary {-}{}{}\_\discretionary {-}{}{}rest}
+    \subitem {gomotion}, \hyperpage{34}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}extend}
+    \subitem {gomotion}, \hyperpage{34}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}generate}
+    \subitem {gomotion}, \hyperpage{34}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}interp}
+    \subitem {gomotion}, \hyperpage{34}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}scale}
+    \subitem {gomotion}, \hyperpage{34}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}stop}
+    \subitem {gomotion}, \hyperpage{35}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}tridiag\discretionary {-}{}{}\_\discretionary {-}{}{}ql}
+    \subitem {gomotion}, \hyperpage{36}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}tridiag\discretionary {-}{}{}\_\discretionary {-}{}{}reduce}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}uxz\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}vector}
+    \subitem {gomotion}, \hyperpage{21}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}vector\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}convert}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {gocode}
+    \subitem {gotraj.\discretionary {-}{}{}cpp}, \hyperpage{114}
+    \subitem {gotypes.\discretionary {-}{}{}c}, \hyperpage{115}
+    \subitem {gotypes.\discretionary {-}{}{}h}, \hyperpage{105}
+  \item {gomath.\discretionary {-}{}{}cpp}
+    \subitem {C\discretionary {-}{}{}B\discretionary {-}{}{}R\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}I\discretionary {-}{}{}S\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}P\discretionary {-}{}{}O\discretionary {-}{}{}W}, 
+		\hyperpage{110}
+    \subitem {C\discretionary {-}{}{}O\discretionary {-}{}{}L\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}I\discretionary {-}{}{}S\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}U\discretionary {-}{}{}N\discretionary {-}{}{}I\discretionary {-}{}{}T}, 
+		\hyperpage{110}
+    \subitem {M\discretionary {-}{}{}A\discretionary {-}{}{}G2}, 
+		\hyperpage{110}
+    \subitem {S\discretionary {-}{}{}I\discretionary {-}{}{}G\discretionary {-}{}{}N}, 
+		\hyperpage{110}
+  \item {gomath.\discretionary {-}{}{}h}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}2\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}P\discretionary {-}{}{}I}, 
+		\hyperpage{93}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}C\discretionary {-}{}{}L\discretionary {-}{}{}O\discretionary {-}{}{}S\discretionary {-}{}{}E}, 
+		\hyperpage{93}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}M\discretionary {-}{}{}A\discretionary {-}{}{}T\discretionary {-}{}{}R\discretionary {-}{}{}I\discretionary {-}{}{}X\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}D\discretionary {-}{}{}E\discretionary {-}{}{}C\discretionary {-}{}{}L\discretionary {-}{}{}A\discretionary {-}{}{}R\discretionary {-}{}{}E}, 
+		\hyperpage{93}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}P\discretionary {-}{}{}I}, 
+		\hyperpage{94}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}P\discretionary {-}{}{}I\discretionary {-}{}{}\_\discretionary {-}{}{}2}, 
+		\hyperpage{94}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}P\discretionary {-}{}{}I\discretionary {-}{}{}\_\discretionary {-}{}{}4}, 
+		\hyperpage{94}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}O\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}C\discretionary {-}{}{}L\discretionary {-}{}{}O\discretionary {-}{}{}S\discretionary {-}{}{}E}, 
+		\hyperpage{94}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}O\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}M\discretionary {-}{}{}A\discretionary {-}{}{}L\discretionary {-}{}{}L}, 
+		\hyperpage{94}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}M\discretionary {-}{}{}A\discretionary {-}{}{}L\discretionary {-}{}{}L}, 
+		\hyperpage{94}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}T\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}D\discretionary {-}{}{}E\discretionary {-}{}{}G}, 
+		\hyperpage{95}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}T\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}A\discretionary {-}{}{}D}, 
+		\hyperpage{95}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}T\discretionary {-}{}{}R\discretionary {-}{}{}A\discretionary {-}{}{}N\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}C\discretionary {-}{}{}L\discretionary {-}{}{}O\discretionary {-}{}{}S\discretionary {-}{}{}E}, 
+		\hyperpage{95}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}T\discretionary {-}{}{}R\discretionary {-}{}{}A\discretionary {-}{}{}N\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}M\discretionary {-}{}{}A\discretionary {-}{}{}L\discretionary {-}{}{}L}, 
+		\hyperpage{95}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}body\discretionary {-}{}{}\_\discretionary {-}{}{}copy}, 
+		\hyperpage{93}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}body\discretionary {-}{}{}\_\discretionary {-}{}{}init}, 
+		\hyperpage{93}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cub}, 
+		\hyperpage{93}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}link\discretionary {-}{}{}\_\discretionary {-}{}{}to\discretionary {-}{}{}\_\discretionary {-}{}{}string}, 
+		\hyperpage{93}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}init}, 
+		\hyperpage{94}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}qua}, 
+		\hyperpage{94}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}sq}, 
+		\hyperpage{95}
+    \subitem {I\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}Z\discretionary {-}{}{}E\discretionary {-}{}{}O\discretionary {-}{}{}F}, 
+		\hyperpage{95}
+  \item {gomotion}, \hyperpage{15}
+    \subitem {C\-O\-E\-F\-F\-\_\-\-M\-A\-X}, \hyperpage{21}
+    \subitem {G\-O\-\_\-\-L\-I\-N\-K\-\_\-\-D\-H}, \hyperpage{21}
+    \subitem {G\-O\-\_\-\-L\-I\-N\-K\-\_\-\-P\-K}, \hyperpage{21}
+    \subitem {G\-O\-\_\-\-L\-I\-N\-K\-\_\-\-P\-P}, \hyperpage{21}
+    \subitem {G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-C\-I\-R\-C\-U\-L\-A\-R}, 
+		\hyperpage{22}
+    \subitem {G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-J\-O\-I\-N\-T}, 
+		\hyperpage{22}
+    \subitem {G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-L\-I\-N\-E\-A\-R}, 
+		\hyperpage{22}
+    \subitem {G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-N\-O\-N\-E}, 
+		\hyperpage{22}
+    \subitem {G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-U\-J\-O\-I\-N\-T}, 
+		\hyperpage{22}
+    \subitem {G\-O\-\_\-\-M\-O\-T\-I\-O\-N\-\_\-\-W\-O\-R\-L\-D}, 
+		\hyperpage{22}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}acoses}, 
+		\hyperpage{22}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}asines}, 
+		\hyperpage{22}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}atans}, 
+		\hyperpage{22}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}add}, 
+		\hyperpage{22}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}angle}, 
+		\hyperpage{22}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}compare}, 
+		\hyperpage{22}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cross}, 
+		\hyperpage{22}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}disp}, 
+		\hyperpage{22}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}dot}, 
+		\hyperpage{22}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}par}, 
+		\hyperpage{22}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}perp}, 
+		\hyperpage{22}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}pose}, 
+		\hyperpage{22}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}proj}, 
+		\hyperpage{23}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}rot}, 
+		\hyperpage{23}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}sub}, 
+		\hyperpage{23}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}centroid}, 
+		\hyperpage{23}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}centroidize}, 
+		\hyperpage{23}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}cyl\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{23}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}is\discretionary {-}{}{}\_\discretionary {-}{}{}norm}, 
+		\hyperpage{23}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}mag}, 
+		\hyperpage{23}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}magsq}, 
+		\hyperpage{23}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}neg}, 
+		\hyperpage{23}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}normal}, 
+		\hyperpage{23}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}proj}, 
+		\hyperpage{23}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{23}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{23}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}sph\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{23}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}trilaterate}, 
+		\hyperpage{23}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}unit}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}vector\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}zero}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cbrt}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}add}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}arg}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}cbrt}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}div}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}inv}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}mag}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}magsq}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}scale}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}sq}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}sqrt}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}complex\discretionary {-}{}{}\_\discretionary {-}{}{}sub}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cubic\discretionary {-}{}{}\_\discretionary {-}{}{}solve}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cyl\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}cyl\discretionary {-}{}{}\_\discretionary {-}{}{}sph\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}dh\discretionary {-}{}{}\_\discretionary {-}{}{}hom\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{24}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}dh\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{25}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}get\discretionary {-}{}{}\_\discretionary {-}{}{}singular\discretionary {-}{}{}\_\discretionary {-}{}{}epsilon}, 
+		\hyperpage{25}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}hom\discretionary {-}{}{}\_\discretionary {-}{}{}dh\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{25}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}hom\discretionary {-}{}{}\_\discretionary {-}{}{}hom\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{25}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}hom\discretionary {-}{}{}\_\discretionary {-}{}{}inv}, 
+		\hyperpage{25}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}hom\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{25}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}evaluate}, 
+		\hyperpage{25}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}from\discretionary {-}{}{}\_\discretionary {-}{}{}planes}, 
+		\hyperpage{25}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}from\discretionary {-}{}{}\_\discretionary {-}{}{}point\discretionary {-}{}{}\_\discretionary {-}{}{}direction}, 
+		\hyperpage{25}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}from\discretionary {-}{}{}\_\discretionary {-}{}{}points}, 
+		\hyperpage{25}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}compare}, 
+		\hyperpage{25}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}intersect}, 
+		\hyperpage{25}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}proj}, 
+		\hyperpage{25}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}linear\discretionary {-}{}{}\_\discretionary {-}{}{}cos\discretionary {-}{}{}\_\discretionary {-}{}{}sin\discretionary {-}{}{}\_\discretionary {-}{}{}solve}, 
+		\hyperpage{26}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}link\discretionary {-}{}{}\_\discretionary {-}{}{}joint\discretionary {-}{}{}\_\discretionary {-}{}{}set}, 
+		\hyperpage{26}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}link\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}build}, 
+		\hyperpage{26}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat3\discretionary {-}{}{}\_\discretionary {-}{}{}inv}, 
+		\hyperpage{26}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat3\discretionary {-}{}{}\_\discretionary {-}{}{}mat3\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{26}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat3\discretionary {-}{}{}\_\discretionary {-}{}{}vec3\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{26}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat4\discretionary {-}{}{}\_\discretionary {-}{}{}inv}, 
+		\hyperpage{26}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat4\discretionary {-}{}{}\_\discretionary {-}{}{}mat4\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{26}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat4\discretionary {-}{}{}\_\discretionary {-}{}{}vec4\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{26}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat6\discretionary {-}{}{}\_\discretionary {-}{}{}inv}, 
+		\hyperpage{26}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat6\discretionary {-}{}{}\_\discretionary {-}{}{}mat6\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{26}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat6\discretionary {-}{}{}\_\discretionary {-}{}{}transpose}, 
+		\hyperpage{26}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat6\discretionary {-}{}{}\_\discretionary {-}{}{}vec6\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{26}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{26}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}inv}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}is\discretionary {-}{}{}\_\discretionary {-}{}{}norm}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}norm}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}uxz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}inv}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}add}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}copy}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}transpose}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}vector\discretionary {-}{}{}\_\discretionary {-}{}{}cross}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}vector\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}evaluate}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}from\discretionary {-}{}{}\_\discretionary {-}{}{}abcd}, 
+		\hyperpage{27}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}from\discretionary {-}{}{}\_\discretionary {-}{}{}point\discretionary {-}{}{}\_\discretionary {-}{}{}line}, 
+		\hyperpage{28}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}from\discretionary {-}{}{}\_\discretionary {-}{}{}point\discretionary {-}{}{}\_\discretionary {-}{}{}normal}, 
+		\hyperpage{28}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}from\discretionary {-}{}{}\_\discretionary {-}{}{}points}, 
+		\hyperpage{28}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}compare}, 
+		\hyperpage{28}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}point\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}distance}, 
+		\hyperpage{28}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}point\discretionary {-}{}{}\_\discretionary {-}{}{}line\discretionary {-}{}{}\_\discretionary {-}{}{}proj}, 
+		\hyperpage{28}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}point\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}distance}, 
+		\hyperpage{28}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}point\discretionary {-}{}{}\_\discretionary {-}{}{}plane\discretionary {-}{}{}\_\discretionary {-}{}{}proj}, 
+		\hyperpage{28}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{28}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}dh\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{28}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}hom\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{29}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}identity}, 
+		\hyperpage{29}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}inv}, 
+		\hyperpage{29}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}compare}, 
+		\hyperpage{29}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{29}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{29}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{29}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}this}, 
+		\hyperpage{29}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}pose\discretionary {-}{}{}\_\discretionary {-}{}{}vel\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{29}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quadratic\discretionary {-}{}{}\_\discretionary {-}{}{}solve}, 
+		\hyperpage{29}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quartic\discretionary {-}{}{}\_\discretionary {-}{}{}solve}, 
+		\hyperpage{29}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{29}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}identity}, 
+		\hyperpage{29}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}inv}, 
+		\hyperpage{29}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}is\discretionary {-}{}{}\_\discretionary {-}{}{}norm}, 
+		\hyperpage{29}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}mag}, 
+		\hyperpage{29}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}matrix\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}norm}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}compare}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}unit}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}compare}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}mult}, 
+		\hyperpage{30}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{31}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{31}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{31}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}set\discretionary {-}{}{}\_\discretionary {-}{}{}singular\discretionary {-}{}{}\_\discretionary {-}{}{}epsilon}, 
+		\hyperpage{31}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}sincos}, 
+		\hyperpage{31}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}sph\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{31}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}sph\discretionary {-}{}{}\_\discretionary {-}{}{}cyl\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{31}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}compute}, 
+		\hyperpage{31}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}extend}, 
+		\hyperpage{31}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}generate}, 
+		\hyperpage{31}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{31}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}scale}, 
+		\hyperpage{32}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}stop}, 
+		\hyperpage{32}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}compute}, 
+		\hyperpage{32}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}compute\discretionary {-}{}{}\_\discretionary {-}{}{}tees\discretionary {-}{}{}\_\discretionary {-}{}{}a\discretionary {-}{}{}\_\discretionary {-}{}{}c}, 
+		\hyperpage{33}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}compute\discretionary {-}{}{}\_\discretionary {-}{}{}tees\discretionary {-}{}{}\_\discretionary {-}{}{}a\discretionary {-}{}{}\_\discretionary {-}{}{}nc}, 
+		\hyperpage{33}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}compute\discretionary {-}{}{}\_\discretionary {-}{}{}tees\discretionary {-}{}{}\_\discretionary {-}{}{}na\discretionary {-}{}{}\_\discretionary {-}{}{}c}, 
+		\hyperpage{33}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}compute\discretionary {-}{}{}\_\discretionary {-}{}{}tees\discretionary {-}{}{}\_\discretionary {-}{}{}na\discretionary {-}{}{}\_\discretionary {-}{}{}nc}, 
+		\hyperpage{34}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}compute\discretionary {-}{}{}\_\discretionary {-}{}{}the\discretionary {-}{}{}\_\discretionary {-}{}{}rest}, 
+		\hyperpage{34}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}extend}, 
+		\hyperpage{34}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}generate}, 
+		\hyperpage{34}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{34}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}scale}, 
+		\hyperpage{34}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}stop}, 
+		\hyperpage{35}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}tridiag\discretionary {-}{}{}\_\discretionary {-}{}{}ql}, 
+		\hyperpage{36}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}tridiag\discretionary {-}{}{}\_\discretionary {-}{}{}reduce}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}uxz\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}vector}, 
+		\hyperpage{21}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}vector\discretionary {-}{}{}\_\discretionary {-}{}{}cart\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}mat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}quat\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}rpy\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}rvec\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}xyz\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}zyz\discretionary {-}{}{}\_\discretionary {-}{}{}zyx\discretionary {-}{}{}\_\discretionary {-}{}{}convert}, 
+		\hyperpage{37}
+    \subitem {Joint\discretionary {-}{}{}State}, \hyperpage{21}
+    \subitem {lubksb}, \hyperpage{37}
+    \subitem {ludcmp}, \hyperpage{38}
+    \subitem {sincos}, \hyperpage{38}
+  \item {gomotion.\discretionary {-}{}{}cpp}
+    \subitem {maxit}, \hyperpage{111}
+  \item {gomotion\discretionary {-}{}{}::\discretionary {-}{}{}Go\discretionary {-}{}{}Motion}, 
+		\hyperpage{82}
+    \subitem {pgm}, \hyperpage{82}
+  \item {gomotion\discretionary {-}{}{}::\discretionary {-}{}{}Go\discretionary {-}{}{}Motion\discretionary {-}{}{}Params}, 
+		\hyperpage{82}
+    \subitem {acc}, \hyperpage{83}
+    \subitem {jerk}, \hyperpage{83}
+    \subitem {vel}, \hyperpage{83}
+  \item {gomotion\discretionary {-}{}{}::coeff}, \hyperpage{39}
+    \subitem {a}, \hyperpage{39}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}body}, 
+		\hyperpage{39}
+    \subitem {inertia}, \hyperpage{40}
+    \subitem {mass}, \hyperpage{40}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}cart}, 
+		\hyperpage{40}
+    \subitem {x}, \hyperpage{40}
+    \subitem {y}, \hyperpage{40}
+    \subitem {z}, \hyperpage{40}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}complex}, 
+		\hyperpage{40}
+    \subitem {im}, \hyperpage{41}
+    \subitem {re}, \hyperpage{41}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}cubic}, 
+		\hyperpage{41}
+    \subitem {a}, \hyperpage{41}
+    \subitem {b}, \hyperpage{41}
+    \subitem {c}, \hyperpage{41}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}cyl}, 
+		\hyperpage{41}
+    \subitem {r}, \hyperpage{42}
+    \subitem {theta}, \hyperpage{42}
+    \subitem {z}, \hyperpage{42}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}dh}, 
+		\hyperpage{42}
+    \subitem {a}, \hyperpage{42}
+    \subitem {alpha}, \hyperpage{42}
+    \subitem {d}, \hyperpage{42}
+    \subitem {theta}, \hyperpage{42}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}hom}, 
+		\hyperpage{43}
+    \subitem {rot}, \hyperpage{43}
+    \subitem {tran}, \hyperpage{43}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{44}
+    \subitem {a}, \hyperpage{46}
+    \subitem {add\discretionary {-}{}{}\_\discretionary {-}{}{}constant}, 
+		\hyperpage{45}
+    \subitem {add\discretionary {-}{}{}\_\discretionary {-}{}{}cubic\discretionary {-}{}{}\_\discretionary {-}{}{}pdv}, 
+		\hyperpage{45}
+    \subitem {add\discretionary {-}{}{}\_\discretionary {-}{}{}cubic\discretionary {-}{}{}\_\discretionary {-}{}{}pf}, 
+		\hyperpage{45}
+    \subitem {add\discretionary {-}{}{}\_\discretionary {-}{}{}cubic\discretionary {-}{}{}\_\discretionary {-}{}{}pv}, 
+		\hyperpage{45}
+    \subitem {add\discretionary {-}{}{}\_\discretionary {-}{}{}func}, 
+		\hyperpage{45}
+    \subitem {add\discretionary {-}{}{}\_\discretionary {-}{}{}linear}, 
+		\hyperpage{45}
+    \subitem {add\discretionary {-}{}{}\_\discretionary {-}{}{}quintic\discretionary {-}{}{}\_\discretionary {-}{}{}pdva}, 
+		\hyperpage{45}
+    \subitem {add\discretionary {-}{}{}\_\discretionary {-}{}{}quintic\discretionary {-}{}{}\_\discretionary {-}{}{}pf}, 
+		\hyperpage{45}
+    \subitem {add\discretionary {-}{}{}\_\discretionary {-}{}{}quintic\discretionary {-}{}{}\_\discretionary {-}{}{}pva}, 
+		\hyperpage{45}
+    \subitem {add\discretionary {-}{}{}\_\discretionary {-}{}{}quintic\discretionary {-}{}{}\_\discretionary {-}{}{}pvda}, 
+		\hyperpage{45}
+    \subitem {calc\discretionary {-}{}{}\_\discretionary {-}{}{}coeff\discretionary {-}{}{}\_\discretionary {-}{}{}bc}, 
+		\hyperpage{45}
+    \subitem {calc\discretionary {-}{}{}\_\discretionary {-}{}{}coeff\discretionary {-}{}{}\_\discretionary {-}{}{}constant}, 
+		\hyperpage{45}
+    \subitem {calc\discretionary {-}{}{}\_\discretionary {-}{}{}coeff\discretionary {-}{}{}\_\discretionary {-}{}{}cubic\discretionary {-}{}{}\_\discretionary {-}{}{}bc}, 
+		\hyperpage{45}
+    \subitem {calc\discretionary {-}{}{}\_\discretionary {-}{}{}coeff\discretionary {-}{}{}\_\discretionary {-}{}{}cubic\discretionary {-}{}{}\_\discretionary {-}{}{}pf}, 
+		\hyperpage{46}
+    \subitem {calc\discretionary {-}{}{}\_\discretionary {-}{}{}coeff\discretionary {-}{}{}\_\discretionary {-}{}{}linear}, 
+		\hyperpage{46}
+    \subitem {calc\discretionary {-}{}{}\_\discretionary {-}{}{}coeff\discretionary {-}{}{}\_\discretionary {-}{}{}pf}, 
+		\hyperpage{46}
+    \subitem {calc\discretionary {-}{}{}\_\discretionary {-}{}{}coeff\discretionary {-}{}{}\_\discretionary {-}{}{}quintic\discretionary {-}{}{}\_\discretionary {-}{}{}bc}, 
+		\hyperpage{46}
+    \subitem {calc\discretionary {-}{}{}\_\discretionary {-}{}{}coeff\discretionary {-}{}{}\_\discretionary {-}{}{}quintic\discretionary {-}{}{}\_\discretionary {-}{}{}pf}, 
+		\hyperpage{46}
+    \subitem {eval\discretionary {-}{}{}\_\discretionary {-}{}{}constant}, 
+		\hyperpage{46}
+    \subitem {eval\discretionary {-}{}{}\_\discretionary {-}{}{}cubic}, 
+		\hyperpage{46}
+    \subitem {eval\discretionary {-}{}{}\_\discretionary {-}{}{}func}, 
+		\hyperpage{45}
+    \subitem {eval\discretionary {-}{}{}\_\discretionary {-}{}{}linear}, 
+		\hyperpage{46}
+    \subitem {eval\discretionary {-}{}{}\_\discretionary {-}{}{}quintic}, 
+		\hyperpage{46}
+    \subitem {init}, \hyperpage{46}
+    \subitem {p}, \hyperpage{46}
+    \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}here}, 
+		\hyperpage{46}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}line}, 
+		\hyperpage{46}
+    \subitem {direction}, \hyperpage{47}
+    \subitem {point}, \hyperpage{47}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}link}, 
+		\hyperpage{47}
+    \subitem {body}, \hyperpage{48}
+    \subitem {dh}, \hyperpage{48}
+    \subitem {pk}, \hyperpage{48}
+    \subitem {pp}, \hyperpage{49}
+    \subitem {quantity}, \hyperpage{49}
+    \subitem {type}, \hyperpage{49}
+    \subitem {u}, \hyperpage{49}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}mat}, 
+		\hyperpage{49}
+    \subitem {x}, \hyperpage{50}
+    \subitem {y}, \hyperpage{50}
+    \subitem {z}, \hyperpage{50}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix}, 
+		\hyperpage{50}
+    \subitem {cols}, \hyperpage{50}
+    \subitem {el}, \hyperpage{50}
+    \subitem {elcpy}, \hyperpage{50}
+    \subitem {index}, \hyperpage{50}
+    \subitem {rows}, \hyperpage{51}
+    \subitem {v}, \hyperpage{51}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}circular\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{51}
+    \subitem {center}, \hyperpage{52}
+    \subitem {normal}, \hyperpage{52}
+    \subitem {qnormal}, \hyperpage{52}
+    \subitem {rstart}, \hyperpage{52}
+    \subitem {rtot}, \hyperpage{52}
+    \subitem {stotinv}, \hyperpage{52}
+    \subitem {thtot}, \hyperpage{52}
+    \subitem {turns}, \hyperpage{52}
+    \subitem {urcsp}, \hyperpage{52}
+    \subitem {zstart}, \hyperpage{52}
+    \subitem {ztot}, \hyperpage{52}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}interface}, 
+		\hyperpage{53}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}deltat}, 
+		\hyperpage{53}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}gmq}, 
+		\hyperpage{53}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}gms}, 
+		\hyperpage{53}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}id}, 
+		\hyperpage{53}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}position}, 
+		\hyperpage{53}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}queuesize}, 
+		\hyperpage{53}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}space}, 
+		\hyperpage{54}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}type}, 
+		\hyperpage{54}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}linear\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{54}
+    \subitem {uquat}, \hyperpage{54}
+    \subitem {uvec}, \hyperpage{54}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{55}
+    \subitem {acc}, \hyperpage{55}
+    \subitem {jerk}, \hyperpage{55}
+    \subitem {vel}, \hyperpage{55}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{55}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}deltat}, 
+		\hyperpage{58}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}end}, 
+		\hyperpage{58}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}endptr}, 
+		\hyperpage{58}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}here}, 
+		\hyperpage{59}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}joint\discretionary {-}{}{}\_\discretionary {-}{}{}num}, 
+		\hyperpage{59}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}last\discretionary {-}{}{}\_\discretionary {-}{}{}id}, 
+		\hyperpage{59}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}number}, 
+		\hyperpage{59}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}size}, 
+		\hyperpage{59}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}start}, 
+		\hyperpage{59}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}startptr}, 
+		\hyperpage{59}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}there}, 
+		\hyperpage{59}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}time}, 
+		\hyperpage{59}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}timescale}, 
+		\hyperpage{59}
+    \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}type}, 
+		\hyperpage{59}
+    \subitem {append}, \hyperpage{57}
+    \subitem {append\discretionary {-}{}{}\_\discretionary {-}{}{}joint}, 
+		\hyperpage{57}
+    \subitem {append\discretionary {-}{}{}\_\discretionary {-}{}{}ujoint}, 
+		\hyperpage{57}
+    \subitem {append\discretionary {-}{}{}\_\discretionary {-}{}{}world}, 
+		\hyperpage{57}
+    \subitem {drop\discretionary {-}{}{}\_\discretionary {-}{}{}pending}, 
+		\hyperpage{57}
+    \subitem {erase}, \hyperpage{57}
+    \subitem {get\discretionary {-}{}{}\_\discretionary {-}{}{}joint\discretionary {-}{}{}\_\discretionary {-}{}{}number}, 
+		\hyperpage{57}
+    \subitem {get\discretionary {-}{}{}\_\discretionary {-}{}{}type}, 
+		\hyperpage{57}
+    \subitem {head}, \hyperpage{57}
+    \subitem {here}, \hyperpage{58}
+    \subitem {init}, \hyperpage{58}
+    \subitem {interp}, \hyperpage{58}
+    \subitem {interp\discretionary {-}{}{}\_\discretionary {-}{}{}joint}, 
+		\hyperpage{58}
+    \subitem {interp\discretionary {-}{}{}\_\discretionary {-}{}{}world}, 
+		\hyperpage{58}
+    \subitem {is\discretionary {-}{}{}\_\discretionary {-}{}{}empty}, 
+		\hyperpage{58}
+    \subitem {last\discretionary {-}{}{}\_\discretionary {-}{}{}id}, 
+		\hyperpage{58}
+    \subitem {number}, \hyperpage{58}
+    \subitem {reset}, \hyperpage{58}
+    \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}cycle\discretionary {-}{}{}\_\discretionary {-}{}{}time}, 
+		\hyperpage{58}
+    \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}here}, 
+		\hyperpage{58}
+    \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}id}, 
+		\hyperpage{58}
+    \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}joint\discretionary {-}{}{}\_\discretionary {-}{}{}number}, 
+		\hyperpage{58}
+    \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}scale}, 
+		\hyperpage{58}
+    \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}type}, 
+		\hyperpage{58}
+    \subitem {size}, \hyperpage{58}
+    \subitem {stop}, \hyperpage{58}
+    \subitem {there}, \hyperpage{58}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{60}
+    \subitem {cj}, \hyperpage{61}
+    \subitem {cpar}, \hyperpage{61}
+    \subitem {end}, \hyperpage{61}
+    \subitem {get\discretionary {-}{}{}\_\discretionary {-}{}{}id}, 
+		\hyperpage{61}
+    \subitem {get\discretionary {-}{}{}\_\discretionary {-}{}{}type}, 
+		\hyperpage{61}
+    \subitem {id}, \hyperpage{62}
+    \subitem {init}, \hyperpage{61}
+    \subitem {lpar}, \hyperpage{62}
+    \subitem {par}, \hyperpage{62}
+    \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}cpar}, 
+		\hyperpage{61}
+    \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}end\discretionary {-}{}{}\_\discretionary {-}{}{}pose}, 
+		\hyperpage{61}
+    \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}end\discretionary {-}{}{}\_\discretionary {-}{}{}position}, 
+		\hyperpage{61}
+    \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}id}, 
+		\hyperpage{61}
+    \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}jpar}, 
+		\hyperpage{61}
+    \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}rpar}, 
+		\hyperpage{61}
+    \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}time}, 
+		\hyperpage{61}
+    \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}tpar}, 
+		\hyperpage{61}
+    \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}type}, 
+		\hyperpage{61}
+    \subitem {start}, \hyperpage{62}
+    \subitem {totalt}, \hyperpage{62}
+    \subitem {type}, \hyperpage{62}
+    \subitem {u}, \hyperpage{62}
+    \subitem {uquat}, \hyperpage{62}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}pk}, 
+		\hyperpage{62}
+    \subitem {base}, \hyperpage{63}
+    \subitem {d}, \hyperpage{63}
+    \subitem {platform}, \hyperpage{63}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}plane}, 
+		\hyperpage{64}
+    \subitem {d}, \hyperpage{64}
+    \subitem {normal}, \hyperpage{64}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}pose}, 
+		\hyperpage{64}
+    \subitem {rot}, \hyperpage{65}
+    \subitem {tran}, \hyperpage{65}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}position}, 
+		\hyperpage{65}
+    \subitem {joint}, \hyperpage{66}
+    \subitem {pose}, \hyperpage{67}
+    \subitem {u}, \hyperpage{67}
+    \subitem {zero\discretionary {-}{}{}\_\discretionary {-}{}{}joints}, 
+		\hyperpage{66}
+    \subitem {zero\discretionary {-}{}{}\_\discretionary {-}{}{}pose}, 
+		\hyperpage{66}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}pp}, 
+		\hyperpage{67}
+    \subitem {pose}, \hyperpage{67}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}quadratic}, 
+		\hyperpage{68}
+    \subitem {a}, \hyperpage{68}
+    \subitem {b}, \hyperpage{68}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}quartic}, 
+		\hyperpage{68}
+    \subitem {a}, \hyperpage{68}
+    \subitem {b}, \hyperpage{68}
+    \subitem {c}, \hyperpage{68}
+    \subitem {d}, \hyperpage{68}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}quat}, 
+		\hyperpage{69}
+    \subitem {s}, \hyperpage{69}
+    \subitem {x}, \hyperpage{69}
+    \subitem {y}, \hyperpage{69}
+    \subitem {z}, \hyperpage{69}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}rpy}, 
+		\hyperpage{69}
+    \subitem {p}, \hyperpage{70}
+    \subitem {r}, \hyperpage{70}
+    \subitem {y}, \hyperpage{70}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec}, 
+		\hyperpage{70}
+    \subitem {x}, \hyperpage{70}
+    \subitem {y}, \hyperpage{70}
+    \subitem {z}, \hyperpage{70}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{71}
+    \subitem {eval}, \hyperpage{72}
+    \subitem {init}, \hyperpage{72}
+    \subitem {scale}, \hyperpage{72}
+    \subitem {scale\discretionary {-}{}{}\_\discretionary {-}{}{}a\discretionary {-}{}{}\_\discretionary {-}{}{}next}, 
+		\hyperpage{72}
+    \subitem {scale\discretionary {-}{}{}\_\discretionary {-}{}{}b}, 
+		\hyperpage{72}
+    \subitem {scale\discretionary {-}{}{}\_\discretionary {-}{}{}dir}, 
+		\hyperpage{72}
+    \subitem {scale\discretionary {-}{}{}\_\discretionary {-}{}{}isneg}, 
+		\hyperpage{72}
+    \subitem {scale\discretionary {-}{}{}\_\discretionary {-}{}{}next}, 
+		\hyperpage{72}
+    \subitem {scale\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{72}
+    \subitem {scale\discretionary {-}{}{}\_\discretionary {-}{}{}t}, 
+		\hyperpage{72}
+    \subitem {scale\discretionary {-}{}{}\_\discretionary {-}{}{}v\discretionary {-}{}{}\_\discretionary {-}{}{}next}, 
+		\hyperpage{72}
+    \subitem {scaling}, \hyperpage{72}
+    \subitem {set}, \hyperpage{72}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}sph}, 
+		\hyperpage{73}
+    \subitem {phi}, \hyperpage{73}
+    \subitem {r}, \hyperpage{73}
+    \subitem {theta}, \hyperpage{73}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{73}
+    \subitem {at0}, \hyperpage{74}
+    \subitem {dt1}, \hyperpage{74}
+    \subitem {dt2}, \hyperpage{74}
+    \subitem {dtend}, \hyperpage{74}
+    \subitem {invd}, \hyperpage{74}
+    \subitem {t1}, \hyperpage{74}
+    \subitem {t2}, \hyperpage{74}
+    \subitem {tend}, \hyperpage{74}
+    \subitem {vt1}, \hyperpage{75}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{75}
+    \subitem {at1}, \hyperpage{76}
+    \subitem {dt1}, \hyperpage{76}
+    \subitem {dt2}, \hyperpage{76}
+    \subitem {dt3}, \hyperpage{76}
+    \subitem {dt4}, \hyperpage{76}
+    \subitem {dt5}, \hyperpage{76}
+    \subitem {dt6}, \hyperpage{76}
+    \subitem {dtend}, \hyperpage{76}
+    \subitem {invd}, \hyperpage{76}
+    \subitem {jt0}, \hyperpage{77}
+    \subitem {t1}, \hyperpage{77}
+    \subitem {t2}, \hyperpage{77}
+    \subitem {t3}, \hyperpage{77}
+    \subitem {t4}, \hyperpage{77}
+    \subitem {t5}, \hyperpage{77}
+    \subitem {t6}, \hyperpage{77}
+    \subitem {tend}, \hyperpage{77}
+    \subitem {vt1}, \hyperpage{77}
+    \subitem {vt2}, \hyperpage{77}
+    \subitem {vt3}, \hyperpage{77}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}interp\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{78}
+    \subitem {a}, \hyperpage{78}
+    \subitem {d}, \hyperpage{78}
+    \subitem {j}, \hyperpage{78}
+    \subitem {s}, \hyperpage{78}
+    \subitem {v}, \hyperpage{78}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}uxz}, 
+		\hyperpage{78}
+    \subitem {x}, \hyperpage{79}
+    \subitem {z}, \hyperpage{79}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}vel}, 
+		\hyperpage{79}
+    \subitem {v}, \hyperpage{80}
+    \subitem {w}, \hyperpage{80}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}xyz}, 
+		\hyperpage{80}
+    \subitem {x}, \hyperpage{81}
+    \subitem {y}, \hyperpage{81}
+    \subitem {z}, \hyperpage{81}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}zyx}, 
+		\hyperpage{81}
+    \subitem {x}, \hyperpage{81}
+    \subitem {y}, \hyperpage{81}
+    \subitem {z}, \hyperpage{81}
+  \item {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}zyz}, 
+		\hyperpage{81}
+    \subitem {y}, \hyperpage{82}
+    \subitem {z}, \hyperpage{82}
+    \subitem {zp}, \hyperpage{82}
+  \item {gomotion\discretionary {-}{}{}::points}, \hyperpage{83}
+    \subitem {p}, \hyperpage{83}
+  \item {gotraj.\discretionary {-}{}{}cpp}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}exit}, 
+		\hyperpage{113}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}flag\discretionary {-}{}{}\_\discretionary {-}{}{}uchar}, 
+		\hyperpage{113}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}init}, 
+		\hyperpage{113}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}integer\discretionary {-}{}{}\_\discretionary {-}{}{}int}, 
+		\hyperpage{114}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}real\discretionary {-}{}{}\_\discretionary {-}{}{}double}, 
+		\hyperpage{114}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}result\discretionary {-}{}{}\_\discretionary {-}{}{}int}, 
+		\hyperpage{114}
+    \subitem {gocode}, \hyperpage{114}
+  \item {gotraj.\discretionary {-}{}{}h}
+    \subitem {reciprocate}, \hyperpage{101}
+  \item {gotypes.\-h}
+    \subitem {G\-O\-\_\-\-Q\-U\-A\-N\-T\-I\-T\-Y\-\_\-\-A\-N\-G\-L\-E}, 
+		\hyperpage{104}
+    \subitem {G\-O\-\_\-\-Q\-U\-A\-N\-T\-I\-T\-Y\-\_\-\-L\-E\-N\-G\-T\-H}, 
+		\hyperpage{104}
+    \subitem {G\-O\-\_\-\-Q\-U\-A\-N\-T\-I\-T\-Y\-\_\-\-N\-O\-N\-E}, 
+		\hyperpage{104}
+    \subitem {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-B\-A\-D\-\_\-\-A\-R\-G\-S}, 
+		\hyperpage{104}
+    \subitem {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-B\-U\-G}, 
+		\hyperpage{104}
+    \subitem {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-D\-I\-V\-\_\-\-E\-R\-R\-O\-R}, 
+		\hyperpage{104}
+    \subitem {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-D\-O\-M\-A\-I\-N\-\_\-\-E\-R\-R\-O\-R}, 
+		\hyperpage{104}
+    \subitem {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-E\-M\-P\-T\-Y}, 
+		\hyperpage{104}
+    \subitem {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-E\-R\-R\-O\-R}, 
+		\hyperpage{104}
+    \subitem {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-I\-G\-N\-O\-R\-E\-D}, 
+		\hyperpage{104}
+    \subitem {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-I\-M\-P\-L\-\_\-\-E\-R\-R\-O\-R}, 
+		\hyperpage{104}
+    \subitem {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-N\-O\-\_\-\-S\-P\-A\-C\-E}, 
+		\hyperpage{104}
+    \subitem {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-N\-O\-R\-M\-\_\-\-E\-R\-R\-O\-R}, 
+		\hyperpage{104}
+    \subitem {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-O\-K}, 
+		\hyperpage{104}
+    \subitem {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-R\-A\-N\-G\-E\-\_\-\-E\-R\-R\-O\-R}, 
+		\hyperpage{104}
+    \subitem {G\-O\-\_\-\-R\-E\-S\-U\-L\-T\-\_\-\-S\-I\-N\-G\-U\-L\-A\-R}, 
+		\hyperpage{104}
+  \item {gotypes.\discretionary {-}{}{}c}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}flag\discretionary {-}{}{}\_\discretionary {-}{}{}uchar}, 
+		\hyperpage{114}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}integer\discretionary {-}{}{}\_\discretionary {-}{}{}int}, 
+		\hyperpage{114}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}real\discretionary {-}{}{}\_\discretionary {-}{}{}double}, 
+		\hyperpage{115}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}result\discretionary {-}{}{}\_\discretionary {-}{}{}int}, 
+		\hyperpage{115}
+    \subitem {gocode}, \hyperpage{115}
+  \item {gotypes.\discretionary {-}{}{}h}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}F\discretionary {-}{}{}L\discretionary {-}{}{}A\discretionary {-}{}{}G}, 
+		\hyperpage{103}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}F\discretionary {-}{}{}L\discretionary {-}{}{}A\discretionary {-}{}{}G\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}U\discretionary {-}{}{}C\discretionary {-}{}{}H\discretionary {-}{}{}A\discretionary {-}{}{}R}, 
+		\hyperpage{103}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}I\discretionary {-}{}{}N\discretionary {-}{}{}F}, 
+		\hyperpage{103}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}I\discretionary {-}{}{}N\discretionary {-}{}{}T\discretionary {-}{}{}E\discretionary {-}{}{}G\discretionary {-}{}{}E\discretionary {-}{}{}R}, 
+		\hyperpage{103}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}I\discretionary {-}{}{}N\discretionary {-}{}{}T\discretionary {-}{}{}E\discretionary {-}{}{}G\discretionary {-}{}{}E\discretionary {-}{}{}R\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}I\discretionary {-}{}{}N\discretionary {-}{}{}T}, 
+		\hyperpage{103}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}I\discretionary {-}{}{}N\discretionary {-}{}{}T\discretionary {-}{}{}E\discretionary {-}{}{}G\discretionary {-}{}{}E\discretionary {-}{}{}R\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}M\discretionary {-}{}{}A\discretionary {-}{}{}X}, 
+		\hyperpage{103}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}E\discretionary {-}{}{}A\discretionary {-}{}{}L}, 
+		\hyperpage{103}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}E\discretionary {-}{}{}A\discretionary {-}{}{}L\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}D\discretionary {-}{}{}O\discretionary {-}{}{}U\discretionary {-}{}{}B\discretionary {-}{}{}L\discretionary {-}{}{}E}, 
+		\hyperpage{103}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}E\discretionary {-}{}{}A\discretionary {-}{}{}L\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}E\discretionary {-}{}{}P\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}L\discretionary {-}{}{}O\discretionary {-}{}{}N}, 
+		\hyperpage{103}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}E\discretionary {-}{}{}A\discretionary {-}{}{}L\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}M\discretionary {-}{}{}A\discretionary {-}{}{}X}, 
+		\hyperpage{103}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}E\discretionary {-}{}{}A\discretionary {-}{}{}L\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}M\discretionary {-}{}{}I\discretionary {-}{}{}N}, 
+		\hyperpage{103}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}E\discretionary {-}{}{}S\discretionary {-}{}{}U\discretionary {-}{}{}L\discretionary {-}{}{}T}, 
+		\hyperpage{103}
+    \subitem {G\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}R\discretionary {-}{}{}E\discretionary {-}{}{}S\discretionary {-}{}{}U\discretionary {-}{}{}L\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}I\discretionary {-}{}{}N\discretionary {-}{}{}T}, 
+		\hyperpage{103}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}flag}, 
+		\hyperpage{104}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}flag\discretionary {-}{}{}\_\discretionary {-}{}{}uchar}, 
+		\hyperpage{105}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}integer}, 
+		\hyperpage{104}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}integer\discretionary {-}{}{}\_\discretionary {-}{}{}int}, 
+		\hyperpage{105}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}quantity\discretionary {-}{}{}\_\discretionary {-}{}{}to\discretionary {-}{}{}\_\discretionary {-}{}{}string}, 
+		\hyperpage{103}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}real}, 
+		\hyperpage{104}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}real\discretionary {-}{}{}\_\discretionary {-}{}{}double}, 
+		\hyperpage{105}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}result}, 
+		\hyperpage{104}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}result\discretionary {-}{}{}\_\discretionary {-}{}{}int}, 
+		\hyperpage{105}
+    \subitem {go\discretionary {-}{}{}\_\discretionary {-}{}{}result\discretionary {-}{}{}\_\discretionary {-}{}{}to\discretionary {-}{}{}\_\discretionary {-}{}{}string}, 
+		\hyperpage{103}
+    \subitem {gocode}, \hyperpage{105}
+
+  \indexspace
+
+  \item {head}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{57}
+  \item {here}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+
+  \indexspace
+
+  \item {I\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}Z\discretionary {-}{}{}E\discretionary {-}{}{}O\discretionary {-}{}{}F}
+    \subitem {gomath.\discretionary {-}{}{}h}, \hyperpage{95}
+  \item {id}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{62}
+  \item {im}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}complex}, 
+		\hyperpage{41}
+  \item {index}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix}, 
+		\hyperpage{50}
+  \item {inertia}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}body}, 
+		\hyperpage{40}
+  \item {init}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{46}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{61}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{72}
+  \item {interp}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+  \item {interp\discretionary {-}{}{}\_\discretionary {-}{}{}joint}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+  \item {interp\discretionary {-}{}{}\_\discretionary {-}{}{}world}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+  \item {invd}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{74}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{76}
+  \item {is\discretionary {-}{}{}\_\discretionary {-}{}{}empty}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+
+  \indexspace
+
+  \item {j}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}interp\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{78}
+  \item {jerk}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{55}
+    \subitem {gomotion\discretionary {-}{}{}::\discretionary {-}{}{}Go\discretionary {-}{}{}Motion\discretionary {-}{}{}Params}, 
+		\hyperpage{83}
+  \item {joint}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}position}, 
+		\hyperpage{66}
+  \item {Joint\discretionary {-}{}{}State}
+    \subitem {gomotion}, \hyperpage{21}
+  \item {jt0}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{77}
+
+  \indexspace
+
+  \item {last\discretionary {-}{}{}\_\discretionary {-}{}{}id}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+  \item {lpar}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{62}
+  \item {lubksb}
+    \subitem {gomotion}, \hyperpage{37}
+  \item {ludcmp}
+    \subitem {gomotion}, \hyperpage{38}
+
+  \indexspace
+
+  \item {M\discretionary {-}{}{}A\discretionary {-}{}{}G2}
+    \subitem {gomath.\discretionary {-}{}{}cpp}, \hyperpage{110}
+  \item {mass}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}body}, 
+		\hyperpage{40}
+  \item {maxit}
+    \subitem {gomotion.\discretionary {-}{}{}cpp}, \hyperpage{111}
+
+  \indexspace
+
+  \item {normal}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}circular\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{52}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}plane}, 
+		\hyperpage{64}
+  \item {number}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+
+  \indexspace
+
+  \item {p}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{46}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}rpy}, 
+		\hyperpage{70}
+    \subitem {gomotion\discretionary {-}{}{}::points}, \hyperpage{83}
+  \item {par}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{62}
+  \item {pgm}
+    \subitem {gomotion\discretionary {-}{}{}::\discretionary {-}{}{}Go\discretionary {-}{}{}Motion}, 
+		\hyperpage{82}
+  \item {phi}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}sph}, 
+		\hyperpage{73}
+  \item {pk}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}link}, 
+		\hyperpage{48}
+  \item {platform}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}pk}, 
+		\hyperpage{63}
+  \item {point}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}line}, 
+		\hyperpage{47}
+  \item {pose}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}position}, 
+		\hyperpage{67}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}pp}, 
+		\hyperpage{67}
+  \item {pp}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}link}, 
+		\hyperpage{49}
+
+  \indexspace
+
+  \item {qnormal}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}circular\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{52}
+  \item {quantity}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}link}, 
+		\hyperpage{49}
+
+  \indexspace
+
+  \item {r}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}cyl}, 
+		\hyperpage{42}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}rpy}, 
+		\hyperpage{70}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}sph}, 
+		\hyperpage{73}
+  \item {re}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}complex}, 
+		\hyperpage{41}
+  \item {reciprocate}
+    \subitem {gotraj.\discretionary {-}{}{}h}, \hyperpage{101}
+  \item {reset}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+  \item {rot}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}hom}, 
+		\hyperpage{43}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}pose}, 
+		\hyperpage{65}
+  \item {rows}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix}, 
+		\hyperpage{51}
+  \item {rstart}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}circular\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{52}
+  \item {rtot}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}circular\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{52}
+
+  \indexspace
+
+  \item {s}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}quat}, 
+		\hyperpage{69}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}interp\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{78}
+  \item {S\discretionary {-}{}{}I\discretionary {-}{}{}G\discretionary {-}{}{}N}
+    \subitem {gomath.\discretionary {-}{}{}cpp}, \hyperpage{110}
+  \item {scale}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{72}
+  \item {scale\discretionary {-}{}{}\_\discretionary {-}{}{}a\discretionary {-}{}{}\_\discretionary {-}{}{}next}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{72}
+  \item {scale\discretionary {-}{}{}\_\discretionary {-}{}{}b}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{72}
+  \item {scale\discretionary {-}{}{}\_\discretionary {-}{}{}dir}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{72}
+  \item {scale\discretionary {-}{}{}\_\discretionary {-}{}{}isneg}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{72}
+  \item {scale\discretionary {-}{}{}\_\discretionary {-}{}{}next}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{72}
+  \item {scale\discretionary {-}{}{}\_\discretionary {-}{}{}spec}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{72}
+  \item {scale\discretionary {-}{}{}\_\discretionary {-}{}{}t}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{72}
+  \item {scale\discretionary {-}{}{}\_\discretionary {-}{}{}v\discretionary {-}{}{}\_\discretionary {-}{}{}next}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{72}
+  \item {scaling}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{72}
+  \item {set}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}scale\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{72}
+  \item {set\discretionary {-}{}{}\_\discretionary {-}{}{}cpar}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{61}
+  \item {set\discretionary {-}{}{}\_\discretionary {-}{}{}cycle\discretionary {-}{}{}\_\discretionary {-}{}{}time}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+  \item {set\discretionary {-}{}{}\_\discretionary {-}{}{}end\discretionary {-}{}{}\_\discretionary {-}{}{}pose}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{61}
+  \item {set\discretionary {-}{}{}\_\discretionary {-}{}{}end\discretionary {-}{}{}\_\discretionary {-}{}{}position}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{61}
+  \item {set\discretionary {-}{}{}\_\discretionary {-}{}{}here}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}interp}, 
+		\hyperpage{46}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+  \item {set\discretionary {-}{}{}\_\discretionary {-}{}{}id}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{61}
+  \item {set\discretionary {-}{}{}\_\discretionary {-}{}{}joint\discretionary {-}{}{}\_\discretionary {-}{}{}number}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+  \item {set\discretionary {-}{}{}\_\discretionary {-}{}{}jpar}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{61}
+  \item {set\discretionary {-}{}{}\_\discretionary {-}{}{}rpar}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{61}
+  \item {set\discretionary {-}{}{}\_\discretionary {-}{}{}scale}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+  \item {set\discretionary {-}{}{}\_\discretionary {-}{}{}time}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{61}
+  \item {set\discretionary {-}{}{}\_\discretionary {-}{}{}tpar}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{61}
+  \item {set\discretionary {-}{}{}\_\discretionary {-}{}{}type}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{61}
+  \item {sincos}
+    \subitem {gomotion}, \hyperpage{38}
+  \item {size}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+  \item {start}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{62}
+  \item {stop}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+  \item {stotinv}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}circular\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{52}
+
+  \indexspace
+
+  \item {t1}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{74}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{77}
+  \item {t2}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{74}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{77}
+  \item {t3}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{77}
+  \item {t4}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{77}
+  \item {t5}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{77}
+  \item {t6}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{77}
+  \item {tend}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{74}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{77}
+  \item {The Go Motion Pose Mathematics Library}, \hyperpage{9}
+  \item {there}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}queue}, 
+		\hyperpage{58}
+  \item {theta}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}cyl}, 
+		\hyperpage{42}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}dh}, 
+		\hyperpage{42}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}sph}, 
+		\hyperpage{73}
+  \item {thtot}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}circular\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{52}
+  \item {totalt}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{62}
+  \item {Trajectory Planning Algorithms}, \hyperpage{13}
+  \item {tran}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}hom}, 
+		\hyperpage{43}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}pose}, 
+		\hyperpage{65}
+  \item {turns}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}circular\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{52}
+  \item {type}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}link}, 
+		\hyperpage{49}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{62}
+
+  \indexspace
+
+  \item {u}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}link}, 
+		\hyperpage{49}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{62}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}position}, 
+		\hyperpage{67}
+  \item {uquat}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}linear\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{54}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{62}
+  \item {urcsp}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}circular\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{52}
+  \item {uvec}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}linear\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{54}
+
+  \indexspace
+
+  \item {v}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}matrix}, 
+		\hyperpage{51}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}interp\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{78}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}vel}, 
+		\hyperpage{80}
+  \item {vel}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{55}
+    \subitem {gomotion\discretionary {-}{}{}::\discretionary {-}{}{}Go\discretionary {-}{}{}Motion\discretionary {-}{}{}Params}, 
+		\hyperpage{83}
+  \item {vt1}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}ca\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{75}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{77}
+  \item {vt2}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{77}
+  \item {vt3}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}traj\discretionary {-}{}{}\_\discretionary {-}{}{}cj\discretionary {-}{}{}\_\discretionary {-}{}{}spec}, 
+		\hyperpage{77}
+
+  \indexspace
+
+  \item {w}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}vel}, 
+		\hyperpage{80}
+
+  \indexspace
+
+  \item {x}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}cart}, 
+		\hyperpage{40}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}mat}, 
+		\hyperpage{50}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}quat}, 
+		\hyperpage{69}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec}, 
+		\hyperpage{70}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}uxz}, 
+		\hyperpage{79}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}xyz}, 
+		\hyperpage{81}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}zyx}, 
+		\hyperpage{81}
+
+  \indexspace
+
+  \item {y}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}cart}, 
+		\hyperpage{40}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}mat}, 
+		\hyperpage{50}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}quat}, 
+		\hyperpage{69}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}rpy}, 
+		\hyperpage{70}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec}, 
+		\hyperpage{70}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}xyz}, 
+		\hyperpage{81}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}zyx}, 
+		\hyperpage{81}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}zyz}, 
+		\hyperpage{82}
+
+  \indexspace
+
+  \item {z}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}cart}, 
+		\hyperpage{40}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}cyl}, 
+		\hyperpage{42}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}mat}, 
+		\hyperpage{50}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}quat}, 
+		\hyperpage{69}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}rvec}, 
+		\hyperpage{70}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}uxz}, 
+		\hyperpage{79}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}xyz}, 
+		\hyperpage{81}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}zyx}, 
+		\hyperpage{81}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}zyz}, 
+		\hyperpage{82}
+  \item {zero\discretionary {-}{}{}\_\discretionary {-}{}{}joints}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}position}, 
+		\hyperpage{66}
+  \item {zero\discretionary {-}{}{}\_\discretionary {-}{}{}pose}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}position}, 
+		\hyperpage{66}
+  \item {zp}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}zyz}, 
+		\hyperpage{82}
+  \item {zstart}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}circular\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{52}
+  \item {ztot}
+    \subitem {gomotion\discretionary {-}{}{}::go\discretionary {-}{}{}\_\discretionary {-}{}{}motion\discretionary {-}{}{}\_\discretionary {-}{}{}circular\discretionary {-}{}{}\_\discretionary {-}{}{}params}, 
+		\hyperpage{52}
+
+\end{theindex}
