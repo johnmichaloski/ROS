@@ -236,6 +236,8 @@ namespace RCS {
         static const int CANON_PLACE = 17;
         static const int CANON_SET_BASE_POSE = 18;
         static const int CANON_FEEDHOLD = 19;
+        static const int  CANON_GRASP_OBJECT=20;
+        static const int  CANON_RELEASE_OBJECT=21;
 
         static const int CANON_UNKNOWN = -1;
 #if 0

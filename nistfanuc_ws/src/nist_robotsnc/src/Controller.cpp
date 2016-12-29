@@ -54,6 +54,7 @@ namespace RCS {
         gripperPose() = RCS::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0, 0, 0));
         invGripperPose() = gripperPose().inverse();
         _robotcmd=0;
+        bGrasping()=false;
 
     }
 
@@ -192,7 +193,7 @@ namespace RCS {
                 laststatus= status;
                 nistcrcl::CrclCommandMsg msg = crclcmds.PeekFrontMsgQueue();
 nextposition:
-                ofsMotionTrace << Name().c_str() << " Command = " << RCS::sCmd[msg.crclcommand]<< "\n";
+                //ofsMotionTrace << Name().c_str() << " Command = " << RCS::sCmd[msg.crclcommand]<< "\n";
                 cc.Set(msg);
                 LOG_TRACE << "Msg Joints " << RCS::VectorDump<double>(msg.joints.position).c_str();
                 LOG_TRACE << "CC Joints " << RCS::VectorDump<double>(cc.joints.position).c_str();
@@ -282,6 +283,12 @@ nextposition:
                 } else if (_newcc.crclcommand == CanonCmdType::CANON_ERASE_OBJECT) {
                     Eigen::Affine3d& pose = pScene->FindPose(_newcc.partname);
                     pScene->UpdateScene(_newcc.partname, pose, "CLEAR");
+                } else if (_newcc.crclcommand == CanonCmdType::CANON_GRASP_OBJECT) {
+                     GraspObj() = pScene->Find(_newcc.partname);
+                     bGrasping()=true;
+                }else if (_newcc.crclcommand == CanonCmdType::CANON_RELEASE_OBJECT) {
+                     GraspObj() = NULL;
+                     bGrasping()=false;
                 } else if (_newcc.crclcommand == CanonCmdType::CANON_DRAW_OBJECT) {
                     Eigen::Affine3d pose= Convert<geometry_msgs::Pose, Eigen::Affine3d> (_newcc.finalpose);
                     pScene->UpdateScene(_newcc.partname,
@@ -306,6 +313,11 @@ nextposition:
                     // FIXME: this is only the current pose of the robot arm, not including base offset of gripper
                     status.currentpose = Kinematics()->FK(status.currentjoints.position); /**<  current robot pose */
                     std::vector<tf::Pose> poses = Kinematics()->ComputeAllFk(status.currentjoints.position);
+                    if(bGrasping() && GraspObj()!=NULL) {
+                        tf::Pose tfpose = basePose() *  status.currentpose * gripperPose();
+                        GraspObj()->pose = Eigen::Affine3d::Identity() * Convert<tf::Pose, Eigen::Affine3d>(tfpose);
+                        pScene->UpdateScene(GraspObj());
+                    }
 #if defined(RobotCNCJointMove)
                     LOG_DEBUG << Name().c_str() << " MOVE ROBOT JOINTS\n";
                     LOG_DEBUG << "     Current Joints " << RCS::VectorDump<double>(_newcc.joints.position).c_str();
@@ -332,7 +344,7 @@ nextposition:
                     rviz_jntcmd.publish(status.currentjoints);
                     ros::spinOnce();
                     ros::spinOnce();
-#if 1
+#if 0
                     if (!_newcc.partname.empty()) {
                         Eigen::Affine3d pose = Eigen::Affine3d::Identity() *
                                 Eigen::Translation3d(_newcc.finalpose.position.x, _newcc.finalpose.position.y, _newcc.finalpose.position.z);

@@ -23,6 +23,7 @@ namespace gomotion {
     typedef sensor_msgs::JointState_<std::allocator<void> > JointState;
 
     struct GoMotionParams {
+        GoMotionParams(){}
         GoMotionParams(double _vel, double _acc, double _jerk) : 
         vel(_vel), acc(_acc),jerk(_jerk)
         {
@@ -39,17 +40,21 @@ namespace gomotion {
     public:
         GoMotion();
         int Init(JointState here, double deltat);
-        int InitPose(tf::Pose here, tf::Pose there,
-                double deltat,
+        int InitPose(tf::Pose here,
+                tf::Pose there,
                 gomotion::GoMotionParams tparams,
                 gomotion::GoMotionParams rparams);
+        int InitPose(tf::Pose here, tf::Pose there,
+                double seconds);
+        int InitJoints(JointState here,
+                JointState there,
+                std::vector<gomotion::GoMotionParams> params,
+                bool bCoordinated=true);
         int InitJoints(JointState here, JointState there,
-                double deltat,
-                gomotion::GoMotionParams params);
-        int InitUJoints(JointState here, JointState there,
-                double deltat,
-                gomotion::GoMotionParams params);
+                double seconds, bool bCoordinated=true);
+
         void AppendPose(tf::Pose);
+        void AppendJoints(JointState);
         tf::Pose NextPose();
         JointState NextJoints();
         bool IsDone();
@@ -57,6 +62,14 @@ namespace gomotion {
     protected:
         boost::shared_ptr<go_motion_interface> pgm;
         size_t num_joints;
+        int InitJoints(JointState here,
+                JointState there,
+                double seconds,
+                std::vector<gomotion::GoMotionParams> jparams,
+                bool bCoordinated);
+        int InitPose(tf::Pose here, tf::Pose there, double seconds,
+                gomotion::GoMotionParams tparams,
+                gomotion::GoMotionParams rparams);
 
     };
 };

@@ -59,7 +59,14 @@ void CGlobals::DebugSetup()
     ofsIkFast.basic_ios<char>::rdbuf(ofsRobotExercise.rdbuf());           //3
    
 }
+void CGlobals::AssignOfs(std::ostream *inOfs, std::ostream *replacementOfs)
+{
 
+    (*inOfs).copyfmt((*replacementOfs));
+    (*inOfs).clear((*replacementOfs).rdstate()); //2
+    (*inOfs).basic_ios<char>::rdbuf((*replacementOfs).rdbuf());           //3
+
+}
 static std::string  LeftTrim (std::string  str)
 {
     size_t startpos = str.find_first_not_of(" \t\r\n");

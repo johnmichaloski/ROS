@@ -122,6 +122,7 @@ int main(int argc, char** argv) {
         GearDemo geardemo(nh, path, Convert<tf::Vector3, tf::Pose>(tf::Vector3(0.25, 0.5, 0.0)));
 #if 0    
         geardemo.Setup(); // this does draw scene
+        pScene->DrawScene();
 #endif
         // Confetti
 #if 0
@@ -132,7 +133,6 @@ int main(int argc, char** argv) {
 
         }
 #endif
-        pScene->DrawScene();
 
         Globals._appproperties[ROSPACKAGENAME] = path;
         MotionException::Load();

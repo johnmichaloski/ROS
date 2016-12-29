@@ -22,8 +22,6 @@ using namespace Conversion;
 void IKinematics::ENormalize(double min, double max) {
     joint_emax = joint_max;
     joint_emin = joint_min;
-    std::reverse(joint_emax.begin(), joint_emax.end());
-    std::reverse(joint_emin.begin(), joint_emin.end());
     
     double range = (fabs(min)+fabs(max));
     for(size_t i=0; i< joint_emin.size(); i++){
@@ -42,20 +40,20 @@ void IKinematics::ENormalize(double min, double max) {
 }
 
 bool IKinematics::IncrementExercise(std::vector<double>& jts) {
-       size_t i = num_joints - 1;
-       while (i >= 0) {
-             jts[i] += _spacer * (joint_emax[i] - joint_emin[i]) / 2.0;
-             size_t j = i;
-             while (j > 0 && jts[j] >= joint_emax[j]) {
-                    jts[j - 1]+= _spacer * (joint_emax[j - 1] - joint_emin[j - 1]) / 2.0;
-                    jts[j] = joint_emin[j];
-                    j--;
-             }
-             break;
-       }
-       if(jts[0]>=joint_max[0])
-             return true;
-       return false;
+    size_t i = 0; 
+    while (i >= 0) {
+        jts[i] += _spacer * (joint_emax[i] - joint_emin[i]) / 2.0;
+        size_t j = i;
+        while (j < num_joints - 1 && jts[j] >= joint_emax[j]) {
+            jts[j + 1] += _spacer * (joint_emax[j + 1] - joint_emin[j + 1]) / 2.0;
+            jts[j] = joint_emin[j];
+            j++;
+        }
+        break;
+    }
+    if (jts[num_joints - 1] >= joint_max[num_joints - 1])
+        return true;
+    return false;
 }
 
 bool IKinematics::ParseURDF(std::string xml_string, std::string base_frame) {

@@ -90,7 +90,20 @@ void InlineRobotCommands::EraseObject(std::string objname) {
     cmd.partname = objname;
     _cnc->crclcmds.AddMsgQueue(cmd);
 }
-
+void InlineRobotCommands::GraspObject(std::string objname) {
+    RCS::CanonCmd cmd;
+    cmd.crclcommand = CanonCmdType::CANON_GRASP_OBJECT;
+    cmd.crclcommandnum = crclcommandnum++;
+    cmd.partname = objname;
+    _cnc->crclcmds.AddMsgQueue(cmd);
+}
+void InlineRobotCommands::ReleaseObject(std::string objname) {
+    RCS::CanonCmd cmd;
+    cmd.crclcommand = CanonCmdType::CANON_RELEASE_OBJECT;
+    cmd.crclcommandnum = crclcommandnum++;
+    cmd.partname = objname;
+    _cnc->crclcmds.AddMsgQueue(cmd);
+}
 void InlineRobotCommands::MoveObject(std::string objname, RCS::Pose pose, std::string color) {
     RCS::CanonCmd cmd;
     cmd.crclcommand = CanonCmdType::CANON_DRAW_OBJECT;
@@ -112,6 +125,7 @@ void InlineRobotCommands::Pick(RCS::Pose pose, std::string objname) {
     DoDwell(mydwell);
     CloseGripper();
     DoDwell(mydwell);
+    GraspObject(objname);
     MoveTo(retract * RCS::Pose(QBend, offset), objname);
 }
 
@@ -136,6 +150,7 @@ void InlineRobotCommands::Place(RCS::Pose pose, std::string objname) {
     MoveTo(retract * RCS::Pose(QBend, offset), objname);
     DoDwell(mydwell);
     MoveTo(RCS::Pose(QBend, offset), objname);
+    ReleaseObject(objname);
     DoDwell(mydwell);
     OpenGripper();
     DoDwell(mydwell);
@@ -383,8 +398,8 @@ void CheckersGame::PhysicalMove(InlineRobotCommands &robot,
          if (obj->height == RvizCheckers::HEIGHT) {
             obj->height *= 2;
             obj->pose = Eigen::Translation3d(Eigen::Vector3d(0, 0, 0.01)) * obj->pose;
-            robot.MoveObject(obj->name, Convert<Eigen::Affine3d, tf::Pose>(obj->pose),
-                    pScene->MARKERCOLOR(checkercolor));
+//            robot.MoveObject(obj->name, Convert<Eigen::Affine3d, tf::Pose>(obj->pose),
+//                    pScene->MARKERCOLOR(checkercolor));
             ros::spinOnce();
             ros::spinOnce();
             ros::spinOnce();

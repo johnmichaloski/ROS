@@ -281,6 +281,10 @@ public:
      * \brief Open logging streams for debugging. Close on CGlobals destroctor.
      */
     void DebugSetup();
+    /*!
+     * \brief Assign a new output file stream to a file stream.
+     */    
+    void AssignOfs(std::ostream *inOfs, std::ostream *replacementOfs);
     // -----------------------------------------
     // Application specifie parameters
     std::map< std::string, std::string> _appproperties; /**<map of application properties, e.g., ["prop"]="value" */

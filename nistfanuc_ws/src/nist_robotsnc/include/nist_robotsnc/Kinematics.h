@@ -17,6 +17,7 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 #include <boost/thread/mutex.hpp>
 //#include "arm_kinematics.h"
 #include <urdf/model.h>
+#include <sstream>
 
 #include "RCS.h"
 #include "Globals.h"
@@ -183,26 +184,19 @@ public:
         }
         bool bFlag = false; // while not done
         while (!bFlag) {
-            std::reverse(jts.begin(), jts.end());
+            //std::reverse(jts.begin(), jts.end());
             tf::Pose pose = FK(jts);
-            std::vector<tf::Pose> poses= ComputeAllFk(jts);
-            
-            ofsRobotExercise << "==========================================================\n";
-            ofsRobotExercise << "In Joints     =" << RCS::VectorDump<double>(jts).c_str() << "\n";
-            ofsRobotExercise << "FK            =" << RCS::DumpPoseSimple(pose).c_str() << "\n";
-            ofsRobotExercise << "All FK        =" << RCS::DumpPoseSimple(poses[num_joints-1]).c_str() << "\n";
+            //std::vector<tf::Pose> poses= ComputeAllFk(jts);
 
             std::vector<double> echojts;
+            std::stringstream tmpofs;
             try {
+                Globals.AssignOfs((std::ostream *) &ofsIkFast,
+                        (std::ostream *) &tmpofs);
                 echojts = IK(pose, jts);
             } catch (...) {
             }
-            ofsRobotExercise << "Out Joints    =" << RCS::VectorDump<double>(echojts).c_str() << "\n";
-#if 0
-            for (size_t n = 0; n < num_joints; n++)
-                LOGFILE << jts[n] << ":";
-            LOGFILE << "\n" << std::flush;
-#endif
+
 
             double err = 0.0;
             int flag = 1;
@@ -218,9 +212,17 @@ public:
                     flag = 0; // Red marker
                 }
             }
-            
+            if (flag <= 0) {
+                //std::cout << RCS::VectorDump(jts).c_str() << "\n";
+                ofsRobotExercise << "==========================================================\n";
+                ofsRobotExercise << "In Joints     =" << RCS::VectorDump<double>(jts).c_str() << "\n";
+                ofsRobotExercise << "FK            =" << RCS::DumpPoseSimple(pose).c_str() << "\n";
+                //            ofsRobotExercise << "All FK        =" << RCS::DumpPoseSimple(poses[num_joints-1]).c_str() << "\n";
+                ofsRobotExercise << "Out Joints    =" << RCS::VectorDump<double>(echojts).c_str() << "\n";
+                ofsRobotExercise << tmpofs.str();
+            }
             op(flag, pose);
-            std::reverse(jts.begin(), jts.end());
+            //std::reverse(jts.begin(), jts.end());
             bFlag = IncrementExercise(jts);
         }
     }

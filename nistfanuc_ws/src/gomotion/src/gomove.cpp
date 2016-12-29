@@ -127,7 +127,23 @@ namespace gomotion {
         return GO_RESULT_OK;
     }
 
-    int GoMotion::InitPose(tf::Pose here, tf::Pose there, double deltat,
+    int GoMotion::InitPose(tf::Pose here, tf::Pose there,
+            double seconds) {
+                return InitPose(here, there, seconds,
+             gomotion::GoMotionParams(),
+            gomotion::GoMotionParams());
+
+    }
+
+    int GoMotion::InitPose(tf::Pose here, tf::Pose there, 
+            gomotion::GoMotionParams tparams,
+            gomotion::GoMotionParams rparams) {
+        return InitPose(here, there, -1,
+             tparams,
+            rparams);
+
+    }        
+    int GoMotion::InitPose(tf::Pose here, tf::Pose there, double seconds,
             gomotion::GoMotionParams tparams,
             gomotion::GoMotionParams rparams) {
         go_position position;
@@ -138,25 +154,23 @@ namespace gomotion {
                 EF(pgm->_gmq.set_type(GO_MOTION_WORLD));
                 position.u.pose = ConvertTfPose(here);
                 EF(pgm->_gmq.set_here(&position)); // position copied	
-#if defined(DEBUG) && defined (GODEBUG)
-                std::cout << "    HERE    = " << DumpPoseSimple(here).c_str() << "\n";
-                std::cout << "    HERE    = " << ArrayDump<double>((double *) &position.u.pose, 7) << "\n";
-#endif
+
             }
             EF(pgm->_gms.init());
             EF(pgm->_gms.set_type(GO_MOTION_LINEAR));
             EF(pgm->_gms.set_id(1));
-            EF(pgm->_gms.set_tpar(tparams.vel, tparams.acc, tparams.jerk)); // set translation parameters
-            EF(pgm->_gms.set_rpar(1.0, 10.0, 100.0)); // set rotation parameters
+            if (seconds >= 0) {
+                EF(pgm->_gms.set_time(seconds));
+            } else {
+                EF(pgm->_gms.set_tpar(tparams.vel, tparams.acc, tparams.jerk)); // set translation parameters
+                EF(pgm->_gms.set_rpar(1.0, 10.0, 100.0)); // set rotation parameters
+            }
             position.u.pose = ConvertTfPose(there);
             AppendPose(there);
-#if defined(DEBUG) && defined (GODEBUG)
-            std::cout << "    THERE   = " << DumpPoseSimple(there).c_str() << "\n";
-            std::cout << "    THERE   = " << ArrayDump<double>((double *) &position.u.pose, 7) << "\n";
-#endif
 
         } catch (std::runtime_error & e) {
             std::cout << "GoMotion::InitPose Exception" << e.what() << "\n";
+            throw;
         }
         return GO_RESULT_OK;
     }
@@ -172,6 +186,7 @@ namespace gomotion {
             EF(pgm->_gmq.append(&(pgm->_gms)));
         } catch (std::runtime_error & e) {
             std::cout << "GoMotion::InitPose Exception" << e.what() << "\n";
+            throw;
         }
     }
 
@@ -188,48 +203,89 @@ namespace gomotion {
         return ConvertGoPose(position.u.pose);
     }
 
-    int GoMotion::InitUJoints(JointState here, JointState there, double deltat, gomotion::GoMotionParams jparams) {
-        try {
-            EF(InitJoints(here, there, deltat, jparams));
-            EF(pgm->_gms.set_type(GO_MOTION_UJOINT));
-            EF(pgm->_gmq.set_type(GO_MOTION_JOINT));
-        } catch (std::exception e) {
-            std::cout << "GoMotion::InitUJoints Exception" << e.what() << "\n";
-        }
+    int GoMotion::InitJoints(JointState here,
+            JointState there,
+            std::vector<gomotion::GoMotionParams> jparams,
+            bool bCoordinated) {
+        return InitJoints(here,
+                there,
+                -1,
+                jparams,
+                bCoordinated);
+
     }
 
-    int GoMotion::InitJoints(JointState here, JointState there, double deltat, gomotion::GoMotionParams jparams) {
+    int GoMotion::InitJoints(JointState here,
+            JointState there,
+            double seconds,
+            bool bCoordinated) {
+        return InitJoints(here,
+                there,
+                seconds,
+                std::vector<gomotion::GoMotionParams> (),
+                bCoordinated);
+
+    }
+    int GoMotion::InitJoints(JointState here, 
+            JointState there, 
+            double seconds,  
+            std::vector<gomotion::GoMotionParams> jparams,
+             bool bCoordinated) {
         JointState nextjoints;
         go_position position;
         try {
             if (pgm->_gmq.get_type() != GO_MOTION_JOINT) {
                 // Set type must go BEFORE set_here!
                 EF(pgm->_gmq.reset());
-                EF(pgm->_gmq.set_type(GO_MOTION_JOINT));
+                if (bCoordinated) {
+                    EF(pgm->_gmq.set_type(GO_MOTION_JOINT));
+                } else {
+                    EF(pgm->_gms.set_type(GO_MOTION_UJOINT));
+                }
                 std::copy(here.position.begin(), here.position.end(), position.u.joint);
                 EF(pgm->_gmq.set_here(&position)); // position copied
             }
-            //Init(deltat);
             EF(pgm->_gms.init());
             EF(pgm->_gms.set_type(GO_MOTION_JOINT));
-            for (size_t i = 0; i < num_joints; i++)
-                EF(pgm->_gms.set_jpar(i, jparams.vel, jparams.acc, jparams.jerk));
+            if (seconds >= 0)
+                EF(pgm->_gms.set_time(seconds));
+            else {
+                if (jparams.size() != num_joints)
+                    throw std::runtime_error("InitJoints: not enough joint params");
+                    for (size_t i = 0; i < num_joints; i++)
+                        EF(pgm->_gms.set_jpar(i, jparams[i].vel, jparams[i].acc, jparams[i].jerk));
 
+            }
             std::copy(there.position.begin(), there.position.end(), position.u.joint);
             EF(pgm->_gms.set_end_position(&position));
-
-
             EF(pgm->_gmq.append(&(pgm->_gms)));
+            return 0;
         } catch (std::exception &e) {
             std::cout << "GoMotion::InitJoints Exception" << e.what() << "\n";
+            throw;
+        }
+        return -1;
+    }
+    void GoMotion::AppendJoints(JointState there) {
+        go_position position;
+        try {
+            if (pgm->_gms.get_type() != GO_MOTION_JOINT)
+                throw std::runtime_error("AppendJoints when not setup for GO_MOTION_JOINT");
+            // Use pgm->_gms again
+            std::copy(there.position.begin(), there.position.end(), position.u.joint);
+            EF(pgm->_gms.set_end_position(&position));
+            EF(pgm->_gmq.append(&(pgm->_gms)));
+        } catch (std::runtime_error & e) {
+            std::cout << "GoMotion::AppendJoints Exception" << e.what() << "\n";
+            throw;
         }
     }
-
     void GoMotion::InitStop() {
         try {
             EF(pgm->_gmq.stop());
         } catch (std::exception e) {
             std::cout << "GoMotion::Stop Exception" << e.what() << "\n";
+            throw;
         }
     }
 

@@ -37,7 +37,7 @@
 #include "nistcrcl/CrclCommandMsg.h"
 #include "nistcrcl/CrclStatusMsg.h"
 //#include "nist_fanuc/Demo.h"
-
+#include "nist_robotsnc/Scene.h"
 namespace RCS {
 
     extern boost::mutex cncmutex;
@@ -167,6 +167,9 @@ namespace RCS {
         VAR(basePose, RCS::Pose);
         VAR(invBasePose, RCS::Pose);
         VAR(QBend, tf::Quaternion);
+        VAR(bGrasping, bool)
+        VAR(GraspObj, ObjectDB * )
+                
 
         ros::NodeHandle *_nh;
 

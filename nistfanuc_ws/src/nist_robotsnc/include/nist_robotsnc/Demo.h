@@ -156,6 +156,8 @@ public:
      * 
      */
     void MoveObject(std::string objname, RCS::Pose pose, std::string color);
+    void GraspObject(std::string objname);
+    void ReleaseObject(std::string objname);
     /*!
      * \brief Erases object with given objname .
      * \param objname name of the object that is being picked up.

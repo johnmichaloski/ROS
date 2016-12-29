@@ -115,10 +115,12 @@ int GoInterpreter::ParseJointCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
         ofsRobotMoveJoint << "  Goal Joints " << RCS::VectorDump<double>(cmd.joints.position).c_str() << "\n";
         ofsRobotMoveJoint << "  Command Num " << cmd.CommandNum() << "\n" << std::flush;
 #endif
+        std::vector<gomotion::GoMotionParams> jparams  (_kinematics->NumJoints(), gomotion::GoMotionParams(1.0, 10.0, 100.0));
         if (cmd.CommandNum() != _lastcmdid) {
             _lastcmdid = cmd.CommandNum();
-            _go->InitJoints(instatus.currentjoints, cmd.joints, this->_nc->CycleTime(),
-                    gomotion::GoMotionParams(1.0, 10.0, 100.0)); // 1 meter/sec
+            _go->InitJoints(instatus.currentjoints, 
+                    cmd.joints, 
+                    jparams); // 1 meter/sec
 
         }
 
@@ -164,10 +166,10 @@ int GoInterpreter::ParseWorldCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
                     _nc->gripperPose();
         if (cmd.CommandNum() != _lastcmdid) {
             _lastcmdid = cmd.CommandNum();
-            _go->InitPose(curpose, finalpose, this->_nc->CycleTime(),
+            _go->InitPose(curpose, 
+                    finalpose, 
                     gomotion::GoMotionParams(1.0, 10.0, 100.0),
                     gomotion::GoMotionParams(.1, 1.0, 10.0)); // 1 meter/sec
-            // _go->AppendPose(lastpose);  // NO WAY~!
 
         }
         //tf::Pose nextpose = _nc->invGripperPose() * _go->NextPose() * _nc->invBasePose();
@@ -285,7 +287,9 @@ int GoInterpreter::ParseCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
             outcmd = cmd;
             return CanonStatusType::CANON_DONE;
         } else if (cmd.crclcommand == CanonCmdType::CANON_DRAW_OBJECT ||
-                cmd.crclcommand == CanonCmdType::CANON_ERASE_OBJECT) {
+                cmd.crclcommand == CanonCmdType::CANON_ERASE_OBJECT ||
+                cmd.crclcommand == CanonCmdType::CANON_GRASP_OBJECT ||
+                cmd.crclcommand == CanonCmdType::CANON_RELEASE_OBJECT) {
             outcmd = cmd;
             return CanonStatusType::CANON_DONE;
         }
