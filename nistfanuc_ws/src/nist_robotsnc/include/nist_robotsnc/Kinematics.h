@@ -191,8 +191,8 @@ public:
             std::vector<double> echojts;
             std::stringstream tmpofs;
             try {
-                Globals.AssignOfs((std::ostream *) &ofsIkFast,
-                        (std::ostream *) &tmpofs);
+//                Globals.AssignOfs((std::ostream *) &ofsIkFast,
+//                        (std::ostream *) &tmpofs);
                 echojts = IK(pose, jts);
             } catch (...) {
             }
@@ -393,6 +393,7 @@ public:
         double dist_sqr = 0;
         std::vector<double> ss = ik_seed_state;
         for (size_t i = 0; i < ik_seed_state.size(); ++i) {
+#if 0
             while (ss[i] > 2 * M_PI) {
                 ss[i] -= 2 * M_PI;
             }
@@ -405,6 +406,7 @@ public:
             while (solution[i] < -2 * M_PI) {
                 solution[i] += 2 * M_PI;
             }
+#endif
             dist_sqr += fabs(ik_seed_state[i] - solution[i]);
         }
         return dist_sqr;
@@ -429,6 +431,7 @@ public:
             Harmonize(ik_seed_state, solution);
         }
     }
+    std::string DumpTransformMatrices();
 };
 typedef boost::shared_ptr<IKinematics> IKinematicsSharedPtr;
 

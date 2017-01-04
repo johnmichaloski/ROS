@@ -40,18 +40,16 @@ void IKinematics::ENormalize(double min, double max) {
 }
 
 bool IKinematics::IncrementExercise(std::vector<double>& jts) {
-    size_t i = 0; 
-    while (i >= 0) {
-        jts[i] += _spacer * (joint_emax[i] - joint_emin[i]) / 2.0;
-        size_t j = i;
-        while (j < num_joints - 1 && jts[j] >= joint_emax[j]) {
-            jts[j + 1] += _spacer * (joint_emax[j + 1] - joint_emin[j + 1]) / 2.0;
-            jts[j] = joint_emin[j];
-            j++;
-        }
-        break;
+    size_t i = 0;
+    jts[i] += _spacer * (joint_emax[i] - joint_emin[i]) / 2.0;
+    size_t j = i;
+    while (j < num_joints - 1 && jts[j] >= joint_emax[j]) {
+        jts[j + 1] += _spacer * (joint_emax[j + 1] - joint_emin[j + 1]) / 2.0;
+        jts[j] = joint_emin[j];
+        j++;
     }
-    if (jts[num_joints - 1] >= joint_max[num_joints - 1])
+
+    if (jts[num_joints - 1] >= joint_emax[num_joints - 1])
         return true;
     return false;
 }
@@ -160,6 +158,17 @@ Eigen::Matrix4d IKinematics::ComputeUrdfTransform(double angle,
     return tmp * m1; // http://answers.ros.org/question/193286/some-precise-definition-or-urdfs-originrpy-attribute/
 }    
 
+std::string IKinematics::DumpTransformMatrices() {
+    // Fixme: row versus column major :( May not matter since eigen rectifies when accessing
+    std::string dump;
+    for (int i = 0; i < joint_names.size(); i++) {
+       Eigen::Matrix4d m= ComputeUrdfTransform(M_PI_2, axis[i], xyzorigin[i], rpyorigin[i]);
+       dump+=Globals.StrFormat("%dT%d=\n", i, i+1);
+           
+       dump+= RCS::Dump4x4Matrix(m);
+    }
+    return dump;
+}
 std::vector<tf::Pose> IKinematics::ComputeAllFk(std::vector<double> thetas)
 {
     // Using URDF will compute FK

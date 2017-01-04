@@ -198,6 +198,7 @@ int main(int argc, char** argv) {
                 ofsRobotURDF << "tooloffset " << RCS::DumpPoseSimple(ncs[i]->gripperPose()).c_str() << "\n";
                 ofsRobotURDF << "Joint names " << VectorDump<std::string>(ncs[i]->Kinematics()->JointNames()).c_str() << "\n" << std::flush;
                 ofsRobotURDF <<  kin->DumpUrdfJoint().c_str()<< "\n";
+               ofsRobotURDF << kin->DumpTransformMatrices().c_str()<< "\n";
 
                 for (std::map<std::string, std::vector<double>>::iterator it = ncs[i]->NamedJointMove.begin(); it != ncs[i]->NamedJointMove.end(); it++)
                     ofsRobotURDF << (*it).first<< "=" << VectorDump<double>(ncs[i]->NamedJointMove[(*it).first]).c_str() << "\n";
@@ -209,9 +210,10 @@ int main(int argc, char** argv) {
         } catch (std::exception &e) {
             LOG_FATAL << e.what();
         }
-#if 0
+#if 1
         ExerciseDemo exercise(nh);
         exercise.Exercise(&nccmds[0]);
+        //exercise.Exercise(&nccmds[1]);
 #endif
 #if 0
         JointTrajectoryMaker jointmaker(0.1);

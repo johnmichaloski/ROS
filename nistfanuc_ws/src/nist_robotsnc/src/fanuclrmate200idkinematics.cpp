@@ -19,7 +19,6 @@
 #include "nist_robotsnc/Controller.h"
 
 using namespace RCS;
-#define IKFASTDEBUG
 
 #define IKFAST_HAS_LIBRARY
 #define IKFAST_NO_MAIN

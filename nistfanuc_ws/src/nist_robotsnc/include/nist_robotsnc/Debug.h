@@ -32,6 +32,10 @@ using namespace Conversion;
 // Log scene information
 #define LogScene
 
+//  Debug IK Fast information
+// #define IKFASTDEBUG
+
+
 namespace RCS {
 
     inline double ToDegree(double ang) {
@@ -192,6 +196,18 @@ namespace RCS {
         s << boost::format("Z=%8.4f") % rot.z() << ":";
         s << boost::format("W=%8.4f") % rot.w() << ":";
         //       s << std::endl;
+        return s.str();
+    }
+    inline std::string Dump4x4Matrix(Eigen::Matrix4d m) {
+        std::stringstream s;
+        for (size_t i = 0; i < 4; i++) {
+            s << "|";
+            for (size_t j = 0; j < 4; j++) {
+                s << boost::format("%8.4f") % m(i, j) << " ";
+            }
+            s << "|\n";
+        }
+        s << "\n";
         return s.str();
     }
 };
