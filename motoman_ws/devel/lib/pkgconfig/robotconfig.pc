@@ -1,0 +1,1 @@
+/usr/local/michalos/motoman_ws/devel/.private/robotconfig/lib/pkgconfig/robotconfig.pc

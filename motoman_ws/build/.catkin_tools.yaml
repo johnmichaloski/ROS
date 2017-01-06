@@ -1,0 +1,6 @@
+devel_space: /usr/local/michalos/motoman_ws/devel
+install: false
+install_space: /usr/local/michalos/motoman_ws/install
+profile: default
+source_space: /usr/local/michalos/motoman_ws/src
+workspace: /usr/local/michalos/motoman_ws

@@ -1,0 +1,8 @@
+/usr/local/michalos/motoman_ws/build/robotconfig/CMakeFiles/_catkin_empty_exported_target.dir
+/usr/local/michalos/motoman_ws/build/robotconfig/CMakeFiles/clean_test_results.dir
+/usr/local/michalos/motoman_ws/build/robotconfig/CMakeFiles/download_extra_data.dir
+/usr/local/michalos/motoman_ws/build/robotconfig/CMakeFiles/doxygen.dir
+/usr/local/michalos/motoman_ws/build/robotconfig/gtest/CMakeFiles/gtest.dir
+/usr/local/michalos/motoman_ws/build/robotconfig/gtest/CMakeFiles/gtest_main.dir
+/usr/local/michalos/motoman_ws/build/robotconfig/CMakeFiles/run_tests.dir
+/usr/local/michalos/motoman_ws/build/robotconfig/CMakeFiles/tests.dir
