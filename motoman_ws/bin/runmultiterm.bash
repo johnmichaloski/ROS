@@ -5,12 +5,12 @@
 
 p=/usr/local/michalos/motoman_ws
 cmd=( gnome-terminal )
+cmd+=( --tab --title="catkin" --working-directory="$p" 
+-e 'bash -c "exec bash;"')
 cmd+=( --tab --title="rviz"  --working-directory="$p" 
 -e 'bash -c "exec bash"')
-cmd+=( --tab --title="catkin" --working-directory="$p" 
--e 'bash -c "exec bash;source ./devel/setup.bash; print env"')
 cmd+=( --tab --title="roslaunch" --working-directory="$p" 
--e 'bash -c "`source ./devel/setup.bash`; exec bash"')
+-e 'bash -c "exec bash"')
 cmd+=( --tab --title="github" --working-directory="$HOME/src/github/johnmichaloski/ROS" 
 -e 'bash -c "exec bash"')
 "${cmd[@]}"

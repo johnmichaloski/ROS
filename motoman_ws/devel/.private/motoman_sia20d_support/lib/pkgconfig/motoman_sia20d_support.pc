@@ -1,8 +1,0 @@
-prefix=/usr/local/michalos/motoman_ws/devel/.private/motoman_sia20d_support
-
-Name: motoman_sia20d_support
-Description: Description of motoman_sia20d_support
-Version: 0.3.5
-Cflags: 
-Libs: -L/usr/local/michalos/motoman_ws/devel/.private/motoman_sia20d_support/lib 
-Requires: 

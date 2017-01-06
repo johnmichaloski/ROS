@@ -1,1 +1,0 @@
-/usr/local/michalos/motoman_ws/devel/.private/robotconfig/share/robotconfig/cmake/robotconfigConfig.cmake
