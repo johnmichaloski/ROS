@@ -130,11 +130,13 @@ protected:
     std::vector< double> joint_emin;
     std::vector< double> joint_emax;
     double _spacer;
+    double _testharnessFudge;
 
     bool IncrementExercise(std::vector<double>& jts);
 public:
     IKinematics() { 
         _spacer=0.5;
+        _testharnessFudge=0.1;
     }
     std::string DumpUrdfJoint();
     
@@ -180,7 +182,7 @@ public:
         double epsilon = 0.1;
 
         for (size_t j = 0; j < num_joints; j++) {
-            jts[j] = joint_emin[j];
+            jts[j] = joint_emin[j]+_testharnessFudge;
         }
         bool bFlag = false; // while not done
         while (!bFlag) {

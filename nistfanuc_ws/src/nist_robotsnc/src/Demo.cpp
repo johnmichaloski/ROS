@@ -395,7 +395,7 @@ void CheckersGame::PhysicalMove(InlineRobotCommands &robot,
     if (rvizgame->IsKing(m)) {
         // Double checker height - for now 
         // Only 2* level for king
-         if (obj->height == RvizCheckers::HEIGHT) {
+         if (obj->height == rvizgame->HEIGHT) {
             obj->height *= 2;
             obj->pose = Eigen::Translation3d(Eigen::Vector3d(0, 0, 0.01)) * obj->pose;
 //            robot.MoveObject(obj->name, Convert<Eigen::Affine3d, tf::Pose>(obj->pose),
@@ -485,7 +485,8 @@ void ExerciseDemo::MarkPose(int flag, tf::Pose pose) {
     else if (flag == 0)
         RvizMarker()->SetColor(1.0, 0.0, 0.0, 1.0);
     else if (flag == -1)
-        RvizMarker()->SetColor(1.0, 1.0, 1.0, 1.0);
+        RvizMarker()->SetColor(0,0,0, 1.0);
+        //RvizMarker()->SetColor(0.597,0.0,0.597, 1.0);  // purple
     RvizMarker()->Send(pose);
 }
 #include <boost/bind.hpp>

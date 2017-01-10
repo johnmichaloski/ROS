@@ -47,7 +47,8 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 //#include "Demo.h"
 
 using namespace Conversion;
-#define UPDOWN
+#define LEFTRIGHT 1
+#define UPDOWN  -1
 
 struct RvizCheckers {
     Checkers::CheckersGame game; /**< game the robots are playing */
@@ -55,13 +56,13 @@ struct RvizCheckers {
     static const int ROWS = 8; /**< number of rows on checkerboard */
     static const int COLS = 8; /**< number of columns on checkerboard */
 #endif
-    static const double HEIGHT= 0.015; /**< rviz height of single checker */
+    double HEIGHT; /**< rviz height of single checker */
     /** CHeckers board rviz dimensions */
     double XOFFSET; /**< x offset from world 0,0,0 */
     double YOFFSET; /**< y offset from world 0,0,0 */
     double SQOFFSET; /**< offset between board positions on checkerboard */
-    double radius; /**< radius of checker cylinder piece */
-    double height; /**< height of checker cylinder piece */
+    double RADIUS; /**< radius of checker cylinder piece */
+    int BOARD_DIRECTION;
     int curplayer; /**< current checker player - either black or red */
 
     ros::Subscriber sub;
@@ -72,9 +73,10 @@ struct RvizCheckers {
         XOFFSET = -0.16;
         YOFFSET = -0.20;
         SQOFFSET = 0.04;
-        radius = 0.025;
-        height = HEIGHT;
-
+        RADIUS = 0.025;
+        HEIGHT= 0.015;
+        BOARD_DIRECTION=UPDOWN;
+           
         curplayer = Checkers::RED;
 
         sub = _nh.subscribe("clicked_point", 10, &RvizCheckers::callback, this);
@@ -102,59 +104,62 @@ struct RvizCheckers {
         assert(col < COLS);
         assert((row + col) % 2 == 1);
         Eigen::Vector3d v;
-#ifdef LEFTRIGHT
-        double rowoffset = XOFFSET + (SQOFFSET * row);
-        double coloffset = YOFFSET + (col * SQOFFSET);
-        v =Eigen::Vector3d(rowoffset + SQOFFSET / 2.0, coloffset + SQOFFSET / 2.0, .01);
-        Eigen::Affine3d pose = Convert<Eigen::Vector3d,Eigen::Affine3d>( v );
-#elif defined(UPDOWN)
-        double rowoffset = YOFFSET + (SQOFFSET * row);
-        double coloffset = XOFFSET + (col * SQOFFSET);
-        v=Eigen::Vector3d(coloffset + SQOFFSET / 2.0, rowoffset + SQOFFSET / 2.0, .01);
-        Eigen::Affine3d pose = Convert<Eigen::Vector3d,Eigen::Affine3d> ( v );
-#endif
+        Eigen::Affine3d pose;
+        if (BOARD_DIRECTION == LEFTRIGHT) {
+            double rowoffset = XOFFSET + (SQOFFSET * row);
+            double coloffset = YOFFSET + (col * SQOFFSET);
+            v = Eigen::Vector3d(rowoffset + SQOFFSET / 2.0, coloffset + SQOFFSET / 2.0, .01);
+            pose = Convert<Eigen::Vector3d, Eigen::Affine3d>(v);
+        } else if (BOARD_DIRECTION == UPDOWN) {
+            double rowoffset = YOFFSET + (SQOFFSET * row);
+            double coloffset = XOFFSET + (col * SQOFFSET);
+            v = Eigen::Vector3d(coloffset + SQOFFSET / 2.0, rowoffset + SQOFFSET / 2.0, .01);
+            pose = Convert<Eigen::Vector3d, Eigen::Affine3d> (v);
+        }
         return pose;
     }
 
     double RowOffset(int row) {
-#ifdef LEFTRIGHT
+        if (BOARD_DIRECTION == LEFTRIGHT) {
         return XOFFSET + (SQOFFSET * row);
-#elif defined(UPDOWN)
+       } else if (BOARD_DIRECTION == UPDOWN) {
         return YOFFSET + (SQOFFSET * row);
-#endif
+       }
     }
 
     double ColOffset(int col) {
-#ifdef LEFTRIGHT
+        if (BOARD_DIRECTION == LEFTRIGHT) {
         return YOFFSET + (SQOFFSET * col);
-#elif defined(UPDOWN)
+       } else if (BOARD_DIRECTION == UPDOWN) {
         return XOFFSET + (SQOFFSET * col);
-#endif
+       }
     }
 
     Eigen::Vector3d GetCentroid(double rowoffset, double coloffset) {
-#ifdef LEFTRIGHT               
+        if (BOARD_DIRECTION == LEFTRIGHT) {
         return Eigen::Vector3d(rowoffset + SQOFFSET / 2.0, coloffset + SQOFFSET / 2.0, .01);
-#elif defined(UPDOWN)
+       } else if (BOARD_DIRECTION == UPDOWN) {
         return Eigen::Vector3d(coloffset + SQOFFSET / 2.0, rowoffset + SQOFFSET / 2.0, .01);
-#endif
+       }
     }
 
     tf::Vector3 GetUp(double rowoffset, double coloffset) {
-#ifdef LEFTRIGHT
-        Eigen::Vector3d up(rowoffset, coloffset, 0.01);
-#elif defined(UPDOWN)
-        Eigen::Vector3d up(coloffset, rowoffset, 0.01);
-#endif
+        Eigen::Vector3d up;
+        if (BOARD_DIRECTION == LEFTRIGHT) {
+            up = Eigen::Vector3d(rowoffset, coloffset, 0.01);
+        } else if (BOARD_DIRECTION == UPDOWN) {
+            up = Eigen::Vector3d(coloffset, rowoffset, 0.01);
+        }
         return Convert<Eigen::Vector3d, tf::Vector3 >(up);
     }
 
     tf::Vector3 GetDown(double rowoffset, double coloffset) {
-#ifdef LEFTRIGHT
-        Eigen::Vector3d down(rowoffset + SQOFFSET, coloffset + SQOFFSET, 0.0);
-#elif defined(UPDOWN)
-        Eigen::Vector3d down(coloffset + SQOFFSET, rowoffset + SQOFFSET, 0.0);
-#endif
+        Eigen::Vector3d down;
+        if (BOARD_DIRECTION == LEFTRIGHT) {
+            down = Eigen::Vector3d(rowoffset + SQOFFSET, coloffset + SQOFFSET, 0.0);
+        } else if (BOARD_DIRECTION == UPDOWN) {
+            down = Eigen::Vector3d(coloffset + SQOFFSET, rowoffset + SQOFFSET, 0.0);
+        }
         return Convert<Eigen::Vector3d, tf::Vector3 >(down);
     }
 
@@ -202,7 +207,7 @@ struct RvizCheckers {
                 if (row % 2 == 0) coloffset = coloffset + SQOFFSET; // red offset at zero
 
                 ObjectDB * checker;
-                double checkerheight = height;
+                double checkerheight = HEIGHT;
                 size_t checkercol = (row % 2 == 0) ? i + 1 : i;
                 std::string checkercolor = "CLEAR";
                 
@@ -222,7 +227,7 @@ struct RvizCheckers {
                             epose, //FIXME: base offset?
                             checkercolor,
                             checkerheight,
-                            radius,
+                            RADIUS,
                             "Cylinder");
                 }
             }

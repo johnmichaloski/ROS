@@ -139,9 +139,9 @@ int main(int argc, char** argv) {
         std::vector<boost::shared_ptr<CController> > ncs;
         std::vector<InlineRobotCommands > nccmds;
         std::vector<double> ds;
+        pt::ptree root;
 
         try {
-            pt::ptree root;
             // Load the json file in this ptree
             //pt::read_ini(::ExeDirectory()+ ROSPACKAGENAME + ".ini", root);
             pt::read_ini(path + "/config/" + ROSPACKAGENAME + ".ini", root);
@@ -209,11 +209,12 @@ int main(int argc, char** argv) {
            }
         } catch (std::exception &e) {
             LOG_FATAL << e.what();
+            throw;
         }
-#if 1
+#if 0
         ExerciseDemo exercise(nh);
         exercise.Exercise(&nccmds[0]);
-        //exercise.Exercise(&nccmds[1]);
+        exercise.Exercise(&nccmds[1]);
 #endif
 #if 0
         JointTrajectoryMaker jointmaker(0.1);
@@ -254,6 +255,14 @@ int main(int argc, char** argv) {
         }
 #if 1
         CheckersGame checkers(nh);
+        /** CHeckers board rviz dimensions */
+        checkers.RvizGame()->HEIGHT = root.get<double>("checkers.HEIGHT", 0.015);
+        checkers.RvizGame()->XOFFSET = root.get<double>("checkers.XOFFSET", -0.16);
+        checkers.RvizGame()->YOFFSET = root.get<double>("checkers.YOFFSET", -0.20);
+        checkers.RvizGame()->SQOFFSET = root.get<double>("checkers.SQOFFSET", 0.04);
+        checkers.RvizGame()->RADIUS = root.get<double>("checkers.RADIUS", 0.0255);
+        checkers.RvizGame()->BOARD_DIRECTION = root.get<int>("checkers.BOARD_DIRECTION", -1);
+
         Checkers::BoardType outboard;
         std::string filename(path + "/config/" + "Checkers.txt");
         Checkers::CheckersGame & game = checkers.RvizGame()->Game();
