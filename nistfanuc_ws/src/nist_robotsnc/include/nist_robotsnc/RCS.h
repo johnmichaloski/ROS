@@ -66,29 +66,7 @@ inline double NORM(double a, double b, double c, double d) {
     return sqrt(a * a + b * b + c * c + d * d);
 }
 
-// ToVector calling parameters MUSTt match e.g., double or long depending on template, OR wont work
-template<typename T>
-inline std::vector<T> ToVector(int n, ...) {
-    std::vector<T> ds;
-    va_list args; // define argument list variable
-    va_start(args, n); // init list; point to last
-    //   defined argument
 
-    for (int i = 0; i < n; i++) {
-        double d = va_arg(args, T); // get next argument
-        ds.push_back(d);
-    }
-    va_end(args); // clean up the system stack
-    return ds;
-}
-
-template<typename T>
-inline std::vector<T> ToRadianVector(std::vector<T> goaljts) {
-    // transform angles from degree to radians
-    std::transform(goaljts.begin(), goaljts.end(), goaljts.begin(),
-            std::bind1st(std::multiplies<double>(), M_PI / 180.0));
-    return goaljts;
-}
 namespace RCS {
 
     //typedef tf::Transform Pose;

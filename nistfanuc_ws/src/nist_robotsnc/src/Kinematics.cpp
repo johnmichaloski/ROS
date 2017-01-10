@@ -18,6 +18,9 @@
 #include "Boost.h"
 
 using namespace Conversion;
+double IKinematics::_testspacing;
+double IKinematics::_testoffset;
+double IKinematics::_testepsilon;
 
 void IKinematics::ENormalize(double min, double max) {
     joint_emax = joint_max;
@@ -41,11 +44,11 @@ void IKinematics::ENormalize(double min, double max) {
 
 bool IKinematics::IncrementExercise(std::vector<double>& jts) {
     size_t i = 0;
-    jts[i] += _spacer * (joint_emax[i] - joint_emin[i]) / 2.0 ;
+    jts[i] += _testspacing * (joint_emax[i] - joint_emin[i]) / 2.0 ;
     size_t j = i;
     while (j < num_joints - 1 && jts[j] >= joint_emax[j]) {
-        jts[j + 1] += _spacer * (joint_emax[j + 1] - joint_emin[j + 1]) / 2.0;
-        jts[j] = joint_emin[j]+_testharnessFudge;
+        jts[j + 1] += _testspacing * (joint_emax[j + 1] - joint_emin[j + 1]) / 2.0;
+        jts[j] = joint_emin[j]+_testoffset;
         j++;
     }
 

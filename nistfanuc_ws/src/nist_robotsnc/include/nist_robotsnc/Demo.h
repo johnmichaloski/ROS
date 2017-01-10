@@ -19,6 +19,7 @@
 #include "Kinematics.h"
 #include "Scene.h"
 #include "Controller.h"
+#include "Conversions.h"
 
 /**
  * \brief RvizDemo provides some synchronization primitives via rviz.
@@ -181,12 +182,18 @@ struct ExerciseDemo {
     ExerciseDemo(ros::NodeHandle & nh) {
         RvizMarker() = boost::shared_ptr<CRvizMarker>(new CRvizMarker(nh));
         RvizMarker()->Init();
+        GoodColor()=Conversion::ToVector<double>(3,  0.0, 1.0, 0.0);
+        BadColor()=Conversion::ToVector<double>(3, 1.0, 0.0, 0.0);
+        TrapColor()=Conversion::ToVector<double>(3, 1.0, 0.4, 1.0);
 
     }
     void MarkPose(int flag, tf::Pose pose);
     void Exercise(InlineRobotCommands *robot);
     VAR(RvizMarker, boost::shared_ptr<CRvizMarker>)
     VAR(Robot, InlineRobotCommands*)
+    VAR(GoodColor, std::vector<double>)
+    VAR(BadColor,  std::vector<double>)
+    VAR(TrapColor, std::vector<double>)
 
     
 };

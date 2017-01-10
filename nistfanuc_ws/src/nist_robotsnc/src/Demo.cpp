@@ -481,11 +481,11 @@ void CheckersGame::Play(InlineRobotCommands * red, InlineRobotCommands * black) 
 void ExerciseDemo::MarkPose(int flag, tf::Pose pose) {
     pose = Robot()->cnc()->basePose() * pose;
     if (flag == 1)
-        RvizMarker()->SetColor(0.0, 1.0, 0.0, 1.0);
+        RvizMarker()->SetColor(GoodColor()[0], GoodColor()[1], GoodColor()[2], 1.0);
     else if (flag == 0)
-        RvizMarker()->SetColor(1.0, 0.0, 0.0, 1.0);
+        RvizMarker()->SetColor(BadColor()[0], BadColor()[1], BadColor()[2], 1.0);
     else if (flag == -1)
-        RvizMarker()->SetColor(0,0,0, 1.0);
+        RvizMarker()->SetColor(TrapColor()[0], TrapColor()[1], TrapColor()[2], 1.0);
         //RvizMarker()->SetColor(0.597,0.0,0.597, 1.0);  // purple
     RvizMarker()->Send(pose);
 }
@@ -501,5 +501,11 @@ void ExerciseDemo::Exercise(InlineRobotCommands *robot) {
     Globals.Sleep(1000);
     Robot() = robot;
     Robot()->cnc()->Kinematics()->ENormalize(- M_PI,  M_PI);
-    Robot()->cnc()->Kinematics()->VerifyKinematics(0.25, boost::bind(&ExerciseDemo::MarkPose, this, _1, _2));
+    std::vector<size_t>  scorecard = Robot()->cnc()->Kinematics()->VerifyKinematics(boost::bind(&ExerciseDemo::MarkPose, this, _1, _2));
+    int total = std::accumulate(scorecard.begin(), scorecard.end(), 0);
+    //int fail = std::accumulate(scorecard.begin()+1, scorecard.end(), 0);
+    LOG_DEBUG <<  "Tests:" << total << ": good=" << scorecard[0]
+           << ": bad="  << scorecard[1]
+           << ": singular=" << scorecard[2] <<  "\n";
 }
+

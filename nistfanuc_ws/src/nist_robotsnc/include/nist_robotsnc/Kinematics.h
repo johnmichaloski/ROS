@@ -129,14 +129,17 @@ protected:
 
     std::vector< double> joint_emin;
     std::vector< double> joint_emax;
-    double _spacer;
-    double _testharnessFudge;
+public:
+    static double _testspacing;
+    static double _testoffset;
+    static double _testepsilon ;
 
     bool IncrementExercise(std::vector<double>& jts);
 public:
     IKinematics() { 
-        _spacer=0.5;
-        _testharnessFudge=0.1;
+        _testspacing=0.5;
+        _testoffset=0.1;
+        _testepsilon = 0.1;
     }
     std::string DumpUrdfJoint();
     
@@ -176,13 +179,12 @@ public:
     void ENormalize(double min, double max) ;
     
     template<typename OP>
-    void VerifyKinematics(double spacing, OP op) {
-        _spacer=spacing;
+    std::vector<size_t> VerifyKinematics(OP op) {
+        std::vector<size_t> scorecard(3, 0);
         std::vector<double> jts(num_joints);
-        double epsilon = 0.1;
 
         for (size_t j = 0; j < num_joints; j++) {
-            jts[j] = joint_emin[j]+_testharnessFudge;
+            jts[j] = joint_emin[j]+_testoffset;
         }
         bool bFlag = false; // while not done
         while (!bFlag) {
@@ -202,16 +204,21 @@ public:
 
             double err = 0.0;
             int flag = 1;
-            if (echojts.size() != jts.size())
+            if (echojts.size() != jts.size()){
                 flag = -1; // no solution
-            else {
+                scorecard[2]++;
+               
+            }
+             else {
                 for (size_t k = 0; k < jts.size(); k++)
                     err += fabs(echojts[k] - jts[k]);
-                if (err < epsilon) {
+                if (err < _testepsilon) {
                     flag = 1; // Green marker
+                scorecard[0]++;
 
                 } else {
                     flag = 0; // Red marker
+                    scorecard[1]++;
                 }
             }
             if (flag <= 0) {
@@ -227,6 +234,7 @@ public:
             //std::reverse(jts.begin(), jts.end());
             bFlag = IncrementExercise(jts);
         }
+        return scorecard;
     }
 
     /*!

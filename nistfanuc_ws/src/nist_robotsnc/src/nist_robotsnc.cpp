@@ -211,8 +211,14 @@ int main(int argc, char** argv) {
             LOG_FATAL << e.what();
             throw;
         }
-#if 0
+#if 1
         ExerciseDemo exercise(nh);
+        IKinematics::_testspacing = root.get<double>("testharness.spacing", 0.5);
+        IKinematics::_testoffset = root.get<double>("testharness.offset", 0.1);
+        IKinematics::_testepsilon = root.get<double>("testharness.epsilon", 0.1);
+        exercise.GoodColor() = GetIniTypes<double>(root, "testharness.GoodColor");
+        exercise.BadColor() = GetIniTypes<double>(root, "testharness.BadColor");
+        exercise.TrapColor() = GetIniTypes<double>(root, "testharness.TrapColor");
         exercise.Exercise(&nccmds[0]);
         exercise.Exercise(&nccmds[1]);
 #endif

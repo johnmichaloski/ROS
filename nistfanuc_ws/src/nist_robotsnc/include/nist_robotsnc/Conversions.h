@@ -52,6 +52,9 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 // Transform http://docs.ros.org/jade/api/tf/html/c++/classtf_1_1Transform.html
 // Quaternion http://docs.ros.org/jade/api/tf/html/c++/classtf_1_1Quaternion.html
 
+
+
+
 /**
  * \brief The namespace Conversion provides some utilities to convert from one representation into another. 
  * Representations include tf, Eigen::Affine3d, std::vector, geometry_msgs::Pose, 
@@ -67,6 +70,40 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
  * 
  * */
 namespace Conversion {
+
+    /*!
+     * \brief ToVector calling parameters MUST match e.g., double or long depending on template, OR wont work
+     * \param n number of items to push into std vector.
+     * \param ... list of n template type items
+     * \return std vector of type T
+      */
+    template<typename T>
+    inline std::vector<T> ToVector(int n, ...) {
+        std::vector<T> ds;
+        va_list args; // define argument list variable
+        va_start(args, n); // init list; point to last
+        //   defined argument
+
+        for (int i = 0; i < n; i++) {
+            double d = va_arg(args, T); // get next argument
+            ds.push_back(d);
+        }
+        va_end(args); // clean up the system stack
+        return ds;
+    }
+
+    /*!
+     * \brief Convert a list of std vector  type T from degrees to radians
+     * Change template from typep into double conversion factor.
+     *  you can't use float literals as template parameters
+     */
+    template<typename T>
+    inline std::vector<T> ToRadianVector(std::vector<T> goaljts) {
+        // transform angles from degree to radians
+        std::transform(goaljts.begin(), goaljts.end(), goaljts.begin(),
+                std::bind1st(std::multiplies<double>(), M_PI / 180.0));
+        return goaljts;
+    }
 
     /*!
      * \brief Empty conversion of type from into type to. If called, asserts.
