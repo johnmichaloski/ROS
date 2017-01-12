@@ -1,4 +1,0 @@
-robotconfig
-/usr/local/michalos/motoman_ws/devel/.private/robotconfig/share/robotconfig/cmake/robotconfigConfig-version.cmake /usr/local/michalos/motoman_ws/devel/share/robotconfig/cmake/robotconfigConfig-version.cmake
-/usr/local/michalos/motoman_ws/devel/.private/robotconfig/share/robotconfig/cmake/robotconfigConfig.cmake /usr/local/michalos/motoman_ws/devel/share/robotconfig/cmake/robotconfigConfig.cmake
-/usr/local/michalos/motoman_ws/devel/.private/robotconfig/lib/pkgconfig/robotconfig.pc /usr/local/michalos/motoman_ws/devel/lib/pkgconfig/robotconfig.pc
