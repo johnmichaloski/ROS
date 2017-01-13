@@ -7,8 +7,7 @@ from numpy import matrix
 import time
 from xml.dom import minidom
 import os.path
-
-
+import tokenize
 
 class CrclClientSocket:
     def __init__(self, host, port):
@@ -33,7 +32,6 @@ class CrclClientSocket:
         self.sock.close()
  
     def syncsend(self, msg):
-        print  msg
         sent = self.sock.send(msg)
         if sent == 0:
             self.disconnect()
@@ -59,7 +57,29 @@ class CrclClientSocket:
                     break
         return alldata  # ''.join(total_data)
 
-
+def get_tokens(text):
+    tokens = tokenize.tokenize(text)
+    return tokens
+ 
+def parse_token(tokens) :
+    global mysocket
+    try:
+        if tokens[0] == "q":
+            mysocket.syncsend("quit\n")
+            return -1  # stops the loop
+        elif tokens[0] == "quit":
+           mysocket.syncsend("quit\n")
+           return -1   # stops the loop
+        elif tokens[0] == "sleep":
+           time.sleep(float(tokens[1]))    
+        else:
+           tokens.append("\n")
+           mysocket.syncsend(" ".join(tokens))
+           
+    except:
+        pass    
+    return 0
+    
 #time.sleep(10)
 mysocket = CrclClientSocket("localhost", 31000)
 print 'Socket Created'
@@ -69,15 +89,29 @@ print 'Socket Connected'
 # q  - quit &send quit
 # quit  - quit send quit
 while True:    # infinite loop
-    msg = raw_input("> ")
-    if msg == "q":
-    	mysocket.syncsend("quit\n")
-        break  # stops the loop
-    elif msg == "quit":
-    	mysocket.syncsend("quit\n")
-        break  # stops the loop
-    else:
-       mysocket.syncsend(msg+"\n")
+    try:
+        msg = raw_input("> ")
+        msgtokens=msg.split( )
+
+        if msgtokens[0] == "file":
+            f = open(os.getcwd()+'/'+msgtokens[1], 'r')
+            #print 'file',os.getcwd()+'/'+msgtokens[1]
+            line = f.readline()
+            while line:
+                    subtokens=line.split( )   
+                    print 'subtokens',subtokens
+                    parse_token(subtokens)
+                    line = f.readline()
+            f.close()
+        else:
+            b=parse_token(msgtokens)
+            if(b<0):
+                break
+    except KeyboardInterrupt:
+        break
+    except:
+        break
+       
 mysocket.disconnect()        
 
 

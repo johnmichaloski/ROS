@@ -23,10 +23,10 @@ struct socket_line_connection {
 
     void start() {
         boost::asio::async_read_until(*pSocket, buf_, "\n",
-                boost::bind(&socket_line_connection::readline, this, _1));
+                boost::bind(&socket_line_connection::readline, this, _1,_2));
     }
 
-    void readline(boost::system::error_code ec) {
+    void readline(boost::system::error_code ec, size_t n) {
         if ((boost::asio::error::eof == ec) ||
                 (boost::asio::error::connection_reset == ec)) {
             boost::system::error_code error;
@@ -35,9 +35,10 @@ struct socket_line_connection {
             Init(_portnum); // disconnected start again
         } else {
             std::string data = asio::buffer_cast<const char*>(buf_.data());
+            data.resize(n);
             std::cout << "Add: " << data; // debug print
             incmds.AddMsgQueue(data);
-            buf_.consume(data.size()); // will infinite loop here unless consumed
+            buf_.consume(n); // will infinite loop here unless consumed
             start();
         }
     }

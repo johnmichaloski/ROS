@@ -178,4 +178,20 @@ struct JointStateUpdater {
         }
         return dist_sqr;
     }
+
+     JointState MakeJointState(std::vector<uint64_t> jointnums,
+            std::vector<double> jointval) {
+        JointState joints;
+        joints.name.resize(jointval.size());
+        joints.position.resize(jointval.size(), 0.0);
+        joints.velocity.resize(jointval.size(), 0.0);
+        joints.effort.resize(jointval.size(), 0.0);
+                // Check each joint, to see if joint is being actuated, if so, change goal position
+        for (size_t i = 0; i < jointnums.size(); i++) {
+            size_t n = jointnums[i]; // should already have indexes -1;
+            joints.position[i] = jointval[i]; // joint numbers already adjusted from CRCL to rcs model
+            joints.name[i] = joint_names[n]; // joint numbers already adjusted from CRCL to rcs model
+        }
+        return joints;
+    }
 };

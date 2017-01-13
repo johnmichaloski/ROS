@@ -66,12 +66,13 @@ public:
      * \param pose p is where the marker is to be placed relative to the base link.
      */
     int Send(tf::Pose p);
+    
     /*!
      *\brief Set the marker to be displayed.
-     * \param shape is the enumeration of the marker type. 
+     * \param shape as string:  cube, arrow, cylinder, sphere. 
      */
-    uint32_t SetShape(uint32_t shape);
-    /*!
+    void SetShape(std::string shape);
+     /*!
      *\brief Set the color of the maker to be displayed.
      * \param red, green. blue and alpha are the values used herein.
      */
@@ -87,4 +88,9 @@ public:
     static int _id;
     double scalex, scaley, scalez;
     double r, g, b, a;
+        /*!
+     *\brief Set the marker to be displayed.
+     * \param shape is the enumeration of the marker type. 
+     */
+    uint32_t SetShape(uint32_t shape);
 };

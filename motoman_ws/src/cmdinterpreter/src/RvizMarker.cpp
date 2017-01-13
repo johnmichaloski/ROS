@@ -119,3 +119,14 @@ uint32_t CRvizMarker::SetShape(uint32_t shape) {
     }
     return oldshape;
 }
+void CRvizMarker::SetShape(std::string shape){
+    std::transform(shape.begin(), shape.end(), shape.begin(), ::tolower);
+    if(shape=="cube")
+        SetShape(visualization_msgs::Marker::CUBE);
+    if(shape=="sphere")
+        SetShape(visualization_msgs::Marker::SPHERE);
+    if(shape=="arrow")
+        SetShape(visualization_msgs::Marker::ARROW);
+    if(shape=="cyliner")
+        SetShape(visualization_msgs::Marker::CYLINDER);
+}

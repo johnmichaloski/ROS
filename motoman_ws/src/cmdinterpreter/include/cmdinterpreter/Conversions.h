@@ -14,6 +14,7 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 #include <algorithm>
 #include <vector>
 #include <string>
+#include <istream>
 
 #include "tf/transform_datatypes.h"
 #include "Eigen/Core"
@@ -101,10 +102,10 @@ namespace Conversion {
  can't use float literals as template parameters
      */
     template<typename T>
-    inline std::vector<T> ToRadianVector(std::vector<T> goaljts) {
+    inline std::vector<T> ScaleVector(std::vector<T> goaljts, double multiplier =  M_PI / 180.0) {
         // transform angles from degree to radians
         std::transform(goaljts.begin(), goaljts.end(), goaljts.begin(),
-                std::bind1st(std::multiplies<double>(), M_PI / 180.0));
+                std::bind1st(std::multiplies<double>(), multiplier));
         return goaljts;
     }
 
@@ -134,7 +135,19 @@ namespace Conversion {
                 });
         return doubleVector;
     }
-
+    
+    template<typename To>
+    inline std::vector<To> ConvertStringVector(std::vector<std::string> From) {
+        std::vector<To> toVector;
+        for (size_t i = 0; i < From.size(); i++) {
+            // Do I need a catch?
+            std::istringstream ss(From[i]);
+            To result;
+            ss >> result ? result : 0;
+            toVector.push_back(result);
+        }
+        return toVector;
+    }
     // tf
 
     /*!
