@@ -23,7 +23,7 @@
 #include "Controller.h"
 #include "Demo.h"
 #include "Debug.h"
-#include "gomotion/gomove.h"
+#include "gotraj/gotraj.h"
 using namespace gomotion;
 
 namespace RCS {
@@ -41,13 +41,14 @@ namespace RCS {
                 RCS::CanonWorldModel instatus, RCS::CanonWorldModel &outstatus);
         virtual void SetRange(std::vector<double> minrange, std::vector<double> maxrange);
     };
+    
 
     class GoInterpreter : public IRCSInterpreter {
     protected:
         IKinematicsSharedPtr _kinematics; /**<  kinematics pointer */
         boost::shared_ptr<RCS::CController>_nc;
         uint64_t _lastcmdid;
-        boost::shared_ptr<GoMotion> _go;
+        boost::shared_ptr<GoTraj> _go;
     public:
         void Init(std::vector<double> jnts) ;
         std::vector<double> minrange;

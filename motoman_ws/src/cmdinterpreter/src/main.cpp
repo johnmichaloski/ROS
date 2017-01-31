@@ -20,6 +20,8 @@ namespace pt = boost::property_tree;
 #include <ros/ros.h>
 #include <ros/package.h>
 #include <ros/console.h>
+#include <ros/master.h>
+#include <tf/transform_listener.h>
 
 #include "NIST/Config.h"
 #include "NIST/RCSThreadTemplate.h"
@@ -51,35 +53,64 @@ int main(int argc, char** argv) {
         std::string exedirectory;
         std::string packagepath;
 
+
         // Find path of executable
         std::string path(argv[0]);
         exedirectory = path.substr(0, path.find_last_of('/') + 1);
+        
 
         // Environment variable setup for Netbeans IDE use
         Nist::Config cfg;
-        cfg.load(exedirectory + ROSPACKAGENAME + ".ini");
+        std::string inipath = exedirectory + "../../../src/"+ROSPACKAGENAME+"/config/" + ROSPACKAGENAME + ".ini";
+        cfg.load(inipath);
         std::map<std::string, std::string> envmap = cfg.getmap("env");
         SetEnvironmentFromMap(envmap);
         double hz = cfg.GetSymbolValue("options.hz", 50.0).toNumber<double>();
         int port = cfg.GetSymbolValue("options.port", 29000).toNumber<int>();
 
-
+        
+#if 0
+        bool bUpFlag = true;
+        while (bUpFlag) {
+            try {
+                ros::master::check();
+                bUpFlag = false;
+            } catch (...) {
+                Sleep(1000);
+            }
+        }
+#endif
+        bool bMaster = ros::master::check();
         // Initialize ROS
         ros::init(argc, argv, ROSPACKAGENAME);
         ros::NodeHandle nh;
+        // Wait until ROS master completely started - hackahack
+        if(!bMaster)
+            Sleep(10000);
+        packagepath = ros::package::getPath(ROSPACKAGENAME);
+        
+        // Now should know robot
+        std::string roboturdf;
+        nh.getParam("robotpkg", roboturdf );
         ros::Rate r(hz); // 10 times a second = 10Hz
+        tf::TransformListener listener;
+        tf::StampedTransform transform;
+     
+
         //  Required for multithreaded ROS communication  NOT TRUE: if not ros::spinOnce
         ros::AsyncSpinner spinner(2); // thread count = 2?
         spinner.start();
+       
+        std::string world = cfg.GetSymbolValue(roboturdf+".base", "").c_str();
+        std::string eelink = cfg.GetSymbolValue(roboturdf+".eelink", "").c_str();
 
         //   RvizMarker setup
         rvizMarker = boost::shared_ptr<CRvizMarker>(new CRvizMarker(nh));
         rvizMarker->Init();
 
-        packagepath = ros::package::getPath(ROSPACKAGENAME);
 
         JointStateUpdater updater(nh);
-        updater.Init("world", "motoman_link_t");
+        updater.Init(world, eelink);
         std::cout << "NC " << updater.Name().c_str() << "\n";
         std::cout << "num joints " << updater.NumJoints() << "\n";
         std::cout << "Joint names " << RCS::VectorDump<std::string>(updater.JointNames()).c_str() << "\n" << std::flush;
@@ -92,7 +123,7 @@ int main(int argc, char** argv) {
             cmdline.io_service.run_one();
             if (incmds.SizeMsgQueue() > 0) {
                 std::string msg = incmds.PopFrontMsgQueue();
-                std::cout << "Echo=" << msg;
+                //std::cout << "Echo=" << msg;
                 msg = Trim(msg);
                 std::vector<std::string> tokens = Split(msg, ' ');
                 switch (tokens.size()) {
@@ -115,6 +146,23 @@ int main(int argc, char** argv) {
                         } else if (strcasecmp(tokens[0].c_str(), "rand") == 0) {
                             std::vector<double> positions = GenRandomVector(updater.NumJoints(), -M_PI, M_PI);
                             updater.Update(updater.JointNames(), positions);
+                        } else if (strcasecmp(tokens[0].c_str(), "mark") == 0) {
+                            try {
+                                ros::Time now = ros::Time::now() - ros::Duration(1);
+                                //listener.waitForTransform(eelink.c_str(), world.c_str(), now, ros::Duration(3.0));
+                                // http://docs.ros.org/jade/api/tf/html/c++/classtf_1_1Transformer.html
+                                listener.lookupTransform( eelink.c_str(), world.c_str(),  now, transform);
+                                tf::Transform ttransform = transform.inverse();
+                        
+                                tf::Pose pose(ttransform.getRotation(), ttransform.getOrigin());
+                                std::cout << "Mark pose = " << RCS::DumpPoseSimple(pose).c_str() << "\n";
+                                rvizMarker->Send(pose,world);
+                                ros::spinOnce();
+
+                            } catch (tf::TransformException ex) {
+                                ROS_ERROR("%s", ex.what());
+                                ros::Duration(1.0).sleep();
+                            }
                         }
                         break;
                     case 2:
@@ -122,7 +170,7 @@ int main(int argc, char** argv) {
                             std::vector<std::string> dbls = Split(tokens[1], ',');
                             std::vector<double> pos = Convert<std::vector<std::string>, std::vector<double>>(dbls);
                             tf::Pose pose = Conversion::CreateRPYPose(pos);
-                            rvizMarker->Send(pose);
+                            rvizMarker->Send(pose,world);
                         } else if (strcasecmp(tokens[0].c_str(), "color") == 0) {
                             std::vector<std::string> dbls = Split(tokens[1], ',');
                             std::vector<double> colors = Convert<std::vector<std::string>, std::vector<double>>(dbls);
@@ -163,6 +211,7 @@ int main(int argc, char** argv) {
                         break;
                     default:
                         std::cout << "Bad command input\n";
+                        std::cout << RCS::VectorDump<std::string>(tokens) << "\n";
                         break;
                 }
 

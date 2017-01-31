@@ -90,7 +90,7 @@ int BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
 GoInterpreter::GoInterpreter(boost::shared_ptr<RCS::CController> nc,
         IKinematicsSharedPtr k)
 : _nc(nc), _kinematics(k), _lastcmdid(-1) {
-    _go = boost::shared_ptr<GoMotion> (new GoMotion());
+    _go = boost::shared_ptr<GoTraj> (new GoTraj());
 }
 
 void GoInterpreter::Init(std::vector<double> initjts) {
@@ -115,7 +115,7 @@ int GoInterpreter::ParseJointCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
         ofsRobotMoveJoint << "  Goal Joints " << RCS::VectorDump<double>(cmd.joints.position).c_str() << "\n";
         ofsRobotMoveJoint << "  Command Num " << cmd.CommandNum() << "\n" << std::flush;
 #endif
-        std::vector<gomotion::GoMotionParams> jparams  (_kinematics->NumJoints(), gomotion::GoMotionParams(1.0, 10.0, 100.0));
+        std::vector<gomotion::GoTrajParams> jparams  (_kinematics->NumJoints(), gomotion::GoTrajParams(1.0, 10.0, 100.0));
         if (cmd.CommandNum() != _lastcmdid) {
             _lastcmdid = cmd.CommandNum();
             _go->InitJoints(instatus.currentjoints, 
@@ -168,8 +168,8 @@ int GoInterpreter::ParseWorldCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
             _lastcmdid = cmd.CommandNum();
             _go->InitPose(curpose, 
                     finalpose, 
-                    gomotion::GoMotionParams(1.0, 10.0, 100.0),
-                    gomotion::GoMotionParams(.1, 1.0, 10.0)); // 1 meter/sec
+                    gomotion::GoTrajParams(1.0, 10.0, 100.0),
+                    gomotion::GoTrajParams(.1, 1.0, 10.0)); // 1 meter/sec
 
         }
         //tf::Pose nextpose = _nc->invGripperPose() * _go->NextPose() * _nc->invBasePose();

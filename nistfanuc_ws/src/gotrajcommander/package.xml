@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<package>
+  <name>gotrajcommander</name>
+  <version>0.1.0</version>
+  <description>
+
+    ROS python package to use gomotion trajectory and interpoloation motion facilities.
+
+  </description>
+  <author email="john.michaloski@nist.gov">John Michaloski(NIST)</author>
+  <maintainer email="john.michaloski@nist.gov">John Michaloski(NIST)</maintainer>
+
+  <license>NO copyright</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+
+  <build_depend>boost</build_depend>
+  <build_depend>cmake_modules</build_depend>
+  <build_depend>python_modules</build_depend>
+  <build_depend>gotraj</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>tf</build_depend>
+
+  <run_depend>rospy</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>gotraj</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>tf</run_depend>
+
+
+  <export>
+    <architecture_independent />
+    <rosindex>
+      <tags>
+        <tag>python</tag>
+        <tag>gomotion</tag>
+        <tag>trajectory</tag>
+        <tag>interpolation</tag>
+        <tag>cubic</tag>
+        <tag>jerk</tag>
+      </tags>
+    </rosindex>
+  </export>
+</package>
+
