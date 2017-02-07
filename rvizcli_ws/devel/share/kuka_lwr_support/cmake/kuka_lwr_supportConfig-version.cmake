@@ -1,0 +1,1 @@
+/usr/local/michalos/rvizcli_ws/devel/.private/kuka_lwr_support/share/kuka_lwr_support/cmake/kuka_lwr_supportConfig-version.cmake

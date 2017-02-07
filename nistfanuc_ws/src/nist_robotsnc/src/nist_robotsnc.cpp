@@ -173,8 +173,10 @@ int main(int argc, char** argv) {
 
                 if (kinsolver == "FanucLRMate200idFastKinematics")
                     kin = boost::shared_ptr<IKinematics>(new FanucLRMate200idFastKinematics(ncs[i]));
-                if (kinsolver == "MotomanSia20dFastKinematics")
+                if (kinsolver == "MotomanSia20dFastKinematics"){
+                    //kin = boost::shared_ptr<IKinematics>(new MotomanSia20dGoKin(ncs[i]));
                     kin = boost::shared_ptr<IKinematics>(new MotomanSia20dFastKinematics(ncs[i]));
+                }
                 kin->Init(std::string("manipulator"), eelink, baselink);
                 kin->Init(nh);
                 ncs[i]->Kinematics() = kin;
@@ -222,6 +224,12 @@ int main(int argc, char** argv) {
         exercise.Exercise(&nccmds[0]);
         exercise.Exercise(&nccmds[1]);
 #endif
+        
+        std::vector<double> testjts = ToVector<double>(7,1.30,-0.84, 0.08, 2.26, 2.96,-0.38,-1.28);
+        tf::Pose testpose = ncs[1]->Kinematics()->FK(testjts);
+        std::cout << "Joint vals " << VectorDump<double>(testjts).c_str() << "\n" << std::flush;
+        std::cout << "testpose " << RCS::DumpPoseSimple(testpose).c_str() << "\n";
+        
 #if 0
         JointTrajectoryMaker jointmaker(0.1);
         JointState here,there,next,last;

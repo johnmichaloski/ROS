@@ -51,6 +51,8 @@
    <build_depend>eigen_conversions</build_depend>
    <build_depend>rviz_visual_tools</build_depend>
    <build_depend>gotraj</build_depend>
+   <build_depend>gokin</build_depend>
+   <build_depend>trac_ik_lib</build_depend>
    
    <run_depend>roscpp</run_depend>
    <run_depend>boost</run_depend>
@@ -68,7 +70,9 @@
    <run_depend>moveit_ros_manipulation</run_depend>
    <run_depend>nistcrcl</run_depend>
    <run_depend>gotraj</run_depend>
-   
+   <run_depend>gokin</run_depend>
+   <run_depend>trac_ik_lib</run_depend>
+  
    <test_depend>rosunit</test_depend>
    
    <!-- The export tag contains other, unspecified, tags -->

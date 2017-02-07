@@ -25,30 +25,30 @@ double IKinematics::_testepsilon;
 void IKinematics::ENormalize(double min, double max) {
     joint_emax = joint_max;
     joint_emin = joint_min;
-    
-    double range = (fabs(min)+fabs(max));
-    for(size_t i=0; i< joint_emin.size(); i++){
-        double jtrange = (fabs(joint_emin[i])+fabs(joint_emax[i]));
-        if(jtrange>range){
-            joint_emin[i]=min;
-            joint_emax[i]=max;
+
+    double range = (fabs(min) + fabs(max));
+    for (size_t i = 0; i < joint_emin.size(); i++) {
+        double jtrange = (fabs(joint_emin[i]) + fabs(joint_emax[i]));
+        if (jtrange > range) {
+            joint_emin[i] = min;
+            joint_emax[i] = max;
         }
 #if 0
-        if(joint_emin[i]<min)
-            joint_emin[i]=min;
-        if(joint_emax[i]>max)
-            joint_emax[i]=max;
+        if (joint_emin[i] < min)
+            joint_emin[i] = min;
+        if (joint_emax[i] > max)
+            joint_emax[i] = max;
 #endif
     }
 }
 
 bool IKinematics::IncrementExercise(std::vector<double>& jts) {
     size_t i = 0;
-    jts[i] += _testspacing * (joint_emax[i] - joint_emin[i]) / 2.0 ;
+    jts[i] += _testspacing * (joint_emax[i] - joint_emin[i]) / 2.0;
     size_t j = i;
     while (j < num_joints - 1 && jts[j] >= joint_emax[j]) {
         jts[j + 1] += _testspacing * (joint_emax[j + 1] - joint_emin[j + 1]) / 2.0;
-        jts[j] = joint_emin[j]+_testoffset;
+        jts[j] = joint_emin[j] + _testoffset;
         j++;
     }
 
@@ -64,7 +64,7 @@ bool IKinematics::ParseURDF(std::string xml_string, std::string base_frame) {
     //ROS_DEBUG_STREAM_NAMED("nc", "Reading joints and links from URDF");
 
     boost::shared_ptr<urdf::Link> link = boost::const_pointer_cast<urdf::Link>(robot_model.getLink(getTipLink()));
-    while (link->name != base_frame){ // && joint_names.size() <= num_joints_) {
+    while (link->name != base_frame) { // && joint_names.size() <= num_joints_) {
         //ROS_DEBUG_NAMED("nc", "Link %s", link->name.c_str());
         link_names.push_back(link->name);
         boost::shared_ptr<urdf::Joint> joint = link->parent_joint;
@@ -73,16 +73,16 @@ bool IKinematics::ParseURDF(std::string xml_string, std::string base_frame) {
                 //ROS_DEBUG_STREAM_NAMED("nc", "Adding joint " << joint->name);
 
                 joint_names.push_back(joint->name);
-                axis.push_back(Convert<urdf::Vector3,Eigen::Vector3d>(joint->axis));
-                xyzorigin.push_back(Convert<urdf::Vector3,Eigen::Vector3d>(joint->parent_to_joint_origin_transform.position));
+                axis.push_back(Convert<urdf::Vector3, Eigen::Vector3d>(joint->axis));
+                xyzorigin.push_back(Convert<urdf::Vector3, Eigen::Vector3d>(joint->parent_to_joint_origin_transform.position));
                 double roll, pitch, yaw;
-                joint->parent_to_joint_origin_transform.rotation.getRPY (roll, pitch, yaw);
-                rpyorigin.push_back(Eigen::Vector3d(roll,pitch,yaw));
-                
-                float lower, upper, maxvel=0.0, maxeffort=0.0;
+                joint->parent_to_joint_origin_transform.rotation.getRPY(roll, pitch, yaw);
+                rpyorigin.push_back(Eigen::Vector3d(roll, pitch, yaw));
+
+                float lower, upper, maxvel = 0.0, maxeffort = 0.0;
                 int hasLimits;
                 if (joint->type != urdf::Joint::CONTINUOUS) {
-                    maxvel=joint->limits->velocity;
+                    maxvel = joint->limits->velocity;
                     maxeffort = joint->limits->effort;
                     if (joint->safety) {
                         lower = joint->safety->soft_lower_limit;
@@ -130,19 +130,24 @@ bool IKinematics::ParseURDF(std::string xml_string, std::string base_frame) {
 }
 
 // FIXME: <limit effort="1000.0" lower="0.0" upper="0.548" velocity="0.5"/>
+
 std::string IKinematics::DumpUrdfJoint() {
     std::stringstream s;
     for (int i = 0; i < joint_names.size(); i++) {
-        s << "Joint       = " << joint_names[i].c_str()<< std::endl;
+        s << "Joint       = " << joint_names[i].c_str() << std::endl;
         s << " Axis       = " << RCS::DumpEVector(axis[i]).c_str();
         s << " XYZ Origin = " << RCS::DumpEVector(xyzorigin[i]).c_str();
         s << " RPY Origin = " << RCS::DumpEVector(rpyorigin[i]).c_str();
-        s << " Has Limits = " << joint_has_limits[i]<< std::endl;
-        s << " Min Pos    = " << joint_min[i]<< std::endl;;
-        s << " Max Pos    = " << joint_max[i]<< std::endl;;   
-        s << " Max Vel    = " << joint_velmax[i]<< std::endl;;   
-        s << " Max Effort = " << joint_effort[i]<< std::endl;;   
-     }
+        s << " Has Limits = " << joint_has_limits[i] << std::endl;
+        s << " Min Pos    = " << joint_min[i] << std::endl;
+        ;
+        s << " Max Pos    = " << joint_max[i] << std::endl;
+        ;
+        s << " Max Vel    = " << joint_velmax[i] << std::endl;
+        ;
+        s << " Max Effort = " << joint_effort[i] << std::endl;
+        ;
+    }
     return s.str();
 }
 
@@ -159,21 +164,21 @@ Eigen::Matrix4d IKinematics::ComputeUrdfTransform(double angle,
     m1.block<3, 3>(0, 0) = t33;
     tmp.block<3, 1>(0, 3) = origin;
     return tmp * m1; // http://answers.ros.org/question/193286/some-precise-definition-or-urdfs-originrpy-attribute/
-}    
+}
 
 std::string IKinematics::DumpTransformMatrices() {
     // Fixme: row versus column major :( May not matter since eigen rectifies when accessing
     std::string dump;
     for (int i = 0; i < joint_names.size(); i++) {
-       Eigen::Matrix4d m= ComputeUrdfTransform(M_PI_2, axis[i], xyzorigin[i], rpyorigin[i]);
-       dump+=Globals.StrFormat("%dT%d=\n", i, i+1);
-           
-       dump+= RCS::Dump4x4Matrix(m);
+        Eigen::Matrix4d m = ComputeUrdfTransform(M_PI_2, axis[i], xyzorigin[i], rpyorigin[i]);
+        dump += Globals.StrFormat("%dT%d=\n", i, i + 1);
+
+        dump += RCS::Dump4x4Matrix(m);
     }
     return dump;
 }
-std::vector<tf::Pose> IKinematics::ComputeAllFk(std::vector<double> thetas)
-{
+
+std::vector<tf::Pose> IKinematics::ComputeAllFk(std::vector<double> thetas) {
     // Using URDF will compute FK
     std::vector<Eigen::Matrix4d> AllM;
     std::vector<Eigen::Matrix4d> A0;
@@ -212,14 +217,14 @@ std::vector<tf::Pose> IKinematics::ComputeAllFk(std::vector<double> thetas)
  * robotiq_85_right_finger_tip_joint 	axis=1,0,0 rpy="0 0 0" xyz="0 .04196 -.0388"
  * @return 
  */
-RCS::Pose ComputeGripperOffset() {
+tf::Pose ComputeGripperOffset() {
     std::vector<Eigen::Matrix4d> AllM;
     AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(1, 0, 0), Eigen::Vector3d(.0085, 0, -.0041), Eigen::Vector3d(0, 0, 0)));
     AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(1, 0, 0), Eigen::Vector3d(.04191, -.0306, 0), Eigen::Vector3d(1.5707, -1.5707, 0)));
     AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(0, -1, 0), Eigen::Vector3d(0, .00508, .03134), Eigen::Vector3d(3.1415, 0, 0)));
     AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(-1, 0, 0), Eigen::Vector3d(.04843, -.0127, 0), Eigen::Vector3d(-1.5707, -1.5707, 0)));
     AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(0, -1, 0), Eigen::Vector3d(0, .04196, -.0388), Eigen::Vector3d(0, 0, 0)));
-    RCS::Pose pose = ComputeFk();
+    tf::Pose pose = ComputeFk();
     LOG_DEBUG << "Gripper Offset Pose " << RCS::DumpPoseSimple(pose).c_str();
 
 }
@@ -236,7 +241,7 @@ Eigen::Vector3d UrdfVector2EigenVector(const urdf::Vector3 &in) {
 // http://docs.ros.org/diamondback/api/urdf/html/classurdf_1_1Vector3.html
 // Auto in quotes so far
 
-RCS::Pose AutoComputeGripperOffset(urdf::Model& robot_model, std::string prefix) {
+tf::Pose AutoComputeGripperOffset(urdf::Model& robot_model, std::string prefix) {
 #if 0
     AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(1, 0, 0), Eigen::Vector3d(.0085, 0, -.0041), Eigen::Vector3d(0, 0, 0)));
     AllM.push_back(ComputeUrdfTransform(0.0, Eigen::Vector3d(1, 0, 0), Eigen::Vector3d(.04191, -.0306, 0), Eigen::Vector3d(1.5707, -1.5707, 0)));
@@ -273,7 +278,7 @@ RCS::Pose AutoComputeGripperOffset(urdf::Model& robot_model, std::string prefix)
                 UrdfVector2EigenVector(position),
                 UrdfVector2EigenVector(rpy)));
     }
-    RCS::Pose pose = ComputeFk();
+    tf::Pose pose = ComputeFk();
     LOG_DEBUG << "Gripper Offset Pose " << RCS::DumpPoseSimple(pose).c_str();
     return pose;
 
@@ -283,8 +288,8 @@ RCS::Pose AutoComputeGripperOffset(urdf::Model& robot_model, std::string prefix)
 
 void FanucLRmate200iD::Configure(int config) {
     _config = config;
-     this->bConfig=true;
-     _min = std::vector<double>(_size, -M_PI_2);
+    this->bConfig = true;
+    _min = std::vector<double>(_size, -M_PI_2);
     _max = std::vector<double>(_size, M_PI_2);
     if (config & BASE_FLIP) {
         _min[0] = -1.6;
@@ -315,7 +320,7 @@ void FanucLRmate200iD::Configure(int config) {
         _min[2] = 1.70;
         _max[2] = 4.0;
     }
-    if (config & FOREARM_DOWN ) {
+    if (config & FOREARM_DOWN) {
         _min[3] = -M_PI_2;
         _max[3] = 2. * M_PI_2;
     }
@@ -336,7 +341,7 @@ void FanucLRmate200iD::Configure(int config) {
 std::vector<double> FanucLRmate200iD::Seed(int config = -1) {
     if (config != -1)
         Configure(config);
-    if(bConfig!=true)
+    if (bConfig != true)
         throw std::runtime_error("Not configured");
 
     std::vector<double> seed;
@@ -346,4 +351,133 @@ std::vector<double> FanucLRmate200iD::Seed(int config = -1) {
         seed.push_back(avg);
     }
     return seed;
+}
+
+#include <gokin/gokin.h>
+#include "Controller.h"
+MotomanSia20dGoKin::MotomanSia20dGoKin(boost::shared_ptr<RCS::CController> nc) {
+    _nc = nc;
+    _pGoKin = boost::shared_ptr<gomotion::GoKin>(new gomotion::GoKin());
+    _pGoKin->SetLengthUnitsPerMeter(1.0);
+}
+
+tf::Pose MotomanSia20dGoKin::FK(std::vector<double> joints) {
+    return _pGoKin->fwd(joints);
+}
+
+size_t MotomanSia20dGoKin::AllIK(tf::Pose & pose,
+        std::vector<std::vector<double>> &joints) {
+    assert(0);
+    return 0;
+}
+
+std::vector<double> MotomanSia20dGoKin::IK(tf::Pose pose,
+        std::vector<double> oldjoints) {
+    return _pGoKin->inv(pose,oldjoints);
+}
+
+bool MotomanSia20dGoKin::IsSingular(tf::Pose pose, double threshold) {
+    return false;
+}
+
+void MotomanSia20dGoKin::Init(ros::NodeHandle & nh) {
+    IKinematics::Init(nh);
+
+    std::vector<std::vector<double> > params;
+    for (size_t i = 0; i < axis.size(); i++) {
+        std::vector<double> d;
+        std::vector<double> e = Convert<Eigen::Vector3d, std::vector<double>>(xyzorigin[i]);
+        d.insert(d.end(), e.begin(), e.end());
+        e = Convert<Eigen::Vector3d, std::vector<double>>(rpyorigin[i]);
+        d.insert(d.end(), e.begin(), e.end());
+        e = Convert<Eigen::Vector3d, std::vector<double>>(axis[i]);
+        d.insert(d.end(), e.begin(), e.end()); //       d.insert(d.end(), rpyorigin.begin(), rpyorigin.end());
+        params.push_back(d);
+    }
+    _pGoKin->SetParams(params);
+}
+
+
+#include <trac_ik/trac_ik.hpp>
+// http://www.orocos.org/kdl/examples
+// http://docs.ros.org/jade/api/tf_conversions/html/c++/tf__kdl_8cpp_source.html
+void poseTFToKDL(const tf::Pose& t, KDL::Frame& k) {
+    for (unsigned int i = 0; i < 3; ++i)
+        k.p[i] = t.getOrigin()[i];
+    for (unsigned int i = 0; i < 9; ++i)
+        k.M.data[i] = t.getBasis()[i / 3][i % 3];
+}
+
+void poseKDLToTF(const KDL::Frame& k, tf::Pose& t) {
+    t.setOrigin(tf::Vector3(k.p[0], k.p[1], k.p[2]));
+    t.setBasis(tf::Matrix3x3(k.M.data[0], k.M.data[1], k.M.data[2],
+            k.M.data[3], k.M.data[4], k.M.data[5],
+            k.M.data[6], k.M.data[7], k.M.data[8]));
+}
+
+MotomanSia20dTrak_IK::MotomanSia20dTrak_IK(boost::shared_ptr<RCS::CController> nc) {
+    _nc = nc;
+}
+
+tf::Pose MotomanSia20dTrak_IK::FK(std::vector<double> joints) {
+    KDL::Chain chain;
+    _pTRAC_IK->getKDLChain(chain);
+    KDL::ChainFkSolverPos_recursive fksolver = KDL::ChainFkSolverPos_recursive(chain);
+    unsigned int nj = joints.size();
+    KDL::JntArray injoints = KDL::JntArray(nj);
+
+    // Assign some values to the joint positions
+    for (unsigned int i = 0; i < nj; i++) {
+        injoints(i) = (double) joints[i];
+    }
+    // Create the frame that will contain the results
+    KDL::Frame cartpos;
+    // Calculate forward position kinematics
+    bool kinematics_status;
+    kinematics_status = fksolver.JntToCart(injoints, cartpos);
+    if (kinematics_status < 0) {
+        std::cerr << "Error: could not calculate forward kinematics :(";
+    }
+
+    tf::Pose pose;
+    poseKDLToTF(cartpos, pose);
+    return pose;
+}
+
+size_t MotomanSia20dTrak_IK::AllIK(tf::Pose & pose,
+        std::vector<std::vector<double>> &joints) {
+    assert(0);
+    return 0;
+}
+
+std::vector<double> MotomanSia20dTrak_IK::IK(tf::Pose pose,
+        std::vector<double> oldjoints) {
+    // Create joint array
+    KDL::Frame kdl_frame;
+    poseTFToKDL(pose,kdl_frame);
+    unsigned int nj = oldjoints.size();
+    KDL::JntArray injoints = KDL::JntArray(nj);
+
+    // Assign some values to the joint positions
+    for (unsigned int i = 0; i < nj; i++) {
+        injoints(i) = (double) oldjoints[i];
+    }
+    KDL::JntArray outjoints = KDL::JntArray(nj);
+    _pTRAC_IK->CartToJnt(injoints, kdl_frame, outjoints);
+    std::vector<double> joints(nj, 0.0);
+    for (unsigned int i = 0; i < nj; i++) {
+        oldjoints[i] = (double) outjoints(i);
+    }
+    return joints;
+}
+
+bool MotomanSia20dTrak_IK::IsSingular(tf::Pose pose, double threshold) {
+    return false;
+}
+
+void MotomanSia20dTrak_IK::Init(ros::NodeHandle & nh) {
+    IKinematics::Init(nh);
+    _pTRAC_IK = boost::shared_ptr<TRAC_IK::TRAC_IK>(new 
+            TRAC_IK::TRAC_IK( _rootlinkname, _tiplinkname));
+
 }

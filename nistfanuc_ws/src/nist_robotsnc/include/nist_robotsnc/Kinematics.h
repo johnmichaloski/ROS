@@ -28,9 +28,8 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-namespace RCS
-{
-struct CController;
+namespace RCS {
+    struct CController;
 };
 
 /***
@@ -56,7 +55,7 @@ public:
     static const int ELBOW_DOWN = 0x08;
     static const int ELBOW_UP = 0x080;
     static const int ELBOW_FLIPPED = 0x080;
-    
+
     static const int FOREARM_UP = 0x10;
     static const int FOREARM_DOWN = 0x100;
 
@@ -73,7 +72,7 @@ public:
      * \param config arm configuration mask
      */
     virtual void Configure(int config) = 0;
-    virtual std::vector<double> Seed(int config=-1) = 0;
+    virtual std::vector<double> Seed(int config = -1) = 0;
 
 };
 
@@ -81,12 +80,12 @@ class FanucLRmate200iD : public IArmConfiguration {
 public:
 
     FanucLRmate200iD() {
-        _size=6;
+        _size = 6;
         Configure(SHOULDER_DOWN | FOREARM_UP | ELBOW_DOWN | WRIST_NORMAL);
 
     }
     virtual void Configure(int config);
-    virtual std::vector<double> Seed(int config=-1);
+    virtual std::vector<double> Seed(int config = -1);
 
 };
 
@@ -113,10 +112,10 @@ protected:
 
 
     Eigen::Matrix4d ComputeUrdfTransform(double angle,
-        Eigen::Vector3d axis,
-        Eigen::Vector3d origin,
-        Eigen::Vector3d rotation);
-    
+            Eigen::Vector3d axis,
+            Eigen::Vector3d origin,
+            Eigen::Vector3d rotation);
+
 
     size_t num_joints;
     std::vector< double> hint;
@@ -132,17 +131,18 @@ protected:
 public:
     static double _testspacing;
     static double _testoffset;
-    static double _testepsilon ;
+    static double _testepsilon;
 
     bool IncrementExercise(std::vector<double>& jts);
 public:
-    IKinematics() { 
-        _testspacing=0.5;
-        _testoffset=0.1;
+
+    IKinematics() {
+        _testspacing = 0.5;
+        _testoffset = 0.1;
         _testepsilon = 0.1;
     }
     std::string DumpUrdfJoint();
-    
+
     std::string getRootLink() {
         return _rootlinkname;
     }
@@ -159,7 +159,8 @@ public:
         assert(joint_names.size() != 0);
         return joint_names.size();
     }
-
+    
+ 
     virtual void SetHint(std::vector< double> hint) {
         this->hint = hint;
     }
@@ -171,20 +172,22 @@ public:
     virtual std::vector<std::string> LinkNames() {
         return link_names;
     }
+
     virtual std::vector<double> JointVelMax() {
         return joint_velmax;
     }
+
     void VerifyLimits(std::vector<double> joints) {
     }
-    void ENormalize(double min, double max) ;
-    
+    void ENormalize(double min, double max);
+
     template<typename OP>
     std::vector<size_t> VerifyKinematics(OP op) {
         std::vector<size_t> scorecard(3, 0);
         std::vector<double> jts(num_joints);
 
         for (size_t j = 0; j < num_joints; j++) {
-            jts[j] = joint_emin[j]+_testoffset;
+            jts[j] = joint_emin[j] + _testoffset;
         }
         bool bFlag = false; // while not done
         while (!bFlag) {
@@ -195,8 +198,8 @@ public:
             std::vector<double> echojts;
             std::stringstream tmpofs;
             try {
-//                Globals.AssignOfs((std::ostream *) &ofsIkFast,
-//                        (std::ostream *) &tmpofs);
+                //                Globals.AssignOfs((std::ostream *) &ofsIkFast,
+                //                        (std::ostream *) &tmpofs);
                 echojts = IK(pose, jts);
             } catch (...) {
             }
@@ -204,17 +207,16 @@ public:
 
             double err = 0.0;
             int flag = 1;
-            if (echojts.size() != jts.size()){
+            if (echojts.size() != jts.size()) {
                 flag = -1; // no solution
                 scorecard[2]++;
-               
-            }
-             else {
+
+            } else {
                 for (size_t k = 0; k < jts.size(); k++)
                     err += fabs(echojts[k] - jts[k]);
                 if (err < _testepsilon) {
                     flag = 1; // Green marker
-                scorecard[0]++;
+                    scorecard[0]++;
 
                 } else {
                     flag = 0; // Red marker
@@ -224,7 +226,7 @@ public:
             if (flag <= 0) {
                 //std::cout << RCS::VectorDump(jts).c_str() << "\n";
                 ofsRobotExercise << "==========================================================\n";
-                ofsRobotExercise << "In Joints     =" << RCS::VectorDump<double>(jts).c_str() << "\n";
+                ofsRobotExercise << "I0n Joints     =" << RCS::VectorDump<double>(jts).c_str() << "\n";
                 ofsRobotExercise << "FK            =" << RCS::DumpPoseSimple(pose).c_str() << "\n";
                 //            ofsRobotExercise << "All FK        =" << RCS::DumpPoseSimple(poses[num_joints-1]).c_str() << "\n";
                 ofsRobotExercise << "Out Joints    =" << RCS::VectorDump<double>(echojts).c_str() << "\n";
@@ -264,24 +266,24 @@ public:
      * \param vector of all robot joint values in doubles.
      * \return corresponding Cartesian robot pose of end  effector.
      */
-    virtual RCS::Pose FK(std::vector<double> jv) = 0;
+    virtual tf::Pose FK(std::vector<double> jv) = 0;
     /*!
      * \brief IK performs the inverse kinematics using the Cartesian pose provided.
      * \param  Cartesian robot pose of end  effector.
      * \param  optional seed joint values to use as best guess for IK joint values.
      * \return vector of all robot joint values in doubles.
      */
-    virtual std::vector<double> IK(RCS::Pose pose,
+    virtual std::vector<double> IK(tf::Pose pose,
             std::vector<double> oldjoints) = 0;
 
- 
+
     /*!
      * \brief AllIK solves  the inverse kinematics to find all solutions using the Cartesian pose provided.
      * \param  Cartesian robot pose of end  effector.
      * \param  vector of double vectos to hold all the IK joint solutions.
      * \return number of solutions found.
      */
-    virtual size_t AllIK(RCS::Pose & pose,
+    virtual size_t AllIK(tf::Pose & pose,
             std::vector<std::vector<double> > & newjoints) = 0;
     /*!
      * \brief NearestJoints finds the joint set that is closest to the old joints.
@@ -291,7 +293,7 @@ public:
      */
     virtual std::vector<double> NearestJoints(
             std::vector<double> oldjoints,
-            std::vector<std::vector<double> > & newjoints) = 0;
+            std::vector<std::vector<double> > & newjoints) { return std::vector<double> (); }
 
     /*!
      * \brief Init is necessary for ROS to initialize it kinematics using robot model .
@@ -320,7 +322,7 @@ public:
      * \param  groupname name of  chained joints in robot model.
      * \param  eelinkname name of end effector joint in robot model.
      */
-    virtual bool IsSingular(RCS::Pose pose, double threshold) {
+    virtual bool IsSingular(tf::Pose pose, double threshold) {
         return false;
     }
 
@@ -363,7 +365,6 @@ public:
         return joints;
     }
 
-
     /*!
      * \brief Compares array of joint positions  against joint minimums and maximums.
      * \param  joints array that contains the value of each joints.
@@ -392,6 +393,7 @@ public:
         msg = errmsg.str();
         return outofbounds.size() > 0;
     }
+
     /*!
      * \brief Compute distance between seed state and solution joint state.
      * First, normalize all solution joint values to (-2pi,+2pi).
@@ -446,25 +448,24 @@ public:
 typedef boost::shared_ptr<IKinematics> IKinematicsSharedPtr;
 
 class MotomanSia20dFastKinematics : public IKinematics {
-
 public:
 
-    MotomanSia20dFastKinematics(boost::shared_ptr<RCS::CController> nc){
-        _nc=nc;
+    MotomanSia20dFastKinematics(boost::shared_ptr<RCS::CController> nc) {
+        _nc = nc;
     }
 
-    virtual RCS::Pose FK(std::vector<double> joints);
+    virtual tf::Pose FK(std::vector<double> joints);
 
-    virtual size_t AllIK(RCS::Pose & pose,
+    virtual size_t AllIK(tf::Pose & pose,
             std::vector<std::vector<double>> &joints);
     Eigen::VectorXd ConvertJoints(std::vector<double> v);
     std::vector<double> ConvertJoints(Eigen::VectorXd ev);
     virtual std::vector<double> NearestJoints(
             std::vector<double> oldjoints,
             std::vector<std::vector<double>> &newjoints);
-    virtual std::vector<double> IK(RCS::Pose pose,
+    virtual std::vector<double> IK(tf::Pose pose,
             std::vector<double> oldjoints);
-    virtual bool IsSingular(RCS::Pose pose, double threshold);
+    virtual bool IsSingular(tf::Pose pose, double threshold);
     //virtual void Init(ros::NodeHandle &nh) ;
     void VerifyLimits(std::vector<double> joints);
 
@@ -472,25 +473,64 @@ public:
 };
 
 class FanucLRMate200idFastKinematics : public IKinematics {
-
 public:
 
-     FanucLRMate200idFastKinematics(boost::shared_ptr<RCS::CController> nc){
-        _nc=nc;
+    FanucLRMate200idFastKinematics(boost::shared_ptr<RCS::CController> nc) {
+        _nc = nc;
     }
 
-    virtual RCS::Pose FK(std::vector<double> joints);
-    virtual size_t AllIK(RCS::Pose & pose,
+    virtual tf::Pose FK(std::vector<double> joints);
+    virtual size_t AllIK(tf::Pose & pose,
             std::vector<std::vector<double>> &joints);
     Eigen::VectorXd ConvertJoints(std::vector<double> v);
     std::vector<double> ConvertJoints(Eigen::VectorXd ev);
     virtual std::vector<double> NearestJoints(
             std::vector<double> oldjoints,
             std::vector<std::vector<double>> &newjoints);
-    virtual std::vector<double> IK(RCS::Pose pose,
+    virtual std::vector<double> IK(tf::Pose pose,
             std::vector<double> oldjoints);
 
-    virtual bool IsSingular(RCS::Pose pose, double threshold);
+    virtual bool IsSingular(tf::Pose pose, double threshold);
     void VerifyLimits(std::vector<double> joints);
+};
+
+
+namespace gomotion{
+    struct GoKin;
+};
+class MotomanSia20dGoKin  : public IKinematics {
+public:
+
+    MotomanSia20dGoKin(boost::shared_ptr<RCS::CController> nc);
+    virtual tf::Pose FK(std::vector<double> joints);
+    virtual size_t AllIK(tf::Pose & pose,
+            std::vector<std::vector<double>> &joints);
+    virtual std::vector<double> IK(tf::Pose pose,
+            std::vector<double> oldjoints);
+    virtual bool IsSingular(tf::Pose pose, double threshold);
+    virtual void Init(ros::NodeHandle & nh);
+    void VerifyLimits(std::vector<double> joints) {
+    }
+   boost::shared_ptr<gomotion::GoKin>  _pGoKin;
+};
+
+namespace TRAC_IK{
+    struct TRAC_IK;
+};
+
+class MotomanSia20dTrak_IK  : public IKinematics {
+public:
+
+    MotomanSia20dTrak_IK(boost::shared_ptr<RCS::CController> nc);
+    virtual tf::Pose FK(std::vector<double> joints);
+    virtual size_t AllIK(tf::Pose & pose,
+            std::vector<std::vector<double>> &joints);
+    virtual std::vector<double> IK(tf::Pose pose,
+            std::vector<double> oldjoints);
+    virtual bool IsSingular(tf::Pose pose, double threshold);
+    virtual void Init(ros::NodeHandle & nh);
+    void VerifyLimits(std::vector<double> joints) {
+    }
+   boost::shared_ptr<TRAC_IK::TRAC_IK>  _pTRAC_IK;
 };
 

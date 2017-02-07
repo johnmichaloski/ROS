@@ -240,6 +240,9 @@ namespace Conversion {
         return tf::Pose(tf::Quaternion(axis, angle), tf::Vector3(0.0, 0.0, 0.0));
     }
 
+    
+ 
+    
     /*!
      * \brief Create Quaternion from a rpy rotation representation designated in radians.
      * \param roll rotation around x axis in radians.
@@ -373,7 +376,19 @@ namespace Conversion {
                 m.orientation.z);
         return e;
     }
-
+       /*!
+     * \brief Convert Eigen::Vector3d into std::vector<double> 
+     * \param e Eigen::Vector3d.
+     * \return vector of 3 doubles
+     */
+    template<>
+    inline std::vector<double> Convert<Eigen::Vector3d, std::vector<double>>(Eigen::Vector3d e) {
+        std::vector<double> ds;
+        ds.push_back(e.x());
+        ds.push_back(e.y());
+        ds.push_back(e.z());
+        return ds;
+    }
     /*!
      * \brief Convert tf::Quaternion into an  Eigen::Quaterniond.
      * \param q is defined as a tf::Quaternion..

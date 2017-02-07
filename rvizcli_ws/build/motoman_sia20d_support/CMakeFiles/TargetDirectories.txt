@@ -1,0 +1,15 @@
+/usr/local/michalos/rvizcli_ws/build/motoman_sia20d_support/CMakeFiles/_catkin_empty_exported_target.dir
+/usr/local/michalos/rvizcli_ws/build/motoman_sia20d_support/CMakeFiles/_run_tests_motoman_sia20d_support.dir
+/usr/local/michalos/rvizcli_ws/build/motoman_sia20d_support/CMakeFiles/_run_tests_motoman_sia20d_support_roslaunch-check.dir
+/usr/local/michalos/rvizcli_ws/build/motoman_sia20d_support/CMakeFiles/_run_tests_motoman_sia20d_support_roslaunch-check_test_launch_test.xml.dir
+/usr/local/michalos/rvizcli_ws/build/motoman_sia20d_support/CMakeFiles/clean_test_results.dir
+/usr/local/michalos/rvizcli_ws/build/motoman_sia20d_support/CMakeFiles/clean_test_results_motoman_sia20d_support.dir
+/usr/local/michalos/rvizcli_ws/build/motoman_sia20d_support/CMakeFiles/download_extra_data.dir
+/usr/local/michalos/rvizcli_ws/build/motoman_sia20d_support/CMakeFiles/doxygen.dir
+/usr/local/michalos/rvizcli_ws/build/motoman_sia20d_support/gtest/CMakeFiles/gtest.dir
+/usr/local/michalos/rvizcli_ws/build/motoman_sia20d_support/gtest/CMakeFiles/gtest_main.dir
+/usr/local/michalos/rvizcli_ws/build/motoman_sia20d_support/CMakeFiles/run_tests.dir
+/usr/local/michalos/rvizcli_ws/build/motoman_sia20d_support/CMakeFiles/run_tests_motoman_sia20d_support.dir
+/usr/local/michalos/rvizcli_ws/build/motoman_sia20d_support/CMakeFiles/run_tests_motoman_sia20d_support_roslaunch-check.dir
+/usr/local/michalos/rvizcli_ws/build/motoman_sia20d_support/CMakeFiles/run_tests_motoman_sia20d_support_roslaunch-check_test_launch_test.xml.dir
+/usr/local/michalos/rvizcli_ws/build/motoman_sia20d_support/CMakeFiles/tests.dir

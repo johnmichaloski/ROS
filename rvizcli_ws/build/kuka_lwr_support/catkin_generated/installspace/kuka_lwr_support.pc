@@ -1,0 +1,8 @@
+prefix=/usr/local/michalos/rvizcli_ws/install
+
+Name: kuka_lwr_support
+Description: Description of kuka_lwr_support
+Version: 0.0.0
+Cflags: 
+Libs: -L/usr/local/michalos/rvizcli_ws/install/lib 
+Requires: 

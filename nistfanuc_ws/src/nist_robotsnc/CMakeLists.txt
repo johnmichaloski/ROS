@@ -23,6 +23,8 @@ rviz_visual_tools
     moveit_ros_planning
     moveit_ros_manipulation
     gotraj
+   gokin
+   trac_ik_lib
 )
 
 find_package(Boost REQUIRED system thread chrono regex log_setup log locale )
@@ -36,6 +38,8 @@ catkin_package(
 #    include/${PROJECT_NAME}/CrclXsd
   LIBRARIES
     gotraj
+    gokin
+    trac_ik_lib
   CATKIN_DEPENDS
     roscpp
     moveit_core
@@ -52,6 +56,8 @@ tf_conversions
 eigen_conversions
 rviz_visual_tools
 gotraj
+gokin
+trac_ik_lib
   DEPENDS
     Boost
     Eigen
@@ -96,7 +102,7 @@ message("DEBUG variable CMAKE_BINARY_DIR    : ${CMAKE_BINARY_DIR}")
 #message("DEBUG variable catkin_LIBRARIES   : ${catkin_LIBRARIES}")  # This is long
 #message("DEBUG variable Boost_LIBRARIES    : ${Boost_LIBRARIES}")  # This is long
 
-message("DEBUG variable catkin_INCLUDEDIR   : ${catkin_INCLUDEDIR}")
+message("DEBUG variable catkin_INCLUDEDIR   : ${catkin_INCLUDE_DIRS}")
 message("DEBUG variable Eigen_INCLUDE_DIRS  :  ${Eigen_INCLUDE_DIRS}")
 message("DEBUG variable Boost_INCLUDE_DIRS  :  ${Boost_INCLUDE_DIRS}")
 message("DEBUG variable CATKIN_DEVEL_PREFIX :  ${CATKIN_DEVEL_PREFIX}")
@@ -117,7 +123,6 @@ message("DEBUG variable CMAKE_INSTALL_PREFIX:  ${CMAKE_INSTALL_PREFIX}")
 add_executable(nist_robotsnc 
 src/BLogging.cpp
 src/Controller.cpp
-src/Conversions.cpp
 src/CsvLogging.cpp
 src/Globals.cpp
 src/Kinematics.cpp
@@ -127,13 +132,9 @@ src/RCSInterpreter.cpp
 src/RvizMarker.cpp
 src/Scene.cpp
 src/RosSetup.cpp
-#src/arm_kinematics.cpp
 src/nist_robotsnc.cpp
 src/trajectoryMaker.cpp
-#src/fanuc/fanuc_lrmate200id_manipulator_ikfast_solver.cpp
-#src/fanuc/fanuc_lrmate200id.cpp
 src/Demo.cpp
-#src/motoman/ikfast_sia20d_manipulator.cpp
 src/motomansia20dkinematics.cpp
 src/fanuclrmate200idkinematics.cpp
 src/MotionException.cpp
@@ -161,12 +162,10 @@ link_directories(${CATKIN_DEVEL_PREFIX}/devel/lib)
 target_link_libraries(nist_robotsnc 
 libtinyxml.a  
 libxerces-c.a  
-#libgotraj.so
 # I had to add ${catkin_LIBRARIES} AND remove the reference to the shared library 
 #libgotraj.so since gotraj is a Catkin library?
 ${catkin_LIBRARIES}
 ${Boost_LIBRARIES}
-#gotraj
 )
 
 

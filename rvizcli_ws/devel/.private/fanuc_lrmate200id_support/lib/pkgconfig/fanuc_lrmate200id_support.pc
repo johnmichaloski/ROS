@@ -1,0 +1,8 @@
+prefix=/usr/local/michalos/rvizcli_ws/devel/.private/fanuc_lrmate200id_support
+
+Name: fanuc_lrmate200id_support
+Description: Description of fanuc_lrmate200id_support
+Version: 0.1.0
+Cflags: 
+Libs: -L/usr/local/michalos/rvizcli_ws/devel/.private/fanuc_lrmate200id_support/lib 
+Requires: 

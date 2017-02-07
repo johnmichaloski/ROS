@@ -1,0 +1,1 @@
+/usr/local/michalos/rvizcli_ws/devel/.private/cmdinterpreter/share/cmdinterpreter/cmake/cmdinterpreterConfig.cmake
