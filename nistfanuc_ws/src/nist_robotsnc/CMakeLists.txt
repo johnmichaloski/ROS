@@ -25,8 +25,8 @@ rviz_visual_tools
     gotraj
    gokin
    trac_ik_lib
+   #rviz
 )
-
 find_package(Boost REQUIRED system thread chrono regex log_setup log locale )
 find_package(Eigen REQUIRED)
 
@@ -35,11 +35,9 @@ find_package(Eigen REQUIRED)
 catkin_package(
   INCLUDE_DIRS
     include
-#    include/${PROJECT_NAME}/CrclXsd
   LIBRARIES
     gotraj
     gokin
-    trac_ik_lib
   CATKIN_DEPENDS
     roscpp
     moveit_core
@@ -75,13 +73,12 @@ trac_ik_lib
 set(CMAKE_CXX_FLAGS "-w ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "-DDEBUG ${CMAKE_CXX_FLAGS}")
-set(CMAKE_CXX_FLAGS "-DBOOST_LOG_DYN_LINK ${CMAKE_CXX_FLAGS}")
+#set(CMAKE_CXX_FLAGS "-DBOOST_LOG_DYN_LINK ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "-fpermissive ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "-g ${CMAKE_CXX_FLAGS}")
 
 #set(CMAKE_CXX_FLAGS "-DCHECKERS ${CMAKE_CXX_FLAGS}")
 #set(CMAKE_CXX_FLAGS "-DBOLTDEMO ${CMAKE_CXX_FLAGS}")
-
 
 set(CMAKE_EXE_LINKER_FLAGS "-rdynamic ${CMAKE_EXE_LINKER_FLAGS}")
 
@@ -102,12 +99,13 @@ message("DEBUG variable CMAKE_BINARY_DIR    : ${CMAKE_BINARY_DIR}")
 #message("DEBUG variable catkin_LIBRARIES   : ${catkin_LIBRARIES}")  # This is long
 #message("DEBUG variable Boost_LIBRARIES    : ${Boost_LIBRARIES}")  # This is long
 
-message("DEBUG variable catkin_INCLUDEDIR   : ${catkin_INCLUDE_DIRS}")
+message("DEBUG variable catkin_INCLUDEDIR   :  ${catkin_INCLUDE_DIRS}")
 message("DEBUG variable Eigen_INCLUDE_DIRS  :  ${Eigen_INCLUDE_DIRS}")
 message("DEBUG variable Boost_INCLUDE_DIRS  :  ${Boost_INCLUDE_DIRS}")
 message("DEBUG variable CATKIN_DEVEL_PREFIX :  ${CATKIN_DEVEL_PREFIX}")
 message("DEBUG variable CMAKE_INSTALL_PREFIX:  ${CMAKE_INSTALL_PREFIX}")
-
+message("DEBUG variable QT_LIBRARIES        :  ${QT_LIBRARIES}")
+message("DEBUG variable CMAKE_CXX_FLAGS     :  ${CMAKE_CXX_FLAGS}")
 
 # Codesynthesis include
 # FMP
@@ -158,6 +156,7 @@ add_custom_target(dummy_${PROJECT_NAME} SOURCES ${extra_files})
 link_directories(/usr/lib/x86_64-linux-gnu/)
 link_directories(${CATKIN_DEVEL_PREFIX}/install)
 link_directories(${CATKIN_DEVEL_PREFIX}/devel/lib)
+link_directories(/usr/lib)
 
 target_link_libraries(nist_robotsnc 
 libtinyxml.a  
@@ -166,6 +165,8 @@ libxerces-c.a
 #libgotraj.so since gotraj is a Catkin library?
 ${catkin_LIBRARIES}
 ${Boost_LIBRARIES}
+${QT_LIBRARIES}
+
 )
 
 

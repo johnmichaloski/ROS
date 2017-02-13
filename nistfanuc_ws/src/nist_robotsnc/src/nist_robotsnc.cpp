@@ -27,6 +27,8 @@ namespace pt = boost::property_tree;
 
 #include <ros/package.h>
 #include <ros/console.h>
+
+
 #include <NIST/Boost.h>
 
 #include "MotionControl.h"
@@ -47,6 +49,7 @@ namespace pt = boost::property_tree;
 #include "nist_robotsnc/MotionException.h"
 #include "nist_robotsnc/Shape.h"
 
+
 using namespace Conversion;
 
 int main(int argc, char** argv) {
@@ -63,7 +66,7 @@ int main(int argc, char** argv) {
 
         // This hard coding of env variables is required for debugging with netbeans ide
         // If ROS environment variables are not set it cannot find "stuff"
-        SetupRosEnvironment();
+        //SetupRosEnvironment();
 
         Nist::Config cfg;
         cfg.load(Globals.ExeDirectory + ROSPACKAGENAME + ".ini");
@@ -175,13 +178,17 @@ int main(int argc, char** argv) {
                     kin = boost::shared_ptr<IKinematics>(new FanucLRMate200idFastKinematics(ncs[i]));
                 if (kinsolver == "MotomanSia20dFastKinematics"){
                     //kin = boost::shared_ptr<IKinematics>(new MotomanSia20dGoKin(ncs[i]));
-                    kin = boost::shared_ptr<IKinematics>(new MotomanSia20dFastKinematics(ncs[i]));
+                    kin = boost::shared_ptr<IKinematics>(new MotomanSia20dTrak_IK(ncs[i]));
+                    //kin = boost::shared_ptr<IKinematics>(new MotomanSia20dFastKinematics(ncs[i]));
                 }
-                kin->Init(std::string("manipulator"), eelink, baselink);
-                kin->Init(nh);
-                ncs[i]->Kinematics() = kin;
-                ncs[i]->Setup(nh, prefix);
-                //ncs[i]->status.currentjoints.name= kin->JointNames();
+                try {
+                    kin->Init(std::string("manipulator"), eelink, baselink);
+                    kin->Init(nh);
+                    ncs[i]->Kinematics() = kin;
+                    ncs[i]->Setup(nh, prefix);
+                } catch (std::exception & ex){
+                    std::cout << "Kinematics error: " << ex.what() << "\n";
+                }
 
                 // This should be selectable
                 //ncs[i]->Interpreter() = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter(ncs[i], kin));
@@ -199,8 +206,8 @@ int main(int argc, char** argv) {
                 ofsRobotURDF << "baseoffset " << RCS::DumpPoseSimple(ncs[i]->basePose()).c_str() << "\n";
                 ofsRobotURDF << "tooloffset " << RCS::DumpPoseSimple(ncs[i]->gripperPose()).c_str() << "\n";
                 ofsRobotURDF << "Joint names " << VectorDump<std::string>(ncs[i]->Kinematics()->JointNames()).c_str() << "\n" << std::flush;
-                ofsRobotURDF <<  kin->DumpUrdfJoint().c_str()<< "\n";
-               ofsRobotURDF << kin->DumpTransformMatrices().c_str()<< "\n";
+                ofsRobotURDF << kin->DumpUrdfJoint().c_str() << "\n";
+                ofsRobotURDF << kin->DumpTransformMatrices().c_str()<< "\n";
 
                 for (std::map<std::string, std::vector<double>>::iterator it = ncs[i]->NamedJointMove.begin(); it != ncs[i]->NamedJointMove.end(); it++)
                     ofsRobotURDF << (*it).first<< "=" << VectorDump<double>(ncs[i]->NamedJointMove[(*it).first]).c_str() << "\n";
@@ -213,7 +220,7 @@ int main(int argc, char** argv) {
             LOG_FATAL << e.what();
             throw;
         }
-#if 1
+#if 0
         ExerciseDemo exercise(nh);
         IKinematics::_testspacing = root.get<double>("testharness.spacing", 0.5);
         IKinematics::_testoffset = root.get<double>("testharness.offset", 0.1);
@@ -228,8 +235,18 @@ int main(int argc, char** argv) {
         std::vector<double> testjts = ToVector<double>(7,1.30,-0.84, 0.08, 2.26, 2.96,-0.38,-1.28);
         tf::Pose testpose = ncs[1]->Kinematics()->FK(testjts);
         std::cout << "Joint vals " << VectorDump<double>(testjts).c_str() << "\n" << std::flush;
-        std::cout << "testpose " << RCS::DumpPoseSimple(testpose).c_str() << "\n";
-        
+        std::cout << "kinpose " << RCS::DumpPoseSimple(testpose).c_str() << "\n";
+        // tf::Pose pose8 =  testpose * tf::Pose(tf::Quaternion(M_PI_2,0,0), tf::Vector3(0,0,0))  ;
+        // std::cout << "gokinpose8 " << RCS::DumpPoseSimple(pose8).c_str() << "\n";
+
+#if 0
+        ncs[1]->Kinematics()->axis.push_back(Eigen::Vector3d(0, 0, -1));
+        ncs[1]->Kinematics()->xyzorigin.push_back(Eigen::Vector3d(0, 0, 0));
+        ncs[1]->Kinematics()->rpyorigin.push_back(Eigen::Vector3d(0,0,-M_PI_2)) ;
+        testjts.push_back(0.0);
+        std::vector<tf::Pose> poses= ncs[1]->Kinematics()->ComputeAllFk(testjts);
+        std::cout << "genericpose " << RCS::DumpPoseSimple(poses.back()).c_str() << "\n";
+#endif      
 #if 0
         JointTrajectoryMaker jointmaker(0.1);
         JointState here,there,next,last;

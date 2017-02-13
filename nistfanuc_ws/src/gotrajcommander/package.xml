@@ -4,7 +4,7 @@
   <version>0.1.0</version>
   <description>
 
-    ROS python package to use gomotion trajectory and interpoloation motion facilities.
+      ROS python package to use gomotion trajectory and interpoloation motion facilities.
 
   </description>
   <author email="john.michaloski@nist.gov">John Michaloski(NIST)</author>
@@ -36,7 +36,7 @@
     <architecture_independent />
     <rosindex>
       <tags>
-        <tag>python</tag>
+          <tag>python</tag>
         <tag>gomotion</tag>
         <tag>trajectory</tag>
         <tag>interpolation</tag>

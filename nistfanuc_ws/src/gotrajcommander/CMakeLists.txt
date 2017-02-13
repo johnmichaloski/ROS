@@ -59,10 +59,6 @@ set(CMAKE_CXX_FLAGS "-DGO_REAL_DOUBLE ${CMAKE_CXX_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "-rdynamic ${CMAKE_EXE_LINKER_FLAGS}")
 
 
-SET(PY_PROJECT_NAME ${PROJECTNAME})
-SET(PY_PACKAGE_DIR python/gotrajcommander)
-
-
 set(GOTRAJCOMMANDER_LIB_SOURCES
     src/gotrajcommander.cpp
 )    
