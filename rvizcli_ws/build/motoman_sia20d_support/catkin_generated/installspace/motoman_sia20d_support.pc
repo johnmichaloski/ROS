@@ -1,8 +1,0 @@
-prefix=/usr/local/michalos/rvizcli_ws/install
-
-Name: motoman_sia20d_support
-Description: Description of motoman_sia20d_support
-Version: 0.3.5
-Cflags: 
-Libs: -L/usr/local/michalos/rvizcli_ws/install/lib 
-Requires: 

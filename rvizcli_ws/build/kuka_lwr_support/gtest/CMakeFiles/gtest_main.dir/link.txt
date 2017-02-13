@@ -1,1 +1,0 @@
-/usr/bin/c++  -fPIC -g   -shared -Wl,-soname,libgtest_main.so -o libgtest_main.so CMakeFiles/gtest_main.dir/src/gtest_main.cc.o  -L/usr/local/michalos/rvizcli_ws/build/kuka_lwr_support/gtest/src -lpthread libgtest.so -lpthread -Wl,-rpath,/usr/local/michalos/rvizcli_ws/build/kuka_lwr_support/gtest/src:/usr/local/michalos/rvizcli_ws/build/kuka_lwr_support/gtest 
