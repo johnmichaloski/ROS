@@ -1,4 +1,0 @@
-motoman_sia20d_support
-/usr/local/michalos/rvizcli_ws/devel/.private/motoman_sia20d_support/share/motoman_sia20d_support/cmake/motoman_sia20d_supportConfig.cmake /usr/local/michalos/rvizcli_ws/devel/share/motoman_sia20d_support/cmake/motoman_sia20d_supportConfig.cmake
-/usr/local/michalos/rvizcli_ws/devel/.private/motoman_sia20d_support/share/motoman_sia20d_support/cmake/motoman_sia20d_supportConfig-version.cmake /usr/local/michalos/rvizcli_ws/devel/share/motoman_sia20d_support/cmake/motoman_sia20d_supportConfig-version.cmake
-/usr/local/michalos/rvizcli_ws/devel/.private/motoman_sia20d_support/lib/pkgconfig/motoman_sia20d_support.pc /usr/local/michalos/rvizcli_ws/devel/lib/pkgconfig/motoman_sia20d_support.pc

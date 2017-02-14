@@ -27,6 +27,8 @@ namespace pt = boost::property_tree;
 
 #include <ros/package.h>
 #include <ros/console.h>
+
+
 #include <NIST/Boost.h>
 
 #include "MotionControl.h"
@@ -47,6 +49,7 @@ namespace pt = boost::property_tree;
 #include "nist_robotsnc/MotionException.h"
 #include "nist_robotsnc/Shape.h"
 
+
 using namespace Conversion;
 
 int main(int argc, char** argv) {
@@ -63,13 +66,6 @@ int main(int argc, char** argv) {
 
         // This hard coding of env variables is required for debugging with netbeans ide
         // If ROS environment variables are not set it cannot find "stuff"
-        SetupRosEnvironment();
-
-        Nist::Config cfg;
-        cfg.load(Globals.ExeDirectory + ROSPACKAGENAME + ".ini");
-        std::string appname = cfg.GetSymbolValue("system.name", "").c_str();
-        std::map<std::string, std::string> envmap = cfg.getmap("env");
-        SetEnvironmentFromMap(envmap);
         SetupRosEnvironment(); // needs to go before ROS!
 
         // Initialize ROS
@@ -118,9 +114,9 @@ int main(int argc, char** argv) {
 
         pScene->InitScene();
         pScene->BuildScene(); // demo actually builds scene
-
+#ifdef GEARS
         GearDemo geardemo(nh, path, Convert<tf::Vector3, tf::Pose>(tf::Vector3(0.25, 0.5, 0.0)));
-#if 0    
+   
         geardemo.Setup(); // this does draw scene
         pScene->DrawScene();
 #endif
@@ -143,7 +139,6 @@ int main(int argc, char** argv) {
 
         try {
             // Load the json file in this ptree
-            //pt::read_ini(::ExeDirectory()+ ROSPACKAGENAME + ".ini", root);
             pt::read_ini(path + "/config/" + ROSPACKAGENAME + ".ini", root);
 
             std::vector<std::string> robots = GetIniTypes<std::string>(root, "system.robots");
@@ -175,13 +170,17 @@ int main(int argc, char** argv) {
                     kin = boost::shared_ptr<IKinematics>(new FanucLRMate200idFastKinematics(ncs[i]));
                 if (kinsolver == "MotomanSia20dFastKinematics"){
                     //kin = boost::shared_ptr<IKinematics>(new MotomanSia20dGoKin(ncs[i]));
+                    //kin = boost::shared_ptr<IKinematics>(new MotomanSia20dTrak_IK(ncs[i]));
                     kin = boost::shared_ptr<IKinematics>(new MotomanSia20dFastKinematics(ncs[i]));
                 }
-                kin->Init(std::string("manipulator"), eelink, baselink);
-                kin->Init(nh);
-                ncs[i]->Kinematics() = kin;
-                ncs[i]->Setup(nh, prefix);
-                //ncs[i]->status.currentjoints.name= kin->JointNames();
+                try {
+                    kin->Init(std::string("manipulator"), eelink, baselink);
+                    kin->Init(nh);
+                    ncs[i]->Kinematics() = kin;
+                    ncs[i]->Setup(nh, prefix);
+                } catch (std::exception & ex){
+                    std::cout << "Kinematics error: " << ex.what() << "\n";
+                }
 
                 // This should be selectable
                 //ncs[i]->Interpreter() = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter(ncs[i], kin));
@@ -199,8 +198,8 @@ int main(int argc, char** argv) {
                 ofsRobotURDF << "baseoffset " << RCS::DumpPoseSimple(ncs[i]->basePose()).c_str() << "\n";
                 ofsRobotURDF << "tooloffset " << RCS::DumpPoseSimple(ncs[i]->gripperPose()).c_str() << "\n";
                 ofsRobotURDF << "Joint names " << VectorDump<std::string>(ncs[i]->Kinematics()->JointNames()).c_str() << "\n" << std::flush;
-                ofsRobotURDF <<  kin->DumpUrdfJoint().c_str()<< "\n";
-               ofsRobotURDF << kin->DumpTransformMatrices().c_str()<< "\n";
+                ofsRobotURDF << kin->DumpUrdfJoint().c_str() << "\n";
+                ofsRobotURDF << kin->DumpTransformMatrices().c_str()<< "\n";
 
                 for (std::map<std::string, std::vector<double>>::iterator it = ncs[i]->NamedJointMove.begin(); it != ncs[i]->NamedJointMove.end(); it++)
                     ofsRobotURDF << (*it).first<< "=" << VectorDump<double>(ncs[i]->NamedJointMove[(*it).first]).c_str() << "\n";
@@ -213,7 +212,7 @@ int main(int argc, char** argv) {
             LOG_FATAL << e.what();
             throw;
         }
-#if 1
+#ifdef EXERCISER
         ExerciseDemo exercise(nh);
         IKinematics::_testspacing = root.get<double>("testharness.spacing", 0.5);
         IKinematics::_testoffset = root.get<double>("testharness.offset", 0.1);
@@ -228,21 +227,17 @@ int main(int argc, char** argv) {
         std::vector<double> testjts = ToVector<double>(7,1.30,-0.84, 0.08, 2.26, 2.96,-0.38,-1.28);
         tf::Pose testpose = ncs[1]->Kinematics()->FK(testjts);
         std::cout << "Joint vals " << VectorDump<double>(testjts).c_str() << "\n" << std::flush;
-        std::cout << "testpose " << RCS::DumpPoseSimple(testpose).c_str() << "\n";
-        
+        std::cout << "kinpose " << RCS::DumpPoseSimple(testpose).c_str() << "\n";
+
 #if 0
-        JointTrajectoryMaker jointmaker(0.1);
-        JointState here,there,next,last;
-        here.position = ncs[0]->NamedJointMove["Home"];
-        there.position = ncs[0]->NamedJointMove["Safe"];
-        last=here;
-        bool bFlag=false;
-        do {
-            bFlag=jointmaker.evalJointPositionTrajectory(ncs[0]->Kinematics()->JointVelMax(), here, here, there,  next);
-            last=here;
-            here = next;
-        } while (!bFlag);
-#endif   
+        ncs[1]->Kinematics()->axis.push_back(Eigen::Vector3d(0, 0, -1));
+        ncs[1]->Kinematics()->xyzorigin.push_back(Eigen::Vector3d(0, 0, 0));
+        ncs[1]->Kinematics()->rpyorigin.push_back(Eigen::Vector3d(0,0,-M_PI_2)) ;
+        testjts.push_back(0.0);
+        std::vector<tf::Pose> poses= ncs[1]->Kinematics()->ComputeAllFk(testjts);
+        std::cout << "genericpose " << RCS::DumpPoseSimple(poses.back()).c_str() << "\n";
+#endif      
+
         // start the Controller Session thread
         for (size_t j = 0; j < ncs.size(); j++) {
             ncs[j]->Start(); 
@@ -267,7 +262,7 @@ int main(int argc, char** argv) {
                 r.sleep();
             }
         }
-#if 1
+#ifdef CHECKERS
         CheckersGame checkers(nh);
         /** CHeckers board rviz dimensions */
         checkers.RvizGame()->HEIGHT = root.get<double>("checkers.HEIGHT", 0.015);
@@ -302,7 +297,7 @@ int main(int argc, char** argv) {
         checkers.Setup();
         checkers.Play(&nccmds[0], &nccmds[1]);
 #endif
-#if 0
+#ifdef GEARS
         do {
             for (size_t i = 1; i < 2; i++) { // only motoman
                 // for (size_t i = 0; i < ncs.size(); i++) {

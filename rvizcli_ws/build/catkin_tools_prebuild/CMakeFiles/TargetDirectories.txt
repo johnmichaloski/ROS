@@ -1,8 +1,0 @@
-/usr/local/michalos/rvizcli_ws/build/catkin_tools_prebuild/CMakeFiles/_catkin_empty_exported_target.dir
-/usr/local/michalos/rvizcli_ws/build/catkin_tools_prebuild/CMakeFiles/clean_test_results.dir
-/usr/local/michalos/rvizcli_ws/build/catkin_tools_prebuild/CMakeFiles/download_extra_data.dir
-/usr/local/michalos/rvizcli_ws/build/catkin_tools_prebuild/CMakeFiles/doxygen.dir
-/usr/local/michalos/rvizcli_ws/build/catkin_tools_prebuild/gtest/CMakeFiles/gtest.dir
-/usr/local/michalos/rvizcli_ws/build/catkin_tools_prebuild/gtest/CMakeFiles/gtest_main.dir
-/usr/local/michalos/rvizcli_ws/build/catkin_tools_prebuild/CMakeFiles/run_tests.dir
-/usr/local/michalos/rvizcli_ws/build/catkin_tools_prebuild/CMakeFiles/tests.dir

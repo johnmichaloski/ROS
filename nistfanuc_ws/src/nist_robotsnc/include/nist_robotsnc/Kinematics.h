@@ -106,9 +106,6 @@ protected:
     std::vector< double> joint_effort;
     std::vector< double> joint_velmax;
 
-    std::vector<Eigen::Vector3d> axis;
-    std::vector<Eigen::Vector3d> xyzorigin;
-    std::vector<Eigen::Vector3d> rpyorigin;
 
 
     Eigen::Matrix4d ComputeUrdfTransform(double angle,
@@ -129,6 +126,11 @@ protected:
     std::vector< double> joint_emin;
     std::vector< double> joint_emax;
 public:
+    std::string urdf_xml;
+    std::vector<Eigen::Vector3d> axis;
+    std::vector<Eigen::Vector3d> xyzorigin;
+    std::vector<Eigen::Vector3d> rpyorigin;
+
     static double _testspacing;
     static double _testoffset;
     static double _testepsilon;
@@ -212,7 +214,8 @@ public:
                 scorecard[2]++;
 
             } else {
-                for (size_t k = 0; k < jts.size(); k++)
+           std::string urdf_xml;
+             for (size_t k = 0; k < jts.size(); k++)
                     err += fabs(echojts[k] - jts[k]);
                 if (err < _testepsilon) {
                     flag = 1; // Green marker
@@ -332,7 +335,6 @@ public:
      */
     virtual void Init(ros::NodeHandle & nh) {
         ROS_DEBUG_NAMED("ikfast", "Reading xml file from parameter server");
-        std::string urdf_xml;
         if (!nh.getParam("robot_description", urdf_xml)) {
             ROS_FATAL_NAMED("IKinematics", "Could not load the xml from parameter server: %s", urdf_xml.c_str());
             //return false;

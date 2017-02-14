@@ -119,23 +119,16 @@ bool SetEnvironmentFromMap(std::map<std::string, std::string> envmap){
 bool SetupRosEnvironment() {
 #ifdef DEBUG       
     setenv("ROS_ROOT", "/opt/ros/indigo/share/ros", true);
-    setenv("ROS_PACKAGE_PATH", "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes:"
-            "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes_core:"
-            "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes_trajectory:"
-            "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes_moveit:"
-            "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes_planner:"
-            "/usr/local/michalos/nistfanuc_ws/src/descartes/descartes_utilities:"
+    setenv("ROS_PACKAGE_PATH", "/usr/local/michalos/nistfanuc_ws/src:"
             "/usr/local/michalos/nistfanuc_ws/src/fanuc_lrmate200id_support:"
             "/usr/local/michalos/nistfanuc_ws/src/nist_robotsnc:"
-            "/usr/local/michalos/nistfanuc_ws/src/nistcrcl:"
+            "/usr/local/michalos/nistfanuc_ws/src/robotduo:"
             "/opt/ros/indigo/share:/opt/ros/indigo/stacks", true);
     setenv("ROS_MASTER_URI", "http://localhost:11311", true);
     setenv("ROS_DISTRO", "indigo", true);
     setenv("ROS_ETC_DIR", "/opt/ros/indigo/etc/ros", true);
     setenv("PYTHONPATH", "/usr/local/michalos/nistfanuc_ws/devel/lib/python2.7/dist-packages:"
-            "/usr/local/michalos/nistcrcl_ws/devel/lib/python2.7/dist-packages:"
-            "/opt/ros/indigo/lib/python2.7/dist-packages:"
-            "/home/isd/michalos/el-robotics-core/nist_kitting/src", true);
+            "/opt/ros/indigo/lib/python2.7/dist-packages", true);
 
     // setenv("PKG_CONFIG_PATH", "/usr/local/michalos/nistfanuc_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/x86_64-linux-gnu/pkgconfig:/opt/ros/indigo/lib/x86_64-linux-gnu/pkgconfig:/usr/local/michalos/nistfanuc_ws/devel/lib/pkgconfig:/usr/local/michalos/nistcrcl_ws/devel/lib/pkgconfig:/opt/ros/indigo/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig", true);
     setenv("PATH", "/usr/local/michalos/nistfanuc_ws/devel/bin:/usr/local/michalos/nistcrcl_ws/devel/bin:/opt/ros/indigo/bin:/usr/local/jdk1.8.0_60/bin:/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:/usr/X11R6/bin:/usr/local/ulapi/bin:/usr/local/gomotion/bin:/home/isd/michalos/bin", true);

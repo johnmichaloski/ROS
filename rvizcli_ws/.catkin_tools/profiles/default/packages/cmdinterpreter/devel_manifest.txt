@@ -1,5 +1,0 @@
-cmdinterpreter
-/usr/local/michalos/rvizcli_ws/devel/.private/cmdinterpreter/share/cmdinterpreter/cmake/cmdinterpreterConfig.cmake /usr/local/michalos/rvizcli_ws/devel/share/cmdinterpreter/cmake/cmdinterpreterConfig.cmake
-/usr/local/michalos/rvizcli_ws/devel/.private/cmdinterpreter/share/cmdinterpreter/cmake/cmdinterpreterConfig-version.cmake /usr/local/michalos/rvizcli_ws/devel/share/cmdinterpreter/cmake/cmdinterpreterConfig-version.cmake
-/usr/local/michalos/rvizcli_ws/devel/.private/cmdinterpreter/lib/cmdinterpreter/cmdinterpreter /usr/local/michalos/rvizcli_ws/devel/lib/cmdinterpreter/cmdinterpreter
-/usr/local/michalos/rvizcli_ws/devel/.private/cmdinterpreter/lib/pkgconfig/cmdinterpreter.pc /usr/local/michalos/rvizcli_ws/devel/lib/pkgconfig/cmdinterpreter.pc

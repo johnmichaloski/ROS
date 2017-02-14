@@ -25,17 +25,17 @@ rviz_visual_tools
     gotraj
    gokin
    trac_ik_lib
+   #rviz
 )
-
 find_package(Boost REQUIRED system thread chrono regex log_setup log locale )
 find_package(Eigen REQUIRED)
+find_package(Threads REQUIRED)
 
 #The catkin_package function specifies which dependencies your package exports to its dependencies. In particular, #INCLUDE_DIRS specifies which directory in your package contains the header directory that should be on the include #path for any packages that compile against your package.
 
 catkin_package(
   INCLUDE_DIRS
     include
-#    include/${PROJECT_NAME}/CrclXsd
   LIBRARIES
     gotraj
     gokin
@@ -75,15 +75,27 @@ trac_ik_lib
 set(CMAKE_CXX_FLAGS "-w ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "-DDEBUG ${CMAKE_CXX_FLAGS}")
-set(CMAKE_CXX_FLAGS "-DBOOST_LOG_DYN_LINK ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-DCHECKERS ${CMAKE_CXX_FLAGS}")
+#set(CMAKE_CXX_FLAGS "-DGEARS ${CMAKE_CXX_FLAGS}")
+#set(CMAKE_CXX_FLAGS "-DEXERCISER ${CMAKE_CXX_FLAGS}")
+set(Boost_USE_MULTITHREADED ON) 
+set(CMAKE_CXX_FLAGS "-DBOOST_ASIO_HAS_THREADS ${CMAKE_CXX_FLAGS}")
+
+
+
+#set(CMAKE_CXX_FLAGS "-DBOOST_LOG_DYN_LINK ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "-fpermissive ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "-g ${CMAKE_CXX_FLAGS}")
 
 #set(CMAKE_CXX_FLAGS "-DCHECKERS ${CMAKE_CXX_FLAGS}")
 #set(CMAKE_CXX_FLAGS "-DBOLTDEMO ${CMAKE_CXX_FLAGS}")
 
+#set(CMAKE_EXE_LINKER_FLAGS "-rdynamic ${CMAKE_EXE_LINKER_FLAGS}")
+#set(CMAKE_EXE_LINKER_FLAGS "-static ${CMAKE_EXE_LINKER_FLAGS}")
 
-set(CMAKE_EXE_LINKER_FLAGS "-rdynamic ${CMAKE_EXE_LINKER_FLAGS}")
+# https://gcc.gnu.org/onlinedocs/gcc-3.0/gcc_3.html#SEC16
+#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--defsym,__stack_limit=16777216")
+
 
 include_directories(include
     ${catkin_INCLUDE_DIRS}
@@ -96,17 +108,6 @@ include_directories(include
    /usr/include/eigen3
 )
 
-# http://docs.ros.org/jade/api/catkin/html/user_guide/variables.html
-message("DEBUG variable PROJECT_NAME        : ${PROJECT_NAME}")
-message("DEBUG variable CMAKE_BINARY_DIR    : ${CMAKE_BINARY_DIR}")
-#message("DEBUG variable catkin_LIBRARIES   : ${catkin_LIBRARIES}")  # This is long
-#message("DEBUG variable Boost_LIBRARIES    : ${Boost_LIBRARIES}")  # This is long
-
-message("DEBUG variable catkin_INCLUDEDIR   : ${catkin_INCLUDE_DIRS}")
-message("DEBUG variable Eigen_INCLUDE_DIRS  :  ${Eigen_INCLUDE_DIRS}")
-message("DEBUG variable Boost_INCLUDE_DIRS  :  ${Boost_INCLUDE_DIRS}")
-message("DEBUG variable CATKIN_DEVEL_PREFIX :  ${CATKIN_DEVEL_PREFIX}")
-message("DEBUG variable CMAKE_INSTALL_PREFIX:  ${CMAKE_INSTALL_PREFIX}")
 
 
 # Codesynthesis include
@@ -158,6 +159,7 @@ add_custom_target(dummy_${PROJECT_NAME} SOURCES ${extra_files})
 link_directories(/usr/lib/x86_64-linux-gnu/)
 link_directories(${CATKIN_DEVEL_PREFIX}/install)
 link_directories(${CATKIN_DEVEL_PREFIX}/devel/lib)
+link_directories(/usr/lib)
 
 target_link_libraries(nist_robotsnc 
 libtinyxml.a  
@@ -166,7 +168,26 @@ libxerces-c.a
 #libgotraj.so since gotraj is a Catkin library?
 ${catkin_LIBRARIES}
 ${Boost_LIBRARIES}
+#${QT_LIBRARIES}
+
 )
+# http://docs.ros.org/jade/api/catkin/html/user_guide/variables.html
+message("DEBUG variable PROJECT_NAME        : ${PROJECT_NAME}")
+message("DEBUG variable CMAKE_BINARY_DIR    : ${CMAKE_BINARY_DIR}")
+#message("DEBUG variable catkin_LIBRARIES   : ${catkin_LIBRARIES}")  # This is long
+#message("DEBUG variable Boost_LIBRARIES    : ${Boost_LIBRARIES}")  # This is long
+
+message("DEBUG variable catkin_INCLUDEDIR   :  ${catkin_INCLUDE_DIRS}")
+message("DEBUG variable Eigen_INCLUDE_DIRS  :  ${Eigen_INCLUDE_DIRS}")
+message("DEBUG variable Boost_INCLUDE_DIRS  :  ${Boost_INCLUDE_DIRS}")
+message("DEBUG variable CATKIN_DEVEL_PREFIX :  ${CATKIN_DEVEL_PREFIX}")
+message("DEBUG variable CMAKE_INSTALL_PREFIX:  ${CMAKE_INSTALL_PREFIX}")
+message("DEBUG variable QT_LIBRARIES        :  ${QT_LIBRARIES}")
+message("DEBUG variable CMAKE_CXX_FLAGS     :  ${CMAKE_CXX_FLAGS}")
+message("DEBUG variable CXX_COMPILER_VERSION:  ${CMAKE_CXX_COMPILER_VERSION}")
+message("DEBUG variable CMAKE_EXE_LINKER_FLAGS:  ${CMAKE_EXE_LINKER_FLAGS}")
+#message("DEBUG variable catkin_LIBRARIES    :  ${catkin_LIBRARIES}") # works but long
+message("DEBUG variable Boost_LIBRARIES     :  ${Boost_LIBRARIES}")
 
 
 #catkin_add_gtest(crclmathunittest test/crclmathtest.cpp)

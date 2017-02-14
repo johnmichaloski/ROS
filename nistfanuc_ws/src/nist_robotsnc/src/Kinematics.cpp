@@ -150,22 +150,6 @@ std::string IKinematics::DumpUrdfJoint() {
     }
     return s.str();
 }
-
-Eigen::Matrix4d IKinematics::ComputeUrdfTransform(double angle,
-        Eigen::Vector3d axis,
-        Eigen::Vector3d origin,
-        Eigen::Vector3d rotation) {
-    Eigen::Matrix3d t33;
-    Eigen::Matrix4d m1 = Eigen::Matrix4d::Identity(); // Create4x4IdentityMatrix();
-    Eigen::Matrix4d tmp = Eigen::Matrix4d::Identity();
-
-    Eigen::Vector3d unit = axis.array().abs();
-    t33 = Eigen::AngleAxisd(axis.sum() * angle, unit);
-    m1.block<3, 3>(0, 0) = t33;
-    tmp.block<3, 1>(0, 3) = origin;
-    return tmp * m1; // http://answers.ros.org/question/193286/some-precise-definition-or-urdfs-originrpy-attribute/
-}
-
 std::string IKinematics::DumpTransformMatrices() {
     // Fixme: row versus column major :( May not matter since eigen rectifies when accessing
     std::string dump;
@@ -178,6 +162,25 @@ std::string IKinematics::DumpTransformMatrices() {
     return dump;
 }
 
+Eigen::Matrix4d IKinematics::ComputeUrdfTransform(double angle,
+        Eigen::Vector3d axis,
+        Eigen::Vector3d origin,
+        Eigen::Vector3d rotation) {
+    Eigen::Matrix3d t33,yaw,pitch, roll;
+    Eigen::Matrix4d m1 = Eigen::Matrix4d::Identity(); // Create4x4IdentityMatrix();
+    Eigen::Matrix4d tmp = Eigen::Matrix4d::Identity();
+
+    Eigen::Vector3d unit = axis.array().abs();
+    t33 = Eigen::AngleAxisd(axis.sum() * angle, unit);
+    yaw = Eigen::AngleAxisd(rotation(0), Eigen::Vector3d(1,0,0));
+    pitch = Eigen::AngleAxisd(rotation(1), Eigen::Vector3d(0,1,0));
+    roll = Eigen::AngleAxisd(rotation(2), Eigen::Vector3d(0,0,1));
+    m1.block<3, 3>(0, 0) =  yaw * pitch *  roll * t33;
+    tmp.block<3, 1>(0, 3) = origin;
+    return tmp * m1; // http://answers.ros.org/question/193286/some-precise-definition-or-urdfs-originrpy-attribute/
+}
+
+
 std::vector<tf::Pose> IKinematics::ComputeAllFk(std::vector<double> thetas) {
     // Using URDF will compute FK
     std::vector<Eigen::Matrix4d> AllM;
@@ -186,11 +189,11 @@ std::vector<tf::Pose> IKinematics::ComputeAllFk(std::vector<double> thetas) {
     std::vector<tf::Pose> jointposes;
     A0.clear();
 
-    for (int i = 0; i < joint_names.size(); i++) {
+    for (int i = 0; i < axis.size(); i++) {
         AllM.push_back(ComputeUrdfTransform(thetas[i], axis[i], xyzorigin[i], rpyorigin[i]));
     }
 
-    for (size_t i = 0; i < AllM.size(); i++) {
+    for (size_t i = 0; i < axis.size(); i++) {
         t = t * AllM[i];
         A0.push_back(t);
         jointposes.push_back(Convert<Eigen::Matrix4d, tf::Pose>(t));
@@ -394,11 +397,16 @@ void MotomanSia20dGoKin::Init(ros::NodeHandle & nh) {
         d.insert(d.end(), e.begin(), e.end()); //       d.insert(d.end(), rpyorigin.begin(), rpyorigin.end());
         params.push_back(d);
     }
+    // 0 0 180 0 0 -180 0 0 -1
+    std::vector<double>d = ToVector<double>(9,0.,0.,0.18, 0.,0.,(double)-M_PI_2,0.,0.,-1.);
+    //params.push_back(d);
     _pGoKin->SetParams(params);
 }
 
 
 #include <trac_ik/trac_ik.hpp>
+#include <kdl_parser/kdl_parser.hpp>
+
 // http://www.orocos.org/kdl/examples
 // http://docs.ros.org/jade/api/tf_conversions/html/c++/tf__kdl_8cpp_source.html
 void poseTFToKDL(const tf::Pose& t, KDL::Frame& k) {
@@ -418,10 +426,53 @@ void poseKDLToTF(const KDL::Frame& k, tf::Pose& t) {
 MotomanSia20dTrak_IK::MotomanSia20dTrak_IK(boost::shared_ptr<RCS::CController> nc) {
     _nc = nc;
 }
-
+using namespace KDL;
+//http://docs.ros.org/kinetic/api/kdl_parser/html/kdl__parser_8cpp_source.html
+//motoman_joint_s = 0.0, 0.0, 0.41,  0.0,-0.0, 0.0,  0.0, 0.0, 1.0
+//motoman_joint_l = 0.0, 0.0, 0.00,  0.0, 0.0, 0.0,  0.0, 1.0, 0.0
+//motoman_joint_e = 0.0, 0.0, 0.49,  0.0,-0.0, 0.0,  0.0, 0.0, 1.0
+//motoman_joint_u = 0.0, 0.0, 0.00,  0.0, 0.0, 0.0,  0.0,-1.0, 0.0 
+//motoman_joint_r = 0.0, 0.0, 0.42,  0.0,-0.0, 0.0,  0.0, 0.0,-1.0
+//motoman_joint_b = 0.0, 0.0, 0.00,  0.0, 0.0, 0.0,  0.0,-1.0, 0.0
+//motoman_joint_t = 0.0, 0.0, 0.18,  0.0,-0.0, 0.0,  0.0, 0.0,-1.0
 tf::Pose MotomanSia20dTrak_IK::FK(std::vector<double> joints) {
     KDL::Chain chain;
     _pTRAC_IK->getKDLChain(chain);
+ 
+#if 0
+   KDL::Tree tree;
+   if (!kdl_parser::treeFromString(urdf_xml, tree)) {
+        ROS_ERROR("Could not initialize tree object");
+        throw std::runtime_error("Exception: robot_model.treeFromString(xml,tree)");
+    }
+    if (!tree.getChain(_rootlinkname, "motoman_robotiq_85_adapter_link", chain)) {
+        ROS_ERROR("Could not initialize chain object");
+        throw std::runtime_error("Exception: tree.getChain)");
+    }
+#endif
+#if 0
+     chain.addSegment(Segment(Joint(Vector(0.0,0.0,.41 ), Vector(0,0,1) , Joint::RotAxis ),
+     KDL::Frame(KDL::Rotation(), KDL::Vector(0.0,0.0,.41 ))));
+     
+     chain.addSegment(Segment(Joint(Vector(0.0,0.0,0.0 ), Vector(0,1,0) , Joint::RotAxis ),
+     KDL::Frame(KDL::Rotation(), KDL::Vector(0.0,0.0,0.0 ))));
+     
+     chain.addSegment(Segment(Joint(Vector(0.0,0.0,.49 ), Vector(0,0,1) , Joint::RotAxis ),
+     KDL::Frame(KDL::Rotation(), KDL::Vector(0.0,0.0,.49 ))));
+     
+     chain.addSegment(Segment(Joint(Vector(0.0,0.0,0.0 ), Vector(0,-1,0) , Joint::RotAxis ),
+     KDL::Frame(KDL::Rotation(), KDL::Vector(0.0,0.0,.41 ))));
+     
+     chain.addSegment(Segment(Joint(Vector(0.0,0.0,.42 ), Vector(0,0,-1) , Joint::RotAxis ),
+     KDL::Frame(KDL::Rotation(), KDL::Vector(0.0,0.0,.42 ))));
+     
+     chain.addSegment(Segment(Joint(Vector(0.0,0.0,0.0 ), Vector(0,-1,0) , Joint::RotAxis ),
+     KDL::Frame(KDL::Rotation(), KDL::Vector(0.0,0.0,0.0 ))));
+     
+     chain.addSegment(Segment(Joint(Vector(0.0,0.0,.18 ), Vector(0,0,-1) , Joint::RotAxis ),
+     KDL::Frame(KDL::Rotation(), KDL::Vector(0.0,0.0,.18 ))));
+     
+#endif
     KDL::ChainFkSolverPos_recursive fksolver = KDL::ChainFkSolverPos_recursive(chain);
     unsigned int nj = joints.size();
     KDL::JntArray injoints = KDL::JntArray(nj);
@@ -466,7 +517,7 @@ std::vector<double> MotomanSia20dTrak_IK::IK(tf::Pose pose,
     _pTRAC_IK->CartToJnt(injoints, kdl_frame, outjoints);
     std::vector<double> joints(nj, 0.0);
     for (unsigned int i = 0; i < nj; i++) {
-        oldjoints[i] = (double) outjoints(i);
+        joints[i] = (double) outjoints(i);
     }
     return joints;
 }
@@ -477,7 +528,14 @@ bool MotomanSia20dTrak_IK::IsSingular(tf::Pose pose, double threshold) {
 
 void MotomanSia20dTrak_IK::Init(ros::NodeHandle & nh) {
     IKinematics::Init(nh);
+    try{
     _pTRAC_IK = boost::shared_ptr<TRAC_IK::TRAC_IK>(new 
-            TRAC_IK::TRAC_IK( _rootlinkname, _tiplinkname));
+            TRAC_IK::TRAC_IK( _rootlinkname,  _tiplinkname, "/robot_description", 0.005, 1e-5, TRAC_IK::Speed));
+           //TRAC_IK::TRAC_IK( _rootlinkname,"motoman_robotiq_85_adapter_link")); //  _tiplinkname));
+    }    catch (std::exception e) {
+        std::cout << "MotomanSia20dTrak_IK::Init() Exception: " << e.what() << "\n";
+    }    catch (const boost::system::system_error& ex) {
+        std::cout << "MotomanSia20dTrak_IK::Init() Exception: " << ex.what() << "\n";
+    }
 
 }

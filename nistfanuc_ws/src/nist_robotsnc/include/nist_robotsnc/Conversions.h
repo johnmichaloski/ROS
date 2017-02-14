@@ -36,6 +36,8 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 // CRCL representations
 #include "RCS.h"
 
+// KDL
+#include <kdl/frames_io.hpp>
 // Error at compile time for non handled convert
 #include <boost/static_assert.hpp>
 
@@ -626,6 +628,26 @@ namespace Conversion {
         for (int i = 0; i < ev.size(); i++)
             v.push_back(ev(i));
         return v;
+    }
+
+    // KDL
+    //http://docs.ros.org/kinetic/api/kdl_parser/html/kdl__parser_8cpp_source.html
+    template<>
+    inline KDL::Vector Convert<urdf::Vector3, KDL::Vector>(urdf::Vector3 v) {
+        return KDL::Vector(v.x, v.y, v.z);
+    }
+
+    template<>
+    inline KDL::Rotation Convert<urdf::Rotation, KDL::Rotation >(urdf::Rotation r) {
+        return KDL::Rotation::Quaternion(r.x, r.y, r.z, r.w);
+    }
+
+    template<>
+    inline KDL::Frame Convert<urdf::Pose, KDL::Frame>(urdf::Pose p) {
+        return KDL::Frame(
+                Convert < urdf::Rotation, KDL::Rotation > (p.rotation),
+                Convert<urdf::Vector3, KDL::Vector>(p.position)
+                );
     }
 }
 #endif

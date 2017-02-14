@@ -1,9 +1,0 @@
-<map id="gomotion::go_link" name="gomotion::go_link">
-<area shape="rect" id="node2" href="$d7/d95/structgomotion_1_1go__pk.html" title="gomotion::go_pk" alt="" coords="9,160,124,187"/>
-<area shape="rect" id="node3" href="$df/d23/structgomotion_1_1go__cart.html" title="gomotion::go_cart" alt="" coords="5,5,128,32"/>
-<area shape="rect" id="node6" href="$d4/d25/structgomotion_1_1go__pose.html" title="gomotion::go_pose" alt="" coords="104,109,233,136"/>
-<area shape="rect" id="node4" href="$d4/da3/structgomotion_1_1go__dh.html" title="gomotion::go_dh" alt="" coords="250,211,365,237"/>
-<area shape="rect" id="node5" href="$d0/d19/structgomotion_1_1go__pp.html" title="gomotion::go_pp" alt="" coords="110,211,225,237"/>
-<area shape="rect" id="node7" href="$d3/d17/structgomotion_1_1go__quat.html" title="gomotion::go_quat" alt="" coords="153,5,279,32"/>
-<area shape="rect" id="node8" href="$d9/da0/structgomotion_1_1go__body.html" title="gomotion::go_body" alt="" coords="390,211,519,237"/>
-</map>

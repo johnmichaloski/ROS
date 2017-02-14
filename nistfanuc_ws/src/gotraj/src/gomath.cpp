@@ -23,8 +23,8 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include "gokin/gotypes.h"  /* go_result,real, etc */
-#include "gokin/gomath.h"  /* these decls, go_cart, etc. */
+#include "gotraj/gotypes.h"  /* go_result,real, etc */
+#include "gotraj/gomath.h"  /* these decls, go_cart, etc. */
 namespace gomotion {
     /*
     DISCLAIMER:

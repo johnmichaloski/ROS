@@ -108,12 +108,12 @@ struct RvizCheckers {
         if (BOARD_DIRECTION == LEFTRIGHT) {
             double rowoffset = XOFFSET + (SQOFFSET * row);
             double coloffset = YOFFSET + (col * SQOFFSET);
-            v = Eigen::Vector3d(rowoffset + SQOFFSET / 2.0, coloffset + SQOFFSET / 2.0, .01);
+            v = Eigen::Vector3d(rowoffset + SQOFFSET / 2.0, coloffset + SQOFFSET / 2.0, HEIGHT);
             pose = Convert<Eigen::Vector3d, Eigen::Affine3d>(v);
         } else if (BOARD_DIRECTION == UPDOWN) {
             double rowoffset = YOFFSET + (SQOFFSET * row);
             double coloffset = XOFFSET + (col * SQOFFSET);
-            v = Eigen::Vector3d(coloffset + SQOFFSET / 2.0, rowoffset + SQOFFSET / 2.0, .01);
+            v = Eigen::Vector3d(coloffset + SQOFFSET / 2.0, rowoffset + SQOFFSET / 2.0, HEIGHT);
             pose = Convert<Eigen::Vector3d, Eigen::Affine3d> (v);
         }
         return pose;
@@ -137,22 +137,24 @@ struct RvizCheckers {
 
     Eigen::Vector3d GetCentroid(double rowoffset, double coloffset) {
         if (BOARD_DIRECTION == LEFTRIGHT) {
-        return Eigen::Vector3d(rowoffset + SQOFFSET / 2.0, coloffset + SQOFFSET / 2.0, .01);
+        return Eigen::Vector3d(rowoffset + SQOFFSET / 2.0, coloffset + SQOFFSET / 2.0, HEIGHT);
        } else if (BOARD_DIRECTION == UPDOWN) {
-        return Eigen::Vector3d(coloffset + SQOFFSET / 2.0, rowoffset + SQOFFSET / 2.0, .01);
+        return Eigen::Vector3d(coloffset + SQOFFSET / 2.0, rowoffset + SQOFFSET / 2.0, HEIGHT);
        }
     }
 
+    /** \brief computes upper limit of board (top = HEIGHT)*/
     tf::Vector3 GetUp(double rowoffset, double coloffset) {
         Eigen::Vector3d up;
         if (BOARD_DIRECTION == LEFTRIGHT) {
-            up = Eigen::Vector3d(rowoffset, coloffset, 0.01);
+            up = Eigen::Vector3d(rowoffset, coloffset, HEIGHT);
         } else if (BOARD_DIRECTION == UPDOWN) {
-            up = Eigen::Vector3d(coloffset, rowoffset, 0.01);
+            up = Eigen::Vector3d(coloffset, rowoffset, HEIGHT);
         }
         return Convert<Eigen::Vector3d, tf::Vector3 >(up);
     }
 
+    /** \brief computes lower limit of board (bottom)*/
     tf::Vector3 GetDown(double rowoffset, double coloffset) {
         Eigen::Vector3d down;
         if (BOARD_DIRECTION == LEFTRIGHT) {
@@ -207,7 +209,7 @@ struct RvizCheckers {
                 if (row % 2 == 0) coloffset = coloffset + SQOFFSET; // red offset at zero
 
                 ObjectDB * checker;
-                double checkerheight = HEIGHT;
+                double checkerheight = HEIGHT/2.0;
                 size_t checkercol = (row % 2 == 0) ? i + 1 : i;
                 std::string checkercolor = "CLEAR";
                 
