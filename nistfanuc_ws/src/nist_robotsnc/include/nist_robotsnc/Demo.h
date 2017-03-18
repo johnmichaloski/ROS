@@ -59,7 +59,7 @@ public:
         bFlag = false;
     }
 
-    /*!
+/*!
      * \brief Ready returns a boolean indicating whether Rviz clicked_point has been clicked. Resets flag to false.
      * \return  T       returns clicked_point detected flag.
      */
@@ -68,6 +68,7 @@ public:
         bClicked = false;
         return b;
     }
+
 
     /*!
      * \brief  Rviz clicked_point subscribed callback has been clicked. 
@@ -234,6 +235,16 @@ public:
             Checkers::Move m,
             bool doublejump=false);
     void Setup();
-    void Play(InlineRobotCommands *,InlineRobotCommands *);
-     boost::shared_ptr<RvizCheckers> RvizGame() { return rvizgame; }
+    void Play(InlineRobotCommands *, InlineRobotCommands *);
+
+    boost::shared_ptr<RvizCheckers> RvizGame() {
+        return rvizgame;
+    }
+    double z;
+    double table_length;
+    double table_width;
+    double table_height;
+    std::vector<double> xyz;
+    boost::shared_ptr<CRvizMarker> rvizMarker;
+    
 };

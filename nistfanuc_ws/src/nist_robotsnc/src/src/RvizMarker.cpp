@@ -11,7 +11,7 @@
  */
 //#pragma message "Compiling " __FILE__ 
 
-#include "RvizMarker.h" 
+#include "RvizMarker.h"
 static int CRvizMarker::_id = 1;
 
 CRvizMarker::CRvizMarker(ros::NodeHandle & nh) : n(nh) {

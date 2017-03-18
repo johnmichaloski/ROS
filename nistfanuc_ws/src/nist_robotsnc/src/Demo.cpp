@@ -349,11 +349,59 @@ void GearDemo::Cycle(boost::shared_ptr<RCS::CController> nc, InlineRobotCommands
 }
 //////////////////////////////////////////////////////////////////////////
 #include "Checkerboard.h"
+#include "RvizMarker.h" 
+
 
 CheckersGame::CheckersGame(ros::NodeHandle & nh) : _nh(nh) {
     rvizgame = boost::shared_ptr<RvizCheckers> (new RvizCheckers(nh));
 
 }
+
+static void DrawTable(boost::shared_ptr<CRvizMarker> rvizMarker, std::string baseframe, double length, double width, double height, tf::Pose pose) {
+    double x = pose.getOrigin().getX();
+    double y = pose.getOrigin().getY();
+    double z = pose.getOrigin().getZ();
+    double minx = x - length;
+    double maxx = x + length;
+    double miny = y - width;
+    double maxy = y + width;
+
+    rvizMarker->Scale(length, width, height);
+    rvizMarker->SetShape("cube");
+    //tf::Pose cube(tf::Quaternion(0, 0, 0, 1), tf::Vector3(x+(length/2.0), y+(width/2.0), z - height / 2.0));
+    tf::Pose cube(tf::Quaternion(0, 0, 0, 1), tf::Vector3(x, y, z - height / 2.0));
+    rvizMarker->Send(cube, baseframe);
+    ros::Duration(0.5).sleep();
+    rvizMarker->Send(cube, baseframe);
+
+    // legs
+    double legradius;
+    double legwidth;
+    legradius = legwidth = 0.05;
+    rvizMarker->SetShape("cylinder");
+    rvizMarker->Scale(legradius, legwidth, z);
+
+    tf::Pose leg1(tf::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(x + (length / 2.0) - legradius, y - (width / 2.0) + legradius, (z - height) / 2.0)));
+    tf::Pose leg2(tf::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(x - (length / 2.0) + legradius, y + (width / 2.0) - legradius, (z - height) / 2.0)));
+    tf::Pose leg3(tf::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(x + (length / 2.0) - legradius, y + (width / 2.0) - legradius, (z - height) / 2.0)));
+    tf::Pose leg4(tf::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(x - (length / 2.0) + legradius, y - (width / 2.0) + legradius, (z - height) / 2.0)));
+
+    rvizMarker->Scale(0.05, 0.05, z - height);
+
+    rvizMarker->Send(leg1, baseframe);
+    rvizMarker->Send(leg1, baseframe);
+    ros::Duration(0.5).sleep();
+    rvizMarker->Send(leg2, baseframe);
+    rvizMarker->Send(leg2, baseframe);
+    ros::Duration(0.5).sleep();
+    rvizMarker->Send(leg3, baseframe);
+    rvizMarker->Send(leg3, baseframe);
+    ros::Duration(0.5).sleep();
+    rvizMarker->Send(leg4, baseframe);
+    rvizMarker->Send(leg4, baseframe);
+    ros::Duration(0.5).sleep();
+}
+
 
 void CheckersGame::PhysicalMove(InlineRobotCommands &robot,
         int player,
@@ -431,6 +479,15 @@ void CheckersGame::Setup() {
     pScene->InitScene();
     rvizgame->RvizBoardSetup();
     rvizgame->RvizPiecesSetup();
+
+    rvizMarker = boost::shared_ptr<CRvizMarker>(new CRvizMarker(_nh));
+    rvizMarker->Init();
+    rvizMarker->SetColor(204.0 / 256.0, 229.0 / 256.0, 1.0, 1.0);
+    tf::Pose centertablepose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(xyz[0], xyz[1], xyz[2]));
+
+    DrawTable(rvizMarker, "world", table_length, table_width, table_height, centertablepose);
+
+        
     pScene->DrawScene(); // Debug: LOG_DEBUG << ObjectDB::DumpDB();
 }
 

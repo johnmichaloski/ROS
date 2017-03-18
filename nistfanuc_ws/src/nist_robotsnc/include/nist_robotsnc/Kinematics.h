@@ -515,7 +515,7 @@ public:
     }
    boost::shared_ptr<gomotion::GoKin>  _pGoKin;
 };
-
+#if 0
 namespace TRAC_IK{
     struct TRAC_IK;
 };
@@ -536,3 +536,4 @@ public:
    boost::shared_ptr<TRAC_IK::TRAC_IK>  _pTRAC_IK;
 };
 
+#endif

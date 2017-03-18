@@ -402,7 +402,7 @@ void MotomanSia20dGoKin::Init(ros::NodeHandle & nh) {
     //params.push_back(d);
     _pGoKin->SetParams(params);
 }
-
+#if 0
 
 #include <trac_ik/trac_ik.hpp>
 #include <kdl_parser/kdl_parser.hpp>
@@ -539,3 +539,4 @@ void MotomanSia20dTrak_IK::Init(ros::NodeHandle & nh) {
     }
 
 }
+#endif

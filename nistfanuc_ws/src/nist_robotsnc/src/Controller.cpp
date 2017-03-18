@@ -27,6 +27,7 @@
 #include "Scene.h"
 #include "Boost.h"
 #include "MotionException.h"
+#include "cartesian_trajectory_msg/CartesianTrajectoryPoint.h"
 
 using namespace Conversion;
 // RCS namespace declarations
@@ -46,7 +47,7 @@ namespace RCS {
     // ----------------------------------------------------
     // CController 
 
-    CController::CController(std::string name, double cycletime) : _Name(name), RCS::Thread(cycletime) {
+    CController::CController(std::string name, double cycletime) : _Name(name), RCS::Thread(cycletime),profiles(1) {
         //IfDebug(LOG_DEBUG << "CController::CController"); // not initialized until after main :()
         bCvsPoseLogging() = false;
         bMarker() = false;
@@ -91,6 +92,8 @@ namespace RCS {
         
         status.currentjoints = RCS::ZeroJointState(Kinematics()->JointNames().size());
         status.currentjoints.name = Kinematics()->JointNames();
+        // assume zero for now. Fixme: read joint state and set this value
+        status.currentjoints.position.resize(status.currentjoints.name.size(),0.0);
         gripper.init(nh, prefix);
         
         // fixme: read arm and gripper joint positions
@@ -99,6 +102,8 @@ namespace RCS {
                 LOG_DEBUG << "Empty CController::Setup CvsPoseLoggingFile";
             PoseLogging().Open(CvsPoseLoggingFile());
         }
+         cartesian_status = _nh->advertise<cartesian_trajectory_msg::CartesianTrajectoryPoint>(prefix+"cartesian_status", 1);
+
     }
 
     RCS::CanonCmd CController::GetLastRobotCommand() {
@@ -153,6 +158,91 @@ namespace RCS {
 
     bool CController::IsBusy() {
         return (crclcmds.SizeMsgQueue() > 0 || robotcmds.SizeMsgQueue() > 0);
+    }
+
+    bool CController::UpdateRobot() {
+        JointState & lastjoints(laststatus.currentjoints);
+        lastjoints = status.currentjoints;
+        if (lastjoints.velocity.size() == 0)
+            lastjoints.velocity.resize(lastjoints.position.size(), 0.0);
+        if (lastjoints.effort.size() == 0)
+            lastjoints.effort.resize(lastjoints.position.size(), 0.0);
+        // insurance against bad newcc
+        if (_newcc.joints.position.size() > 0)
+            status.currentjoints = _newcc.joints;
+        status.currentjoints.name = Kinematics()->JointNames();
+        for (size_t k = 0; k < lastjoints.position.size(); k++) {
+            if (status.currentjoints.velocity.size() <= k)
+                status.currentjoints.velocity.push_back(0.0);
+            status.currentjoints.velocity[k] = (fabs(status.currentjoints.position[k]) + fabs(lastjoints.position[k])) / 2.0;
+            if (status.currentjoints.effort.size() <= k)
+                status.currentjoints.effort.push_back(0.0);
+            status.currentjoints.effort[k] = (fabs(status.currentjoints.velocity[k]) + fabs(lastjoints.velocity[k])) / 2.0;
+        }
+        // FIXME: this is only the current pose of the robot arm, not including base offset of gripper
+        tf::Pose &lastpose(laststatus.currentpose); 
+        lastpose = status.currentpose;
+        status.currentpose = Kinematics()->FK(status.currentjoints.position); /**<  current robot pose */
+        // compute ee cartesian vel, acc, jerk
+        cartesian_trajectory_msg::CartesianTrajectoryPoint profile;
+        // this doesn't include angular velocity calculation - assume scale is almost same as linear
+
+        profile.velocity.data = (status.currentpose.getOrigin().distance(lastpose.getOrigin())) / 2.0;
+        double lastvel = (profiles.size() > 0) ? profiles[0].velocity.data : 0.0;
+        double lastacc = (profiles.size() > 0) ? profiles[0].acceleration.data : 0.0;
+        profile.acceleration.data = (fabs(profile.velocity.data) - fabs(lastvel)) / 2.0;
+        profile.jerk.data = (fabs(profile.acceleration.data) - fabs(lastacc)) / 2.0;
+        profiles.push_back(profile);
+        cartesian_status.publish(profile);
+
+        std::vector<tf::Pose> poses = Kinematics()->ComputeAllFk(status.currentjoints.position);
+        if (bGrasping() && GraspObj() != NULL) {
+            tf::Pose tfpose = basePose() * status.currentpose * gripperPose();
+            GraspObj()->pose = Eigen::Affine3d::Identity() * Convert<tf::Pose, Eigen::Affine3d>(tfpose);
+            pScene->UpdateScene(GraspObj());
+        }
+        
+#if defined(RobotCNCJointMove)
+        LOG_DEBUG << Name().c_str() << " MOVE ROBOT JOINTS\n";
+        LOG_DEBUG << "     Current Joints " << RCS::VectorDump<double>(_newcc.joints.position).c_str();
+        for (size_t k = 0; k < poses.size(); k++)
+            LOG_DEBUG << "    Joint Pose " << k << " = " << DumpPoseSimple(poses[k]).c_str();
+        LOG_DEBUG << "    Current Pose " << DumpPoseSimple(status.currentpose).c_str();
+#endif
+
+#if 0
+        // Fixme: this does not work
+        std::vector<int> outofbounds;
+        std::string msg;
+        if (Kinematics()->CheckJointPositionLimits(status.currentjoints.position, outofbounds, msg)) {
+            throw MotionException(1000, msg.c_str());
+        }
+#endif
+        status.currentjoints.header.stamp = ros::Time(0);
+        // Debugging rviz communication via joint publisher 
+        // rostopic echo joint_states 
+        // rostopic echo  nist_controller/robot/joint_states
+
+        rviz_jntcmd.publish(status.currentjoints);
+        rviz_jntcmd.publish(status.currentjoints);
+        ros::spinOnce();
+        ros::spinOnce();
+#if 0
+        if (!_newcc.partname.empty()) {
+            Eigen::Affine3d pose = Eigen::Affine3d::Identity() *
+                    Eigen::Translation3d(_newcc.finalpose.position.x, _newcc.finalpose.position.y, _newcc.finalpose.position.z);
+            pScene->UpdateScene(_newcc.partname,
+                    pose,
+                    pScene->MARKERCOLOR(_newcc.partcolor));
+        }
+#endif
+        ros::spinOnce();
+        ros::spinOnce();
+        ofsMotionTrace << Name().c_str() << " MOVE ROBOT JOINTS\n";
+        ofsMotionTrace << "  World Pose    =" << RCS::DumpPoseSimple(basePose() * status.currentpose).c_str() << "\n";
+        ofsMotionTrace << "  Robot Pose    =" << RCS::DumpPoseSimple(status.currentpose).c_str() << "\n";
+        ofsMotionTrace << "  Goal Joints   =" << VectorDump<double>(_newcc.joints.position).c_str() << "\n" << std::flush;
+
     }
     /**
     std_msgs/Header headerposition
@@ -247,6 +337,9 @@ nextposition:
             if (robotcmds.SizeMsgQueue() == 0) {
                 _lastcc.status = CanonStatusType::CANON_DONE;
                 status.crclcommandstatus = CanonStatusType::CANON_DONE;
+                // should do a "fake" move to same spot
+                UpdateRobot();
+                
             } else {
                 _lastcc = _newcc;
 
@@ -308,62 +401,13 @@ nextposition:
                     LOG_DEBUG << "STOP Controller ";
                 }
                 else {
-                    status.currentjoints = _newcc.joints;
-                    status.currentjoints.name=Kinematics()->JointNames();
-                    // FIXME: this is only the current pose of the robot arm, not including base offset of gripper
-                    status.currentpose = Kinematics()->FK(status.currentjoints.position); /**<  current robot pose */
-                    std::vector<tf::Pose> poses = Kinematics()->ComputeAllFk(status.currentjoints.position);
-                    if(bGrasping() && GraspObj()!=NULL) {
-                        tf::Pose tfpose = basePose() *  status.currentpose * gripperPose();
-                        GraspObj()->pose = Eigen::Affine3d::Identity() * Convert<tf::Pose, Eigen::Affine3d>(tfpose);
-                        pScene->UpdateScene(GraspObj());
-                    }
-#if defined(RobotCNCJointMove)
-                    LOG_DEBUG << Name().c_str() << " MOVE ROBOT JOINTS\n";
-                    LOG_DEBUG << "     Current Joints " << RCS::VectorDump<double>(_newcc.joints.position).c_str();
-                    for (size_t k = 0; k < poses.size(); k++)
-                        LOG_DEBUG << "    Joint Pose " << k << " = " << DumpPoseSimple(poses[k]).c_str();
-                    LOG_DEBUG << "    Current Pose " << DumpPoseSimple(status.currentpose).c_str();
-#endif
-                    
-#if 0
-                    // Fixme" this does not work
-                    std::vector<int> outofbounds;
-                    std::string msg;
-                    if (Kinematics()->CheckJointPositionLimits(status.currentjoints.position, outofbounds, msg)) {
-                        throw MotionException(1000, msg.c_str());
-                    }
-#endif
-                     status.currentjoints.header.stamp = ros::Time(0);
-                   // Debugging rviz communication via joint publisher 
-                    // rostopic echo joint_states 
-                    // rostopic echo  nist_controller/robot/joint_states
-                    
-                     
-                    rviz_jntcmd.publish(status.currentjoints);
-                    rviz_jntcmd.publish(status.currentjoints);
-                    ros::spinOnce();
-                    ros::spinOnce();
-#if 0
-                    if (!_newcc.partname.empty()) {
-                        Eigen::Affine3d pose = Eigen::Affine3d::Identity() *
-                                Eigen::Translation3d(_newcc.finalpose.position.x, _newcc.finalpose.position.y, _newcc.finalpose.position.z);
-                        pScene->UpdateScene(_newcc.partname,
-                                pose,
-                                pScene->MARKERCOLOR(_newcc.partcolor));
-                    }
-#endif
-                    ros::spinOnce();
-                    ros::spinOnce();
+                    UpdateRobot();
+                    // Only want to mark once
                     if (bMarker()) {
                         RCS::Pose goalpose = Kinematics()->FK(_newcc.joints.position);
                         goalpose = basePose() * goalpose;
                         RvizMarker()->Send(goalpose);
                     }
-                    ofsMotionTrace << Name().c_str() << " MOVE ROBOT JOINTS\n";
-                    ofsMotionTrace << "  World Pose    =" << RCS::DumpPoseSimple(basePose() * status.currentpose).c_str() << "\n";
-                    ofsMotionTrace << "  Robot Pose    =" << RCS::DumpPoseSimple(status.currentpose).c_str() << "\n";
-                    ofsMotionTrace << "  Goal Joints   =" << VectorDump<double>(_newcc.joints.position).c_str() << "\n" << std::flush;
                 }
 
             }

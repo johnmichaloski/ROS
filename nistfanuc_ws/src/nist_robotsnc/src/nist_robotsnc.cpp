@@ -52,6 +52,9 @@ namespace pt = boost::property_tree;
 
 using namespace Conversion;
 
+// pose is the midpoint of x,y,z
+
+
 int main(int argc, char** argv) {
     int bPublishPoint = 0;
     //signal(SIGSEGV, handler);   // install our handler
@@ -61,6 +64,16 @@ int main(int argc, char** argv) {
         Globals.ExeDirectory = path.substr(0, path.find_last_of('/') + 1);
         Globals._appproperties["ExeDirectory"] = Globals.ExeDirectory;
 
+        std::string pkgname = path.substr(path.find_last_of('/') + 1);
+        Globals._appproperties["Package"] = pkgname;
+        std::string wspath = path;
+        for (size_t i = 0; i < 4; i++)
+            wspath = wspath.substr(0, wspath.find_last_of('/'));
+        Globals._appproperties["Workspace"] = wspath + "/";
+        //std::string wspath =  path + "/../../../../" ;
+        std::string pkgpath = wspath + "/src/" + pkgname + "/config/" + pkgname + ".ini";
+        std::string envstr = ExecuteShellCommand("export ROS_PACKAGE_PATH; cd " + wspath + "; /bin/bash -c \"source devel/setup.bash & env \"");
+        std::cout << envstr << "\n";
         // This sets up tother application _appproperties name/value pairs: user, hostname
         SetupAppEnvironment();
 
@@ -80,17 +93,14 @@ int main(int argc, char** argv) {
          * INFO ROS_INFO
          * WARN
          * ERROR
-         * FATAL  ROS_FATAL
          */
-
         if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info)) {
             ros::console::notifyLoggerLevelsChanged();
         }
 #endif
-
         boostlogfile = nh.param<std::string>("logfile", "/home/isd/michalos/Documents/example.log");
         boostloglevel = (boost::log::v2_mt_posix::trivial::severity_level) nh.param<int>("loglevel", 0); // 0 = debug
-        
+
         bPublishPoint = nh.param<int>("PublishPoint", 0);
 
         Globals.DebugSetup();
@@ -116,7 +126,7 @@ int main(int argc, char** argv) {
         pScene->BuildScene(); // demo actually builds scene
 #ifdef GEARS
         GearDemo geardemo(nh, path, Convert<tf::Vector3, tf::Pose>(tf::Vector3(0.25, 0.5, 0.0)));
-   
+
         geardemo.Setup(); // this does draw scene
         pScene->DrawScene();
 #endif
@@ -164,11 +174,11 @@ int main(int argc, char** argv) {
                 ncs[i]->bCvsPoseLogging() = false;
                 boost::shared_ptr<IKinematics> kin;
                 ncs[i]->CycleTime() = dCycleTime;
-                ncs[i]->bMarker()=bMarker;
+                ncs[i]->bMarker() = bMarker;
 
                 if (kinsolver == "FanucLRMate200idFastKinematics")
                     kin = boost::shared_ptr<IKinematics>(new FanucLRMate200idFastKinematics(ncs[i]));
-                if (kinsolver == "MotomanSia20dFastKinematics"){
+                if (kinsolver == "MotomanSia20dFastKinematics") {
                     //kin = boost::shared_ptr<IKinematics>(new MotomanSia20dGoKin(ncs[i]));
                     //kin = boost::shared_ptr<IKinematics>(new MotomanSia20dTrak_IK(ncs[i]));
                     kin = boost::shared_ptr<IKinematics>(new MotomanSia20dFastKinematics(ncs[i]));
@@ -178,7 +188,7 @@ int main(int argc, char** argv) {
                     kin->Init(nh);
                     ncs[i]->Kinematics() = kin;
                     ncs[i]->Setup(nh, prefix);
-                } catch (std::exception & ex){
+                } catch (std::exception & ex) {
                     std::cout << "Kinematics error: " << ex.what() << "\n";
                 }
 
@@ -190,7 +200,7 @@ int main(int argc, char** argv) {
                     ncs[i]->NamedJointMove[jointmovenames[j]] = ds;
                 }
                 ncs[i]->Interpreter()->Init(ncs[i]->NamedJointMove["Home"]);
-                nccmds.push_back(InlineRobotCommands(ncs[i])); // , fanuchints);
+                nccmds.push_back(InlineRobotCommands(ncs[i]));
                 ofsRobotURDF << "NC " << ncs[i]->Name().c_str() << "\n";
                 ofsRobotURDF << "base link " << ncs[i]->Kinematics()->getRootLink().c_str() << "\n";
                 ofsRobotURDF << "ee link " << ncs[i]->Kinematics()->getTipLink().c_str() << "\n";
@@ -199,15 +209,15 @@ int main(int argc, char** argv) {
                 ofsRobotURDF << "tooloffset " << RCS::DumpPoseSimple(ncs[i]->gripperPose()).c_str() << "\n";
                 ofsRobotURDF << "Joint names " << VectorDump<std::string>(ncs[i]->Kinematics()->JointNames()).c_str() << "\n" << std::flush;
                 ofsRobotURDF << kin->DumpUrdfJoint().c_str() << "\n";
-                ofsRobotURDF << kin->DumpTransformMatrices().c_str()<< "\n";
+                ofsRobotURDF << kin->DumpTransformMatrices().c_str() << "\n";
 
                 for (std::map<std::string, std::vector<double>>::iterator it = ncs[i]->NamedJointMove.begin(); it != ncs[i]->NamedJointMove.end(); it++)
-                    ofsRobotURDF << (*it).first<< "=" << VectorDump<double>(ncs[i]->NamedJointMove[(*it).first]).c_str() << "\n";
+                    ofsRobotURDF << (*it).first << "=" << VectorDump<double>(ncs[i]->NamedJointMove[(*it).first]).c_str() << "\n";
                 //ofsRobotURDF << "cycletime " << ncs[i]->Name();
-                ofsRobotURDF << "Cycletime   " << ncs[i]->CycleTime() << "\n" ;
-                ofsRobotURDF << "Markers     " <<  ncs[i]->bMarker() << "\n" ;
+                ofsRobotURDF << "Cycletime   " << ncs[i]->CycleTime() << "\n";
+                ofsRobotURDF << "Markers     " << ncs[i]->bMarker() << "\n";
                 ofsRobotURDF << std::flush;
-           }
+            }
         } catch (std::exception &e) {
             LOG_FATAL << e.what();
             throw;
@@ -223,8 +233,8 @@ int main(int argc, char** argv) {
         exercise.Exercise(&nccmds[0]);
         exercise.Exercise(&nccmds[1]);
 #endif
-        
-        std::vector<double> testjts = ToVector<double>(7,1.30,-0.84, 0.08, 2.26, 2.96,-0.38,-1.28);
+
+        std::vector<double> testjts = ToVector<double>(7, 1.30, -0.84, 0.08, 2.26, 2.96, -0.38, -1.28);
         tf::Pose testpose = ncs[1]->Kinematics()->FK(testjts);
         std::cout << "Joint vals " << VectorDump<double>(testjts).c_str() << "\n" << std::flush;
         std::cout << "kinpose " << RCS::DumpPoseSimple(testpose).c_str() << "\n";
@@ -232,17 +242,17 @@ int main(int argc, char** argv) {
 #if 0
         ncs[1]->Kinematics()->axis.push_back(Eigen::Vector3d(0, 0, -1));
         ncs[1]->Kinematics()->xyzorigin.push_back(Eigen::Vector3d(0, 0, 0));
-        ncs[1]->Kinematics()->rpyorigin.push_back(Eigen::Vector3d(0,0,-M_PI_2)) ;
+        ncs[1]->Kinematics()->rpyorigin.push_back(Eigen::Vector3d(0, 0, -M_PI_2));
         testjts.push_back(0.0);
-        std::vector<tf::Pose> poses= ncs[1]->Kinematics()->ComputeAllFk(testjts);
+        std::vector<tf::Pose> poses = ncs[1]->Kinematics()->ComputeAllFk(testjts);
         std::cout << "genericpose " << RCS::DumpPoseSimple(poses.back()).c_str() << "\n";
 #endif      
 
         // start the Controller Session thread
         for (size_t j = 0; j < ncs.size(); j++) {
-            ncs[j]->Start(); 
+            ncs[j]->Start();
         }
-         
+
         // Move robots to "home position"
         for (size_t j = 0; j < ncs.size(); j++) {
             nccmds[j].MoveJoints(ncs[j]->Kinematics()->AllJointNumbers(), ncs[j]->NamedJointMove["Home"]);
@@ -252,7 +262,7 @@ int main(int argc, char** argv) {
                 r.sleep();
             }
         }
-        
+
         // Move robots to "safe position"
         for (size_t j = 0; j < ncs.size(); j++) {
             nccmds[j].MoveJoints(ncs[j]->Kinematics()->AllJointNumbers(), ncs[j]->NamedJointMove["Safe"]);
@@ -268,10 +278,20 @@ int main(int argc, char** argv) {
         checkers.RvizGame()->HEIGHT = root.get<double>("checkers.HEIGHT", 0.015);
         checkers.RvizGame()->XOFFSET = root.get<double>("checkers.XOFFSET", -0.16);
         checkers.RvizGame()->YOFFSET = root.get<double>("checkers.YOFFSET", -0.20);
+        checkers.RvizGame()->ZOFFSET = root.get<double>("checkers.ZOFFSET", 0.0);
         checkers.RvizGame()->SQOFFSET = root.get<double>("checkers.SQOFFSET", 0.04);
         checkers.RvizGame()->RADIUS = root.get<double>("checkers.RADIUS", 0.0255);
         checkers.RvizGame()->BOARD_DIRECTION = root.get<int>("checkers.BOARD_DIRECTION", -1);
 
+        checkers. z = checkers.RvizGame()->ZOFFSET;
+        checkers. table_length = root.get<double>("checkers.TABLE_LENGTH", 0.4);
+        checkers. table_width = root.get<double>("checkers.TABLE_WIDTH", 0.4);
+        checkers. table_height = root.get<double>("checkers.TABLE_HEIGHT", 0.05);
+        checkers.xyz = GetIniTypes<double>(root, "checkers.TABLE_CENTER");
+
+        assert(checkers.xyz.size() > 2);
+
+ 
         Checkers::BoardType outboard;
         std::string filename(path + "/config/" + "Checkers.txt");
         Checkers::CheckersGame & game = checkers.RvizGame()->Game();
@@ -294,7 +314,9 @@ int main(int argc, char** argv) {
         game.Deserialize(iss, outboard);
         game.Board() = outboard;
 #endif
+
         checkers.Setup();
+
         checkers.Play(&nccmds[0], &nccmds[1]);
 #endif
 #ifdef GEARS

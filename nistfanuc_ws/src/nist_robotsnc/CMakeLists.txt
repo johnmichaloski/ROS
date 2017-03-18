@@ -1,4 +1,4 @@
-#http://docs.ros.org/kinetic/api/catkin/html/index.html
+# http://docs.ros.org/kinetic/api/catkin/html/index.html
 # https://cmake.org/Wiki/CMake_Useful_Variables
 
 cmake_minimum_required(VERSION 2.8.3)
@@ -8,25 +8,25 @@ project(nist_robotsnc)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  moveit_core
   roscpp
   cmake_modules
   trajectory_msgs
   geometry_msgs
   sensor_msgs
   tf
-tf_conversions
-eigen_conversions
-rviz_visual_tools
-   moveit_ros_planning_interface
-    moveit_ros_move_group
-    moveit_ros_planning
-    moveit_ros_manipulation
-    gotraj
-   gokin
-   trac_ik_lib
-   #rviz
-)
+  tf_conversions
+  eigen_conversions
+  rviz_visual_tools
+  moveit_core
+  moveit_ros_planning_interface
+  moveit_ros_move_group
+  moveit_ros_planning
+  moveit_ros_manipulation
+  gotraj
+  gokin
+  trac_ik_lib
+  #rviz
+  )
 find_package(Boost REQUIRED system thread chrono regex log_setup log locale )
 find_package(Eigen REQUIRED)
 find_package(Threads REQUIRED)
@@ -35,37 +35,37 @@ find_package(Threads REQUIRED)
 
 catkin_package(
   INCLUDE_DIRS
-    include
+  include
   LIBRARIES
-    gotraj
-    gokin
-    trac_ik_lib
+  gotraj
+  gokin
+  trac_ik_lib
   CATKIN_DEPENDS
-    roscpp
-    moveit_core
-    sensor_msgs
-    trajectory_msgs
-    geometry_msgs
-    moveit_ros_planning_interface
-    moveit_ros_move_group
-    moveit_ros_planning
-    moveit_ros_manipulation
-    nistcrcl
-    tf
-tf_conversions
-eigen_conversions
-rviz_visual_tools
-gotraj
-gokin
-trac_ik_lib
+  roscpp
+  sensor_msgs
+  trajectory_msgs
+  geometry_msgs
+  moveit_core
+  moveit_ros_planning_interface
+  moveit_ros_move_group
+  moveit_ros_planning
+  moveit_ros_manipulation
+  nistcrcl
+  tf
+  tf_conversions
+  eigen_conversions
+  rviz_visual_tools
+  gotraj
+  gokin
+  trac_ik_lib
   DEPENDS
-    Boost
-    Eigen
+  Boost
+  Eigen
 
 
-#  CFG_EXTRAS
-#    descartes_core-extras.cmake
-)
+  #  CFG_EXTRAS
+  #    descartes_core-extras.cmake
+  )
 
 ###########
 ## Build ##
@@ -75,12 +75,13 @@ trac_ik_lib
 set(CMAKE_CXX_FLAGS "-w ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "-DDEBUG ${CMAKE_CXX_FLAGS}")
-set(CMAKE_CXX_FLAGS "-DCHECKERS ${CMAKE_CXX_FLAGS}")
-#set(CMAKE_CXX_FLAGS "-DGEARS ${CMAKE_CXX_FLAGS}")
-#set(CMAKE_CXX_FLAGS "-DEXERCISER ${CMAKE_CXX_FLAGS}")
 set(Boost_USE_MULTITHREADED ON) 
 set(CMAKE_CXX_FLAGS "-DBOOST_ASIO_HAS_THREADS ${CMAKE_CXX_FLAGS}")
 
+# Select DEMO by choosing debug flag. CHECKERS, GEARS, or EXERCISER
+set(CMAKE_CXX_FLAGS "-DCHECKERS ${CMAKE_CXX_FLAGS}")
+#set(CMAKE_CXX_FLAGS "-DGEARS ${CMAKE_CXX_FLAGS}")
+#set(CMAKE_CXX_FLAGS "-DEXERCISER ${CMAKE_CXX_FLAGS}")
 
 
 #set(CMAKE_CXX_FLAGS "-DBOOST_LOG_DYN_LINK ${CMAKE_CXX_FLAGS}")
@@ -98,15 +99,15 @@ set(CMAKE_CXX_FLAGS "-g ${CMAKE_CXX_FLAGS}")
 
 
 include_directories(include
-    ${catkin_INCLUDE_DIRS}
-    ${Boost_INCLUDE_DIRS}
-    ${Eigen_INCLUDE_DIRS}
-    # include breakdown for this project
-    include/${PROJECT_NAME}
- #   include/${PROJECT_NAME}/CrclXsd
-    include/${PROJECT_NAME}/NIST
-   /usr/include/eigen3
-)
+  ${catkin_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
+  ${Eigen_INCLUDE_DIRS}
+  # include breakdown for this project
+  include/${PROJECT_NAME}
+  #   include/${PROJECT_NAME}/CrclXsd
+  include/${PROJECT_NAME}/NIST
+  /usr/include/eigen3
+  )
 
 
 
@@ -122,26 +123,27 @@ include_directories(include
 
 
 add_executable(nist_robotsnc 
-src/BLogging.cpp
-src/Controller.cpp
-src/CsvLogging.cpp
-src/Globals.cpp
-src/Kinematics.cpp
-src/MotionControl.cpp
-src/RCS.cpp
-src/RCSInterpreter.cpp
-src/RvizMarker.cpp
-src/Scene.cpp
-src/RosSetup.cpp
-src/nist_robotsnc.cpp
-src/trajectoryMaker.cpp
-src/Demo.cpp
-src/motomansia20dkinematics.cpp
-src/fanuclrmate200idkinematics.cpp
-src/MotionException.cpp
-src/Shape.cpp
-src/JointTrajectory.cpp
-)
+  src/BLogging.cpp
+  src/Controller.cpp
+  src/CsvLogging.cpp
+  src/Globals.cpp
+  src/Kinematics.cpp
+  src/MotionControl.cpp
+  src/RCS.cpp
+  src/RCSInterpreter.cpp
+  src/RvizMarker.cpp
+  src/Scene.cpp
+  src/RosSetup.cpp
+  src/nist_robotsnc.cpp
+  src/trajectoryMaker.cpp
+  src/Demo.cpp
+  src/motomansia20dkinematics.cpp
+  src/fanuclrmate200idkinematics.cpp
+  src/MotionException.cpp
+  src/Shape.cpp
+  src/JointTrajectory.cpp
+  src/CollisionDetection.cpp
+  )
 
 #Add all files in subdirectories of the project in
 # a dummy_target so qtcreator have access to all files
@@ -162,15 +164,15 @@ link_directories(${CATKIN_DEVEL_PREFIX}/devel/lib)
 link_directories(/usr/lib)
 
 target_link_libraries(nist_robotsnc 
-libtinyxml.a  
-libxerces-c.a  
-# I had to add ${catkin_LIBRARIES} AND remove the reference to the shared library 
-#libgotraj.so since gotraj is a Catkin library?
-${catkin_LIBRARIES}
-${Boost_LIBRARIES}
-#${QT_LIBRARIES}
+  libtinyxml.a  
+  libxerces-c.a  
+  # I had to add ${catkin_LIBRARIES} AND remove the reference to the shared library 
+  #libgotraj.so since gotraj is a Catkin library?
+  ${catkin_LIBRARIES}
+  ${Boost_LIBRARIES}
+  #${QT_LIBRARIES}
 
-)
+  )
 # http://docs.ros.org/jade/api/catkin/html/user_guide/variables.html
 message("DEBUG variable PROJECT_NAME        : ${PROJECT_NAME}")
 message("DEBUG variable CMAKE_BINARY_DIR    : ${CMAKE_BINARY_DIR}")
@@ -186,8 +188,9 @@ message("DEBUG variable QT_LIBRARIES        :  ${QT_LIBRARIES}")
 message("DEBUG variable CMAKE_CXX_FLAGS     :  ${CMAKE_CXX_FLAGS}")
 message("DEBUG variable CXX_COMPILER_VERSION:  ${CMAKE_CXX_COMPILER_VERSION}")
 message("DEBUG variable CMAKE_EXE_LINKER_FLAGS:  ${CMAKE_EXE_LINKER_FLAGS}")
-#message("DEBUG variable catkin_LIBRARIES    :  ${catkin_LIBRARIES}") # works but long
+#message("DEBUG variable catkin_LIBRARIES   :  ${catkin_LIBRARIES}") # works but long
 message("DEBUG variable Boost_LIBRARIES     :  ${Boost_LIBRARIES}")
+message("DEBUG variable CMAKE_PREFIX_PATH   :  ${CMAKE_PREFIX_PATH}")
 
 
 #catkin_add_gtest(crclmathunittest test/crclmathtest.cpp)
@@ -203,13 +206,13 @@ install(TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
+  )
 
 
 install(
-    DIRECTORY include/${PROJECT_NAME}/
-    DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
-    
-    
-    
-    
+  DIRECTORY include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+
+
+
+

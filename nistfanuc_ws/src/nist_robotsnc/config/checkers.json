@@ -1,0 +1,14 @@
+{
+	"checkers" : 
+	{
+		"xoffset": -0.16,
+		"yoffset": -0.20,
+		"zoffset": 0.0,
+		"sqoffset": 0.04,
+		"radius": 0.025,
+		"height": 0.015,
+		"direction": "UPDOWN"
+		}
+}
+
+

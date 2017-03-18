@@ -14,6 +14,7 @@
 #pragma once
 #include <boost/shared_ptr.hpp>
 #include <boost/signals2/signal.hpp>
+#include <boost/circular_buffer.hpp>
 
 #include <list>
 
@@ -38,6 +39,9 @@
 #include "nistcrcl/CrclStatusMsg.h"
 //#include "nist_fanuc/Demo.h"
 #include "nist_robotsnc/Scene.h"
+#include "cartesian_trajectory_msg/CartesianTrajectoryPoint.h"
+
+
 namespace RCS {
 
     extern boost::mutex cncmutex;
@@ -104,6 +108,7 @@ namespace RCS {
         // CRCL interface
         ros::Publisher crcl_status; /**< ros publisher information used for crcl status updates */
         ros::Subscriber crcl_cmd; /**< ros subscriber information used for crcl command updates */
+        ros::Publisher cartesian_status;
         void CmdCallback(const nistcrcl::CrclCommandMsg::ConstPtr& cmdmsg);
         void PublishCrclStatus();
          /*!
@@ -132,6 +137,12 @@ namespace RCS {
          */
         RCS::Pose GetLastCommandedPose();
 
+         /*!
+         *\brief Update position of robot.
+         * For now compute cartesian and joint vel, acc, jerk of motion.
+          */       
+        bool UpdateRobot();
+        
         ////////////////////////////////////////////////
         static ros::Publisher rviz_jntcmd; /**< ros publisher information for joint_publisher */
         static bool bRvizPubSetup;
@@ -141,6 +152,7 @@ namespace RCS {
 
         RCS::CanonWorldModel status; /**< current status of controller */
         RCS::CanonWorldModel laststatus; /**< last status of controller */
+        boost::circular_buffer<cartesian_trajectory_msg::CartesianTrajectoryPoint> profiles;
         RCS::CMessageQueue<nistcrcl::CrclCommandMsg > crclcmds; /**< queue of commands interpreted from Crcl messages */
         
         unsigned long _robotcmd;
@@ -162,10 +174,10 @@ namespace RCS {
         VAR(bCvsPoseLogging, bool)
         VAR(CvsPoseLoggingFile, std::string)
         VAR(PoseLogging, CsvLogging)
-        VAR(gripperPose, RCS::Pose);
-        VAR(invGripperPose, RCS::Pose);
-        VAR(basePose, RCS::Pose);
-        VAR(invBasePose, RCS::Pose);
+        VAR(gripperPose, tf::Pose);
+        VAR(invGripperPose, tf::Pose);
+        VAR(basePose, tf::Pose);
+        VAR(invBasePose, tf::Pose);
         VAR(QBend, tf::Quaternion);
         VAR(bGrasping, bool)
         VAR(GraspObj, ObjectDB * )

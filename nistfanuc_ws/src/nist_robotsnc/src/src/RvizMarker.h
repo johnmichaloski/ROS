@@ -66,7 +66,7 @@ public:
      * \param pose p is where the marker is to be placed relative to the base link.
      * \param frame is the world fixed frame name or base
      */
-    int Send(tf::Pose p, std::string frame="world");
+    int Send(tf::Pose p, std::string frame);
     
     int Scale(double x= 0.005, double y= 0.005, double z= 0.005);
     
