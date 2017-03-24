@@ -1,0 +1,8 @@
+catkin build -DCMAKE_BUILD_TYPE=Debug
+
+
+# This doesn't work
+catkin build -DCMAKE_BUILD_TYPE=Debug --make-args  -DCHECKERS
+catkin build -DCMAKE_BUILD_TYPE=Debug --make-args  -DGEARS
+catkin build -DCMAKE_BUILD_TYPE=Debug --make-args  -DEXERCISER
+

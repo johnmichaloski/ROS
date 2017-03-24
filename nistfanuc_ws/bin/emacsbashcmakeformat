@@ -1,0 +1,12 @@
+:;exec emacs -batch -l   "$0" -f : "$@" --no-site-file -q  # -*- Emacs-Lisp -*-
+;     @emacs -batch -l "%~f0" -f :  %*  --no-site-file -q  & goto :EOF
+;
+(defun : ()
+   (find-file (nth 5 command-line-args))
+      (condition-case nil
+          (indent-region (point-min) (point-max))
+        (error nil) )
+      (save-buffer) )
+;:EOF
+    
+    

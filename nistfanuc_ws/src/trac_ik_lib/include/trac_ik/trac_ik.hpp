@@ -109,7 +109,7 @@ namespace TRAC_IK {
     std::vector<std::pair<double,uint> >  errors; 
 
 
-    boost::asio::io_service io_service;
+    //boost::asio::io_service io_service;
     boost::thread_group threads;
     boost::asio::io_service::work work;
     KDL::Twist bounds;

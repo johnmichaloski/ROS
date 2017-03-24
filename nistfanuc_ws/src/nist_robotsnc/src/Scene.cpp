@@ -19,434 +19,478 @@ using namespace std;
 using namespace boost::assign;
 
 #include "Boost.h"
-#include "Conversions.h"
 #include "Debug.h"
 #include "Config.h"
 #include "Shape.h"
-using namespace rviz_visual_tools;
+using namespace Conversion;
 
+#ifdef _CONFETTI_HEADER_
+CMath Math;
+std::vector<Piece*> Piece::pieces;
+int Piece::n = 0;
+#endif
 
-std::map<std::string, std::string> ObjectDB::_typemapping =
+std_msgs::ColorRGBA SceneObject::dummyColor;
+SceneObject SceneObject::nullref;
+boost::shared_ptr<Scene> pScene = boost::shared_ptr<Scene>(new Scene());
+std::map<std::string, rgba> Scene::_color_index=
+        map_list_of("RED", rgba(.8, .1, .1))
+    ("GREEN",rgba(.1, .8, .1))
+    ("GREY",rgba(.9, .9, .9))
+    ("DARK_GREY",rgba(.6, .6, .6))
+    ("WHITE",rgba(1.0, 1.0, 1.0))
+    ("ORANGE",rgba(1.0, 0.5, 0.0))
+    ("TRANSLUCENT_LIGHT",rgba(.1, .1, .1, .1))
+    ("TRANSLUCENT",rgba(.1, .1, .1, .25))
+    ("TRANSLUCENT_DARK",rgba(.1, .1, .1, .5))
+    ("BLACK",rgba(0.0, 0.0, 0.0))
+    ("YELLOW",rgba(1.0, 1.0, 0.0))
+    ("BROWN",rgba(0.597, 0.296, 0.0))
+    ("PINK",rgba(1.0, 0.4, 1.0))
+    ("LIME_GREEN",rgba(0.6, 1.0, 0.2))
+    ("CLEAR",rgba(1.0, 1.0, 1.0, 0.0))
+    ("PURPLE",rgba(0.597, 0.0, 0.597))
+    ("CYAN",rgba(0.0, 1.0, 1.0))
+    ("MAGENTA",rgba(1.0, 0.0, 1.0))
+    ("BLUE",rgba(1.0, 1.0, 0.0));
+            
+std::map<std::string, std::string> SceneObject::_typemapping =
         map_list_of("gear", "mesh")
 ("gearholder", "mesh")
+("table", "table")
 ("wall", "cuboid")
 ("Checkerboard", "cuboid")
 ("Cylinder", "Cylinder")
 ("trayoutline", "WireframeCuboid")
 ("marker", "Mark")
-("confetti","confetti")
+("confetti", "confetti")
 ;
-CMath Math;
+
 std::size_t Scene::gid = 1;
-std::vector<Piece*> Piece::pieces;
-//std::vector<ObjectDB*> Scen::objects;
-ObjectDB * Scene::dummy = new ObjectDB("dummy", "nevermatch", (std::size_t) 0);
-int Piece::n=0;
-
-int Scene::MARKERCOLOR(std::string X) {
-    boost::to_upper(X);
-    if (X == "RED") return rviz_visual_tools::RED;
-    if (X == "GREEN") return rviz_visual_tools::GREEN;
-    if (X == "CLEAR") return rviz_visual_tools::CLEAR;
-    if (X == "BLACK") return rviz_visual_tools::BLACK;
-    if (X == "BROWN") return rviz_visual_tools::BROWN;
-    if (X == "BLUE") return rviz_visual_tools::BLUE;
-    if (X == "CYAN") return rviz_visual_tools::CYAN;
-    if (X == "GREY") return rviz_visual_tools::GREY;
-    if (X == "DARK_GREY") return rviz_visual_tools::DARK_GREY;
-    if (X == "GREEN") return rviz_visual_tools::GREEN;
-    if (X == "LIME_GREEN") return rviz_visual_tools::LIME_GREEN;
-    if (X == "MAGENTA") return rviz_visual_tools::MAGENTA;
-    if (X == "ORANGE") return rviz_visual_tools::ORANGE;
-    if (X == "PURPLE") return rviz_visual_tools::PURPLE;
-    if (X == "PINK") return rviz_visual_tools::PINK;
-    if (X == "WHITE") return rviz_visual_tools::WHITE;
-    if (X == "YELLOW") return rviz_visual_tools::YELLOW;
-    if (X == "YELLOW") return rviz_visual_tools::YELLOW;
-    if (X == "TRANSLUCENT") return rviz_visual_tools::TRANSLUCENT;
-    if (X == "TRANSLUCENT_LIGHT") return rviz_visual_tools::TRANSLUCENT_LIGHT;
-    if (X == "TRANSLUCENT_DARK") return rviz_visual_tools::TRANSLUCENT_DARK;
-    if (X == "CLEAR") return rviz_visual_tools::CLEAR;
-
-
-    return rviz_visual_tools::DEFAULT;
+std::string SceneObject::DumpObject(SceneObject& obj){
+    std::stringstream s;
+    s << "Object=" << obj.name << " Type = " << obj.metatype << "\n";
+    return s.str();
 }
-std::string  Scene::MARKERCOLOR(int X) {
-    if (X ==  rviz_visual_tools::RED) return "RED";
-    if (X ==  rviz_visual_tools::GREEN) return "GREEN";
-    if (X == rviz_visual_tools::CLEAR) return "CLEAR";
-    if (X == rviz_visual_tools::BLACK) return "BLACK" ;
-    if (X == rviz_visual_tools::BROWN) return "BROWN" ;
-    if (X == rviz_visual_tools::BLUE) return "BLUE" ;
-    if (X == rviz_visual_tools::CYAN) return "CYAN" ;
-    if (X == rviz_visual_tools::GREY) return "GREY" ;
-    if (X == rviz_visual_tools::DARK_GREY) return "DARK_GREY" ;
-    if (X == rviz_visual_tools::GREEN) return "GREEN" ;
-    if (X == rviz_visual_tools::LIME_GREEN) return "LIME_GREEN" ;
-    if (X == rviz_visual_tools::MAGENTA) return "MAGENTA" ;
-    if (X == rviz_visual_tools::ORANGE) return "ORANGE" ;
-    if (X == rviz_visual_tools::PURPLE) return "PURPLE" ;
-    if (X == rviz_visual_tools::PINK) return "PINK" ;
-    if (X == rviz_visual_tools::WHITE) return "WHITE" ;
-    if (X == rviz_visual_tools::YELLOW) return "YELLOW" ;
-    if (X == rviz_visual_tools::TRANSLUCENT) return "TRANSLUCENT" ;
-    if (X == rviz_visual_tools::TRANSLUCENT_LIGHT) return "TRANSLUCENT_LIGHT" ;
-    if (X == rviz_visual_tools::TRANSLUCENT_DARK) return "TRANSLUCENT_DARK" ;
-    if (X == rviz_visual_tools::CLEAR) return "CLEAR"  ;
-    return "DEFAULT";
-}
-boost::shared_ptr<Scene> pScene = boost::shared_ptr<Scene>(new Scene());
+Scene::Scene()  {
+    global_scale_ = 1.0;
+ }
 
-ObjectDB * Scene::CreateMesh(
+std_msgs::ColorRGBA Scene::GetColor(std::string name) {
+    // unordered map
+    for (std::map<std::string, rgba>::iterator it = _color_index.begin(); it != _color_index.end(); it++) {
+        if ((*it).first == name)
+            return rgba().SetColorRGBA((*it).second);
+    }
+    return rgba().SetColorRGBA(rgba(1.0, 1.0, 0.0));
+}
+
+std::string Scene::GetColorName(std_msgs::ColorRGBA c) {
+    // unordered map
+    rgba color(c);
+    for (std::map<std::string, rgba>::iterator it = _color_index.begin(); it != _color_index.end(); it++) {
+        if (rgba().eq((*it).second, color))
+            return (*it).first;
+    }
+    return "BLUE";
+}
+
+void Scene::ClearScene() {
+    visualization_msgs::Marker reset_marker_;
+    reset_marker_.header.frame_id = frameid;
+    reset_marker_.header.stamp = ros::Time();
+    reset_marker_.ns = "deleteAllMarkers"; // helps during debugging
+    reset_marker_.action = 3;
+    marker_pub.publish(reset_marker_);
+    ros::spinOnce();
+    ros::spinOnce();
+    gid = 1;
+    objects.clear(); // leak if pointers?  not a leak if using references
+}
+
+void Scene::InitScene(ros::NodeHandle & nh, std::string base_frame_) {
+    frameid = base_frame_;
+    marker_pub = nh.advertise<visualization_msgs::Marker>("visualization_marker", 10);
+
+    Globals.Sleep(10000); // waits for rviz to finish loading
+    ClearScene();
+
+    generic_marker_.header.frame_id = frameid;
+    generic_marker_.action = visualization_msgs::Marker::ADD;
+    generic_marker_.lifetime = ros::Duration(0.0);
+}
+
+void Scene::SetBaseFrame(std::string base_frame_) {
+    frameid = base_frame_;
+    ClearScene();
+    DrawScene();
+}
+
+void Scene::NewScene() {
+    ClearScene();
+    DrawScene();
+}
+
+SceneObject & Scene::CreateMesh(
         std::string name,
         std::string metatype,
         std::size_t id,
-        Eigen::Affine3d pose,
+        tf::Pose pose,
         std::string filepath,
-        std::string color, // rviz_visual_tools::colors color,
+        std_msgs::ColorRGBA color,
         double scale) {
-    ObjectDB* obj = new ObjectDB();
-    obj->name = name;
-    obj->pose = pose;
-    obj->metatype = metatype;
-    obj->filepath = filepath;
-    obj->firstcolor = obj->color = color;
-    obj->scale = scale;
+    objects.push_back(SceneObject());
+    SceneObject & obj(objects.back());
+    obj.name = name;
+    obj.pose = pose;
+    obj.metatype = metatype;
+    obj.filepath = filepath;
+    obj.scale = scale;
+    obj.firstcolor = obj.rawcolor = color;
+
     if (id == 0)
-        obj->id = gid++;
-    else obj->id = id;
-    Save(obj);
-    return obj;
+        obj.id = gid++;
+    else obj.id = id;
+     return obj;
 }
 // cuboid
 
-ObjectDB * Scene::CreateCuboid(
+SceneObject & Scene::CreateCuboid(
         std::string name,
         std::string metatype,
-        Eigen::Affine3d pose,
-        Eigen::Affine3d adjacentpose,
-        std::string color // rviz_visual_tools::colors color
+        tf::Pose pose,
+        tf::Pose adjacentpose,
+        std_msgs::ColorRGBA color 
         ) {
-    ObjectDB* obj = new ObjectDB();
-    obj->name = name;
-    obj->pose = pose;
-    obj->metatype = metatype;
-    obj->firstcolor = obj->color = color;
-    obj->adjacentpose = adjacentpose;
-    Save(obj);
+    objects.push_back(SceneObject());
+    SceneObject & obj(objects.back());
+    obj.name = name;
+    obj.pose = pose;
+    obj.metatype = metatype;
+    obj.adjacentpose = adjacentpose;
+    obj.firstcolor = obj.rawcolor = color;
+    obj.id = gid++;
     return obj;
 }
 // marker
-ObjectDB * Scene::CreateMarker(std::string name,
-        Eigen::Affine3d pose,
-        std::string color) {
-    ObjectDB* obj = new ObjectDB();
-    obj->name = name;
-    obj->pose = pose;
-    obj->metatype = "marker";
-    obj->firstcolor = obj->color = color;
-    obj->id = gid++;
-    Save(obj);
+
+SceneObject & Scene::CreateMarker(std::string name,
+        tf::Pose pose,
+        std_msgs::ColorRGBA color) {
+    objects.push_back(SceneObject());
+    SceneObject & obj(objects.back());
+    obj.name = name;
+    obj.pose = pose;
+    obj.metatype = "marker";
+    obj.id = gid++;
+    obj.firstcolor = obj.rawcolor = color;
     return obj;
 }
 // cylinder
 
-ObjectDB * Scene::CreateCylinder(std::string name,
+SceneObject & Scene::CreateCylinder(std::string name,
         std::string metatype,
-        Eigen::Affine3d pose,
-        std::string color, //rviz_visual_tools::colors color,
+        tf::Pose pose,
+        std_msgs::ColorRGBA color, 
         double height,
         double radius,
         const std::string &ns) {
-    ObjectDB* obj = new ObjectDB();
-    obj->name = name;
-    obj->pose = pose;
-    obj->metatype = metatype;
-    obj->firstcolor = obj->color = color;
-    obj->height = height;
-    obj->radius = radius;
-    obj->id = 1000 + gid++;
-    Save(obj);
+    objects.push_back(SceneObject());
+    SceneObject & obj(objects.back());
+    obj.name = name;
+    obj.pose = pose;
+    obj.metatype = metatype;
+    obj.height = height;
+    obj.radius = radius;
+    obj.id = gid++;
+    obj.firstcolor = obj.rawcolor = color;
     return obj;
 }
 
 
 // Line
-ObjectDB * Scene::CreateLine(std::string name,
+
+SceneObject & Scene::CreateLine(std::string name,
         std::string metatype,
-        Eigen::Vector3d point1, 
-        Eigen::Vector3d point2,
-        std_msgs::ColorRGBA color, 
-        double radius){
-    ObjectDB* obj = new ObjectDB();
-    obj->name = name;
-    obj->metatype = metatype;
-    obj->pose = Convert<Eigen::Vector3d, Eigen::Affine3d>(point1);
-    obj->adjacentpose = Convert<Eigen::Vector3d, Eigen::Affine3d>(point2);
-    obj->rawcolor = color;
-    obj->radius = radius;
-    obj->id =  gid++;
-    Save(obj);
-    return obj;   
+        tf::Vector3 point1,
+        tf::Vector3 point2,
+        std_msgs::ColorRGBA color,
+        double radius) {
+    objects.push_back(SceneObject());
+    SceneObject & obj(objects.back());
+    obj.name = name;
+    obj.metatype = metatype;
+    obj.pose = Convert<tf::Vector3, tf::Pose>(point1);
+    obj.adjacentpose = Convert<tf::Vector3, tf::Pose>(point2);
+    obj.rawcolor = color;
+    obj.radius = radius;
+    obj.id = gid++;
+    return obj;
 }
 
 // wireframe cuboid
 
-ObjectDB* Scene::CreateWireframeCuboid(std::string name,
+SceneObject &Scene::CreateWireframeCuboid(std::string name,
         std::string metatype,
-        Eigen::Affine3d pose,
+        tf::Pose pose,
         double depth,
         double width,
         double height,
-        std::string color, //rviz_visual_tools::colors color,
+        std_msgs::ColorRGBA color,
         const std::string &ns) {
-    ObjectDB* obj = new ObjectDB();
-    obj->name = name;
-    obj->pose = pose;
-    obj->metatype = metatype;
-    obj->firstcolor = obj->color = color;
-    obj->height = height;
-    obj->depth = depth;
-    obj->width = width;
-    obj->id = 1000 + gid++;
-    Save(obj);
+    objects.push_back(SceneObject());
+    SceneObject & obj(objects.back());
+    obj.name = name;
+    obj.pose = pose;
+    obj.metatype = metatype;
+    obj.height = height;
+    obj.depth = depth;
+    obj.width = width;
+    obj.id = gid++;
+    obj.firstcolor = obj.rawcolor = color;
     return obj;
 }
 
-void Scene::Save(ObjectDB * obj) {
-    objects.push_back(obj);
-}
 
-ObjectDB * Scene::Find(std::size_t id) {
-    std::vector<ObjectDB *>::iterator it = std::find_if(objects.begin(), objects.end(),
-            boost::bind(&ObjectDB::id, _1) == id);
+SceneObject & Scene::Find(std::size_t id) {
+    std::vector<SceneObject>::iterator it = std::find_if(objects.begin(), objects.end(),
+            boost::bind(&SceneObject::id, _1) == id);
 
     if (it != objects.end())
         return *it;
 
-    return NULL;
+    return SceneObject::nullref;
 }
 
-Eigen::Affine3d& Scene::FindPose(std::string name) {
-    std::vector<ObjectDB *>::iterator it = std::find_if(objects.begin(), objects.end(),
-            boost::bind(&ObjectDB::name, _1) == name);
-    if (it != objects.end())
-        return (*it)->pose;
-    return dummy->pose;
+tf::Pose& Scene::FindPose(std::string name) {
+//    std::vector<SceneObject>::iterator it = std::find_if(objects.begin(), objects.end(),
+//            boost::bind(&SceneObject::name, _1) == name);
+//    if (it != objects.end())
+//        return (*it).pose;
+
+     for (size_t i = 0; i < objects.size(); i++) {
+        if (objects[i].name == name)
+            return objects[i].pose;
+    }
+        
+    return SceneObject::nullref.pose;
 }
 
-ObjectDB * Scene::Find(std::string name) {
-    std::vector<ObjectDB *>::iterator it = std::find_if(objects.begin(), objects.end(),
-            boost::bind(&ObjectDB::name, _1) == name);
-    if (it != objects.end())
-        return *it;
-    return NULL;
+SceneObject & Scene::Find(std::string name) {
+    for(size_t i=0; i< objects.size(); i++){
+        if(objects[i].name == name)
+            return objects[i];
+    }
+    return SceneObject::nullref;
+}
+
+bool Scene::CreateWall(std::string name,
+        std_msgs::ColorRGBA rgbacolor,
+        std::string frameid,
+        tf::Vector3 v1,
+        tf::Vector3 v2) {
+    objects.push_back(SceneObject());
+    SceneObject & obj(objects.back());
+    obj.name = name;
+    obj.metatype = "wall";
+    obj.rawcolor = rgbacolor;
+    obj.pose = Convert<tf::Vector3, tf::Pose>(v1);
+    obj.adjacentpose = Convert<tf::Vector3, tf::Pose>(v2);
+    return true;
+}
+
+bool Scene::CreateTable(std::string name,
+        std_msgs::ColorRGBA rgbacolor,
+        std::string frameid,
+        double table_width,
+        double table_depth,
+        double table_height,
+        tf::Pose pose) {
+
+    //rvizMarker->Scale(length, width, height);
+    //rvizMarker->SetShape("cube");
+
+    objects.push_back(SceneObject());
+    SceneObject & obj(objects.back());
+    obj.name = name;
+    obj.pose = pose;
+    obj.metatype = "table";
+    obj.rawcolor = rgbacolor;
+    obj.width = table_width;
+    obj.depth = table_depth;
+    obj.height = table_height;
+    obj.id = gid++;
+    for (size_t i = 0; i < 4; i++)
+        obj.ids.push_back(gid++);
+
+    return true;
 }
 
 std::string Scene::DumpDB() {
     std::stringstream str;
     for (size_t i = 0; i < objects.size(); i++)
-        str << objects[i]->name << " " << objects[i]->color << "\n";
+        str << objects[i].name << " " << objects[i].id << "\n";
     return str.str();
 
 }
 
-Scene::Scene() {
-
-}
-
-void Scene::ClearScene() {
-    assert(visual_tools != NULL);
-    visual_tools->deleteAllMarkers();
-    ros::spinOnce();
-    ros::spinOnce();
-    gid = 1;
-    objects.clear(); // leak?
-}
-
-void Scene::InitScene() {
-    visual_tools = boost::shared_ptr<RvizVisualTools>(new RvizVisualTools("world", "/visualization_marker_array"));
-    //visual_tools = boost::shared_ptr<SonOfRvizVisualTools>(new SonOfRvizVisualTools("base_link"));
-    visual_tools->enableBatchPublishing(false);
-    global_scale_ = 1.0;
-
-    Globals.Sleep(10000);
-
-    ClearScene();
-
-    std::string base_frame_("world");
-    
-    // Setup up triangle_marker_ for wall drawing
-    triangle_marker_.header.frame_id = base_frame_;
-
-    triangle_marker_.ns = "Triangle";
-    triangle_marker_.action = visualization_msgs::Marker::ADD;
-    triangle_marker_.type = visualization_msgs::Marker::TRIANGLE_LIST;
-    triangle_marker_.lifetime = ros::Duration(0.0);
-
-    // Load Cylinder ----------------------------------------------------
-    cylinder_marker_.header.frame_id = base_frame_;
-    cylinder_marker_.ns = "Cylinder";
-    cylinder_marker_.action = visualization_msgs::Marker::ADD;
-    cylinder_marker_.type = visualization_msgs::Marker::CYLINDER;
-    cylinder_marker_.lifetime = ros::Duration(0.0);
-    cylinder_marker_.id = 1;
-
-
-    line_strip_marker_.header.frame_id = base_frame_;
-    // Set the namespace and id for this marker.  This serves to create a unique
-    // ID
-    line_strip_marker_.ns = "Line";
-    // Set the marker type.
-    line_strip_marker_.type = visualization_msgs::Marker::LINE_STRIP;
-    // Set the marker action.  Options are ADD and DELETE
-    line_strip_marker_.action = visualization_msgs::Marker::ADD;
-    // Lifetime
-    line_strip_marker_.lifetime = ros::Duration(0.0);
-    line_strip_marker_.id = 1;
-}
-void Scene::BuildScene() {
-
-
 #if WALLS
-    Save(obj = new ObjectDB(
-            "rightwall", "wall",
-            Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, 0.5, 1.0),
-            Eigen::Affine3d::Identity() * Eigen::Translation3d(1.0, 0.501, 0.0),
-            rviz_visual_tools::TRANSLUCENT_DARK)
-            );
-    ObjectDB::gid++;
+Save(obj = new SceneObject(
+        "rightwall", "wall",
+        Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, 0.5, 1.0),
+        Eigen::Affine3d::Identity() * Eigen::Translation3d(1.0, 0.501, 0.0),
+        rviz_visual_tools::TRANSLUCENT_DARK)
+        );
+SceneObject::gid++;
 
-    Save(obj = new ObjectDB(
-            "backwall", "wall",
-            Eigen::Affine3d::Identity() * Eigen::Translation3d(-0.5, 1.0, 1.0),
-            Eigen::Affine3d::Identity() * Eigen::Translation3d(-0.501, -1.0, 0.0),
-            rviz_visual_tools::TRANSLUCENT_DARK)
-            );
-    ObjectDB::gid++;
+Save(obj = new SceneObject(
+        "backwall", "wall",
+        Eigen::Affine3d::Identity() * Eigen::Translation3d(-0.5, 1.0, 1.0),
+        Eigen::Affine3d::Identity() * Eigen::Translation3d(-0.501, -1.0, 0.0),
+        rviz_visual_tools::TRANSLUCENT_DARK)
+        );
+SceneObject::gid++;
 #endif 
 #if 0
-    Save(obj = new ObjectDB(
-            "leftwall", "wall",
-            Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, -0.5, 1.0),
-            Eigen::Affine3d::Identity() * Eigen::Translation3d(1.0, -0.501, 0.0),
-            rviz_visual_tools::TRANSLUCENT_DARK)
-            ));
-    Save(obj = new ObjectDB(
-            "backwall", "wall",
-            Eigen::Affine3d::Identity() * Eigen::Translation3d(-0.5, -1.0, 1.0),
-            Eigen::Affine3d::Identity() * Eigen::Translation3d(-0.5, 1.01, 1.0),
-            rviz_visual_tools::TRANSLUCENT_DARK)
-            ));
+Save(obj = new SceneObject(
+        "leftwall", "wall",
+        Eigen::Affine3d::Identity() * Eigen::Translation3d(0.0, -0.5, 1.0),
+        Eigen::Affine3d::Identity() * Eigen::Translation3d(1.0, -0.501, 0.0),
+        rviz_visual_tools::TRANSLUCENT_DARK)
+        ));
+Save(obj = new SceneObject(
+        "backwall", "wall",
+        Eigen::Affine3d::Identity() * Eigen::Translation3d(-0.5, -1.0, 1.0),
+        Eigen::Affine3d::Identity() * Eigen::Translation3d(-0.5, 1.01, 1.0),
+        rviz_visual_tools::TRANSLUCENT_DARK)
+        ));
 
 #endif
 
+void Scene::UpdateScene(SceneObject & obj) {
+     DrawObject(obj);
 }
 
-void Scene::NewScene() {
-
-}
-
-// Initialize Eigen::Affine3d http://stackoverflow.com/questions/25504397/eigen-combine-rotation-and-translation-into-one-matrix
-
-void Scene::UpdateScene(ObjectDB * obj) {
-//        rviz_visual_tools::colors color) {
-    if (obj == NULL)
+void Scene::UpdateScene(std::string objname, tf::Pose pose, std_msgs::ColorRGBA color) {
+    SceneObject & obj = Find(objname);
+    if (IsNull(obj))
         throw std::runtime_error("Gak UpdateScene!");
+    obj.rawcolor = color;
+    obj.pose = pose;
     DrawObject(obj);
-    visual_tools->triggerBatchPublish();
-}
-
-void Scene::UpdateScene(std::string objname, Eigen::Affine3d pose, std::string color) {
-//        rviz_visual_tools::colors color) {
-    ObjectDB * obj = Find(objname);
-    if (obj == NULL)
-        throw std::runtime_error("Gak UpdateScene!");
-    obj->color = color;
-    obj->pose = pose;
-    DrawObject(obj);
-    visual_tools->triggerBatchPublish();
 }
 
 void Scene::DeleteObject(std::string objname) {
-    ObjectDB * obj = Find(objname);
-    if (obj == NULL)
+    SceneObject & obj = Find(objname);
+    if (IsNull(obj))
         throw std::runtime_error("Gak DeleteObject!");
-    cylinder_marker_.action = visualization_msgs::Marker::DELETE;
+    generic_marker_.action = visualization_msgs::Marker::DELETE;
     DrawObject(obj);
-    visual_tools->triggerBatchPublish();
-    cylinder_marker_.action = visualization_msgs::Marker::ADD;
+    generic_marker_.action = visualization_msgs::Marker::ADD;
 }
 
-void Scene::ChangeColor(std::string objname, std::string color) { //rviz_visual_tools::colors color) {
-    ObjectDB * obj = Find(objname);
-    if (obj == NULL)
+void Scene::ChangeColor(std::string objname, std_msgs::ColorRGBA color) { //rviz_visual_tools::colors color) {
+    SceneObject & obj = Find(objname);
+    if (IsNull(obj))
         throw std::runtime_error("Gak ChangeColor!");
-    obj->color = color;
-    cylinder_marker_.action = visualization_msgs::Marker::MODIFY;
+    obj.rawcolor = color;
+    generic_marker_.action = visualization_msgs::Marker::MODIFY;
     DrawObject(obj);
-    visual_tools->triggerBatchPublish();
-
-    cylinder_marker_.action = visualization_msgs::Marker::ADD;
+    generic_marker_.action = visualization_msgs::Marker::ADD;
 
 }
 
-bool Scene::DrawObject(ObjectDB *obj) {
+bool Scene::DrawObject(SceneObject &obj) {
     bool b;
-    std::string type = ObjectDB::_typemapping[obj->metatype];
+    std::string type = SceneObject::_typemapping[obj.metatype];
     if (type == "mesh") {
-        b = visual_tools->publishMesh(obj->pose,
-                obj->filepath,
-                MARKERCOLOR(obj->color),
-                obj->scale,
-                type,
-                obj->id);
+        publishMesh(obj.pose,
+                obj.filepath,
+                obj.rawcolor,
+                obj.scale,
+                obj.id);
     } else if (type == "cuboid") {
-        b = visual_tools->publishCuboid(obj->pose.translation(),
-                obj->adjacentpose.translation(),
-                MARKERCOLOR(obj->color)); // Eigen::Vector3d(0.0, 0.5, 1.0), 
+        std_msgs::ColorRGBA color = obj.rawcolor;
+        publishCuboid(obj.pose,
+                obj.adjacentpose,
+                color,
+                obj.id);
+    } else if (type == "table") {
+        std_msgs::ColorRGBA color = obj.rawcolor;
+        tf::Pose adjpose = obj.pose;
+        adjpose.getOrigin().setZ( adjpose.getOrigin().z() - obj.height / 2.0);
+        // x=depth, y=width, z = height
+        publishCuboid(adjpose,
+                obj. depth, obj. width, obj. height,
+                color,
+                obj.id);
+
+         double x = obj.pose.getOrigin().x();
+        double y = obj.pose.getOrigin().y();
+        double z = obj.pose.getOrigin().z();
+        double minx = x - obj.depth;
+        double maxx = x + obj.depth;
+        double miny = y - obj.width;
+        double maxy = y + obj.width;
+
+        // legs
+        double legradius;
+        double legwidth;
+        double length = obj.width;
+        double width = obj.depth;
+        double height = obj.height;
+        legradius = legwidth = 0.05;
+
+        tf::Pose leg1, leg2, leg3, leg4;
+        leg1.setOrigin(tf::Vector3(x + (length / 2.0) - legradius, y - (width / 2.0) + legradius, (z - height) / 2.0));
+        leg1.setRotation(tf::QIdentity());
+        leg2.setOrigin(tf::Vector3(x - (length / 2.0) + legradius, y + (width / 2.0) - legradius, (z - height) / 2.0));
+        leg3.setRotation(tf::QIdentity());
+        leg3.setOrigin(tf::Vector3(x + (length / 2.0) - legradius, y + (width / 2.0) - legradius, (z - height) / 2.0));
+        leg3.setRotation(tf::QIdentity());
+        leg4.setOrigin(tf::Vector3(x - (length / 2.0) + legradius, y - (width / 2.0) + legradius, (z - height) / 2.0));
+        leg4.setRotation(tf::QIdentity());
+
+        height = obj.pose.getOrigin().z() - obj.height;
+
+        publishCylinder(leg1, color, height, legradius, obj.ids[0]);
+        publishCylinder(leg2, color, height, legradius, obj.ids[1]);
+        publishCylinder(leg3, color, height, legradius, obj.ids[2]);
+        publishCylinder(leg4, color, height, legradius, obj.ids[3]);
+        ros::Duration(0.05).sleep();
+
     } else if (type == "Cylinder") {
-        b = publishCylinder(obj->pose,
-                obj->color,
-                obj-> height,
-                obj-> radius,
-                obj->id);
+        std_msgs::ColorRGBA color = obj.rawcolor;
+        publishCylinder(obj.pose,
+                color,
+                obj.height,
+                obj.radius,
+                obj.id);
 
     } else if (type == "WireframeCuboid") {
-        b=visual_tools->publishWireframeRectangle(obj->pose, 
-                obj-> depth, 
-                obj->width, 
-                MARKERCOLOR(obj->color),
-                rviz_visual_tools::REGULAR);  
-#if 0  
-        b = visual_tools->publishWireframeCuboid(obj->pose,
-                obj-> depth,
-                obj->width,
-                obj-> height,
-                MARKERCOLOR(obj->color),
-                type.c_str(),
-                obj->id);
-#endif
+        publishWireframeRectangle(obj.pose,
+                obj.depth,
+                obj.width,
+                obj.rawcolor, // MARKERCOLOR("YELLOW"),
+                0.01,
+                obj.id);
     } else if (type == "Mark") {
-        b = visual_tools->publishSphere(obj->pose,
-                MARKERCOLOR(obj->color),
-                rviz_visual_tools::LARGE,
-                "Sphere",
-                obj->id);
-
+        publishSphere(obj.pose,
+                obj.rawcolor,
+                0.025,
+                obj.id);
     } else if (type == "confetti") {
-        b = publishLine(
-                Convert<Eigen::Affine3d, Eigen::Vector3d>(obj->pose),
-                Convert<Eigen::Affine3d, Eigen::Vector3d>(obj->adjacentpose),
-                obj->rawcolor,
-                obj->radius,
-                obj->id);
+        publishLine(
+                Convert<tf::Pose, tf::Vector3>(obj.pose),
+                Convert<tf::Pose, tf::Vector3>(obj.adjacentpose),
+                obj.rawcolor,
+                obj.radius,
+                obj.id);
     }
 
-    visual_tools->triggerBatchPublish();
     // BOOST_ASSERT_MSG(b == 0, "Failed to publish object");
 #if defined(LogScene)
-    ofsScene << "Draw " << obj->name << "="<< RCS::DumpEigenPose(obj->pose).c_str()<<"\n"<< std::flush;
+    ofsScene << "Draw " << obj.name << "=" << RCS::DumpPose(obj.pose).c_str() << "\n" << std::flush;
 #endif
     ros::spinOnce();
     ros::spinOnce();
@@ -456,25 +500,25 @@ bool Scene::DrawObject(ObjectDB *obj) {
     return b;
 }
 
-
 void Scene::MakeConfetti() {
 
     for (size_t i = 0; i < 20; i++) {
-        
+
         double x = ((double) i)*.01;
         CreateLine("confetti1", "confetti",
-                Eigen::Vector3d(x, 0.0, 1.0), Eigen::Vector3d(x, 0.0, 1.005),
-                pScene->make_rawcolor(Random(0.0, 128.0),
+                tf::Vector3(x, 0.0, 1.0), tf::Vector3(x, 0.0, 1.005),
+                rgba(Random(0.0, 128.0),
                 Random(0.0, 128.0),
                 Random(0.0, 128.0),
-                1.0),
+                1.0).GetColorRGBA(),
                 .005);
 
     }
 }
+
 void Scene::DrawScene() {
     for (size_t i = 0; i < objects.size(); i++) {
-        ObjectDB *obj = objects[i];
+        SceneObject &obj = objects[i];
         bool bFlag = false;
         //while(!bFlag) 
         {
@@ -484,11 +528,11 @@ void Scene::DrawScene() {
 
 }
 
-bool Scene::publishCylinder(Eigen::Affine3d pose,
-        std::string _color, //rviz_visual_tools::colors color,
+void Scene::publishCylinder(tf::Pose pose,
+        std_msgs::ColorRGBA _color,
         double height,
         double radius,
-        size_t &id) {
+        size_t id) {
 #if 0
     // Distance between two points
     double height = (point1 - point2).lpNorm<2>();
@@ -505,51 +549,283 @@ bool Scene::publishCylinder(Eigen::Affine3d pose,
     pose = pose * rotation;
 #endif
     bool bWorked;
-    rviz_visual_tools::colors color = MARKERCOLOR(_color);
     // Set the timestamp
-    cylinder_marker_.header.stamp = ros::Time::now();
-    cylinder_marker_.ns = "Cylinder";
-    //id=cylinder_marker_.id;
-    cylinder_marker_.id = id; // ++;
+    generic_marker_.header.stamp = ros::Time::now();
+ //   generic_marker_.action = visualization_msgs::Marker::ADD;
+    generic_marker_.type = visualization_msgs::Marker::CYLINDER;
+    generic_marker_.ns = "Cylinder";
+    generic_marker_.id = id;
 
     // Set the pose
-    cylinder_marker_.pose = visual_tools->convertPose(pose);
+    generic_marker_.pose = Convert<tf::Pose, geometry_msgs::Pose >(pose);
+
 
     // Set marker size
-    cylinder_marker_.scale.x = radius;
-    cylinder_marker_.scale.y = radius;
-    cylinder_marker_.scale.z = height;
+    generic_marker_.scale.x = radius;
+    generic_marker_.scale.y = radius;
+    generic_marker_.scale.z = height;
 
     // Set marker color
-    cylinder_marker_.color = visual_tools->getColor(color);
+    generic_marker_.color = _color;
 
     // Helper for publishing rviz markers
-    bWorked = visual_tools->publishMarker(cylinder_marker_);
-    return bWorked;
-}
+    marker_pub.publish(generic_marker_);
+ }
 
-bool Scene::publishLine(const Eigen::Vector3d &point1, 
-        const Eigen::Vector3d &point2,
-        const std_msgs::ColorRGBA &color, 
+void Scene::publishLine(const tf::Vector3 &point1,
+        const tf::Vector3 &point2,
+        const std_msgs::ColorRGBA &color,
         double radius,
-         size_t &id) {
-    
-    // Set the timestamp
-    line_strip_marker_.header.stamp = ros::Time::now();
+        size_t &id) {
 
+    // Set the timestamp
+    generic_marker_.header.stamp = ros::Time::now();
+    generic_marker_.type = visualization_msgs::Marker::LINE_STRIP;
     geometry_msgs::Vector3 scale;
     scale.x = radius * global_scale_;
     scale.y = radius * global_scale_;
     scale.z = radius * global_scale_;
 
-    line_strip_marker_.id=id;
-    line_strip_marker_.color = color;
-    line_strip_marker_.scale = scale;
+    generic_marker_.id = id;
+    generic_marker_.color = color;
+    generic_marker_.scale = scale;
 
-    line_strip_marker_.points.clear();
-    line_strip_marker_.points.push_back(Convert<Eigen::Vector3d, geometry_msgs::Point>(point1));
-    line_strip_marker_.points.push_back(Convert<Eigen::Vector3d, geometry_msgs::Point>(point2));
+    generic_marker_.points.clear();
+    generic_marker_.points.push_back(Convert<tf::Vector3, geometry_msgs::Point>(point1));
+    generic_marker_.points.push_back(Convert<tf::Vector3, geometry_msgs::Point>(point2));
 
     // Helper for publishing rviz markers
-    return visual_tools->publishMarker(line_strip_marker_);
+    marker_pub.publish(generic_marker_); // line_strip_marker_);
 }
+
+/**
+ * \brief Display a rectangular cuboid
+ * \param point1 - x,y,z top corner location of box
+ * \param point2 - x,y,z bottom opposite corner location of box
+ * \param color - color of marker
+ * \param id  id of marker
+ * \return true on success
+ */
+void Scene::publishCuboid(tf::Pose &pose1, tf::Pose &pose2,
+        std_msgs::ColorRGBA color,
+        size_t id) {
+    // Calculate center pose
+    tf::Vector3 point1 = Convert<tf::Pose, tf::Vector3>(pose1);
+    tf::Vector3 point2 = Convert<tf::Pose, tf::Vector3>(pose2);
+
+    tf::Pose midpoint = tf::Identity();
+    midpoint.setOrigin(tf::Vector3((point1.x() - point2.x()) / 2.0 + point2.x(),
+            (point1.y() - point2.y()) / 2.0 + point2.y(),
+            (point1.z() - point2.z()) / 2.0 + point2.z()));
+    // Calculate scale
+    double depth = fabs(point1.x() - point2.x());
+    double width = fabs(point1.y() - point2.y());
+    double height = fabs(point1.z() - point2.z());
+    publishCuboid(midpoint, depth, width, height, color, id);
+}
+
+void Scene::publishCuboid(tf::Pose &midpoint, double depth, double width, double height,
+        std_msgs::ColorRGBA color,
+        size_t id) {
+
+    // Set the timestamp
+    generic_marker_.header.stamp = ros::Time::now();
+    generic_marker_.ns = "nist";
+    generic_marker_.type = visualization_msgs::Marker::CUBE;
+    generic_marker_.id = id;
+    generic_marker_.color = color;
+
+    generic_marker_.pose = Convert<tf::Pose, geometry_msgs::Pose >(midpoint);
+
+    // Calculate scale
+    generic_marker_.scale.x = depth; // fabs(point1.x - point2.x);
+    generic_marker_.scale.y = width; // fabs(point1.y - point2.y);
+    generic_marker_.scale.z = height; // fabs(point1.z - point2.z);
+
+    // Prevent scale from being zero
+    if (!generic_marker_.scale.x)
+        generic_marker_.scale.x = 0.0001;
+    if (!generic_marker_.scale.y)
+        generic_marker_.scale.y = 0.0001;
+    if (!generic_marker_.scale.z)
+        generic_marker_.scale.z = 0.0001; //SMALL_SCALE;
+
+    // Helper for publishing rviz markers
+    marker_pub.publish(generic_marker_);
+}
+
+void Scene::publishSphere(const tf::Pose &pose, std_msgs::ColorRGBA color, double scale, std::size_t id) {
+    // Set the frame ID and timestamp
+    generic_marker_.header.stamp = ros::Time::now();
+    generic_marker_.ns = "nist";
+    generic_marker_.type = visualization_msgs::Marker::SPHERE;
+
+    generic_marker_.id = id;
+    generic_marker_.pose = Convert<tf::Pose, geometry_msgs::Pose >(pose);
+    generic_marker_.color = color;
+    generic_marker_.scale = Convert<double, geometry_msgs::Vector3 >(scale * global_scale_); //geometry_msgs::Vector3 scale
+    marker_pub.publish(generic_marker_);
+}
+
+void Scene::publishMesh(const tf::Pose &pose, const std::string &file_name, std_msgs::ColorRGBA color,
+        double scale, std::size_t id) {
+    // Set the timestamp
+    generic_marker_.header.stamp = ros::Time::now();
+    generic_marker_.ns = "nist";
+    generic_marker_.id = id;
+    generic_marker_.type = visualization_msgs::Marker::MESH_RESOURCE;
+
+    // Set the mesh
+    generic_marker_.mesh_resource = file_name;
+    generic_marker_.mesh_use_embedded_materials = true;
+
+    // Set the pose
+    generic_marker_.pose = Convert<tf::Pose, geometry_msgs::Pose >(pose);
+
+    // Set marker size
+    generic_marker_.scale.x = scale;
+    generic_marker_.scale.y = scale;
+    generic_marker_.scale.z = scale;
+
+    generic_marker_.color = color;
+    marker_pub.publish(generic_marker_);
+}
+
+void Scene::publishText(const tf::Pose &pose, const std::string &text, std_msgs::ColorRGBA color,
+        const tf::Vector3 scale, std::size_t id) {
+    // Set the timestamp
+    generic_marker_.header.stamp = ros::Time::now();
+    generic_marker_.ns = "nist";
+    generic_marker_.id = id;
+    generic_marker_.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
+
+    generic_marker_.header.frame_id = frameid;
+    generic_marker_.text = text;
+    generic_marker_.pose = Convert<tf::Pose, geometry_msgs::Pose >(pose);
+    generic_marker_.color = color;
+    generic_marker_.scale = Convert<tf::Vector3, geometry_msgs::Vector3 >(scale);
+    
+
+    marker_pub.publish(generic_marker_);
+}
+
+void Scene::publishWireframeRectangle(const tf::Pose &pose, double height, double width, std_msgs::ColorRGBA color,
+        double scale, std::size_t id) {
+    // Set the timestamp
+    generic_marker_.header.stamp = ros::Time::now();
+    generic_marker_.ns = "Wireframe Rectangle";
+    generic_marker_.id = id;
+    generic_marker_.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
+
+
+    // Extract 8 cuboid vertices
+    tf::Vector3 p1(-width / 2.0, -height / 2.0, 0.0);
+    tf::Vector3 p2(-width / 2.0, height / 2.0, 0.0);
+    tf::Vector3 p3(width / 2.0, height / 2.0, 0.0);
+    tf::Vector3 p4(width / 2.0, -height / 2.0, 0.0);
+
+    p1 = pose * p1;
+    p2 = pose * p2;
+    p3 = pose * p3;
+    p4 = pose * p4;
+
+    // Setup marker
+
+    std_msgs::ColorRGBA this_color = color;
+    generic_marker_.scale = Convert<double, geometry_msgs::Vector3 >(scale);
+    generic_marker_.color = this_color;
+    generic_marker_.points.clear();
+    generic_marker_.colors.clear();
+
+    // Add each point pair to the line message
+    generic_marker_.points.push_back(Convert<tf::Vector3, geometry_msgs::Point>(p1));
+    generic_marker_.points.push_back(Convert<tf::Vector3, geometry_msgs::Point>(p2));
+    generic_marker_.colors.push_back(this_color);
+    generic_marker_.colors.push_back(this_color);
+
+    generic_marker_.points.push_back(Convert<tf::Vector3, geometry_msgs::Point>(p2));
+    generic_marker_.points.push_back(Convert<tf::Vector3, geometry_msgs::Point>(p3));
+    generic_marker_.colors.push_back(this_color);
+    generic_marker_.colors.push_back(this_color);
+
+    generic_marker_.points.push_back(Convert<tf::Vector3, geometry_msgs::Point>(p3));
+    generic_marker_.points.push_back(Convert<tf::Vector3, geometry_msgs::Point>(p4));
+    generic_marker_.colors.push_back(this_color);
+    generic_marker_.colors.push_back(this_color);
+
+    generic_marker_.points.push_back(Convert<tf::Vector3, geometry_msgs::Point>(p4));
+    generic_marker_.points.push_back(Convert<tf::Vector3, geometry_msgs::Point>(p1));
+    generic_marker_.colors.push_back(this_color);
+    generic_marker_.colors.push_back(this_color);
+
+    marker_pub.publish(generic_marker_);
+}
+
+
+/**
+
+  Evenly allocate RGB colors around HSL color wheel
+
+  @param[out] v_picked_cols  a vector of colors in RGB format
+  @param[in]  count   number of colors required
+  @param[in]  bright  0 is all black, 100 is all white, defaults to 50
+
+  based on Fig 3 of http://epub.wu-wien.ac.at/dyn/virlib/wp/eng/mediate/epub-wu-01_c87.pdf?ID=epub-wu-01_c87
+
+ */
+
+//void cColorPicker::Pick( vector<DWORD>&v_picked_cols, int count, int bright )
+
+void cColorPicker::Pick(vector<rgba>&v_picked_cols, int count, int bright) {
+    v_picked_cols.clear();
+    for (int k_hue = 0; k_hue < 360; k_hue += 360 / count)
+        v_picked_cols.push_back(HSL2RGB(k_hue, 100, bright));
+}
+/**
+
+  Convert HSL to RGB
+
+  based on http://www.codeguru.com/code/legacy/gdi/colorapp_src.zip
+  from: http://stackoverflow.com/questions/180/function-for-creating-color-wheels
+
+ */
+
+//DWORD cColorPicker::HSL2RGB( int h, int s, int l )
+
+rgba cColorPicker::HSL2RGB(int h, int s, int l) {
+    unsigned long ret = 0;
+    UCHAR r, g, b;
+
+    float saturation = s / 100.0f;
+    float luminance = l / 100.f;
+    float hue = (float) h;
+
+    if (saturation == 0.0) {
+        r = g = b = UCHAR(luminance * 255.0);
+    } else {
+        float rm1, rm2;
+
+        if (luminance <= 0.5f) rm2 = luminance + luminance * saturation;
+        else rm2 = luminance + saturation - luminance * saturation;
+        rm1 = 2.0f * luminance - rm2;
+        r = ToRGB1(rm1, rm2, hue + 120.0f);
+        g = ToRGB1(rm1, rm2, hue);
+        b = ToRGB1(rm1, rm2, hue - 120.0f);
+    }
+
+    //ret = ((DWORD)(((BYTE)(r)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(b))<<16)));
+
+    return rgba(((double) r) / 255., ((double) g) / 255., ((double) b) / 255.);
+}
+
+unsigned char cColorPicker::ToRGB1(float rm1, float rm2, float rh) {
+    if (rh > 360.0f) rh -= 360.0f;
+    else if (rh < 0.0f) rh += 360.0f;
+
+    if (rh < 60.0f) rm1 = rm1 + (rm2 - rm1) * rh / 60.0f;
+    else if (rh < 180.0f) rm1 = rm2;
+    else if (rh < 240.0f) rm1 = rm1 + (rm2 - rm1) * (240.0f - rh) / 60.0f;
+
+    return static_cast<unsigned char> (rm1 * 255);
+}
+

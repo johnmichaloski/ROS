@@ -39,7 +39,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <urdf/model.h>
 
 namespace TRAC_IK {
-
+boost::asio::io_service io_service;
   TRAC_IK::TRAC_IK(const std::string& base_link, const std::string& tip_link, const std::string& URDF_param, double _maxtime, double _eps, SolveType _type ) :
     initialized(false),
     eps(_eps),

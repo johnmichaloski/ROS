@@ -12,8 +12,10 @@ maintenance, and subsequent redistribution.
 
 See NIST Administration Manual 4.09.07 b and Appendix I.
  */
-
-#include <rviz_visual_tools/rviz_visual_tools.h>
+#include <ros/ros.h>
+#include <visualization_msgs/Marker.h>
+#include <tf/transform_datatypes.h>
+// #include <rviz_visual_tools/rviz_visual_tools.h>
 #include <boost/bind.hpp>
 #include <algorithm>
 #include <map>
@@ -21,178 +23,275 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 #include "Globals.h"
 #include "RCS.h"
 #include "Shape.h"
+#include "Conversions.h"
+
 
 /**
- * The ObjectDB is a class to represent various RVIZ markers in the "scene". 
+ * \brief Class wrapper for rbga color scheme.
+ * RGB color definition and alpha A are all represented as 0..1 doubles.
+ */
+
+struct rgba {
+
+    /**
+     * \brief Empty constructor.
+     */
+    rgba() {
+    }
+
+    /**
+     * \brief RBGA constructor, where Colors RGB and alpha A are all represented as 0..1 doubles.
+     */
+    rgba(double r_, double g_, double b_, double a_ = 1.0) : r(r_), g(g_), b(b_), a(a_) {
+    }
+
+    rgba(std_msgs::ColorRGBA c) : r(c.r), g(c.g), b(c.b), a(c.a) {
+    }
+
+    /**
+     * \brief Equal method for determining equality of color coding instances.
+     */
+    bool eq(const rgba & c, const rgba & d) {
+        return (d.a == c.a) && (d.r == c.r) && (d.g == c.g) && (d.b == c.b);
+    }
+    double r, g, b, a; /**< RBGA valudes represented as 0..1 doubles */
+
+    std_msgs::ColorRGBA SetColorRGBA(double r, double g, double b, double a) {
+        return SetColorRGBA(rgba(r, g, b, a));
+    }
+    std_msgs::ColorRGBA GetColorRGBA() {
+        std_msgs::ColorRGBA val;
+        val.r = r;
+        val.g = g;
+        val.b = b;
+        val.a = a;
+        return val;
+    }
+    std_msgs::ColorRGBA SetColorRGBA(rgba color) {
+        std_msgs::ColorRGBA val;
+        val.r = color.r;
+        val.g = color.g;
+        val.b = color.b;
+        val.a = color.a;
+        return val;
+    }
+};
+
+
+/**
+ * The SceneObject is a class to represent various RVIZ markers in the "scene". 
  * There can be a number of objects in a scene, Depending on the instance, different 
  * parameters from the class are used. The class definition is merely a union of all
- * possible parameters. Depending on the ObjectDB type a different set of parameters 
+ * possible parameters. Depending on the SceneObject type a different set of parameters 
  * will be used.
  * 
  * */
-struct ObjectDB {
-    //bool King;
+class SceneObject {
+public:
+    static SceneObject nullref;
 
-    ObjectDB() {
+    SceneObject() {
+        rawcolor = dummyColor;
     }
 
-    ObjectDB(
+    SceneObject(
             std::string name,
             std::string metatype,
             std::size_t id) {
+        rawcolor = dummyColor;
 
         this->name = name;
         this->metatype = metatype;
         this->id = id;
     }
     std::size_t id;
+    std::vector<std::size_t> ids; // for multiple markers per object
     std::string name;
-    //std::string type;
     std::string metatype; /**< mesh, cuboid, cylinder */
     std::string subtype; /**< solid, wireframe */
-    std::string color;
-    std_msgs::ColorRGBA rawcolor;
-    Eigen::Affine3d pose;
-    Eigen::Affine3d gripperoffset;
-    double gripperclosewidth; // displacement of gripper closed in meters
+    //std::string color;
+    std_msgs::ColorRGBA rawcolor, firstcolor;
+     tf::Pose pose;
+    tf::Pose gripperoffset;
+   double gripperclosewidth; // displacement of gripper closed in meters
 
     // Mesh definitionss
     std::string filepath; /**< file path of the mesh file (STL) */
     double scale; /**< scale factor of the mesh */
 
-    std::string firstcolor; // rviz_visual_tools::colors firstcolor;
-    Eigen::Affine3d adjacentpose;
-    Eigen::Vector3d centroid;
+    //std::string firstcolor; // rviz_visual_tools::colors firstcolor;
+     
+    tf::Pose adjacentpose;
+    tf::Vector3 centroid;
     double depth, width, height, radius;
 
     // Metatype name mapping into rviz_visual_tools id marker type (e.g. gear into mesh)
     static std::map<std::string, std::string> _typemapping;
     boost::shared_ptr<ShapeModel::Instance> instance;
+    static std_msgs::ColorRGBA dummyColor;
+    static std::string DumpObject(SceneObject&);
 
 };
 
 /**
  * \brief The scene represents all the objects to be drawn in rviz using rviz_visual_tools. 
- * There can be a number of objects in a scene.
+ * There can be a number of objects in a scene.You could just use the package rviz_visual_tools,
+ * but this helps with some other scene objects. Doubt if its thread safe.
  * 
  * */
 struct Scene {
     Scene();
-    int MARKERCOLOR(std::string X);
-    std::string MARKERCOLOR(int X);
-    bool DrawObject(ObjectDB *obj);
+    static std::string GetColorName(std_msgs::ColorRGBA c);
+    static std_msgs::ColorRGBA GetColor(std::string name);
+    bool DrawObject(SceneObject &obj);
     void ClearScene();
     void NewScene();
-    void InitScene();
-    void BuildScene();
-    void ChangeColor(std::string objname, std::string color); // rviz_visual_tools::colors color);
-    void UpdateScene(std::string objname, Eigen::Affine3d pose, std::string color); // rviz_visual_tools::colors color);
-    void UpdateScene(ObjectDB * obj);
+    void InitScene(ros::NodeHandle & nh, std::string base_frame_);
+    void ChangeColor(std::string objname, std_msgs::ColorRGBA color); 
+    void UpdateScene(std::string objname, tf::Pose pose, std_msgs::ColorRGBA color); 
+    void UpdateScene(SceneObject & obj);
     void DrawScene();
     void DeleteObject(std::string objname);
-    bool publishCylinder(Eigen::Affine3d pose,
-            std::string color,
-            double radius,
-            double height,
-            size_t &id);
-    bool publishLine(const Eigen::Vector3d &point1,
-            const Eigen::Vector3d &point2,
-            const std_msgs::ColorRGBA &color,
-            double radius,
-            size_t &id);
 
-    ObjectDB * CreateMesh(
+
+    SceneObject & CreateMesh(
             std::string name,
             std::string metatype,
             std::size_t id,
-            Eigen::Affine3d pose,
+            tf::Pose pose,
             std::string filepath,
-            std::string color = "CLEAR",
+            std_msgs::ColorRGBA color,
             double scale = 1.0);
+
     // cuboid
-    ObjectDB * CreateCuboid(
+    SceneObject & CreateCuboid(
             std::string name,
             std::string metatype,
-            Eigen::Affine3d pose = Eigen::Affine3d::Identity(),
-            Eigen::Affine3d adjacentpose = Eigen::Affine3d::Identity(),
-            std::string color = "CLEAR"
+            tf::Pose pose = tf::Identity(),
+            tf::Pose adjacentpose = tf::Identity(),
+            std_msgs::ColorRGBA color=GetColor("CLEAR")
             );
+
     // cylinder
-    ObjectDB * CreateCylinder(std::string name,
+    SceneObject & CreateCylinder(std::string name,
             std::string metatype,
-            Eigen::Affine3d pose,
-            std::string color, //rviz_visual_tools::colors color,
+            tf::Pose pose,
+            std_msgs::ColorRGBA color,
             double height,
             double radius,
             const std::string &ns);
+
     // Line
-    ObjectDB * CreateLine(std::string name,
+    SceneObject & CreateLine(std::string name,
             std::string metatype,
-            Eigen::Vector3d point1,
-            Eigen::Vector3d point2,
+            tf::Vector3 point1,
+            tf::Vector3 point2,
             std_msgs::ColorRGBA color,
             double radius);
 
-    std_msgs::ColorRGBA make_rawcolor(double const r, double const g, const double b, double const a) {
-        std_msgs::ColorRGBA out;
-        out.r = r;
-        out.g = g;
-        out.b = b;
-        out.a = a;
-        return out;
-    }
-    void MakeConfetti();
     // x cross marker
-    ObjectDB * CreateMarker(std::string name,
-            Eigen::Affine3d pose,
-            std::string color);
+    SceneObject & CreateMarker(std::string name,
+            tf::Pose pose,
+            std_msgs::ColorRGBA color);
 
     // wireframe cuboid
-    ObjectDB* CreateWireframeCuboid(std::string name,
+    SceneObject& CreateWireframeCuboid(std::string name,
             std::string metatype,
-            Eigen::Affine3d pose,
+            tf::Pose pose,
             double depth = 0.005,
             double width = 0.005,
             double height = 0.01,
-            std::string color = "GREEN",
+            std_msgs::ColorRGBA color=GetColor("GREEN"),
             const std::string &ns = "WireframeCuboid");
 
-    void Save(ObjectDB * obj);
+    bool CreateWall(std::string name,
+            std_msgs::ColorRGBA rgbacolor,
+            std::string frameid,
+            tf::Vector3 v1,
+            tf::Vector3 v2);
 
-    ObjectDB * Find(std::size_t id);
+    bool CreateTable(std::string name,
+            std_msgs::ColorRGBA rgbacolor,
+            std::string frameid,
+            double table_length,
+            double table_width,
+            double table_height,
+            tf::Pose centertablepose);
 
-    Eigen::Affine3d& FindPose(std::string name);
-
-    ObjectDB * Find(std::string name);
-
+    //void Save(SceneObject & obj);
+    // FIXME: add delete object
+    SceneObject & Find(std::size_t id);
+    tf::Pose& FindPose(std::string name);
+    SceneObject & Find(std::string name);
     std::string DumpDB();
 
-    static ObjectDB * dummy;
+    void SetBaseFrame(std::string base_frame_);
+
+    std::string GetBaseFrame() {
+        return frameid;
+    }
+
+    void MakeConfetti();
+
+    static bool IsNull(SceneObject & obj) {
+        return &obj == &SceneObject::nullref;
+    } 
+    static SceneObject & NullObj(){ return SceneObject::nullref; }
     static std::size_t gid;
+
+private:
+    ros::Publisher marker_pub;
+    /**
+     * \brief Array of matching rviz visual tools color string and corresdponing  rgb and alpha color.
+     */
+    static std::map<std::string, rgba> _color_index;
+    std::string frameid;
     double global_scale_;
-    std::vector<ObjectDB*> objects;
-    //Eigen::Affine3d fanucoffset00;
-
-    rviz_visual_tools::RvizVisualToolsPtr visual_tools;
-    //extern boost::shared_ptr<SonOfRvizVisualTools> visual_tools;// did not work
-    visualization_msgs::Marker triangle_marker_;
-    visualization_msgs::Marker cylinder_marker_;
-    visualization_msgs::Marker line_strip_marker_;
-    //std::vector<tf::Pose> gearspots;
-    //std::vector<tf::Pose> sku_gear_vessel;  // fixme needs description of gear size to match
-
+    std::vector<SceneObject> objects;
+    std::map<std::string, std::vector<SceneObject> > compound_objs;
+    visualization_msgs::Marker generic_marker_;
+    
+    void publishCylinder(tf::Pose pose,
+            std_msgs::ColorRGBA color,
+            double radius,
+            double height,
+            size_t id);
+    void publishCuboid(tf::Pose &pose1, tf::Pose &pose2,
+            std_msgs::ColorRGBA color,
+            size_t id);
+    void publishCuboid(tf::Pose &midpoint, double depth, double width, double height,
+            std_msgs::ColorRGBA color,
+            size_t id);
+    void publishLine(const tf::Vector3 &point1,
+            const tf::Vector3 &point2,
+            const std_msgs::ColorRGBA &color,
+            double radius,
+            size_t &id);
+    void Scene::publishSphere(const tf::Pose &pose,
+            std_msgs::ColorRGBA color,
+            double scale,
+            std::size_t id);
+    void publishMesh(const tf::Pose &pose,
+            const std::string &file_name,
+            std_msgs::ColorRGBA color,
+            double scale,
+            std::size_t id);
+    void publishText(const tf::Pose &pose,
+            const std::string &text,
+            std_msgs::ColorRGBA color,
+            const tf::Vector3 scale,
+            std::size_t id);
+    void publishWireframeRectangle(const tf::Pose &pose,
+            double height,
+            double width,
+            std_msgs::ColorRGBA color,
+            double scale,
+            std::size_t id);
 };
+
 extern boost::shared_ptr<Scene> pScene;
 
-struct SonOfRvizVisualTools : public rviz_visual_tools::RvizVisualTools {
 
-    SonOfRvizVisualTools(const std::string &base_frame) : rviz_visual_tools::RvizVisualTools(base_frame) {
-    }
-
-    size_t GetCylinderId() {
-        return rviz_visual_tools::RvizVisualTools::cylinder_marker_.id;
-    }
-};
 #include "confetti.h"
 
 struct Piece {
@@ -206,7 +305,7 @@ protected:
     double x;
     double y;
     double z;
-    ObjectDB* obj;
+    SceneObject& obj;
     static int n;
     boost::shared_ptr<Scene> pScene;
 public:
@@ -216,7 +315,7 @@ public:
     std_msgs::ColorRGBA color;
     static std::vector<Piece*> pieces;
 
-    Piece(boost::shared_ptr<Scene> _pScene) : pScene(_pScene) {
+    Piece(boost::shared_ptr<Scene> _pScene) : pScene(_pScene), obj(SceneObject::nullref) {
         type = Math.floor(Math.random() * 5);
         d = .1;
         dx = 0;
@@ -226,7 +325,7 @@ public:
         pieces.push_back(this);
     }
 
-    Eigen::Vector3d compute_dxyz() {
+    tf::Vector3 compute_dxyz() {
         double a = Math.random() * Math.PI * 2;
 
         m = 0.0;
@@ -255,31 +354,57 @@ public:
         dx = ((s + 4) * Math.sin(a)) / 1000.0;
         dy = ((s + 4) * Math.cos(a) - 2) / 1000.0;
         dz = .005;
-        return Eigen::Vector3d(dx, dy, dz);
+        return tf::Vector3(dx, dy, dz);
     }
+
     void launch(double x, double y, double z) {
         this->x = x;
         this->y = y;
         this->z = z;
 
-        Eigen::Vector3d origin(x, y, z);
-        Eigen::Vector3d offset = origin + compute_dxyz();
-        
+        tf::Vector3  origin(x, y, z);
+        tf::Vector3  offset = origin + compute_dxyz();
+
         obj = pScene->CreateLine(Globals.StrFormat("confetti%d", n++), "confetti",
                 origin, offset,
-                pScene->make_rawcolor(Random(0.0, 128.0),
-                Random(0.0, 128.0),
-                Random(0.0, 128.0),
-                1.0),
-                .005);
+                rgba(Random(0.0, 128.0),Random(0.0, 128.0),Random(0.0, 128.0)).GetColorRGBA(),
+                 .005);
     }
 
     void Update() {
-        //ObjectDB * obj = pScene->Find(StrFormat("confetti%d",i));
-        Eigen::Translation3d diff(dx, dy, dz);
-        obj->pose = obj->pose * diff;
-        obj->adjacentpose = obj->adjacentpose * diff;
+        //SceneObject * obj = pScene->Find(StrFormat("confetti%d",i));
+        tf::Pose diff(tf::QIdentity(), tf::Vector3(dx, dy, dz));
+        obj.pose = obj.pose * diff;
+        obj.adjacentpose = obj.adjacentpose * diff;
         pScene->UpdateScene(obj);
     }
 
+};
+
+
+/**
+int _tmain(int argc, _TCHAR* argv[])
+{
+vector<rgba> myCols;
+cColorPicker colpick;
+colpick.Pick( myCols, 20 );
+for( int k = 0; k < (int)myCols.size(); k++ )
+printf("%d: %d %d %d\n", k+1,
+( myCols[k] & 0xFF0000 ) >>16,
+( myCols[k] & 0xFF00 ) >>8,
+( myCols[k] & 0xFF ) );
+
+return 0;
+}
+ */
+typedef unsigned char UCHAR;
+
+class cColorPicker {
+public:
+    void Pick(std::vector<rgba>&v_picked_cols, int count, int bright = 50);
+    //  void Pick( std::vector<DWORD>&v_picked_cols, int count, int bright = 50 );
+private:
+    rgba HSL2RGB(int h, int s, int v);
+    // DWORD HSL2RGB( int h, int s, int v );
+    unsigned char ToRGB1(float rm1, float rm2, float rh);
 };

@@ -12,7 +12,8 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
  */
 
 //#pragma message "Compiling " __FILE__ 
-#pragma once
-
+#ifndef _CONFETTI_HEADER_
+#define _CONFETTI_HEADER_
 #include <NIST/CMath.h>
+#endif
 

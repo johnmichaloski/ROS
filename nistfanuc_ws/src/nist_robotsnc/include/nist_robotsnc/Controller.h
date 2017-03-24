@@ -180,7 +180,10 @@ namespace RCS {
         VAR(invBasePose, tf::Pose);
         VAR(QBend, tf::Quaternion);
         VAR(bGrasping, bool)
-        VAR(GraspObj, ObjectDB * )
+        protected: SceneObject  _GraspObj; \
+	public: SceneObject & GraspObj( ) { return _GraspObj; }
+
+        //VAR(GraspObj, SceneObject *)
                 
 
         ros::NodeHandle *_nh;

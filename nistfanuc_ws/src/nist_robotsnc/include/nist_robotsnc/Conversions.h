@@ -54,7 +54,11 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 // Transform http://docs.ros.org/jade/api/tf/html/c++/classtf_1_1Transform.html
 // Quaternion http://docs.ros.org/jade/api/tf/html/c++/classtf_1_1Quaternion.html
 
+namespace tf {
+    inline tf::Pose Identity() {  tf::Pose p; p.setIdentity(); return p; }
+    inline tf::Quaternion QIdentity() {  return tf::Quaternion(0.0,0.0,0.0,1.0); }
 
+};
 
 
 /**
@@ -206,7 +210,16 @@ namespace Conversion {
     inline tf::Pose Convert<tf::Vector3, tf::Pose>(tf::Vector3 t) {
         return tf::Pose(tf::Quaternion(0.0, 0.0, 0.0, 1.0), t);
     }
-
+    /*!
+     * \brief Convert  tf::Pose into tf::Vector3.
+     * \param  p is tf::Pose.
+     * \return tf::Vector3 
+     */
+    template<>
+    inline tf::Vector3 Convert<tf::Pose, tf::Vector3>(tf::Pose t) {
+        return t.getOrigin();
+    }
+    
     /*!
      * \brief Convert Eigen::Matrix4d into tf::Pose.
      * \param  m is Eigen 4x4 matrix to be converted into a tf::Pose.
@@ -469,10 +482,10 @@ namespace Conversion {
      * \return  Eigen::Affine3d pose 
      */
     template<>
-    inline Eigen::Affine3d Convert<geometry_msgs::Point, Eigen::Affine3d>(geometry_msgs::Point point) {
+    inline Eigen::Affine3d Convert<>(geometry_msgs::Point point) {
         return Eigen::Affine3d::Identity() * Eigen::Translation3d(point.x, point.y, point.z);
     }
-    
+
     /*!
      * \brief Convert Eigen::Affine3d  into an  Eigen::Vector3d vector.
      * \param e is  pose defined as a Eigen Affine3d.
@@ -532,7 +545,49 @@ namespace Conversion {
         pt.z = point.z();
         return pt;
     }
-
+        /*!
+     * \brief Convert tf::Vector3 vector  translation into an  geometry_msgs::Point.
+     * \param point is translation  defined as a tf::Vector3 vector.
+     * \return  geometry_msgs::Point vector 
+     */
+    template<>
+    inline geometry_msgs::Vector3 Convert<tf::Vector3, geometry_msgs::Vector3>(tf::Vector3 point) {
+        geometry_msgs::Vector3 v;
+        v.x = point.x();
+        v.y = point.y();
+        v.z = point.z();
+        return v;
+    }
+    template<>
+    inline geometry_msgs::Point Convert<tf::Vector3, geometry_msgs::Point>(tf::Vector3 point) {
+        geometry_msgs::Point pt;
+        pt.x = point.x();
+        pt.y = point.y();
+        pt.z = point.z();
+        return pt;
+    }
+    /*!
+     * \brief Convert Eigen::Vector3d translation into an  geometry_msgs Vector3.
+     * \param vector is defined as a Eigen::Vector3d.
+     * \return  geometry_msgs :Vector3e 
+     */
+    template<>
+    inline geometry_msgs::Vector3 Convert<Eigen::Vector3d, geometry_msgs::Vector3 >(Eigen::Vector3d e) {
+        geometry_msgs::Vector3 v;
+        v.x=e.x(); v.y=e.y(); v.z=e.z();
+        return v;
+    }
+    /*!
+     * \brief Convert Eigen::Vector3d translation into an  geometry_msgs Vector3.
+     * \param vector is defined as a Eigen::Vector3d.
+     * \return  geometry_msgs :Vector3e 
+     */
+    template<>
+    inline geometry_msgs::Vector3 Convert<double, geometry_msgs::Vector3 >(double scale) {
+        geometry_msgs::Vector3 v;
+        v.x=scale; v.y=scale; v.z=scale;
+        return v;
+    }
     /*!
      * \brief Convert Eigen::Affine3d pose into an geometry_msgs::Pose pose.
      * \param e is Eigen::Affine3d defining equivalent pose.

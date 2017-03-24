@@ -52,9 +52,6 @@ namespace pt = boost::property_tree;
 
 using namespace Conversion;
 
-// pose is the midpoint of x,y,z
-
-
 int main(int argc, char** argv) {
     int bPublishPoint = 0;
     //signal(SIGSEGV, handler);   // install our handler
@@ -122,8 +119,7 @@ int main(int argc, char** argv) {
         Globals.WriteFile(Globals.ExeDirectory + "rosconfig.txt", params);
         path = ros::package::getPath(ROSPACKAGENAME);
 
-        pScene->InitScene();
-        pScene->BuildScene(); // demo actually builds scene
+ 
 #ifdef GEARS
         GearDemo geardemo(nh, path, Convert<tf::Vector3, tf::Pose>(tf::Vector3(0.25, 0.5, 0.0)));
 
@@ -146,11 +142,11 @@ int main(int argc, char** argv) {
         std::vector<InlineRobotCommands > nccmds;
         std::vector<double> ds;
         pt::ptree root;
+        std::string baselink;
 
         try {
             // Load the json file in this ptree
             pt::read_ini(path + "/config/" + ROSPACKAGENAME + ".ini", root);
-
             std::vector<std::string> robots = GetIniTypes<std::string>(root, "system.robots");
             for (size_t i = 0; i < robots.size(); i++) {
                 ofsRobotURDF << "============================================================\n";
@@ -158,7 +154,7 @@ int main(int argc, char** argv) {
                 double dCycleTime = root.get<double>(robots[i] + ".cycletime", 10.0);
                 std::string prefix = root.get<std::string>(robots[i] + ".prefix", "");
                 std::string eelink = root.get<std::string>(robots[i] + ".eelink", "");
-                std::string baselink = root.get<std::string>(robots[i] + ".baselink", "");
+                baselink = root.get<std::string>(robots[i] + ".baselink", "");
                 std::vector<double> dbase = GetIniTypes<double>(root, robots[i] + ".base");
                 std::vector<double> dtool = GetIniTypes<double>(root, robots[i] + ".tool");
                 std::vector<double> dbend = GetIniTypes<double>(root, robots[i] + ".bend");
@@ -222,6 +218,31 @@ int main(int argc, char** argv) {
             LOG_FATAL << e.what();
             throw;
         }
+        
+        pScene->InitScene(nh, baselink);
+        
+        double table_length = root.get<double>("checkers.TABLE_LENGTH", 0.4);
+        double table_width = root.get<double>("checkers.TABLE_WIDTH", 0.4);
+        double table_height = root.get<double>("checkers.TABLE_HEIGHT", 0.05);
+        std::vector<double> xyz = GetIniTypes<double>(root, "checkers.TABLE_CENTER");
+        tf::Pose centertablepose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(xyz[0], xyz[1], xyz[2]));
+
+        pScene->CreateTable("table1",
+                rgba(1.0, 0.0, 0.0, 1.0).GetColorRGBA(),
+                "world",
+                table_length,
+                table_width,
+                table_height,
+                centertablepose);
+        pScene->DrawScene();
+        cColorPicker colorpicker;
+        std::vector<rgba> myCols;
+        colorpicker.Pick(myCols, 50);
+        for(size_t j=0; j< myCols.size(); j++){
+            pScene->ChangeColor("table1", myCols[j].GetColorRGBA());
+            ros::Duration(0.05).sleep();
+        }
+
 #ifdef EXERCISER
         ExerciseDemo exercise(nh);
         IKinematics::_testspacing = root.get<double>("testharness.spacing", 0.5);

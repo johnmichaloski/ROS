@@ -13,7 +13,7 @@ maintenance, and subsequent redistribution.
 See NIST Administration Manual 4.09.07 b and Appendix I.
  */
 
-#include <rviz_visual_tools/rviz_visual_tools.h>
+////#include <rviz_visual_tools/rviz_visual_tools.h>
 #include <ros/ros.h>
 #include <geometry_msgs/PointStamped.h>
 
@@ -110,23 +110,23 @@ struct RvizCheckers {
 
     }
 
-    Eigen::Affine3d GetPose(int row, int col) {
+    tf::Pose GetPose(int row, int col) {
         // Input into this method assumes only correct row/col choices
         assert(row < ROWS);
         assert(col < COLS);
         assert((row + col) % 2 == 1);
-        Eigen::Vector3d v;
-        Eigen::Affine3d pose;
+        tf::Vector3 v;
+        tf::Pose pose;
         if (BOARD_DIRECTION == LEFTRIGHT) {
             double rowoffset = XOFFSET + (SQOFFSET * row);
             double coloffset = YOFFSET + (col * SQOFFSET);
-            v = Eigen::Vector3d(rowoffset + SQOFFSET / 2.0, coloffset + SQOFFSET / 2.0, ZOFFSET+HEIGHT);
-            pose = Convert<Eigen::Vector3d, Eigen::Affine3d>(v);
+            v = tf::Vector3(rowoffset + SQOFFSET / 2.0, coloffset + SQOFFSET / 2.0, ZOFFSET+HEIGHT);
+            pose = Convert<tf::Vector3, tf::Pose>(v);
         } else if (BOARD_DIRECTION == UPDOWN) {
             double rowoffset = YOFFSET + (SQOFFSET * row);
             double coloffset = XOFFSET + (col * SQOFFSET);
-            v = Eigen::Vector3d(coloffset + SQOFFSET / 2.0, rowoffset + SQOFFSET / 2.0, ZOFFSET+HEIGHT);
-            pose = Convert<Eigen::Vector3d, Eigen::Affine3d> (v);
+            v = tf::Vector3(coloffset + SQOFFSET / 2.0, rowoffset + SQOFFSET / 2.0, ZOFFSET+HEIGHT);
+            pose = Convert<tf::Vector3, tf::Pose> (v);
         }
         return pose;
     }
@@ -147,34 +147,34 @@ struct RvizCheckers {
        }
     }
 
-    Eigen::Vector3d GetCentroid(double rowoffset, double coloffset) {
+    tf::Vector3 GetCentroid(double rowoffset, double coloffset) {
         if (BOARD_DIRECTION == LEFTRIGHT) {
-        return Eigen::Vector3d(rowoffset + SQOFFSET / 2.0, coloffset + SQOFFSET / 2.0, ZOFFSET+HEIGHT);
+        return tf::Vector3(rowoffset + SQOFFSET / 2.0, coloffset + SQOFFSET / 2.0, ZOFFSET+HEIGHT);
        } else if (BOARD_DIRECTION == UPDOWN) {
-        return Eigen::Vector3d(coloffset + SQOFFSET / 2.0, rowoffset + SQOFFSET / 2.0, ZOFFSET+HEIGHT);
+        return tf::Vector3(coloffset + SQOFFSET / 2.0, rowoffset + SQOFFSET / 2.0, ZOFFSET+HEIGHT);
        }
     }
 
     /** \brief computes upper limit of board (top = HEIGHT)*/
     tf::Vector3 GetUp(double rowoffset, double coloffset) {
-        Eigen::Vector3d up;
+        tf::Vector3 up;
         if (BOARD_DIRECTION == LEFTRIGHT) {
-            up = Eigen::Vector3d(rowoffset, coloffset,ZOFFSET+ HEIGHT);
+            up = tf::Vector3(rowoffset, coloffset,ZOFFSET+ HEIGHT);
         } else if (BOARD_DIRECTION == UPDOWN) {
-            up = Eigen::Vector3d(coloffset, rowoffset,ZOFFSET+ HEIGHT);
+            up = tf::Vector3(coloffset, rowoffset,ZOFFSET+ HEIGHT);
         }
-        return Convert<Eigen::Vector3d, tf::Vector3 >(up);
+        return up;
     }
 
     /** \brief computes lower limit of board (bottom)*/
     tf::Vector3 GetDown(double rowoffset, double coloffset) {
-        Eigen::Vector3d down;
+        tf::Vector3 down;
         if (BOARD_DIRECTION == LEFTRIGHT) {
-            down = Eigen::Vector3d(rowoffset + SQOFFSET, coloffset + SQOFFSET, ZOFFSET);
+            down = tf::Vector3(rowoffset + SQOFFSET, coloffset + SQOFFSET, ZOFFSET);
         } else if (BOARD_DIRECTION == UPDOWN) {
-            down = Eigen::Vector3d(coloffset + SQOFFSET, rowoffset + SQOFFSET, ZOFFSET);
+            down = tf::Vector3(coloffset + SQOFFSET, rowoffset + SQOFFSET, ZOFFSET);
         }
-        return Convert<Eigen::Vector3d, tf::Vector3 >(down);
+        return down;
     }
 
     void RvizBoardSetup() {
@@ -188,15 +188,15 @@ struct RvizCheckers {
                 //LOG_DEBUG << "Rowoffset="<<rowoffset << " Coloffset="<<coloffset << "\n";
 
                 std::string sqname = Globals.StrFormat("Square[%d:%d]", row, i);
-                ObjectDB * obj;
+                SceneObject & obj(SceneObject::nullref);
  
                 obj = pScene->CreateCuboid(sqname,
                         "Checkerboard",
-                         Convert<tf::Pose, Eigen::Affine3d>(tf::Pose(qidentity, GetUp(rowoffset, coloffset))),
-                         Convert<tf::Pose, Eigen::Affine3d>(tf::Pose(qidentity, GetDown(rowoffset, coloffset))),
-                        "WHITE");
+                         tf::Pose(qidentity, GetUp(rowoffset, coloffset)),
+                         tf::Pose(qidentity, GetDown(rowoffset, coloffset)),
+                        Scene::GetColor("WHITE"));
                
-                obj->centroid = GetCentroid(rowoffset, coloffset);
+                obj.centroid = GetCentroid(rowoffset, coloffset);
 
                 sqname = Globals.StrFormat("Square[%d:%d]", row, i + 1);
                 if (row % 2 == 0) coloffset = coloffset - SQOFFSET; // red offset at zero
@@ -204,15 +204,16 @@ struct RvizCheckers {
 
                 obj = pScene->CreateCuboid(sqname,
                         "Checkerboard",
-                        Convert<tf::Pose, Eigen::Affine3d>(tf::Pose(qidentity, GetUp(rowoffset, coloffset))),
-                        Convert<tf::Pose, Eigen::Affine3d>(tf::Pose(qidentity, GetDown(rowoffset, coloffset))),
-                        "BLACK");
-                obj->centroid = GetCentroid(rowoffset, coloffset);
+                        tf::Pose(qidentity, GetUp(rowoffset, coloffset)),
+                        tf::Pose(qidentity, GetDown(rowoffset, coloffset)),
+                        Scene::GetColor("BLACK"));
+                obj.centroid = GetCentroid(rowoffset, coloffset);
             }
         }
     }
 
     void RvizPiecesSetup() {     
+        tf::Quaternion qidentity(0.0, 0.0, 0.0, 1.0);
         LOG_DEBUG << Game().printDisplayFancy(this->Game().Board()).c_str();
         for (size_t row = 0; row < ROWS; row++) {
             double rowoffset = RowOffset(row);
@@ -220,7 +221,7 @@ struct RvizCheckers {
                 double coloffset = ColOffset(i);
                 if (row % 2 == 0) coloffset = coloffset + SQOFFSET; // red offset at zero
 
-                ObjectDB * checker;
+                SceneObject & checker(SceneObject::nullref);
                 double checkerheight = HEIGHT/2.0;
                 size_t checkercol = (row % 2 == 0) ? i + 1 : i;
                 std::string checkercolor = "CLEAR";
@@ -234,12 +235,12 @@ struct RvizCheckers {
                     checkerheight *= 2;
 
                 if (checkercolor != "CLEAR") {
-                    Eigen::Affine3d epose = Eigen::Affine3d(Eigen::Translation3d(GetCentroid(rowoffset, coloffset)));
+                    tf::Pose epose = tf::Pose(qidentity,GetCentroid(rowoffset, coloffset));
                      std::string checkername = Globals.StrFormat("Checker[%d:%d]", row, checkercol);
                     checker = pScene->CreateCylinder(checkername,
                             "Cylinder",
-                            epose, //FIXME: base offset?
-                            checkercolor,
+                            epose, 
+                            Scene::GetColor(checkercolor),
                             checkerheight,
                             RADIUS,
                             "Cylinder");
@@ -248,11 +249,6 @@ struct RvizCheckers {
         }
     }
 
-    void SetCheckerColor(Checkers::Move m, std::string color) { // rviz_visual_tools::colors color) {
-        std::string checkername = Globals.StrFormat("Checker[%d:%d]", m.row, m.col);
-        Eigen::Affine3d pose = pScene->FindPose(checkername);
-        pScene->ChangeColor(checkername, color);
-    }
 
     bool IsKing(Checkers::Move m) {
         return ISKING(game.Board()[m.row][m.col]);

@@ -41,7 +41,7 @@ float64   dwell_seconds
 string opmessage
 string partname
 string partfeature
-uint64  partcolor
+std_msgs/ColorRGBA  partcolor
 bool bCoordinated
 float64 eepercent
 CrclMaxProfileMsg[] profile # maximum profile 

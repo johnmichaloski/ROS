@@ -196,9 +196,9 @@ namespace RCS {
         cartesian_status.publish(profile);
 
         std::vector<tf::Pose> poses = Kinematics()->ComputeAllFk(status.currentjoints.position);
-        if (bGrasping() && GraspObj() != NULL) {
+        if (bGrasping()){ // && GraspObj() != NULL) {
             tf::Pose tfpose = basePose() * status.currentpose * gripperPose();
-            GraspObj()->pose = Eigen::Affine3d::Identity() * Convert<tf::Pose, Eigen::Affine3d>(tfpose);
+            GraspObj().pose = tfpose; // Eigen::Affine3d::Identity() * Convert<tf::Pose, Eigen::Affine3d>(tfpose);
             pScene->UpdateScene(GraspObj());
         }
         
@@ -374,19 +374,18 @@ nextposition:
                     // No speed control for now.
 
                 } else if (_newcc.crclcommand == CanonCmdType::CANON_ERASE_OBJECT) {
-                    Eigen::Affine3d& pose = pScene->FindPose(_newcc.partname);
-                    pScene->UpdateScene(_newcc.partname, pose, "CLEAR");
+                    tf::Pose& pose = pScene->FindPose(_newcc.partname);
+                    pScene->UpdateScene(_newcc.partname, pose, Scene::GetColor("CLEAR"));
                 } else if (_newcc.crclcommand == CanonCmdType::CANON_GRASP_OBJECT) {
                      GraspObj() = pScene->Find(_newcc.partname);
                      bGrasping()=true;
                 }else if (_newcc.crclcommand == CanonCmdType::CANON_RELEASE_OBJECT) {
-                     GraspObj() = NULL;
+                     GraspObj() = Scene::NullObj();
                      bGrasping()=false;
-                } else if (_newcc.crclcommand == CanonCmdType::CANON_DRAW_OBJECT) {
-                    Eigen::Affine3d pose= Convert<geometry_msgs::Pose, Eigen::Affine3d> (_newcc.finalpose);
-                    pScene->UpdateScene(_newcc.partname,
-                            pose,
-                            pScene->MARKERCOLOR(_newcc.partcolor));
+//                } else if (_newcc.crclcommand == CanonCmdType::CANON_DRAW_OBJECT) {
+//                     pScene->UpdateScene(_newcc.partname.c_str(),
+//                            _Enewcc.finalpose,
+//                            _newcc.partcolor);
                 } else if (_newcc.crclcommand == CanonCmdType::CANON_SET_GRIPPER_POSE) {
                     gripperPose() = Conversion::Convert<geometry_msgs::Pose, tf::Pose>(_newcc.finalpose);
                     invGripperPose() = gripperPose().inverse();

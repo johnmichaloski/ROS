@@ -84,12 +84,15 @@ To run the rqt_plot at a terminal console with ROS and the NIST conttroller runn
  
 which listens to the published vel/acc/jerk values published by the fanuc lr mate controller. You have to play with the display to see anything, since the vel/acc/jerk are small. It is suggested to use the last button on the right (the check mark) and change x to run from 0 to 1000.  
 Then you can use the fourth button (zoom) which allows you to draw crosshairs that can select a range of the plot to zoom in on (from 80-110) or 30 time units. The x axis is the time sequence. This can be done since the profile will be a visible blip, but might be small. Just zoom in, and you should see the vel/acc/jerk profile. The checkers sequence is evident in the plot: first, the robot approaches the hecker offset, then the robot descends to the part, grasps the checker, and retracts to a safe distance, and then makes the checker move: approach, descend, release the checker, and depart. Finally, a coordinated joint move to a programmed "safe" robot position. The last joint move has slower max profile so the plot is flatter with an actual hump.
+
 
 <CENTER>
 ![Figure1](./images/image1.gif?raw=true)
 </CENTER>
 
-Then, the plot is zoomed again, 110-130, that is 20 total time units.
+
+Then, the plot is zoomed again, 110-130, that is 20 total time units.
+
 <CENTER>
 ![Figure2](./images/image2.gif?raw=true)
 </CENTER>

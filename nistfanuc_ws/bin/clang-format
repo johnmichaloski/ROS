@@ -1,0 +1,26 @@
+#!/bin/bash
+
+CWD="$(pwd)"
+echo $CWD
+function clangit(){
+local FILES="*.cpp"
+for f in $FILES
+do
+echo "cpp=${f}" 
+	clang-format-3.4 -i $f 
+done
+
+FILES="*.h"
+for f in $FILES
+do
+echo "*h=${f}"
+	clang-format-3.4 -i $f # uncrustify  -c $1 --replace $f
+done
+}
+
+
+find ../src/nist_robotsnc -iname *.h -o -iname *.cpp | xargs clang-format-3.4 -i
+
+
+
+

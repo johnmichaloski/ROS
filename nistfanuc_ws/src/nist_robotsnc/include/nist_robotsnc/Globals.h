@@ -100,6 +100,10 @@
 protected: Y _ ## X; \
 public: Y & X( ) { return _ ## X; }
 
+#define VARREF(X, Y)    \
+protected: Y &_ ## X; \
+public: Y & X( ) { return _ ## X; }
+
 #define RVAR(X, Y)    \
 protected: Y _ ## X; \
 public: Y  X( ) { return _ ## X; }

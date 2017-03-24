@@ -23,23 +23,15 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 using namespace RCS;
 using namespace Conversion;
 
-#ifndef PI_2
-#define PI_2 1.5707963268
-#endif
+//#ifndef PI_2
+//#define PI_2 1.5707963268
+//#endif
 
 boost::mutex RvizDemo::_flag_mutex;
 
-
-
-// Motoman - assuming at 0, .5, 0
-// 0 0 0 = 1.15 -1.74 0 1.34 .22 0 0  (hint)
-
 // Simplistic Testing code
 int InlineRobotCommands::crclcommandnum = 1;
-RCS::Pose retract = RCS::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0, 0, 0.1));
-// Checkers hint
-//  ToVector<double>(6, 0.27, 0.5, -0.4, 0.0, 0.0, 0.0);
-//std::vector<double> hint = ToVector<double> (6, 0.27, 0.7, -0.57, 0.0, 0.0, 0.0);
+RCS::Pose retract = RCS::Pose(tf::QIdentity(), tf::Vector3(0, 0, 0.1));
 
 void InlineRobotCommands::SetGripper(double ee) {
     // set gripper to 0..1
@@ -75,9 +67,11 @@ void InlineRobotCommands::MoveTo(RCS::Pose pose, std::string objname) {
     //cmd.hint = _hints.FindClosest(pose);
     cmd.finalpose = Convert<tf::Pose, geometry_msgs::Pose> (pose);
     if (!objname.empty()) {
-        ObjectDB * obj = pScene->Find(objname);
+        SceneObject & obj = pScene->Find(objname);
         cmd.partname = objname;
-        cmd.partcolor = (int) pScene->MARKERCOLOR(obj->color);
+        //cmd.partcolor = (int) pScene->MARKERCOLOR(obj.color);
+        cmd.partcolor = obj.rawcolor;
+        
         // lookup gripper close amount from object
     }
     _cnc->crclcmds.AddMsgQueue(cmd);
@@ -109,7 +103,7 @@ void InlineRobotCommands::MoveObject(std::string objname, RCS::Pose pose, std::s
     cmd.crclcommand = CanonCmdType::CANON_DRAW_OBJECT;
     cmd.crclcommandnum = crclcommandnum++;
     cmd.partname = objname;
-    cmd.partcolor = pScene->MARKERCOLOR(color);
+    cmd.partcolor = Scene::GetColor(color);
     cmd.finalpose = Convert<tf::Pose, geometry_msgs::Pose>(pose);
     _cnc->crclcmds.AddMsgQueue(cmd);
 }
@@ -186,14 +180,14 @@ bool GearDemo::IssueRobotCommands(InlineRobotCommands & r, bool bSafe) {
     // Ok we will move this gear - mark as no longer free standing
     instance->properties["state"] = "stored";
 
-    ObjectDB * obj = pScene->Find(instance->name);
-    NC_ASSERT(obj != NULL);
+    SceneObject &obj = pScene->Find(instance->name);
+    //NC_ASSERT(obj != NULL);
 
-    Eigen::Affine3d affpose = Convert<Eigen::Vector3d, Eigen::Affine3d>(obj->pose.translation()); 
+    tf::Pose affpose = obj.pose; // Convert<Eigen::Vector3d, Eigen::Affine3d>(obj.pose.translation()); 
     // The object gripper offset is where on the object it is to be gripped
-    tf::Pose gripperoffset = Convert<Eigen::Affine3d, tf::Pose>(obj->gripperoffset);
+    tf::Pose gripperoffset = obj.gripperoffset; // Convert<Eigen::Affine3d, tf::Pose>(obj.gripperoffset);
     // THe gripperoffset is the robot gripper offset back to the 0T6 equivalent
-    pickpose = RCS::Pose(r.QBend, Convert<Eigen::Vector3d,tf::Vector3>(affpose.translation()))*gripperoffset;
+    pickpose = RCS::Pose(r.QBend, affpose.getOrigin())* gripperoffset; // /*Convert<Eigen::Vector3d,tf::Vector3>(affpose.translation()))*gripperoffset;
 
     tf::Vector3 offset = pickpose.getOrigin();
 
@@ -281,15 +275,15 @@ void GearDemo::Setup() {
         tf::Pose gearpose = _baseoffset * _shapes.GetInstancePose(instances[i]);
 
         ShapeModel::Shape shape = _shapes.GetInstanceShape(instances[i]);
-        ObjectDB *obj = pScene->CreateMesh(gearname, "gear",
+        SceneObject &obj = pScene->CreateMesh(gearname, "gear",
                 pScene->gid++,
-                Convert<tf::Pose, Eigen::Affine3d>(gearpose),
+               gearpose,
                 shape.meshfile,
-                shape.color,
+                Scene::GetColor(shape.color),
                 shape.scale);
         std::vector<double> graspoffset = _shapes.GetChildValues<double>("parts." + shape.name + ".gripper.offset");
-        obj->gripperoffset = Convert<tf::Pose, Eigen::Affine3d>(Conversion::CreateRPYPose(graspoffset));
-        obj->instance = instances[i];
+        obj.gripperoffset = Conversion::CreateRPYPose(graspoffset);
+        obj.instance = instances[i];
         //        pScene->CreateMarker("maker",
         //                Convert<tf::Pose, Eigen::Affine3d>(gearpose * Conversion::CreatePose(tf::Vector3(0.0, 0.0, 0.04))
         //                ),
@@ -309,17 +303,17 @@ void GearDemo::Setup() {
         ShapeModel::Shape shape = _shapes.GetInstanceShape(instances[i]);
         //tf::Vector3 pos = shapes.GetInstancePosition(instances[i]); // +tf::Vector3(0.0455, 0.0356,0.0);
         //        pos.rotate(tf::Vector3(0.0,0.0,1.0), Deg2Rad(-90.0));
-        ObjectDB *obj = pScene->CreateMesh(holdername,
+        SceneObject &obj = pScene->CreateMesh(holdername,
                 "gearholder",
                 pScene->gid++,
-                Convert<tf::Pose, Eigen::Affine3d>(gearpose),
+                gearpose,
                 shape.meshfile,
-                shape.color,
+                Scene::GetColor(shape.color),
                 shape.scale);
-        obj->instance = instances[i];
+        obj.instance = instances[i];
 
     }
-    // Debug: LOG_DEBUG << ObjectDB::DumpDB();   
+    // Debug: LOG_DEBUG << SceneObject::DumpDB();   
 }
 
 void GearDemo::Reset() {
@@ -330,9 +324,7 @@ void GearDemo::Reset() {
 
 void GearDemo::Cycle(boost::shared_ptr<RCS::CController> nc, InlineRobotCommands&robot) {
     ros::Rate r(50);
-    //    nc->Suspend();
     while (IssueRobotCommands(robot) != NULL) {
-        //       nc->Start();
         while (nc->IsBusy()) {
             if (rvizdemo.Clicked()) {
                 RCS::Thread::SuspendAll();
@@ -344,7 +336,6 @@ void GearDemo::Cycle(boost::shared_ptr<RCS::CController> nc, InlineRobotCommands
             ros::spinOnce();
             r.sleep();
         }
-        //        nc->Suspend();
     }
 }
 //////////////////////////////////////////////////////////////////////////
@@ -356,139 +347,86 @@ CheckersGame::CheckersGame(ros::NodeHandle & nh) : _nh(nh) {
     rvizgame = boost::shared_ptr<RvizCheckers> (new RvizCheckers(nh));
 
 }
-
-static void DrawTable(boost::shared_ptr<CRvizMarker> rvizMarker, std::string baseframe, double length, double width, double height, tf::Pose pose) {
-    double x = pose.getOrigin().getX();
-    double y = pose.getOrigin().getY();
-    double z = pose.getOrigin().getZ();
-    double minx = x - length;
-    double maxx = x + length;
-    double miny = y - width;
-    double maxy = y + width;
-
-    rvizMarker->Scale(length, width, height);
-    rvizMarker->SetShape("cube");
-    //tf::Pose cube(tf::Quaternion(0, 0, 0, 1), tf::Vector3(x+(length/2.0), y+(width/2.0), z - height / 2.0));
-    tf::Pose cube(tf::Quaternion(0, 0, 0, 1), tf::Vector3(x, y, z - height / 2.0));
-    rvizMarker->Send(cube, baseframe);
-    ros::Duration(0.5).sleep();
-    rvizMarker->Send(cube, baseframe);
-
-    // legs
-    double legradius;
-    double legwidth;
-    legradius = legwidth = 0.05;
-    rvizMarker->SetShape("cylinder");
-    rvizMarker->Scale(legradius, legwidth, z);
-
-    tf::Pose leg1(tf::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(x + (length / 2.0) - legradius, y - (width / 2.0) + legradius, (z - height) / 2.0)));
-    tf::Pose leg2(tf::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(x - (length / 2.0) + legradius, y + (width / 2.0) - legradius, (z - height) / 2.0)));
-    tf::Pose leg3(tf::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(x + (length / 2.0) - legradius, y + (width / 2.0) - legradius, (z - height) / 2.0)));
-    tf::Pose leg4(tf::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(x - (length / 2.0) + legradius, y - (width / 2.0) + legradius, (z - height) / 2.0)));
-
-    rvizMarker->Scale(0.05, 0.05, z - height);
-
-    rvizMarker->Send(leg1, baseframe);
-    rvizMarker->Send(leg1, baseframe);
-    ros::Duration(0.5).sleep();
-    rvizMarker->Send(leg2, baseframe);
-    rvizMarker->Send(leg2, baseframe);
-    ros::Duration(0.5).sleep();
-    rvizMarker->Send(leg3, baseframe);
-    rvizMarker->Send(leg3, baseframe);
-    ros::Duration(0.5).sleep();
-    rvizMarker->Send(leg4, baseframe);
-    rvizMarker->Send(leg4, baseframe);
-    ros::Duration(0.5).sleep();
-}
-
-
 void CheckersGame::PhysicalMove(InlineRobotCommands &robot,
         int player,
         int i, int j,
         Checkers::Move m,
         bool doublejump) {
-    std::string errmsg;
+    
     std::string typemove("move");
+    
+    try {
+        // If blank space there can be no actual checkername2 object
+        std::string checkername1 = Globals.StrFormat("Checker[%d:%d]", i, j);
+        std::string checkername2 = Globals.StrFormat("Checker[%d:%d]", m.row, m.col);
+        tf::Pose frompose = rvizgame->GetPose(i, j);
+        tf::Pose topose = rvizgame->GetPose(m.row, m.col);
+        SceneObject & obj = pScene->Find(checkername1);
+        if(Scene::IsNull(obj))
+            throw std::runtime_error(Globals.StrFormat("PhysicalMove null scene object Checker[%d:%d]", i, j));
 
-    // If blank space there can be no actual checkername2 object
-    std::string checkername1 = Globals.StrFormat("Checker[%d:%d]", i, j);
-    std::string checkername2 = Globals.StrFormat("Checker[%d:%d]", m.row, m.col);
-    Eigen::Affine3d frompose = rvizgame->GetPose(i, j);
-    Eigen::Affine3d pose = rvizgame->GetPose(m.row, m.col);
-    ObjectDB * obj = pScene->Find(checkername1);
-
-    assert(obj != NULL);
 #ifdef DEBUG
-    LOG_DEBUG << "Move From " << Globals.StrFormat("[%d,%d]=%f,%f", i, j, frompose(0, 3), frompose(1, 3));
-    LOG_DEBUG << "Move To   " << Globals.StrFormat("[%d,%d]=%f,%f", m.row, m.col, pose(0, 3), pose(1, 3));
-    LOG_DEBUG << "tf    Checkerboard1 pose" << RCS::DumpPoseSimple(Conversion::Convert< Eigen::Affine3d,tf::Pose>(obj-> pose));
-    LOG_DEBUG << "Eigen Checkerboard1 pose" << RCS::DumpEigenPose(obj-> pose);
-#endif
+//        LOG_DEBUG << "Move From " << Globals.StrFormat("[%d,%d]=%f,%f", i, j, frompose(0, 3), frompose(1, 3));
+//        LOG_DEBUG << "Move To   " << Globals.StrFormat("[%d,%d]=%f,%f", m.row, m.col, topose(0, 3), topose(1, 3));
+        LOG_DEBUG << "Move From " << Globals.StrFormat("[%d,%d]=%f,%f", i, j, frompose.getOrigin().x(), frompose.getOrigin().y());
+        LOG_DEBUG << "Move To   " << Globals.StrFormat("[%d,%d]=%f,%f", m.row, m.col, topose.getOrigin().x(), topose.getOrigin().y());
+        LOG_DEBUG << "tf    Checkerboard1 pose" << RCS::DumpPoseSimple(obj.pose);
+ #endif
 
-    rviz_visual_tools::colors checkercolor = (ISRED(player)) ? rviz_visual_tools::RED : rviz_visual_tools::BLACK;
-    ;
-    robot.Pick(Convert<Eigen::Affine3d, tf::Pose >(obj-> pose), checkername1);
-    robot.Place(Convert< Eigen::Affine3d, tf::Pose>(pose), checkername1);
+        robot.Pick(obj.pose, checkername1);
+        robot.Place(topose, checkername1);
 
-    while (robot.cnc()->IsBusy())
-        ros::Duration(0.01).sleep();
-
-    if (m.bJump) {
-        typemove = "jump";
-        Checkers::Move jumped = m.Diff(Checkers::Move(i, j));
-        std::string jumpedcheckername = Globals.StrFormat("Checker[%d:%d]", jumped.row, jumped.col);
-        pScene->DeleteObject(jumpedcheckername);
-    }
-    if (rvizgame->IsKing(m)) {
-        // Double checker height - for now 
-        // Only 2* level for king
-         if (obj->height == rvizgame->HEIGHT) {
-            obj->height *= 2;
-            obj->pose = Eigen::Translation3d(Eigen::Vector3d(0, 0, 0.01)) * obj->pose;
-//            robot.MoveObject(obj->name, Convert<Eigen::Affine3d, tf::Pose>(obj->pose),
-//                    pScene->MARKERCOLOR(checkercolor));
-            ros::spinOnce();
-            ros::spinOnce();
-            ros::spinOnce();
-        }
-    }
-#if 0
-    pScene->UpdateScene(checkername1, pose, obj->color);
-#endif
-    ros::spinOnce();
-    obj->name = checkername2; // change checker name 
-    if (m.doublejumps.size() > 0) {
-        PhysicalMove(robot, player, m.row, m.col, m.doublejumps[0], true);
-    }
-
-    // Done - move to safe non-collision position - skip if double jump
-    if (!doublejump) {
-        std::vector<unsigned long> jointnum(robot.cnc()->Kinematics()->NumJoints());
-        std::iota(jointnum.begin(), jointnum.end(), 0); // adjusted already to 0..n-1
-        robot.MoveJoints(jointnum, robot.cnc()->NamedJointMove["Safe"]);
-        while (robot.cnc()->IsBusy()) {
-            ros::spinOnce();
+        while (robot.cnc()->IsBusy())
             ros::Duration(0.01).sleep();
+
+        if (m.bJump) {
+            typemove = "jump";
+            Checkers::Move jumped = m.Diff(Checkers::Move(i, j));
+            std::string jumpedcheckername = Globals.StrFormat("Checker[%d:%d]", jumped.row, jumped.col);
+            pScene->DeleteObject(jumpedcheckername);
         }
+        // change checker name from old checkerboard spot to new one
+        obj.name = checkername2;
+        obj.pose = topose;
+
+        if (rvizgame->IsKing(m)) {
+            // Double checker height - for now 
+            // Only 2* level for king
+            if (obj.height == rvizgame->HEIGHT) {
+                obj.height *= 2;
+                obj.pose.setOrigin(  obj.pose.getOrigin() + tf::Vector3(0, 0, 0.01));
+                ros::spinOnce();
+                ros::spinOnce();
+                ros::spinOnce();
+            }
+        }
+        ros::spinOnce();
+
+        if (m.doublejumps.size() > 0) {
+            PhysicalMove(robot, player, m.row, m.col, m.doublejumps[0], true);
+        }
+
+        // Done - move to safe non-collision position - skip if double jump
+        if (!doublejump) {
+            std::vector<unsigned long> jointnum(robot.cnc()->Kinematics()->NumJoints());
+            std::iota(jointnum.begin(), jointnum.end(), 0); // adjusted already to 0..n-1
+            robot.MoveJoints(jointnum, robot.cnc()->NamedJointMove["Safe"]);
+            while (robot.cnc()->IsBusy()) {
+                ros::spinOnce();
+                ros::Duration(0.01).sleep();
+            }
+        }
+    } catch (std::runtime_error &e) {
+        std::cout << e.what() << "\n";
+        throw;
     }
 
 }
+
 void CheckersGame::Setup() {
-    //    RvizDemo rvizdemo(_nh);
-    pScene->InitScene();
     rvizgame->RvizBoardSetup();
     rvizgame->RvizPiecesSetup();
-
-    rvizMarker = boost::shared_ptr<CRvizMarker>(new CRvizMarker(_nh));
-    rvizMarker->Init();
-    rvizMarker->SetColor(204.0 / 256.0, 229.0 / 256.0, 1.0, 1.0);
-    tf::Pose centertablepose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(xyz[0], xyz[1], xyz[2]));
-
-    DrawTable(rvizMarker, "world", table_length, table_width, table_height, centertablepose);
-
-        
-    pScene->DrawScene(); // Debug: LOG_DEBUG << ObjectDB::DumpDB();
+    pScene->DrawScene(); // Debug: LOG_DEBUG << SceneObject::DumpDB();
 }
 
 void CheckersGame::Play(InlineRobotCommands * red, InlineRobotCommands * black) {
