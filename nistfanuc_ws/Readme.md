@@ -10,7 +10,7 @@ This document presents a Robot Operating System (ROS)  package for a trajectory 
 This implementation provides a simulation that is displayed in RVIZ yet differs from other ROS trajectory packages, e.g., moveit, in that it does not use the trajectory or kinematic functionality of moveit. It does use the Unified Robot Description Format (URDF). The URDF robot description is read using a C++ based on code developed by David Lu. Originally, kinematics were handled by the Kinematics and Dynamics Library (KDL) from Orocos to solve the forward and inverse kinematics of a robot represented in URDF.  Because KDL would not converge on a solution unless provided suitable hints and other issues in solving the kinematics, IKFast was used to solve the kinematics. In addition, the ikfast standalone solution for the Fanuc LR Mate 200 iD robot are available to perform forward and inverse kinematics.
 The visualization of the Motoman robot below is to sort small and medium "gears" into appropriate gear holders is shown in an animated gif below (in this case on "vessels" which hold one type of gear, while a kit may hold varios size gears – or at least in this demo.)  In the code a vision system would generate JSON representation of the parts and instances of the parts. The demo code reads the JSON file using the boost Property Tree package. 
 
-![Figure1](./images/image1.gif?raw=true)
+![Figure1](./images/image1.gif)
 
 
 <p align="center">
@@ -35,18 +35,18 @@ During a CRCL session, until a ConfigureJointReports command has been executed t
 # Software Architecture
 The controller handles a Fanuc LRMate 200 iD and a robotiq two finger gripper, as shownin the figure below:
 
-![Figure2](./images/image2.gif?raw=true)
+![Figure2](./images/image2.gif)
 
 
 The robot and gripper are modeled in ROS URDF shown below:
 
-![Figure4](./images/image4.gif?raw=true)
+![Figure4](./images/image4.gif)
 
 
 
 The following diagram describes the ROS topic communication between modules in the contol system.
 
-![Figure5](./images/image5.gif?raw=true)
+![Figure5](./images/image5.gif)
 
 
 The Robot model combines the Fanuc LR Mate 200 id with the robotiq 2 finger gripper. The controller advertised updates to the /nist_controller/robot/joint_states which is read by the joint_state_publisher package. This communication is enabled in the launch file by the following snippet:
@@ -67,7 +67,7 @@ This snippet loads the ROS node "nistcrcl" with the parameters specified as ip (
 # Robot Kinematic Chain
 The robot path is specified I terms of a "kinematic chain " made up of a series of homogeneous matrix transforms relation the manipulator to the task.
 
-![Figure6](./images/image6.gif?raw=true)
+![Figure6](./images/image6.gif)
 
 
 <p align="center">
@@ -106,7 +106,7 @@ A Kinematic Chain is assembled suing the make_equation method.  A chain is const
 ## Robot Gripper
 In general, an end effector is the device at the end of a robotic arm, meant to interact with the environment (Wikipedia, 2016). The exact nature of this device depends on the application of the robot.  We are concerned with grasping objects and placing the objects somewhere else. This can be done with a vacuum gripper, but we are interested in the case of using grippers (with 2 fingers) to achieve object manipulation (grasping and releasing).
 
-![Figure7](./images/image7.gif?raw=true)
+![Figure7](./images/image7.gif)
 
 
 <p align="center">
@@ -114,7 +114,7 @@ In general, an end effector is the device at the end of a robotic arm, meant to 
 </p>
 Robotiq's 2-Finger Adaptive Robot Gripper is modeled as the gripper since a ROS URDF description existed for its kinematics and a CAD model existed to described it visually. Of concern, is determining the gripper offset, that is what is the length offsets of the x,y,z axes of the gripper when it is attached to the robot.  To understand the xyz gripper offset, the URDF model describes link6 as having the xaxis point straight ahead, the yaxis points to the side and the z axis points up. Figure 4 shows the positioning of the Link 6 axis and the relationship to the gripper.
 
-![Figure8](./images/image8.gif?raw=true)
+![Figure8](./images/image8.gif)
 
 
 <p align="center">
@@ -164,19 +164,19 @@ The easies first step is to use roslaunch, in which you load a robot description
 	<node name="rviz" pkg="rviz" type="rviz">
 When you do this, you will eventually see an RVIZ screen appear with the error condition of "Global Status". 
 
-![Figure9](./images/image9.gif?raw=true)
+![Figure9](./images/image9.gif)
 
 
 
 To rectify this error, click on the Fixed Frame text box (and possibly the base_link will appear in a combo box which you can select) or type in "base_link" or whatever is the base link in your URDF robot description. Below the error message disappears when base_link is entered.
 
-![Figure10](./images/image10.gif?raw=true)
+![Figure10](./images/image10.gif)
 
 
 
 Now, the problem is that no robot is visible. Obviously, not a good situation. To rectify this problem, click the [ADD} button above time in the lower left hand corner, and when the Create Visualization dialog box appears, select "Robot Model", as shown below:
 
-![Figure11](./images/image11.gif?raw=true)
+![Figure11](./images/image11.gif)
 
 
 
@@ -184,7 +184,7 @@ Then, the robot that is described in the robot_description ROS parameter will ap
 
 
 
-![Figure12](./images/image12.gif?raw=true)
+![Figure12](./images/image12.gif)
 
 
 
@@ -204,7 +204,7 @@ Of importance is the ROS parameter :ource_list", which is a list of topics that 
 # Manual Inserting of an STL File containing a scene object in RViz
 A scene of objects for gripper manipulation by the Crcl Robot Controller in RVIZ must be built. Each object is imported into RVIZ as a Stereolithography Language (STL) file. To import an object, a 3D STL file is imported with the Scene Objects-Import File button. The STL format should be binary, not plain text. (?)
 
-![Figure13](./images/image13.gif?raw=true)
+![Figure13](./images/image13.gif)
 
 
 RVIZ is independent of moveit, so to get objects registered in the moveit Planning Scene, collision object programmatically to moveit (See http://wiki.ros.org/motion_planning_environment/Tutorials/Adding%20known%20objects%20to%20the%20collision%20environment) .
@@ -215,7 +215,7 @@ For the Fanuc LR Mate 200iD, the addition of two objects will be illustrated to 
 Two objects will be added to the Rviz scene, a medium gear and a gear holder tray.  These scene objects were created in a CAD design system and have been produced by an 3D printing device. 3D printing devices use STL, so the STL files from these objects were imported and displayed Rviz using the displayMesh rviz-visual-tools method.
 In addition, the method publishWall was developed that is based on rviz-visual-tools, to display a wall in Rviz.
 
-![Figure14](./images/image14.gif?raw=true)
+![Figure14](./images/image14.gif)
 
 
 <p align="center">
@@ -318,7 +318,7 @@ The Go Motion trajectory planning algorithms are based on smooth   velocity prof
 Constant-jerk (CJ) profiling is shown in Figure 1, a plot of the   speed versus time. There are 7 phases to the motion. Phase 1 is a   jerk phase, where the acceleration varies smoothly from 0 at time 0   to \a a1 at time \a t1 following the jerk (change in acceleration per unit   time) \a j0. Phase 2 is an acceleration phase, with   constant acceleration \a a1 throughout. Phase 3 is a jerk phase (or   de-jerk phase) with constant (negative) jerk slowing down the   acceleration from \a a1 to 0. Phase 4 is a constant speed phase at   speed \a v3. Phase 5 is a constant-jerk counterpart to phase 3,   where the deceleration varies smoothly from 0 to \a -a1. Phase 6 is   a constant-acceleration counterpart to phase 2. Phase 7 is a   constant-jerk counterpart to phase 1, where the deceleration varies   smoothly from \a -a1 to 0 and motion stops. 
 
 
-![Figure15](./images/image15.gif?raw=true)
+![Figure15](./images/image15.gif)
 
 
 <p align="center">
@@ -329,14 +329,14 @@ Constant-jerk (CJ) profiling is shown in Figure 1, a plot of the   speed versus 
 In order to get a visualization of the axes for each axis of you robot, rviz can offer this service is you ADD the "TF" module. Assuming you have started Rviz and configured it so that there is a robot description and the Robot Model module has been added to Rviz,  you can turn on the axes visualization for the links you desire to visualize them. Below, link_1 through link_6 have axis visualization enabled :
 
 
-![Figure16](./images/image16.gif?raw=true)
+![Figure16](./images/image16.gif)
 
 
 
 
 Here is another vantage point:
 
-![Figure17](./images/image17.gif?raw=true)
+![Figure17](./images/image17.gif)
 
 
 The X axis is indicated in red, the Y axis is indicated in green, and the Z axis is indicated in blue. (http://wiki.ros.org/rviz/DisplayTypes/TF).  Thus, in the scene above the bolt is located at (.25,-45,0) which is not the centroid of the object.
@@ -344,13 +344,13 @@ The X axis is indicated in red, the Y axis is indicated in green, and the Z axis
 The STL meshes mapping into the Rviz scene use a pose to position the STL object. At this point in time, this Rviz mapping of the object pose is that it is not a centroid or it would be assumed the centroid of the pose to place the bolt object would give the bolt location – and it does not.
 Instead trusty joint publisher GUI has sliders to move the joint values around to place the robot with the correct position and orientation to pick up the bolt. Suffice to say that it was not trivial centering the robot over the bolt but can be done. You can get the joint positions on the Joint State Publisher GUI :
 
-![Figure18](./images/image18.gif?raw=true)
+![Figure18](./images/image18.gif)
 
 
 
 Assuming you have started Rviz and configured it so that there is a robot description and the Robot Model module has been added to Rviz, you can read the position and orientation of link_6 which should place the robot in the correct position to grasp the bolt:
 
-![Figure19](./images/image19.gif?raw=true)
+![Figure19](./images/image19.gif)
 
 
 # Two Robot Cooperative Behavior
@@ -422,7 +422,7 @@ But http://answers.ros.org/question/243910/easily-move-relative-base-position-in
 
 An error oringally occurred, since the joint 'fanuc_joint_6-tool0' was not unique as it was defined in the file lrmate200id_macro.xacro and the file lrmate200id.xacro file. It was removed in the lrmate200id_macro.xacro file and was used to connect a robotiq gripper to it. Likewise this was done in the motoman macro xacro.
 
-![Figure20](./images/image20.gif?raw=true)
+![Figure20](./images/image20.gif)
 
 
 You musts set the base frame for tf to "world" for this to work.
@@ -430,7 +430,7 @@ You musts set the base frame for tf to "world" for this to work.
 But drawing the scene with bolts required that rviz_visual_tools use the world frame not the base_link frame that the original fanuc used. Otherwise the following error occurs:
 
 
-![Figure21](./images/image21.gif?raw=true)
+![Figure21](./images/image21.gif)
 
 
 
@@ -439,19 +439,19 @@ But drawing the scene with bolts required that rviz_visual_tools use the world f
 # Gear Geometry
 Therer are small, medium, and large gears.
 
-![Figure22](./images/image22.gif?raw=true)
+![Figure22](./images/image22.gif)
 
 
 Likewise, there are small, medium and large gear "vessels" that can hold the geats. Below are the dimensions for the small gear holder.
 
-![Figure23](./images/image23.gif?raw=true)
+![Figure23](./images/image23.gif)
 
 
 <p align="center">
 **Figure 7 Small Gear Vessel Dimensions**
 </p>
 
-![Figure24](./images/image24.gif?raw=true)
+![Figure24](./images/image24.gif)
 
 
 There is a little mixing of units here. The linear dimensions of the vessel are in inches. The linear units of ROS are always in meters. Thus, the offsets are described as values in meter units. While the vessel part is described in inch units. The part as described by 4 3/8 inches is equivalent to .11125 meters.
@@ -484,12 +484,30 @@ The JSON structure is a hierarchical tree of nodes, branches, children, without 
 	}
 "Parts" and "Instances" are the two primary JSON branches under the root. At this point in time, the boost Property Tree parses the JSON (as well as traditional ini format) for syntax validation and tree manipulcation API that was used to translate and interpret the JSON as a Shapes data repository with Part model containing Shape Geometry and other attributes, and instances which are instantiations of the part models. For example below is the JSON to describe the small and medium size gears and the vessels to hold the gears:
 
-	{     "parts":{        "sku_small_gear":{  },      "sku_small_gear_vessel":{  },      "sku_medium_gear":{  },      "sku_medium_gear_vessel":{  }   },   "instances":{        "sku_small_gear1":{  },      "sku_small_gear2":{  },      "sku_small_gear3":{  },      "sku_small_gear4":{  },      "sku_medium_gear1":{  },      "outline_sku_small_gear_vessel1":{  },      "sku_small_gear_vessel1":{  },      "sku_medium_gear_vessel1":{  }   }}
+	{  
+	   "parts":{  
+	      "sku_small_gear":{  },
+	      "sku_small_gear_vessel":{  },
+	      "sku_medium_gear":{  },
+	      "sku_medium_gear_vessel":{  }
+	   },
+	   "instances":{  
+	      "sku_small_gear1":{  },
+	      "sku_small_gear2":{  },
+	      "sku_small_gear3":{  },
+	      "sku_small_gear4":{  },
+	      "sku_medium_gear1":{  },
+	      "outline_sku_small_gear_vessel1":{  },
+	      "sku_small_gear_vessel1":{  },
+	      "sku_medium_gear_vessel1":{  }
+	   }
+	}
+
 In the controller, the instances are drawn in ROS as RVIZ markers. The instance name given by the child branches under the instance branch (i.e., sku_small_gear1, sku_sm sku_small_gear_vessel1all_gear2,  sku_small_gear3,  sku_small_gear4, sku_medium_gear1, outline_sku_small_gear_vessel1, and sku_medium_gear_vessel1) is used as the name in the controller. Gear  "type" can be of any type of gear: small, medium or large. Gear trays can contain a combination of gear type holders. The distinction used herein, is that a gear vessel can hold all of the same gear types (e.g., sku_small_gear_vessel1 only can hold small gears), while a kit can contain a combination of gear types (e.g., sku_kit2  can hold small or medium or large gears). Each part describes the geometry and part of the containing slots for gears.
 ## Gear Tray
 Below is a figure showing the STL visualization for a medium gear vessel/tray that will hold the medium gears.  The gear vessel design was specified in inches and had a few issues. First, the centroid of the vessel part was not in the middle of the XY plane. Second, the part's bottom in the Z axis  was negarive, so if it was placed on a flat surface, it would "in" the surface. Using FreeCAD, the part was centered in the middle, and the Z axis was raised so that all z values were greater than or equal to zero.
 
-![Figure25](./images/image25.gif?raw=true)
+![Figure25](./images/image25.gif)
 
 
 <p align="center">
@@ -568,13 +586,13 @@ A robot arm can generally reach a pose (position and orientation) in a number of
 This section will attempt to categorize the various configurations that different styles of manipulator robots may encounter and provide a coding mechanism in which to describe the configuration.  Generally, for non-redundant robots, each configuration can be mapped into revolute ranges for each joint. For example, a shoulder up could result in a min and max joint angle of: 
 To understand the requirement of arm configuration, let's start with an example. For example, the Fanuc LR Mate 200id is a 6-axis robot arm with an articulated wrist is shown below. One anomaly occurs when the Fanuc LR Mate can reach the same pose by offsetting a twist in joint 4 with a twist in joint 6 leading to an infinite number of joint solutions to attain a pose. This is known as a singularity. A singularity is defined as a robot configuration in which the joint positions no longer completely define the robot pose.
 
-![Figure26](./images/image26.gif?raw=true)
+![Figure26](./images/image26.gif)
 
 
 **Figure 10 Fanuc LR Mate  Home Position - Joints all zero**
 Instead, we will concentrate on the configuration of the Fanuc LR Mate base, shoulder, elbow and wrist joints. The base joint can be pointed straight ahead or swiveled around by 180 degrees, in which case the shoulder would compensate by bending backward. 
 
-![Figure27](./images/image27.gif?raw=true)
+![Figure27](./images/image27.gif)
 
 
 **Figure 11Fanuc LR Mate  Base rotated and Shoulder Flipped**
@@ -584,41 +602,41 @@ Instead, we will concentrate on the configuration of the Fanuc LR Mate base, sho
 
 
 
-![Figure28](./images/image28.gif?raw=true)
+![Figure28](./images/image28.gif)
 
 
 
-![Figure29](./images/image29.gif?raw=true)
+![Figure29](./images/image29.gif)
 
 
 
-![Figure30](./images/image30.gif?raw=true)
+![Figure30](./images/image30.gif)
 
 
 
-![Figure31](./images/image31.gif?raw=true)
+![Figure31](./images/image31.gif)
 
 
 
-![Figure32](./images/image32.gif?raw=true)
-
-
-
-
-![Figure33](./images/image33.gif?raw=true)
-
-
-
-![Figure34](./images/image34.gif?raw=true)
+![Figure32](./images/image32.gif)
 
 
 
 
-![Figure36](./images/image36.gif?raw=true)
+![Figure33](./images/image33.gif)
 
 
 
-![Figure38](./images/image38.gif?raw=true)
+![Figure34](./images/image34.gif)
+
+
+
+
+![Figure36](./images/image36.gif)
+
+
+
+![Figure38](./images/image38.gif)
 
 
 
@@ -627,7 +645,7 @@ Instead, we will concentrate on the configuration of the Fanuc LR Mate base, sho
 The algorithm chooses from min to max range for all joints in a robot. The joint values act like an odometer or other sequential distance measurement instrument – joint values are incremented and each digit causes a rollover in the next digit when the maximum is reached, and that value is reset to the minumum. Using this "odometer" like joint increment, each set of joint values are feed into a Forward Kinematics computation to compute the Cartesian pose. Then the Inverse Kinematics is performed on the pose and if successful, the exact same joint values should be computed. 
 
 
-![Figure39](./images/image39.gif?raw=true)
+![Figure39](./images/image39.gif)
 
 
 
