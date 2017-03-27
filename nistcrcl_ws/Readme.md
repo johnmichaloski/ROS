@@ -1,5 +1,5 @@
 
-#Readme for Conversion of CRCL XML into ROS Message 
+# Readme for Conversion of CRCL XML into ROS Message 
 ----
 
 Michaloski, John L.
@@ -7,14 +7,14 @@ Michaloski, John L.
 NistCrclReadme.docx
 
 This document presents the nistcrcl Robot Operating System (ROS) package for translating commands and status between Canonical Robot Control Language (CRCL) and ROS.
-#Background
+# Background
 Firstly, the nistcrcl ROS package frames CRCL message. Detecting an CRCl message is not trivial as there is not an ending marker (i.e., "0" or linefeed) to detect. If a CRCl XML message is detected, it is placed onto a synchronized queue. Upon receipt of a message, a signal is sent to another thread to execute an "Action()" method.  The Action method interprets this CRCl XML command message by translating CRCL robot data structures (e.g., joints and pose) and units of representation (e.g., millimeter and inches) into ROS standard representation. Finally, after the message has been decoded into a canonical ROS command, it is published as a ROS message on the crcl_command topic. Handling of robot status is done similarly, only in reverse.
-#Running
+# Running
 There is a launch file crclserver.launch which allows ip and port arguments:
 
 	roslaunch nistcrcl crclserver.launch port:=64444
 Side effects include starting a roscore and selecting the Fanuc robot description.
-#Canonical Robot Control Language (CRCL) Background 
+# Canonical Robot Control Language (CRCL) Background 
 Canonical robot command language (CRCL) is part of the robot research at NIST. CRCL is a messaging language for controlling a robot. CRCL commands are executed by a low-level device robot controller. The usual source of CRCL commands is a plan/program execution system. CRCL is intended for use with devices typically described as industrial robots and for other automated positioning devices such as automated guided vehicles (AGVs). An AGV with a robotic arm attached may be regarded as a single robot responding to a single stream of CRCL commands or as two robots responding to two separate streams of CRCL commands.
 Although CRCL is not a programming language, the commands are in the context of a session consisting of getting ready for activity, performing activities, and becoming quiescent. CRCL commands may be collected in files for testing purposes, but executing such files (by giving the commands in the order they occur in the file) is not be the normal operating mode of a robot. Because robots operate in uncertain and changing environment, the reliance on sensors to adjust for such disturbances makes canned scripts ineffective under real conditions. 
 CRCL models a status message from a low-level robot controller. Status includes the position and orientation (Poses) that are the subject of CRCL commands. If any joint status reporting is done, it is assumed that the system sending canonical commands and the system executing them both know the kinematics of the robot and have the same numbering system for the joints, starting with 1. The two systems also have the same understanding of where the zero point is and which direction is positive for each joint. Status items for joints must be configured using a CRCl ConfigureJointReports command. For each joint for which anything is to be reported, ConfigureJointReports specifies:
@@ -22,10 +22,10 @@ CRCL models a status message from a low-level robot controller. Status includes 
  - whether joint torque or force should be reported
  - whether joint velocity should be reported
 During a CRCL session, until a ConfigureJointReports command has been executed that sets the reporting status for a joint, default joint status is reported for that joint. The ConfigureJointReports command may be used more than once during a session to change joint status reporting.
-##Nistcrcl package Architecture
-<CENTER>
-![Figure1](./images/image1.jpg?raw=true)
-</CENTER>
+## Nistcrcl package Architecture
+
+![Figure1](./images/image1.gif)
+
 
 nistcrcl Package - ROS C++ class to handle all socket communication with the CRCL clients. Relies on Boost Asio for low level IO handling. Within the Boost Asio framework, the class CAsioServer handles the intracies of socket connections and disconnections, while the class class CAsioSession handles initiating, reading, buffering and queing messages. CRCL XML commands are posted as complete strings on a message queue. The class CCrcl2Ros handles the translation of Crcl messages into ROS topic commands. The class CCrcl2Ros also handles status from ROS and updates Crcl world model for status replies.
 Boost.Asio - Boost.Asio is a cross-platform C++ library that was used for network I/O programming because it abstracts the low level socket handling functionality (Schäling, n.d.). Boost Asio is used for communication over sockets to the CRCL controller. Boost Asio is very robust with examples and issue solutions pervasively found on the Internet. 
@@ -33,7 +33,7 @@ Crcl2ROS relies on CodeSynthesis and the Xerces XML DOM parser. Xerces was used 
 RCS implements  a few  utility classes: shared message queue, timer, timed thread, and message event-driven thread. ROS provides support for the timing utilities, but often the requirement to include the entire ROS middleware is a bloated solution.
 Python client Crcl testing  program was created to send Crcl commands to the Crcl2Ros package (assume at minimum roscore is running), and also handles Crcl status messages. This Python program does not require ROS.
 Python client ROS testing program was created to send/receive ROS topics: crcl_commands and ROS crcl_status.  This Python program does require ROS.
-##How does the Crcl2Ros class work?
+## How does the Crcl2Ros class work?
 In the main C++ program, a Crcl2Ros class is declared (with a  reference to the main ROS node handle reference, i.e., nh). Crcl2Ros reads framed Crcl XML messages, interprets them, and translates into ROS.  Then, it publishes the Crcl command as a ROS command using the nistcrcl/crcl_command topic.
 
 	CCrcl2RosMsg crcl2ros(nh);
@@ -142,20 +142,20 @@ Finally, if a ROS message was generated it is published on the topic (nistcrcl/ 
 	    crcl_pub.publish(rosmsg);
 	   }
 
-##CRCL Socket Communication
+## CRCL Socket Communication
 As discussed, there is also no terminating character (such as zero) in a CRCL message. Also, CRCL messages can also be of different buffer sizes. So framing the message requires buffering each message, such that the end of a status message is detected with a closing XML tag, and this message may be divided with some of the buffer belonging to the previous or next message. Unfortuneately,  the last write of the CRCL XML message need not satisfy an asynchronous condition - such as buffer full or matching character. Since there is no CRCL message termination condition, a deadline timer was used to stop asynchronous reading and cancel the read. Likewise, often two CRCL will be combined into one aynchronous read operation, so that these two message must be separated by the CRCL streaming reader. 
 The CRCL client establishes a connection using an assigned socket and port number with the CRCL server once.   The method to send CRCL command from a client is shown in the (b) portion of Figure 1. Upon receipt of a Crcl command that requires a status reply, then the nistcrcl package responds with the CRCL XML status message as shown in the (c) portion of Figure 1. 
-<CENTER>
-![Figure2](./images/image2.jpg?raw=true)
-</CENTER>
+
+![Figure2](./images/image2.gif)
+
 
 <p align="center">
 _Figure 1 CRCL Communication to nistcrcl ROS package_
 </p>
 We will assume that the CRCL Client has connected to the nistcrcl package socket. Figure 2 shows the components involved in communication.The CRCL Client  class initiates communication to first send a command to the nistcrcl package. Using Boost Asio, the nistcrcl package  has the class CAsioSession which asynchronously reads the command from the CRCL client. When the CAsioSession has read a complete message it queues this message onto the message queue. Since the message queue is a shared resource, and multiple threads share this resource, a mutex is used to lock the contents for one thread at a time access. The latest CRCL command message is retrieved and then the CRCL data expressed in XML can be reinterpreted before storing into the ROS crcl_command topic. The translation uses CodeSynthesis to parse the CRCL XML message and translate into C++. Once in C++, it is translated into an equivalent ROS representation. 
-<CENTER>
-![Figure3](./images/image3.jpg?raw=true)
-</CENTER>
+
+![Figure3](./images/image3.gif)
+
 
 <p align="center">
 _Figure 2 Communication Sequence with ROS crcl_command topic_
@@ -166,19 +166,19 @@ A major portion of the CAsioSession was the handling of the socket stream interf
 Then the asynchronous read event handler will be called. Within the asynchronous read event handler, the asynchronous read event setup must be done again, or no more bytes will be read from the stream. Of note, often the condition of completely filling the buffer is impossible as receiving the exact amount of buffer size is impractical. Because of this, deadline timers are incorporated into Boost Asio to terminate asynchronous reads even if the triggering event (full buffer) has not occurred. So a deadline timer is used to cancel a socket asynchronous read when it expires.
 Boost Asio provides io_service, which is a singleton class for servicing I/O. Every program based on Boost.Asio uses an object of type io_service. There is one Asio "io_service" per application program and from our effort it helps if all the asynchronous operations are run in the same thread as this io_service object. Each asynchronous call in Boost Asio is enabled by the io_service methods run, run_one or poll. After all the asynchronous operations were placed in the same thread, the io_service communication responded better. However, Boost Asio was too efficient so an io_service run_one method was combined with a sleep and yield to allow other threads to run and to slow down the Boost Asio operation. 
 Figure 3 shows the call sequence involved with the CRCL status reading. Of note, are the synchronous write to send the "Init" during the connection handling and the "GetStatus" command messages sent at the start of every new read of the CRCL simulator status. These are the only Boost Asio operations that were synchronous. Overall, the Boost Asio asynchronous connect operation could wait indefinitely upon startup of the CRCL simulator listener. This is as intended. It is unclear how often Boost Asio tests the socket for the CRCL listener. Upon connection of the socket, the handler for the async connect event is called and it calls the async read and async periodic timer (2 seconds). Either 1) the socket stream is read and the periodic timer is canceled, or 2) the periodic timer expires and the socket async read is canceled, which calls the read handler to see if it has read any bytes or is just waiting for a termination condition. If bytes have been read, there are buffered. In either case, the asynchronous read is called again.
-<CENTER>
-![Figure4](./images/image4.jpg?raw=true)
-</CENTER>
+
+![Figure4](./images/image4.gif)
+
 
 <p align="center">
 _Figure 3 Asio Communication Sequence_
 </p>
-##CRCL Communication Code Review
+## CRCL Communication Code Review
 The nistcrcl package uses a two thread model 1) one thread to handle communication with CRCL client(s) and 2) the other thread to handle the ROS interface. Figure 4 shows the main thread spawns thread 2, which handles the ROS message streaming. It was found that if all the Boost Asio operation were not in the same thread, unpredictable results occurred. Unfortunately, it is very difficult to debug problems in Boost Asio, as most of the operation is hidden in a thread, and when no events occur, there is nothing to debug.
 Figure 4 shows the code that run in the two threads. Thread 1 spawns Boost Asio event callbacks, and then loop running Boost Asio io_service to handle all the asynchronous communication events, as well as frame and queue any CRCL XML messages. Thread 2 handles the ROS communication over topics. This framework forms the basis of the nistcrcl code, which will be described herein.
-<CENTER>
-![Figure5](./images/image5.jpg?raw=true)
-</CENTER>
+
+![Figure5](./images/image5.gif)
+
 
 <p align="center">
 _Figure 4 Threads - Boost Asio and Crcl2ROS_
@@ -322,8 +322,8 @@ The routine FindLeadingElement(std::string xml)  is being documented only becaus
 	    return NonsenseTag();
 	}
 
-#Installing Prerequisites
-##Installing XercesC with Ubuntu
+# Installing Prerequisites
+## Installing XercesC with Ubuntu
 You can use apt-get to install the packages for the library and the dev files. Then to use them in your C/C++ programs you simply #include the appropriate headers and link with the library when compiling/linking.
 
 	sudo apt-get update
@@ -342,7 +342,7 @@ Need to link against libxerces.a in CMakeLists.txt:
 	${catkin_LIBRARIES}
 	${Boost_LIBRARIES}
 	)
-##Installing CodeSynthesis XSD
+## Installing CodeSynthesis XSD
 http://www.codesynthesis.com/products/xsd/download.xhtml 1. Chose the linux deb install file that matches your computer (below 64 bit amd). 2. Download xsd4_.0.0-1amd6_ .deb and it will say open with Ubuntu Software Center 3. Click to install, authenticate and add /usr/include/xsd/cxx/xml as include path.
 Need include file path in CMakeLists.txt:
 
@@ -358,7 +358,7 @@ Make a symbolic link:
 
 	ln -s <path/to/xsd-4.0.0-x86_64-linux-gnu/libxsd/xsd /usr/local/include/xsd
 e.g., ln -s /usr/local/xsd-4.0.0-x86_64-linux-gnu/libxsd/xsd /usr/local/include/xsd
-#Testing
+# Testing
 A testing scenario was developed that is similar to typical deployment.  A minimalist approach was taken, which can often be difficult in ROS. Initially, only roscore was to be spawned to integrate ROS functionality, but it was determined that a robot_description parameter was required in order to establish names for the joints. (CRCL only used sequential numbered actuator indexes, while ROS uses names to identify links and joints using the robot description.) As such a roslaunch file was used to start roscore and establish two ROS parameters: robot_description and controller_joint_names as defined below:
 
 	<launch>
@@ -370,12 +370,12 @@ The roslaunch utility starts roscore which starts up:
  - ROS Parameter Server
  - rosout logging node
 The roscore can run indefinitely.  At the same time a crcl_client Python program was started that generated CRCL XML commands to the nistcrcl package to receive and interpret.  The nistcrcl package communicates with another Python test program to read and write "robot" status/commands.
-<CENTER>
-![Figure6](./images/image6.jpg?raw=true)
-</CENTER>
+
+![Figure6](./images/image6.gif)
+
 
 The crcl_client Python program contains code to prevent it from proceeding until a socket connection with the CRCL server has been established.
-##Coordinated Testing of nistcrcl package Bash Script
+## Coordinated Testing of nistcrcl package Bash Script
 A bash script was developed to test the CRCL command communication through nistcrcl executable that is then read as a ROS crcl_command in a ROS python package. The location of the script is:
 
 	. . ./nistcrcl_ws/src/nistcrcl/scripts/runmultiterm.bash
@@ -384,7 +384,7 @@ roscore  which launches the ROS master program as well as set the robot_descript
 nistcrcl which executable to handle communication between CRCL and ROS topics 
 cannedcrclclient.py is a python program which sends CRCL XML commands to the nistcrcl (and receives CRCL status)
 crclfeedbacktest.py under the ROS testcrcl\scripts is a ROS python program which reads crcl_command topic ROS message and writes robot status out the crcl_status topic ROS message.
-###Bash script to coordinate multiple nistcrcl shells - runmultiterm.bash
+### Bash script to coordinate multiple nistcrcl shells - runmultiterm.bash
 A shell script to open gnome terminal with multiple tabs, with each tab running a separate shell command. 
 
 	#!/bin/bash
@@ -421,7 +421,7 @@ This script does the following:
  2. appends tab command which opens a tab executes a script following the -e option
  3. for example, --title=" roslaunch "  opens a tab with title " roslaunch " that runs the ROS master program roslaunch, -e "/opt/ros/indigo/bin/roslaunch".
 The script is best exited by hitting ^C in each shell and then can exit the gnome-terminal window by closing the window which kills the nistcrcl command which hangs on a control C.
-###Python CRCL Test Program - cannedcrclclient.py
+### Python CRCL Test Program - cannedcrclclient.py
 A Python program was written to act as a CRCL client. That is, the Python code establishes a TCP/IP socket connection to a CRCL server (in the test case it is the nistcrcl ROS package executable). This Python program is not an exhaustive test and does not have coverage for all potential CRCL commands. It repeatedly attempts to connect to the server, and once a connection is established it sends a CRCL ActuateJoint command to move Joint 1 (numbered from 1) from -90° to +90°. 
 A Python class CrclClientSocket handles the connection, synchronous sending and synchronous receiving of CRCL XML socket communication. CrclClientSocket repeatedly attempts to connect to the server as defined by a host and port (typically 127.0.0.1 and port 64444). Upon failure to connect, the  CrclClientSocket class will keep recursively calling connect until the server listener has been established.
 
@@ -524,7 +524,7 @@ The Python code below creates a CrclClientSocket class which does the connection
 		time.sleep(6)
 	mysocket.disconnect()
 
-###Python CRCL Test Program - crclfeedbacktest.py
+### Python CRCL Test Program - crclfeedbacktest.py
 The feedback ros client reads the translated CRCL commands and simulates status by publishing to the crcl_status topic.
 
 	
@@ -702,7 +702,7 @@ Using a the Spyder Python IDE in ROS was not successful. Python programs run fin
 		os.environ[key]=dict[key]
 
 ****
-#Appendix I  nistcrcl  Package Version Dependencies
+# Appendix I  nistcrcl  Package Version Dependencies
 
 <TABLE>
 <TR>
@@ -899,9 +899,9 @@ Using a the Spyder Python IDE in ROS was not successful. Python programs run fin
 </TR>
 </TABLE>
 
-#Appendix II  nistcrcl  ROS Message Definitions
+# Appendix II  nistcrcl  ROS Message Definitions
 
-##nistcrcl/CrclCommandMsg
+## nistcrcl/CrclCommandMsg
 <TABLE>
 <TR>
 <TD>Type<BR></TD>
@@ -1189,7 +1189,7 @@ Using a the Spyder Python IDE in ROS was not successful. Python programs run fin
 <TD><BR></TD>
 </TR>
 </TABLE>
-##nistcrcl/CrclMaxProfileMsg
+## nistcrcl/CrclMaxProfileMsg
 <TABLE>
 <TR>
 <TD>Type<BR></TD>
@@ -1212,7 +1212,7 @@ Using a the Spyder Python IDE in ROS was not successful. Python programs run fin
 <TD><BR></TD>
 </TR>
 </TABLE>
-##nistcrcl/CrclStatusMsg
+## nistcrcl/CrclStatusMsg
 <TABLE>
 <TR>
 <TD>Type<BR></TD>
@@ -1371,4 +1371,7 @@ Using a the Spyder Python IDE in ROS was not successful. Python programs run fin
 </TR>
 </TABLE>
 
-Autogenerated from Microsoft Word by [Word2Markdown](https://github.com/johnmichaloski/SoftwareGadgets/tree/master/Word2Markdown)
+
+![Word2Markdown](./images/word2markdown.jpg)
+
+[Word2Markdown](https://github.com/johnmichaloski/SoftwareGadgets/tree/master/Word2Markdown)
