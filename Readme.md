@@ -8,7 +8,11 @@ RosReadme.docx
 
 This github site contains various ROS repositories that integrate various ROS and non-ROS robotic tools.  The code was compile with gnu c++ 0x on a Ubuntu 12.04 with ROS installed and various additional ROS packages  installed.
 This document describes the   Robot Operating System (ROS) pick/place applications for two arm and industrial robot trajectory generation. The genesis of this work was the delving into the existing pick/place functionality in ROS and dealing with the software complexity involved in making the robot perform such tasks.  First, a gripper was required to grasp objects. To achieve this in ROS, you need a URDF description of the gripper. Robotiq gripper was chosen since SWRI had developed several gripper models. Although all I wanted was a prismatic open/close gripper, could not find one.
-So far, besides using the core ROS tools, the following packages or code have been very useful:- David Lu arm_kinematics – for clean integration into KDL- Dave Coleman rviz_visual_tools – - SWRI – host of robot URDF and visualizationsHere is an animated gif of what is supposed to happen when the Fanuc LR Mate robot places gears in a gear tray:![Figure2](./images/fanuc-2.gif?raw=true)
+So far, besides using the core ROS tools, the following packages or code have been very useful:
+ - David Lu arm_kinematics – for clean integration into KDL
+ - Dave Coleman rviz_visual_tools 
+ - SWRI – host of robot URDF and visualizations
+Here is an animated gif of what is supposed to happen when the Fanuc LR Mate robot places gears in a gear tray:![Figure2](./images/fanuc-2.gif?raw=true)
 # Background
 The robot applications are coordinated two robots (Fanuc LR Mate 200id and a Motoman sia 20d) activity that visually simulates either arranging "bolts" into a bolt tray or playing checkers.  The application is capable of showing collaborative robots (where the two robots work together) or agile robots (where one robot can perform the same functionality as the other with minimal change).
 In either case, the fundamental robot functionality is pick and place. The simulated robot control is open loop, with no sensor feedback. At its simplest, motion planning is simple bang-bang control. In the bang-bang control, the robot is commanded to goal joint positions and the simulated robot "moves" there. If a goal position as a Cartesian pose (position and orientation), the goal pose is transformed into joint positions using an inverse kinematics function, and these joints are then used as the goal position. Intermixed with the motion control are robot commands to dwell (to delay), open/close gripper, and object handling. Highlights of the various ROS and non-ROS robotic tools include:
@@ -179,4 +183,6 @@ It is suggested you perform a source setup.bash, and then do a
 to understand what the environment variables are set to.  PATH and PYTHONPATH do not contain ROS so you will have to examine them in env.
 The setenv() function is part of C++ and is included with the command: #include <stdlib.h>. setenv()  adds the variable name to the environment with the value value, if name does not already exist. If name does exist in the environment, then its value is changed to value if overwrite is nonzero; if overwrite is zero, then the value of name is not changed.
 
-[![Word2Markdown](./images/word2markdown.jpg)] (https://github.com/johnmichaloski/SoftwareGadgets/tree/master/Word2Markdown)  [Word2Markdown](https://github.com/johnmichaloski/SoftwareGadgets/tree/master/Word2Markdown)
+![Word2Markdown](./images/word2markdown.jpg)
+
+[Word2Markdown](https://github.com/johnmichaloski/SoftwareGadgets/tree/master/Word2Markdown)
