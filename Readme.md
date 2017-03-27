@@ -9,14 +9,14 @@ RosReadme.docx
 This github site contains various ROS repositories that integrate various ROS and non-ROS robotic tools.  The code was compile with gnu c++ 0x on a Ubuntu 12.04 with ROS installed and various additional ROS packages  installed.
 This document describes the   Robot Operating System (ROS) pick/place applications for two arm and industrial robot trajectory generation. The genesis of this work was the delving into the existing pick/place functionality in ROS and dealing with the software complexity involved in making the robot perform such tasks.  First, a gripper was required to grasp objects. To achieve this in ROS, you need a URDF description of the gripper. Robotiq gripper was chosen since SWRI had developed several gripper models. Although all I wanted was a prismatic open/close gripper, could not find one.
 So far, besides using the core ROS tools, the following packages or code have been very useful:- David Lu arm_kinematics – for clean integration into KDL- Dave Coleman rviz_visual_tools – - SWRI – host of robot URDF and visualizationsHere is an animated gif of what is supposed to happen when the Fanuc LR Mate robot places gears in a gear tray:![Figure2](./images/fanuc-2.gif?raw=true)
-#Background
+# Background
 The robot applications are coordinated two robots (Fanuc LR Mate 200id and a Motoman sia 20d) activity that visually simulates either arranging "bolts" into a bolt tray or playing checkers.  The application is capable of showing collaborative robots (where the two robots work together) or agile robots (where one robot can perform the same functionality as the other with minimal change).
 In either case, the fundamental robot functionality is pick and place. The simulated robot control is open loop, with no sensor feedback. At its simplest, motion planning is simple bang-bang control. In the bang-bang control, the robot is commanded to goal joint positions and the simulated robot "moves" there. If a goal position as a Cartesian pose (position and orientation), the goal pose is transformed into joint positions using an inverse kinematics function, and these joints are then used as the goal position. Intermixed with the motion control are robot commands to dwell (to delay), open/close gripper, and object handling. Highlights of the various ROS and non-ROS robotic tools include:
  - The robot and gripper definition and visualization use open source ROS URDF definition for the Fanuc LR Mate 200id and a Motoman sia 20d and Robotiq C2 gripper.
  - Rviz is a ROS visualization tool that integrates with URDF.
  - Inverse kinematics uses existing ikfast ROS software to solve the forward and inverse kinematics.  The Fanuc robot had used the Orocos KDL kinematics solver that was part of the ROS arm navigation C++ software of David Lu, but required hints (seeds) in order for the KDL IK solution to converge. The KDL IK solution did not work for the Motoman sia 20d even with hints. However, use of the ikfast routines assumes that the robot is situated at the world origin (0,0,0) so transformations from the base position of each robot to the world origin were done for each commanded Cartesian position.
  - rviz_visual_tools was used to describe "markers" in the rviz smulation. In other words, if the robot scene contained checkers or a bolt tray, these objects were described using the rviz_visual_tools package and linked library.  The rviz_visual_tools ROS communication was found to be problematic, so extra ROS "spins" and other programming hacks were used to guarantee communication to the maker visualization front-end and rviz.
-#Robot and Gripper Description
+# Robot and Gripper Description
 Once the robot and gripper URDF is in place, definitions can become a macro with Xacro (ok programming with XML bad eye test)
 
 	<?xml version="1.0"?>
@@ -67,23 +67,23 @@ Connect the grippers to the end link of the robots:
 	  </joint>
 
 <CENTER>
-![Figure1](./images/image1.jpg?raw=true)
+![Figure1](./images/image1.gif?raw=true)
 </CENTER>
 
 
-#Installation
+# Installation
 The current implementation is based on the ROS indigo version, which supports the Ubuntu 14.04 distribution and employs the catkin beta build system (http://catkin-tools.readthedocs.io/en/latest/) . Later a section on using the Netbeans C++ IDE will be discussed.
 The github site contains a couple ROS workspaces: primarily checkers_ws, nistfanuc_ws and crcl_ws. Included in these workspaces are ROS packages found in repositories at https://github.com/ros-industrial:
  - fanuc - for some URDF and Xacro definitions, which is part of the main ROS distribution
  - fanuc_lrmate200id_support package - inside fanuc_experimental repository, other packages are not required. Used for URDF and visualization.
  - motoman_sia20d_support package - inside motoman  repository, other packages are not required. Used for URDF and visualization.
  - robotiq_c2_model_visualization package inside the robotiq  repository - other packages are not required.  Used for URDF and visualization.
-##CRCL Installation Requirements
+## CRCL Installation Requirements
 CRCL is a standalone workspace, with Python testing programs. The nist_crcl ROS package is integrated into the checkers_ws and nistfanuc_ws workspaces. The nist_crcl package handles socket communication with a CRCL client. The client will send CRCL commands and expect CRCL status in XML. The XML commands are enocded into ROS messages and are then communicated via a ROS topic (i.e., crcl_command). 
 The CRCL package requires the following code installations 
  1. Xerces
  2. CodeSythesis
-##Installing Xerces c with Ubuntu
+## Installing Xerces c with Ubuntu
 https://www.daniweb.com/hardware-and-software/linux-and-unix/threads/409769/ubuntu-11-10-xerces-c As far as I'm aware libxerces is the same as pretty much any other library in Debian based systems. It should be available in the repositories (the exact version will depend on which version of Ubuntu you're running).
 You can use apt-get to install the packages for the library and the dev files. Then to use them in your C/C++ programs you simply #include the appropriate headers and link with the library when compiling/linking.
 
@@ -103,7 +103,7 @@ Need to link against libxerces.a in CMakeLists.txt:
 	${catkin_LIBRARIES}
 	${Boost_LIBRARIES}
 	)
-##Installing CodeSynthesis XSD
+## Installing CodeSynthesis XSD
 http://www.codesynthesis.com/products/xsd/download.xhtml
 Chose the linux deb install file that matches your computer (below 64 bit amd).
 Download xsd_4.0.0-1_amd64.deb and it will say open with Ubuntu Software Center
@@ -122,9 +122,9 @@ Make a symbolic link:
 
 	ln -s <path/to/xsd-4.0.0-x86_64-linux-gnu/libxsd/xsd /usr/local/include/xsd
 e.g., ln -s /usr/local/xsd-4.0.0-x86_64-linux-gnu/libxsd/xsd /usr/local/include/xsd
-#ROS Workspace 
+# ROS Workspace 
 We assume that ROS has been installed.
-##Setting up the ROS workspace
+## Setting up the ROS workspace
 
 	$ source /opt/ros/indigo/setup.bash
 Create the ROS checkers_ws workspace:
@@ -133,11 +133,11 @@ Create the ROS checkers_ws workspace:
 	$ cd /home/local/michalos/checkers_ws/src
 	$ catkin init
 Now add the github packages to the ROS checkers_ws catkin workspace. In theory you can git clone under the directory /usr/local/michalos and the workspace will be created.
-##Compile ROS packages
+## Compile ROS packages
 
 	$ cd /home/local/michalos/checkers_ws
 	$ catkin build -DCMAKE_BUILD_TYPE=Debug
-#Netbeans
+# Netbeans
 Netbeans was used as the  IDE for debugging instead of Gnu Emacs.  To install Netbeans, navigate to:  https://netbeans.org/downloads/
 Change directory (i.e., cd) to the directory where you downloaded netbeans:
 
@@ -178,4 +178,5 @@ It is suggested you perform a source setup.bash, and then do a
 
 to understand what the environment variables are set to.  PATH and PYTHONPATH do not contain ROS so you will have to examine them in env.
 The setenv() function is part of C++ and is included with the command: #include <stdlib.h>. setenv()  adds the variable name to the environment with the value value, if name does not already exist. If name does exist in the environment, then its value is changed to value if overwrite is nonzero; if overwrite is zero, then the value of name is not changed.
-Autogenerated from Microsoft Word by [Word2Markdown](https://github.com/johnmichaloski/SoftwareGadgets/tree/master/Word2Markdown)
+
+![Word2Markdown](./images/word2markdown.jpg?raw=true)  Autogenerated from Microsoft Word by [Word2Markdown](https://github.com/johnmichaloski/SoftwareGadgets/tree/master/Word2Markdown)
