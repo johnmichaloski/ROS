@@ -12,12 +12,7 @@ maintenance, and subsequent redistribution.
 
 See NIST Administration Manual 4.09.07 b and Appendix I.
 */
-#if 0
-#include <string>
-#include <vector>
-#include <map>
-#include <sstream>
-#endif
+
 #include "Checkers.h"
 #include <algorithm>
 #include <iostream>
@@ -449,6 +444,7 @@ namespace Checkers {
 		std::map<Move, std::vector < Move>> moves = GenerateMoveList(curBoard, player);
 
 		// For each player position on checkerboard
+                // treat all moves as positive return negative if signFactor
 		std::map<Move, std::vector < Move>>::iterator it;
 		for (it = moves.begin(); it != moves.end(); it++) {
 			// no moves associated with player checkerboard position
@@ -459,9 +455,9 @@ namespace Checkers {
 			for (size_t i = 0; i < (*it).second.size(); i++) {
 				Move & to((*it).second[i]);
 				BoardType newBoard = MakeMove(curBoard, player, from.row, from.col, to);
-				float newValue = signFactor * MinMaxEval(depth + 1, opponent, newBoard, -signFactor);
+				float newValue = /*signFactor *  */ MinMaxEval(depth + 1, opponent, newBoard, -signFactor);
 				if (to.bJump)
-					newValue += signFactor * 10;  // this hopefully skews evaluation towards jumps
+					newValue += /*signFactor *  */ 10;  // this hopefully skews evaluation towards jumps
 				if (newValue > posValue)
 					posValue = newValue;
 			}

@@ -13,7 +13,6 @@ maintenance, and subsequent redistribution.
 See NIST Administration Manual 4.09.07 b and Appendix I.
 */
 
-////#include <rviz_visual_tools/rviz_visual_tools.h>
 #include <ros/ros.h>
 #include <geometry_msgs/PointStamped.h>
 
@@ -27,26 +26,6 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 #include "Globals.h"
 #include "Checkers.h"
 #include "Controller.h"
-
-#if 0
-#include <algorithm>
-#include <stdarg.h>
-#include <iostream>
-#include <math.h>
-#include <assert.h>
-#include <iterator> 
-#include <fstream>   
-#include <iomanip>
-#include <sstream>
-
-
-#include <boost/bind.hpp>
-#include <boost/thread/mutex.hpp>
-
-
-#include "Debug.h"
-//#include "Demo.h"
-#endif
 
 #define LEFTRIGHT 1
 #define UPDOWN  -1

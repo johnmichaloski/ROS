@@ -20,15 +20,7 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 #include <math.h>
 #include <stdarg.h>
 #include <string.h>
-#if 0
-#include <algorithm>
-#include <stdarg.h>
-#include <iostream>
-#include <assert.h>
-#include <iterator> 
-#include <fstream>   
-#include <iomanip>
-#endif
+
 namespace Checkers {
 #define ROWS 8
 #define COLS 8

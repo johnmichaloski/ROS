@@ -15,17 +15,6 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 
 ////#include <rviz_visual_tools/rviz_visual_tools.h>
 #include "RvizCheckers.h"
-#if 0
-#include <ros/ros.h>
-#include <geometry_msgs/PointStamped.h>
-
-
-#include <algorithm>
-#include <map>
-#include <string>
-#include <vector>
-#include <map>
-#endif
 
 #include <algorithm>
 #include <stdarg.h>
