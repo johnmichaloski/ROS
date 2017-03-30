@@ -587,6 +587,7 @@ void Scene::publishLine(const tf::Vector3 &point1,
     scale.z = radius * global_scale_;
 
     generic_marker_.id = id;
+    generic_marker_.ns = "line";
     generic_marker_.color = color;
     generic_marker_.scale = scale;
 
@@ -630,7 +631,7 @@ void Scene::publishCuboid(tf::Pose &midpoint, double depth, double width, double
 
     // Set the timestamp
     generic_marker_.header.stamp = ros::Time::now();
-    generic_marker_.ns = "nist";
+    generic_marker_.ns = "cuboid";
     generic_marker_.type = visualization_msgs::Marker::CUBE;
     generic_marker_.id = id;
     generic_marker_.color = color;
@@ -657,7 +658,7 @@ void Scene::publishCuboid(tf::Pose &midpoint, double depth, double width, double
 void Scene::publishSphere(const tf::Pose &pose, std_msgs::ColorRGBA color, double scale, std::size_t id) {
     // Set the frame ID and timestamp
     generic_marker_.header.stamp = ros::Time::now();
-    generic_marker_.ns = "nist";
+    generic_marker_.ns = "sphere";
     generic_marker_.type = visualization_msgs::Marker::SPHERE;
 
     generic_marker_.id = id;
@@ -671,7 +672,7 @@ void Scene::publishMesh(const tf::Pose &pose, const std::string &file_name, std_
         double scale, std::size_t id) {
     // Set the timestamp
     generic_marker_.header.stamp = ros::Time::now();
-    generic_marker_.ns = "nist";
+    generic_marker_.ns = "mesh";
     generic_marker_.id = id;
     generic_marker_.type = visualization_msgs::Marker::MESH_RESOURCE;
 
@@ -695,7 +696,7 @@ void Scene::publishText(const tf::Pose &pose, const std::string &text, std_msgs:
         const tf::Vector3 scale, std::size_t id) {
     // Set the timestamp
     generic_marker_.header.stamp = ros::Time::now();
-    generic_marker_.ns = "nist";
+    generic_marker_.ns = "text";
     generic_marker_.id = id;
     generic_marker_.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
 

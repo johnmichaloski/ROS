@@ -143,6 +143,8 @@ add_executable(nist_robotsnc
   src/Shape.cpp
   src/JointTrajectory.cpp
   src/CollisionDetection.cpp
+  src/Checkers.cpp
+  src/RvizCheckers.cpp
   )
 
 #Add all files in subdirectories of the project in

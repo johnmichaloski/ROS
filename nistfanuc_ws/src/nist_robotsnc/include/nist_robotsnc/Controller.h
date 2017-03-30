@@ -179,7 +179,10 @@ namespace RCS {
         VAR(basePose, tf::Pose);
         VAR(invBasePose, tf::Pose);
         VAR(QBend, tf::Quaternion);
-        VAR(bGrasping, bool)
+        VAR(bGrasping, bool);
+        VAR(linearmax, std::vector<double>);
+        VAR(rotationmax, std::vector<double>);
+                
         protected: SceneObject  _GraspObj; \
 	public: SceneObject & GraspObj( ) { return _GraspObj; }
 

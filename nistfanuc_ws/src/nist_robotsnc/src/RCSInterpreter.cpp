@@ -166,10 +166,14 @@ int GoInterpreter::ParseWorldCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
                     _nc->gripperPose();
         if (cmd.CommandNum() != _lastcmdid) {
             _lastcmdid = cmd.CommandNum();
-            _go->InitPose(curpose, 
-                    finalpose, 
-                    gomotion::GoTrajParams(1.0, 10.0, 100.0),
-                    gomotion::GoTrajParams(.1, 1.0, 10.0)); // 1 meter/sec
+            _go->InitPose(curpose,
+                    finalpose,
+                    gomotion::GoTrajParams(_nc->linearmax()[0],
+                    _nc->linearmax()[1],
+                    _nc->linearmax()[2]),
+                    gomotion::GoTrajParams(_nc->rotationmax()[0],
+                    _nc->rotationmax()[1],
+                    _nc->rotationmax()[2])); // 1 meter/sec
 
         }
         //tf::Pose nextpose = _nc->invGripperPose() * _go->NextPose() * _nc->invBasePose();

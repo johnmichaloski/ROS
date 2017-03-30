@@ -40,7 +40,6 @@ namespace pt = boost::property_tree;
 #include "NIST/Boost.h"
 #include "Debug.h"
 #include "Scene.h"
-#include "Checkerboard.h"
 #include "StackTrace.h"
 #include "RCSInterpreter.h"
 #include "Demo.h"
@@ -51,6 +50,7 @@ namespace pt = boost::property_tree;
 
 
 using namespace Conversion;
+
 
 int main(int argc, char** argv) {
     int bPublishPoint = 0;
@@ -160,14 +160,16 @@ int main(int argc, char** argv) {
                 std::vector<double> dbend = GetIniTypes<double>(root, robots[i] + ".bend");
                 std::string kinsolver = root.get<std::string>(robots[i] + ".kinsolver", "");
                 std::vector<std::string> jointmovenames = GetIniTypes<std::string>(root, robots[i] + ".jointmovenames");
-                int bCsvLogging = root.get<int>(robots[i] + ".csvlogging", 0);
                 int bMarker = root.get<int>(robots[i] + ".markers", 0);
+                int bCsvLogging = root.get<int>(robots[i] + ".csvlogging", 0);
 
                 ncs.push_back(boost::shared_ptr<CController>(new RCS::CController(robotname, dCycleTime)));
                 ncs[i]->SetToolOffset(Convert<std::vector<double>, tf::Pose> (dtool));
                 ncs[i]->SetBaseOffset(Convert<std::vector<double>, tf::Pose> (dbase));
                 ncs[i]->QBend() = tf::Quaternion(Deg2Rad(dbend[0]), Deg2Rad(dbend[1]), Deg2Rad(dbend[2]));
                 ncs[i]->bCvsPoseLogging() = false;
+                ncs[i]->rotationmax() = GetIniTypes<double>(root, robots[i] + ".rotationmax");
+                ncs[i]->linearmax() = GetIniTypes<double>(root, robots[i] + ".linearmax");
                 boost::shared_ptr<IKinematics> kin;
                 ncs[i]->CycleTime() = dCycleTime;
                 ncs[i]->bMarker() = bMarker;
@@ -184,7 +186,7 @@ int main(int argc, char** argv) {
                     kin->Init(nh);
                     ncs[i]->Kinematics() = kin;
                     ncs[i]->Setup(nh, prefix);
-                } catch (std::exception & ex) {
+                 } catch (std::exception & ex) {
                     std::cout << "Kinematics error: " << ex.what() << "\n";
                 }
 
@@ -213,6 +215,13 @@ int main(int argc, char** argv) {
                 ofsRobotURDF << "Cycletime   " << ncs[i]->CycleTime() << "\n";
                 ofsRobotURDF << "Markers     " << ncs[i]->bMarker() << "\n";
                 ofsRobotURDF << std::flush;
+
+                // Error checking
+                if (ncs[i]->linearmax().size() < 3)
+                    throw std::runtime_error(Globals.StrFormat("Config error: Insufficient number linear parameters for %s", ncs[i]->Name().c_str()));
+                if (ncs[i]->rotationmax().size() < 3)
+                    throw std::runtime_error(Globals.StrFormat("Config error: Insufficient number rotation parameters for %s", ncs[i]->Name().c_str()));
+
             }
         } catch (std::exception &e) {
             LOG_FATAL << e.what();

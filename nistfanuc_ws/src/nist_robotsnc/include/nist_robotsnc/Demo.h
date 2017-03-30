@@ -223,7 +223,7 @@ protected:
 
 
 // Checkers game - demo defined in Demo.cpp
-#include "Checkerboard.h"
+#include "RvizCheckers.h"
 class CheckersGame {
     boost::shared_ptr<RvizCheckers> rvizgame;
     ros::NodeHandle & _nh;

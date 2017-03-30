@@ -339,7 +339,6 @@ void GearDemo::Cycle(boost::shared_ptr<RCS::CController> nc, InlineRobotCommands
     }
 }
 //////////////////////////////////////////////////////////////////////////
-#include "Checkerboard.h"
 #include "RvizMarker.h" 
 
 
