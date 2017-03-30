@@ -501,16 +501,11 @@ namespace Checkers {
 					bestmoves[(*it).first] = std::vector<Move>();
 					bestmoves[(*it).first].push_back(move);
 				}
-				if (move.score == bestScore) {
-					bestmoves[(*it).first].push_back(move);
-				}
 			}
 		}
-		// Lots of moves with same mixmax value - randomly pick one
-		if (bestmoves.size() > 1) {
-			// This should pick the best, not just a randome one.
-			RandomMove(bestmoves, m1, m2);
-		}
+
+                if(bestScore = -LDBL_MAX)
+                    return false;
 		return true;
 	}
 
