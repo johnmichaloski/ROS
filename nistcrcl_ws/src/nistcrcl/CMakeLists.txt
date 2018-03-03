@@ -16,7 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 find_package(Boost REQUIRED system thread chrono regex)
-find_package(Eigen REQUIRED)
+find_package(Eigen3 REQUIRED)
 
 ## Declare ROS messages and services
 add_message_files(  DIRECTORY msg FILES   CrclCommandMsg.msg CrclStatusMsg.msg CrclMaxProfileMsg.msg)
@@ -48,7 +48,7 @@ catkin_package(
     message_runtime
   DEPENDS
     Boost
-    Eigen
+    Eigen3
 )
 
 ###########
@@ -59,14 +59,15 @@ catkin_package(
 set(CMAKE_CXX_FLAGS "-w ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "-DDEBUG ${CMAKE_CXX_FLAGS}")
+set(Eigen3_INCLUDE_DIRS   "/usr/include/eigen3")
 
 message("DEBUG variable catkin_INCLUDEDIR: ${catkin_INCLUDEDIR}")
-message("DEBUG variable Eigen_INCLUDE_DIRS:  ${Eigen_INCLUDE_DIRS}")
+message("DEBUG variable Eigen_INCLUDE_DIRS:  ${Eigen3_INCLUDE_DIRS}")
 
 include_directories(include
     ${catkin_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}
-    ${Eigen_INCLUDE_DIRS}
+    ${Eigen3_INCLUDE_DIRS}
     # include breakdown for this project
     include/${PROJECT_NAME}
     include/${PROJECT_NAME}/CrclXsd
@@ -119,6 +120,7 @@ link_directories(/usr/lib/x86_64-linux-gnu/)
 target_link_libraries(nistcrcl 
 libtinyxml.a  
 libxerces-c.a  
+libicuuc.so
 ${catkin_LIBRARIES}
 ${Boost_LIBRARIES}
 )

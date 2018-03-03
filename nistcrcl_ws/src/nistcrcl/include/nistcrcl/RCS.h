@@ -20,7 +20,7 @@
 //#include <moveit/robot_model/robot_model.h>
 #include <tf/transform_datatypes.h>
 //#include "urdf_model/tfmath.h"
-#include "/opt/ros/indigo/include/sensor_msgs/JointState.h"
+#include "sensor_msgs/JointState.h"
 #include <stdarg.h>
 #include "Globals.h"
 

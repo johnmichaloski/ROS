@@ -20,7 +20,7 @@
 #include "Scene.h"
 #include "Controller.h"
 #include "Conversions.h"
-
+#include "CrclApi.h"
 /**
  * \brief RvizDemo provides some synchronization primitives via rviz.
  * Uses PublishPoint to listen and set flags when pushed. 
@@ -84,98 +84,7 @@ public:
     }
 };
 
-/**
- * \brief InlineRobotCommands provides some inline Crcl commands that are queued to given CNC.
- */
-class InlineRobotCommands {
-protected:
-    boost::shared_ptr<RCS::CController>_cnc;
-    static int crclcommandnum; /**<  crcl command number for this robot */
-public:
-    double mydwell; /**<  global dwell time */
-    tf::Quaternion QBend; /**< rotation so end effect is facing down (as opposed to sideways)*/
 
-    /*!
-     * \brief Constructor of commands requires reference to Controller object.
-     * \param cnc is pointer to CController instance.
-     */
-    InlineRobotCommands(boost::shared_ptr<RCS::CController> cnc) : _cnc(cnc) {
-        mydwell = .50;
-        QBend = cnc->QBend();
-    }
-
-    /*!
-     * \brief Return pointer to CNC instance of this robot command object.
-     * \return cnc is pointer to CController instance.
-     */
-    boost::shared_ptr<RCS::CController> cnc() {
-        return _cnc;
-    }
-    /*!
-     * \brief Robot picks up an object at pose with given objname.
-     * \param pose of the given object to pick up.
-     * \param objname name of the object that is being picked up.
-     */
-    void Pick(RCS::Pose pose, std::string objname);
-    /*!
-     * \brief Robot moves to given Cartesian pose, and may move object .
-     * \param pose of the given object to pick up.
-     * \param objname name of the object that is being picked up.
-     */
-    void MoveTo(RCS::Pose pose, std::string objname = "");
-    /*!
-     * \brief Robot dwells for given dwell time in seconds. .
-     * \param dwelltime time to dwell in seconds.
-     * */
-    void DoDwell(double dwelltime);
-    //void AddGripperOffset();
-    /*!
-     * \brief Robot opens gripper. .
-     */
-    void OpenGripper();
-    /*!
-     * \brief Robot closes gripper. .
-     */
-    void CloseGripper();
-    /*!
-     * \brief Set the robot gripper to the given percentage (from 0..1). .
-     * \param ee end effector percentage close(0)..open(1). Note gripper could be closed at 1!
-     */
-    void SetGripper(double ee);
-    /*!
-     * \brief Robot places up an object at pose with given objname. 
-     * Retracts to given retraction offset from place pose.
-     * \param pose of the given object to pick up.
-     * \param objname name of the object that is being picked up.
-     */
-    void Place(RCS::Pose pose, std::string objname);
-
-    /*!
-     * \brief Move object with given objname to given pose.
-     * \param objname name of the object that is being picked up.
-     * \param pose of the given object to pick up.
-     * \param color sets the object color
-     * 
-     */
-    void MoveObject(std::string objname, RCS::Pose pose, std::string color);
-    void GraspObject(std::string objname);
-    void ReleaseObject(std::string objname);
-    /*!
-     * \brief Erases object with given objname .
-     * \param objname name of the object that is being picked up.
-     */
-    void EraseObject(std::string objname);
-    /*!
-     * \brief Robot moves joints as defined joint number vector to positions.
-     * Coordinated joint motion "assumed".
-     * \param jointnum is a list of joints to move.
-     * \param positions is final joint position 
-     */
-    void MoveJoints(std::vector<long unsigned int> jointnum,
-            std::vector<double> positions);
-
-
-};
 #include "RvizMarker.h"
 
 struct ExerciseDemo {
@@ -189,9 +98,9 @@ struct ExerciseDemo {
 
     }
     void MarkPose(int flag, tf::Pose pose);
-    void Exercise(InlineRobotCommands *robot);
+    void Exercise(CrclApi *robot);
     VAR(RvizMarker, boost::shared_ptr<CRvizMarker>)
-    VAR(Robot, InlineRobotCommands*)
+    VAR(Robot, CrclApi*)
     VAR(GoodColor, std::vector<double>)
     VAR(BadColor,  std::vector<double>)
     VAR(TrapColor, std::vector<double>)
@@ -206,12 +115,12 @@ struct GearDemo {
     GearDemo(ros::NodeHandle & nh, std::string pkgpath, tf::Pose offset);
     void Setup();
     void Reset();
-    void Cycle(boost::shared_ptr<RCS::CController>, InlineRobotCommands&);
+    void Cycle(boost::shared_ptr<RCS::CController>, CrclApi&);
     OpenHolderSlot FindFreeGearHolder(std::string geartype, bool bFill=true);
     //boost::shared_ptr< ShapeModel::Instance> FindFreeGearHolder(std::string geartype, bool bFill=true);
     //tf::Pose GetFirstSlotHolder(boost::shared_ptr<ShapeModel::Instance> instance, std::string skupart,bool bFill=true);
     boost::shared_ptr< ShapeModel::Instance> FindFreeGear();
-    bool IssueRobotCommands(InlineRobotCommands & r, bool bSafe=false);
+    bool IssueRobotCommands(CrclApi & r, bool bSafe=false);
 protected:
     ShapeModel::Shapes _shapes;
     ros::NodeHandle & _nh;
@@ -229,13 +138,13 @@ class CheckersGame {
     ros::NodeHandle & _nh;
 public:
     CheckersGame(ros::NodeHandle & nh);
-    void CheckersGame::PhysicalMove(InlineRobotCommands &robot,
+    void CheckersGame::PhysicalMove(CrclApi &robot,
             int player,
             int i, int j,
             Checkers::Move m,
             bool doublejump=false);
     void Setup();
-    void Play(InlineRobotCommands *, InlineRobotCommands *);
+    void Play(CrclApi *, CrclApi *);
 
     boost::shared_ptr<RvizCheckers> RvizGame() {
         return rvizgame;
@@ -247,4 +156,53 @@ public:
     std::vector<double> xyz;
     boost::shared_ptr<CRvizMarker> rvizMarker;
     
+};
+
+
+#include "ttt.h"
+
+struct ScriptingDemo {
+
+    ScriptingDemo(ros::NodeHandle & nh) {
+        RvizMarker() = boost::shared_ptr<CRvizMarker>(new CRvizMarker(nh));
+        RvizMarker()->Init();
+        FontColor()=Conversion::ToVector<double>(3,  0.0, 1.0, 0.0);
+        Font2WorldScale()=0.1;
+    }
+    void MarkPose(int flag, tf::Pose pose);
+    void Init(CrclApi *robot,
+    std::string penholderfile,
+    double penholderscale,
+    std::string penfile,
+    double pencilscale);
+    
+    void Draw(std::string text,
+            unsigned long fontsize = 32,
+            double scale = .1,
+            tf::Vector3 origin=tf::Vector3(0,0,0),
+            tf::Pose transform=tf::Identity());
+    VAR(RvizMarker, boost::shared_ptr<CRvizMarker>)
+    VAR(Robot, CrclApi*)
+    VAR(FontColor, std::vector<double>)
+    VAR(Font2WorldScale, double)
+    letters script;
+
+};
+
+struct PaintingDemo {
+
+    PaintingDemo(ros::NodeHandle & nh) {
+        RvizMarker() = boost::shared_ptr<CRvizMarker>(new CRvizMarker(nh));
+        RvizMarker()->Init();
+        ImageColor()=Conversion::ToVector<double>(3,  0.0, 1.0, 0.0);
+     }
+    void Draw(CrclApi *robot,
+            std::string imagefilename,
+            double scale = .1,
+            tf::Pose transform = tf::Identity());
+
+    VAR(RvizMarker, boost::shared_ptr<CRvizMarker>)
+    VAR(Robot, CrclApi*)
+    VAR(ImageColor, std::vector<double>)
+
 };

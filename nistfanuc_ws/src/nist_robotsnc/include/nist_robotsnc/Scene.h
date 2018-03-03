@@ -25,7 +25,6 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 #include "Shape.h"
 #include "Conversions.h"
 
-
 /**
  * \brief Class wrapper for rbga color scheme.
  * RGB color definition and alpha A are all represented as 0..1 doubles.
@@ -37,6 +36,13 @@ struct rgba {
      * \brief Empty constructor.
      */
     rgba() {
+    }
+
+    /**
+     * \brief RBGA constructor, where Colors RGB and alpha A are all represented as 0..1 doubles.
+     */
+    rgba(int r, int g, int b) {
+        SetColorRGBA((double) r / 255.0, (double) g / 255.0, (double) b / 255.0, 1.0);
     }
 
     /**
@@ -59,6 +65,7 @@ struct rgba {
     std_msgs::ColorRGBA SetColorRGBA(double r, double g, double b, double a) {
         return SetColorRGBA(rgba(r, g, b, a));
     }
+
     std_msgs::ColorRGBA GetColorRGBA() {
         std_msgs::ColorRGBA val;
         val.r = r;
@@ -67,6 +74,7 @@ struct rgba {
         val.a = a;
         return val;
     }
+
     std_msgs::ColorRGBA SetColorRGBA(rgba color) {
         std_msgs::ColorRGBA val;
         val.r = color.r;
@@ -76,7 +84,6 @@ struct rgba {
         return val;
     }
 };
-
 
 /**
  * The SceneObject is a class to represent various RVIZ markers in the "scene". 
@@ -111,16 +118,16 @@ public:
     std::string subtype; /**< solid, wireframe */
     //std::string color;
     std_msgs::ColorRGBA rawcolor, firstcolor;
-     tf::Pose pose;
+    tf::Pose pose;
     tf::Pose gripperoffset;
-   double gripperclosewidth; // displacement of gripper closed in meters
+    double gripperclosewidth; // displacement of gripper closed in meters
 
     // Mesh definitionss
     std::string filepath; /**< file path of the mesh file (STL) */
     double scale; /**< scale factor of the mesh */
 
     //std::string firstcolor; // rviz_visual_tools::colors firstcolor;
-     
+
     tf::Pose adjacentpose;
     tf::Vector3 centroid;
     double depth, width, height, radius;
@@ -147,8 +154,8 @@ struct Scene {
     void ClearScene();
     void NewScene();
     void InitScene(ros::NodeHandle & nh, std::string base_frame_);
-    void ChangeColor(std::string objname, std_msgs::ColorRGBA color); 
-    void UpdateScene(std::string objname, tf::Pose pose, std_msgs::ColorRGBA color); 
+    void ChangeColor(std::string objname, std_msgs::ColorRGBA color);
+    void UpdateScene(std::string objname, tf::Pose pose, std_msgs::ColorRGBA color);
     void UpdateScene(SceneObject & obj);
     void DrawScene();
     void DeleteObject(std::string objname);
@@ -169,7 +176,7 @@ struct Scene {
             std::string metatype,
             tf::Pose pose = tf::Identity(),
             tf::Pose adjacentpose = tf::Identity(),
-            std_msgs::ColorRGBA color=GetColor("CLEAR")
+            std_msgs::ColorRGBA color = GetColor("CLEAR")
             );
 
     // cylinder
@@ -201,7 +208,7 @@ struct Scene {
             double depth = 0.005,
             double width = 0.005,
             double height = 0.01,
-            std_msgs::ColorRGBA color=GetColor("GREEN"),
+            std_msgs::ColorRGBA color = GetColor("GREEN"),
             const std::string &ns = "WireframeCuboid");
 
     bool CreateWall(std::string name,
@@ -235,8 +242,11 @@ struct Scene {
 
     static bool IsNull(SceneObject & obj) {
         return &obj == &SceneObject::nullref;
-    } 
-    static SceneObject & NullObj(){ return SceneObject::nullref; }
+    }
+
+    static SceneObject & NullObj() {
+        return SceneObject::nullref;
+    }
     static std::size_t gid;
 
 private:
@@ -250,7 +260,7 @@ private:
     std::vector<SceneObject> objects;
     std::map<std::string, std::vector<SceneObject> > compound_objs;
     visualization_msgs::Marker generic_marker_;
-    
+
     void publishCylinder(tf::Pose pose,
             std_msgs::ColorRGBA color,
             double radius,
@@ -362,13 +372,13 @@ public:
         this->y = y;
         this->z = z;
 
-        tf::Vector3  origin(x, y, z);
-        tf::Vector3  offset = origin + compute_dxyz();
+        tf::Vector3 origin(x, y, z);
+        tf::Vector3 offset = origin + compute_dxyz();
 
         obj = pScene->CreateLine(Globals.StrFormat("confetti%d", n++), "confetti",
                 origin, offset,
-                rgba(Random(0.0, 128.0),Random(0.0, 128.0),Random(0.0, 128.0)).GetColorRGBA(),
-                 .005);
+                rgba(Random(0.0, 128.0), Random(0.0, 128.0), Random(0.0, 128.0)).GetColorRGBA(),
+                .005);
     }
 
     void Update() {

@@ -15,6 +15,8 @@
  */
 #pragma once
 #include <vector>
+#include <ros/ros.h>
+#include <geometry_msgs/Point.h>
 
 #include "RCS.h"
 #include "Kinematics.h"
@@ -24,6 +26,7 @@
 #include "Demo.h"
 #include "Debug.h"
 #include "gotraj/gotraj.h"
+
 using namespace gomotion;
 
 namespace RCS {
@@ -41,7 +44,6 @@ namespace RCS {
                 RCS::CanonWorldModel instatus, RCS::CanonWorldModel &outstatus);
         virtual void SetRange(std::vector<double> minrange, std::vector<double> maxrange);
     };
-    
 
     class GoInterpreter : public IRCSInterpreter {
     protected:
@@ -49,11 +51,19 @@ namespace RCS {
         boost::shared_ptr<RCS::CController>_nc;
         uint64_t _lastcmdid;
         boost::shared_ptr<GoTraj> _go;
+        ros::Publisher world_goalpose_pub;
+        ros::Publisher robot_goalpose_pub;
+        ros::Publisher world_gopose_pub;
+        ros::Publisher robot_gopose_pub;
+        ros::Publisher world_currentpose_pub;
+        ros::Publisher robot_currentpose_pub;
+        ros::NodeHandle _nh;
     public:
-        void Init(std::vector<double> jnts) ;
+        void Init(std::vector<double> jnts);
+        void PublishPose(tf::Pose &pose, ros::Publisher * pub);
         std::vector<double> minrange;
         std::vector<double> maxrange;
-        GoInterpreter(boost::shared_ptr<RCS::CController> nc,
+        GoInterpreter(ros::NodeHandle & nh, boost::shared_ptr<RCS::CController> nc,
                 IKinematicsSharedPtr k); //  ,
         virtual int ParseCommand(RCS::CanonCmd incmd, RCS::CanonCmd& outcmd,
                 RCS::CanonWorldModel instatus, RCS::CanonWorldModel &outstatus);

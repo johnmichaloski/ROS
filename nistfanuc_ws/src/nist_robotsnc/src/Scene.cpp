@@ -56,6 +56,7 @@ std::map<std::string, rgba> Scene::_color_index=
             
 std::map<std::string, std::string> SceneObject::_typemapping =
         map_list_of("gear", "mesh")
+("mesh", "mesh")
 ("gearholder", "mesh")
 ("table", "table")
 ("wall", "cuboid")
@@ -263,11 +264,6 @@ SceneObject & Scene::Find(std::size_t id) {
 }
 
 tf::Pose& Scene::FindPose(std::string name) {
-//    std::vector<SceneObject>::iterator it = std::find_if(objects.begin(), objects.end(),
-//            boost::bind(&SceneObject::name, _1) == name);
-//    if (it != objects.end())
-//        return (*it).pose;
-
      for (size_t i = 0; i < objects.size(); i++) {
         if (objects[i].name == name)
             return objects[i].pose;

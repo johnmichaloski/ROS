@@ -55,8 +55,59 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 // Quaternion http://docs.ros.org/jade/api/tf/html/c++/classtf_1_1Quaternion.html
 
 namespace tf {
-    inline tf::Pose Identity() {  tf::Pose p; p.setIdentity(); return p; }
-    inline tf::Quaternion QIdentity() {  return tf::Quaternion(0.0,0.0,0.0,1.0); }
+
+    /*!
+     * \brief Return identity tf pose. 
+     */
+    inline tf::Pose Identity() {
+        tf::Pose p;
+        p.setIdentity();
+        return p;
+    }
+
+    /*!
+     * \brief Return identity tf quaternion. 
+     */
+    inline tf::Quaternion QIdentity() {
+        return tf::Quaternion(0.0, 0.0, 0.0, 1.0);
+    }
+
+    /*!
+     * \brief Return all zero tf vector3. 
+     */
+    inline tf::Vector3 VIdentity() {
+        return tf::Vector3(0.0, 0.0, 0.0);
+    }
+
+    /*!
+     * \brief Return tf vector3 Z axis. 
+     */
+    inline tf::Vector3 ZAxis() {
+        return tf::Vector3(0.0, 0.0, 1.0);
+    }
+
+    /*!
+     * \brief Return tf vector3 Y axis. 
+     */
+    inline tf::Vector3 YAxis() {
+        return tf::Vector3(0.0, 1.0, 0.0);
+    }
+
+    /*!
+     * \brief Return tf vector3 X axis. 
+     */
+    inline tf::Vector3 XAxis() {
+        return tf::Vector3(1.0, 0.0, 0.0);
+    }
+
+    /*!
+     * \brief Return tf quaternion with the rotation set using axis angle notation. 
+     */
+    inline tf::Quaternion AxisAngle(double angle, tf::Vector3 axis) {
+        tf::Quaternion q;
+        q.setRotation(axis, angle);
+        return q;
+    }
 
 };
 

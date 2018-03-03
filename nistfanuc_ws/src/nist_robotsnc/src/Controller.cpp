@@ -34,28 +34,114 @@ using namespace Conversion;
 //////////////////////////////////
 namespace RCS {
     boost::mutex cncmutex;
-
+    static tf::Pose Ipose = tf::Identity();
     // ----------------------------------------------------
     // Extern definitions
-   // boost::shared_ptr<CController> Fnc = boost::shared_ptr<CController>(new RCS::CController("Fanuc CNC", DEFAULT_LOOP_CYCLE));
+    // boost::shared_ptr<CController> Fnc = boost::shared_ptr<CController>(new RCS::CController("Fanuc CNC", DEFAULT_LOOP_CYCLE));
     //boost::shared_ptr<CController> Mnc = boost::shared_ptr<CController>(new RCS::CController("Motoman CNC", DEFAULT_LOOP_CYCLE));
 
     // Static definitions
     bool CController::bRvizPubSetup = false;
-    ros::Publisher CController::rviz_jntcmd; 
+    ros::Publisher CController::rviz_jntcmd;
 
     // ----------------------------------------------------
+    // KinematicRing 
+
+    KinematicRing::KinematicRing() :
+            prerobotxform(1, tf::Identity()),
+            postrobotxform(2, tf::Identity()),
+    _gripperPose(postrobotxform[0]),
+    _basePose(prerobotxform[0]),
+    _toolPose(postrobotxform[1]) {
+        postrobotxform.clear();
+        postrobotxform.resize(2, tf::Identity());
+    }
+
+    void KinematicRing::SetGripperOffset(RCS::Pose offset) {
+        assert(postrobotxform.size()>0);
+        _gripperPose = offset;
+    }
+
+    /*!
+     *\brief Set tool (possibly held by end effector) offset, i.e., pose at end of robot arm
+     */
+    void KinematicRing::SetToolOffset(RCS::Pose offset) {
+        assert(postrobotxform.size()>1);
+        _toolPose = offset;
+    }
+
+    /*!
+     *\brief Set base offset from world into robot coordinate system as pose (or homogeneous matrice)
+     */
+    void KinematicRing::SetBaseOffset(RCS::Pose offset) {
+        assert(prerobotxform.size()>0);
+        _basePose = offset;
+    }
+
+    tf::Pose KinematicRing::WorldCoord(tf::Pose robotpose) {
+#if 1
+        // Fixme: this should be variable depending
+        // on current kinematic ring
+        for (size_t i = 0; i < prerobotxform.size(); i++)
+            robotpose = prerobotxform[i] * robotpose;
+        //for (size_t i = 0; i < postrobotxform.size(); i++)
+        //    robotpose = robotpose * postrobotxform[i];
+        robotpose = robotpose * _gripperPose;
+        return robotpose;
+#else
+        return basePose() * robotpose * gripperPose();    
+#endif
+    }
+
+    tf::Pose KinematicRing::RobotCoord(tf::Pose worldpose) {
+#if 1
+        // Fixme: this should be variable depending
+        // on current kinematic ring
+        //for(size_t i=0; i< prerobotxform.size(); i++)
+        for (size_t i = prerobotxform.size(); i-- > 0;)
+            worldpose = prerobotxform[i].inverse() * worldpose;
+        //for(size_t i=0; i< postrobotxform.size(); i++)
+        for (size_t i = postrobotxform.size(); i-- > 0; )
+            worldpose = worldpose * postrobotxform[i].inverse();
+#else
+        worldpose = worldpose * _gripperPose.inverse();
+#endif
+
+
+            
+       // return basePose().inverse() *  worldpose * gripperPose().inverse();
+         return worldpose;
+   }
+
+    tf::Pose KinematicRing::AddBaseTransform(tf::Pose pose) {
+        return _basePose * pose;
+    }
+
+    tf::Pose  KinematicRing::gripperPose() {
+        return _gripperPose;
+    }
+
+    tf::Pose  KinematicRing::basePose() {
+        return _basePose;
+    }
+
+    tf::Pose  KinematicRing::toolPose() {
+        return _toolPose;
+    }
+    // ----------------posecallback------------------------------------
     // CController 
 
-    CController::CController(std::string name, double cycletime) : _Name(name), RCS::Thread(cycletime),profiles(1) {
+    CController::CController(std::string name, double cycletime) :
+    _Name(name),
+    RCS::Thread(cycletime),
+    profiles(1) {
         //IfDebug(LOG_DEBUG << "CController::CController"); // not initialized until after main :()
         bCvsPoseLogging() = false;
         bMarker() = false;
         bSimulation() = true;
-        gripperPose() = RCS::Pose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0, 0, 0));
-        invGripperPose() = gripperPose().inverse();
-        _robotcmd=0;
-        bGrasping()=false;
+        bGrasping() = false;
+        _robotcmd = 0;      
+        ClearCallback();
 
     }
 
@@ -80,8 +166,8 @@ namespace RCS {
 
         status.Init(this);
         _nh = &nh;
-        crcl_status = _nh->advertise<nistcrcl::CrclStatusMsg>(prefix+"crcl_status", 1);
-        crcl_cmd = _nh->subscribe(prefix+"crcl_command", 10, &CController::CmdCallback, this);
+        crcl_status = _nh->advertise<nistcrcl::CrclStatusMsg>(prefix + "crcl_status", 1);
+        crcl_cmd = _nh->subscribe(prefix + "crcl_command", 10, &CController::CmdCallback, this);
         if (!bRvizPubSetup) {
             rviz_jntcmd = _nh->advertise<sensor_msgs::JointState>("nist_controller/robot/joint_states", 1);
             bRvizPubSetup = true;
@@ -89,25 +175,25 @@ namespace RCS {
 
         RvizMarker() = boost::shared_ptr<CRvizMarker>(new CRvizMarker(nh));
         RvizMarker()->Init();
-        
+
         status.currentjoints = RCS::ZeroJointState(Kinematics()->JointNames().size());
         status.currentjoints.name = Kinematics()->JointNames();
         // assume zero for now. Fixme: read joint state and set this value
-        status.currentjoints.position.resize(status.currentjoints.name.size(),0.0);
+        status.currentjoints.position.resize(status.currentjoints.name.size(), 0.0);
         gripper.init(nh, prefix);
-        
+
         // fixme: read arm and gripper joint positions
         if (bCvsPoseLogging()) {
             if (CvsPoseLoggingFile().empty())
                 LOG_DEBUG << "Empty CController::Setup CvsPoseLoggingFile";
             PoseLogging().Open(CvsPoseLoggingFile());
         }
-         cartesian_status = _nh->advertise<cartesian_trajectory_msg::CartesianTrajectoryPoint>(prefix+"cartesian_status", 1);
+        cartesian_status = _nh->advertise<cartesian_trajectory_msg::CartesianTrajectoryPoint>(prefix + "cartesian_status", 1);
 
     }
 
     RCS::CanonCmd CController::GetLastRobotCommand() {
-        IfDebug(LOG_DEBUG << "CController::GetLastRobotCommand"<< Name().c_str());
+        IfDebug(LOG_DEBUG << "CController::GetLastRobotCommand" << Name().c_str());
         try {
             RCS::CanonCmd cc = robotcmds.BackMsgQueue();
             return cc;
@@ -118,7 +204,7 @@ namespace RCS {
     }
 
     JointState CController::GetLastJointState() {
-        IfDebug(LOG_DEBUG << "CController::GetLastJointState"<< Name().c_str());
+        IfDebug(LOG_DEBUG << "CController::GetLastJointState" << Name().c_str());
         // This assumes queue of motion commands, with last being last in queue.
         try {
             RCS::CanonCmd cc = robotcmds.BackMsgQueue();
@@ -136,7 +222,7 @@ namespace RCS {
     }
 
     RCS::Pose CController::GetLastCommandedPose() {
-        IfDebug(LOG_DEBUG << "CController::GetLastCommandedPose"<< Name().c_str());
+        IfDebug(LOG_DEBUG << "CController::GetLastCommandedPose" << Name().c_str());
         JointState lastjoints = GetLastJointState();
         return Kinematics()->FK(lastjoints.position);
         //return EEPoseReader()->GetLinkValue(links.back());
@@ -150,7 +236,7 @@ namespace RCS {
         statusmsg.crclcommandnum = status.echocmd.crclcommandnum;
         statusmsg.crclstatusnum = status.echocmd.crclcommandnum;
         status.currentpose = Kinematics()->FK(status.currentjoints.position); /**<  current robot pose */
-        statusmsg.statuspose=Convert<tf::Pose, geometry_msgs::Pose>(status.currentpose);
+        statusmsg.statuspose = Convert<tf::Pose, geometry_msgs::Pose>(status.currentpose);
         statusmsg.statusjoints = status.currentjoints;
         statusmsg.eepercent = status.eepercent;
         crcl_status.publish(statusmsg);
@@ -180,7 +266,7 @@ namespace RCS {
             status.currentjoints.effort[k] = (fabs(status.currentjoints.velocity[k]) + fabs(lastjoints.velocity[k])) / 2.0;
         }
         // FIXME: this is only the current pose of the robot arm, not including base offset of gripper
-        tf::Pose &lastpose(laststatus.currentpose); 
+        tf::Pose & lastpose(laststatus.currentpose);
         lastpose = status.currentpose;
         status.currentpose = Kinematics()->FK(status.currentjoints.position); /**<  current robot pose */
         // compute ee cartesian vel, acc, jerk
@@ -196,12 +282,12 @@ namespace RCS {
         cartesian_status.publish(profile);
 
         std::vector<tf::Pose> poses = Kinematics()->ComputeAllFk(status.currentjoints.position);
-        if (bGrasping()){ // && GraspObj() != NULL) {
+        if (bGrasping()) { // && GraspObj() != NULL) {
             tf::Pose tfpose = basePose() * status.currentpose * gripperPose();
             GraspObj().pose = tfpose; // Eigen::Affine3d::Identity() * Convert<tf::Pose, Eigen::Affine3d>(tfpose);
             pScene->UpdateScene(GraspObj());
         }
-        
+
 #if defined(RobotCNCJointMove)
         LOG_DEBUG << Name().c_str() << " MOVE ROBOT JOINTS\n";
         LOG_DEBUG << "     Current Joints " << RCS::VectorDump<double>(_newcc.joints.position).c_str();
@@ -242,8 +328,9 @@ namespace RCS {
         ofsMotionTrace << "  World Pose    =" << RCS::DumpPoseSimple(basePose() * status.currentpose).c_str() << "\n";
         ofsMotionTrace << "  Robot Pose    =" << RCS::DumpPoseSimple(status.currentpose).c_str() << "\n";
         ofsMotionTrace << "  Goal Joints   =" << VectorDump<double>(_newcc.joints.position).c_str() << "\n" << std::flush;
-
+        posecallback(0, this->WorldCoord(status.currentpose));
     }
+
     /**
     std_msgs/Header headerposition
     uint8 crclcommandnum
@@ -267,7 +354,7 @@ namespace RCS {
             // Check for STOP MOTION - interrupts any commands and stops motion and clears message queue
 
             boost::mutex::scoped_lock lock(cncmutex);
-            
+
             RCS::CMessageQueue<nistcrcl::CrclCommandMsg>::xml_message_queue_iterator it;
             it = std::find_if(crclcmds.begin(), crclcmds.end(),
                     boost::bind(&nistcrcl::CrclCommandMsg::crclcommand, _1) == RCS::CanonCmdType::CANON_STOP_MOTION);
@@ -280,7 +367,7 @@ namespace RCS {
                 // Translate into Cnc.cmds 
                 // FIXME: this is an upcast
                 RCS::CanonCmd cc, newcc;
-                laststatus= status;
+                laststatus = status;
                 nistcrcl::CrclCommandMsg msg = crclcmds.PeekFrontMsgQueue();
 nextposition:
                 //ofsMotionTrace << Name().c_str() << " Command = " << RCS::sCmd[msg.crclcommand]<< "\n";
@@ -288,19 +375,16 @@ nextposition:
                 LOG_TRACE << "Msg Joints " << RCS::VectorDump<double>(msg.joints.position).c_str();
                 LOG_TRACE << "CC Joints " << RCS::VectorDump<double>(cc.joints.position).c_str();
 
-                newcc=cc;  // in case interpreter does not handle, e.g., dwell
+                newcc = cc; // in case interpreter does not handle, e.g., dwell
                 int cmdstatus = Interpreter()->ParseCommand(cc, newcc, laststatus, status);
-                newcc.CommandID()=_robotcmd++; 
+                newcc.CommandID() = _robotcmd++;
                 robotcmds.AddMsgQueue(newcc);
                 // Signals done with canon command
-                if(cmdstatus==CanonStatusType::CANON_WORKING){
-                
-                }
-                else if(cmdstatus== CanonStatusType::CANON_DONE) 
-                {
+                if (cmdstatus == CanonStatusType::CANON_WORKING) {
+
+                } else if (cmdstatus == CanonStatusType::CANON_DONE) {
                     crclcmds.PopFrontMsgQueue();
-                }
-                else if(cmdstatus== CanonStatusType::CANON_STOP){
+                } else if (cmdstatus == CanonStatusType::CANON_STOP) {
                     // assume last command was world, joint or ujoint motion
                     // stop inserted in front of queue. We are done. Messy? Yes.
                     crclcmds.PopFrontMsgQueue(); // pop stop command
@@ -315,21 +399,16 @@ nextposition:
                             goto nextposition;
                         }
                     }
-                }
-                else if(cmdstatus== CanonStatusType::CANON_ERROR )
-                {
+                } else if (cmdstatus == CanonStatusType::CANON_ERROR) {
                     crclcmds.ClearMsgQueue();
-                }
-                else if(cmdstatus== CanonStatusType::CANON_NOTIMPLEMENTED )
-                {
+                } else if (cmdstatus == CanonStatusType::CANON_NOTIMPLEMENTED) {
                     LOG_DEBUG << "Canon Command not handled";
                     assert(0);
-                }               
-             else 
-                {
+                }
+                else {
                     LOG_DEBUG << "Command not handled";
                     assert(0);
-                }  
+                }
             }
 
             ///////////////////////////////////////////////////////
@@ -339,7 +418,7 @@ nextposition:
                 status.crclcommandstatus = CanonStatusType::CANON_DONE;
                 // should do a "fake" move to same spot
                 UpdateRobot();
-                
+
             } else {
                 _lastcc = _newcc;
 
@@ -377,29 +456,26 @@ nextposition:
                     tf::Pose& pose = pScene->FindPose(_newcc.partname);
                     pScene->UpdateScene(_newcc.partname, pose, Scene::GetColor("CLEAR"));
                 } else if (_newcc.crclcommand == CanonCmdType::CANON_GRASP_OBJECT) {
-                     GraspObj() = pScene->Find(_newcc.partname);
-                     bGrasping()=true;
-                }else if (_newcc.crclcommand == CanonCmdType::CANON_RELEASE_OBJECT) {
-                     GraspObj() = Scene::NullObj();
-                     bGrasping()=false;
-//                } else if (_newcc.crclcommand == CanonCmdType::CANON_DRAW_OBJECT) {
-//                     pScene->UpdateScene(_newcc.partname.c_str(),
-//                            _Enewcc.finalpose,
-//                            _newcc.partcolor);
+                    GraspObj() = pScene->Find(_newcc.partname);
+                    bGrasping() = true;
+                } else if (_newcc.crclcommand == CanonCmdType::CANON_RELEASE_OBJECT) {
+                    GraspObj() = Scene::NullObj();
+                    bGrasping() = false;
+                    //                } else if (_newcc.crclcommand == CanonCmdType::CANON_DRAW_OBJECT) {
+                    //                     pScene->UpdateScene(_newcc.partname.c_str(),
+                    //                            _Enewcc.finalpose,
+                    //                            _newcc.partcolor);
                 } else if (_newcc.crclcommand == CanonCmdType::CANON_SET_GRIPPER_POSE) {
-                    gripperPose() = Conversion::Convert<geometry_msgs::Pose, tf::Pose>(_newcc.finalpose);
-                    invGripperPose() = gripperPose().inverse();
-                }
-                else if (_newcc.crclcommand == CanonCmdType::CANON_SET_BASE_POSE) {
-                    basePose() = Conversion::Convert<geometry_msgs::Pose, tf::Pose>(_newcc.finalpose);
-                    invBasePose() = basePose().inverse();
-                }
-                else if (_newcc.crclcommand == CanonCmdType::CANON_FEEDHOLD) {
-                        
+                    _gripperPose = Conversion::Convert<geometry_msgs::Pose, tf::Pose>(_newcc.finalpose);
+                    //invGripperPose() = gripperPose().inverse();
+                } else if (_newcc.crclcommand == CanonCmdType::CANON_SET_BASE_POSE) {
+                    _basePose = Conversion::Convert<geometry_msgs::Pose, tf::Pose>(_newcc.finalpose);
+                    //invBasePose() = basePose().inverse();
+                } else if (_newcc.crclcommand == CanonCmdType::CANON_FEEDHOLD) {
+
                 } else if (_newcc.crclcommand == CanonCmdType::CANON_STOP_MOTION) {
                     LOG_DEBUG << "STOP Controller ";
-                }
-                else {
+                } else {
                     UpdateRobot();
                     // Only want to mark once
                     if (bMarker()) {

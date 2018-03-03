@@ -12,7 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 find_package(Boost REQUIRED system thread chrono regex)
-find_package(Eigen REQUIRED)
+find_package(Eigen3 REQUIRED)
 
 ## Declare ROS messages and services
 add_message_files(  DIRECTORY msg FILES   CrclRawCommandMsg.msg)
@@ -37,7 +37,7 @@ catkin_package(
     message_runtime
   DEPENDS
     Boost
-    Eigen
+    Eigen3
 )
 
 ###########

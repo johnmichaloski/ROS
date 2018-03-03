@@ -117,8 +117,9 @@ add_custom_target(dummy_${PROJECT_NAME} SOURCES ${extra_files})
 link_directories(/usr/lib/x86_64-linux-gnu/)
 
 target_link_libraries(nistcrcl 
+libicuuc.so
 libtinyxml.a  
-libxerces-c.a  
+libxerces-c.so  
 ${catkin_LIBRARIES}
 ${Boost_LIBRARIES}
 )

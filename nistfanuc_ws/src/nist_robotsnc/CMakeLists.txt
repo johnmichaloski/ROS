@@ -18,18 +18,21 @@ find_package(catkin REQUIRED COMPONENTS
   eigen_conversions
   rviz_visual_tools
   moveit_core
-  moveit_ros_planning_interface
+ # moveit_ros_planning_interface
   moveit_ros_move_group
   moveit_ros_planning
   moveit_ros_manipulation
   gotraj
   gokin
   trac_ik_lib
+  nistcrcl
   #rviz
   )
 find_package(Boost REQUIRED system thread chrono regex log_setup log locale )
 find_package(Eigen REQUIRED)
 find_package(Threads REQUIRED)
+find_package(Freetype REQUIRED)
+find_package(JPEG REQUIRED)
 
 #The catkin_package function specifies which dependencies your package exports to its dependencies. In particular, #INCLUDE_DIRS specifies which directory in your package contains the header directory that should be on the include #path for any packages that compile against your package.
 
@@ -46,7 +49,7 @@ catkin_package(
   trajectory_msgs
   geometry_msgs
   moveit_core
-  moveit_ros_planning_interface
+#  moveit_ros_planning_interface
   moveit_ros_move_group
   moveit_ros_planning
   moveit_ros_manipulation
@@ -70,6 +73,7 @@ catkin_package(
 ###########
 ## Build ##
 ###########
+add_definitions(-std=c++11)
 # set(CMAKE_CXX_COMPILER "g++")
 #set(CMAKE_CXX_FLAGS "-Wdeprecated-declarations ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS "-w ${CMAKE_CXX_FLAGS}")
@@ -102,6 +106,7 @@ include_directories(include
   ${catkin_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
   ${Eigen_INCLUDE_DIRS}
+  ${FREETYPE_INCLUDE_DIRS}
   # include breakdown for this project
   include/${PROJECT_NAME}
   #   include/${PROJECT_NAME}/CrclXsd
@@ -145,6 +150,9 @@ add_executable(nist_robotsnc
   src/CollisionDetection.cpp
   src/Checkers.cpp
   src/RvizCheckers.cpp
+  src/ttt.cpp
+  src/Bezier.cpp
+  src/CrclApi.cpp
   )
 
 #Add all files in subdirectories of the project in
@@ -173,7 +181,8 @@ target_link_libraries(nist_robotsnc
   ${catkin_LIBRARIES}
   ${Boost_LIBRARIES}
   #${QT_LIBRARIES}
-
+  ${FREETYPE_LIBRARIES}
+  ${JPEG_LIBRARIES}
   )
 # http://docs.ros.org/jade/api/catkin/html/user_guide/variables.html
 message("DEBUG variable PROJECT_NAME        : ${PROJECT_NAME}")
@@ -184,6 +193,7 @@ message("DEBUG variable CMAKE_BINARY_DIR    : ${CMAKE_BINARY_DIR}")
 message("DEBUG variable catkin_INCLUDEDIR   :  ${catkin_INCLUDE_DIRS}")
 message("DEBUG variable Eigen_INCLUDE_DIRS  :  ${Eigen_INCLUDE_DIRS}")
 message("DEBUG variable Boost_INCLUDE_DIRS  :  ${Boost_INCLUDE_DIRS}")
+message("DEBUG variable FREETYPE_INCLUDE_DIRS  :  ${FREETYPE_INCLUDE_DIRS}")
 message("DEBUG variable CATKIN_DEVEL_PREFIX :  ${CATKIN_DEVEL_PREFIX}")
 message("DEBUG variable CMAKE_INSTALL_PREFIX:  ${CMAKE_INSTALL_PREFIX}")
 message("DEBUG variable QT_LIBRARIES        :  ${QT_LIBRARIES}")
@@ -193,12 +203,13 @@ message("DEBUG variable CMAKE_EXE_LINKER_FLAGS:  ${CMAKE_EXE_LINKER_FLAGS}")
 #message("DEBUG variable catkin_LIBRARIES   :  ${catkin_LIBRARIES}") # works but long
 message("DEBUG variable Boost_LIBRARIES     :  ${Boost_LIBRARIES}")
 message("DEBUG variable CMAKE_PREFIX_PATH   :  ${CMAKE_PREFIX_PATH}")
+message("DEBUG variable Freetype_LIBRARIES     :  ${FREETYPE_LIBRARIES}")
 
 
 #catkin_add_gtest(crclmathunittest test/crclmathtest.cpp)
 
 #catkin_add_gtest(conversionTest test/conversiontests.cpp)
-#add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --verbose)
+#add_custom_target(check COMMAND ${CM=0.001AKE_CTEST_COMMAND} --verbose)
 #target_link_libraries(conversionTest ${catkin_LIBRARIES} ${Boost_LIBRARIES} )
 
 #############

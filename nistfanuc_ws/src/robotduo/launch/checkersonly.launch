@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+
+<launch>
+	<node name="demo" pkg="nist_robotsnc" type="nist_robotsnc" required="true" />
+</launch>

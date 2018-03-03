@@ -60,7 +60,9 @@ public:
     /*!
      *\brief Initialization routine which subsribes to the "Marker" topic..
      */
-    void Init();
+    void Init(std::string frameid="world");
+    
+    void SetFrameId(std::string frameid) { _frameid=frameid; }
     /*!
      *\brief Publish a visualization marker message to the Marker topic.
      * \param pose p is where the marker is to be placed relative to the base link.
@@ -80,10 +82,23 @@ public:
      * \param red, green. blue and alpha are the values used herein.
      */
     void SetColor(double r, double g, double b, double a);
+    void SetColor(int r, int g, int b){
+        SetColor((double) r/255.0,(double) g/255.0,(double) b/255.0, 1.0);
+    }
     /*!
      *\brief Clear all markers that have been created.
      */   
     void Clear();
+    
+    void CRvizMarker::publishLine(const tf::Vector3 &point1,
+        const tf::Vector3 &point2,
+        double radius=0.1,
+        double scale=0.01);
+    
+    int CRvizMarker::publishMesh(const tf::Pose &pose, 
+    const std::string &file_name, 
+        double scale=1.0, 
+        std::size_t id=0);
     /////////////////////////////////
     ros::Publisher marker_pub;
     ros::NodeHandle & n;
@@ -96,4 +111,5 @@ public:
      * \param shape is the enumeration of the marker type. 
      */
     uint32_t SetShape(uint32_t shape);
+    std::string _frameid;
 };

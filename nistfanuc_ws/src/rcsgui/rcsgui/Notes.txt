@@ -1,0 +1,66 @@
+
+
+
+Tue 25 Apr 2017 11:24:50 AM EDT 
+parse tree of boost really hung gdb.
+Not sure why, switched to QSetting which too had issues
+Also - comma in setting really messed up value
+
+
+    //settings.beginGroup("system");
+    //const QStringList childKeys = settings.childKeys();
+    //qDebug( "%s\n", childKeys.join(",").toStdString().c_str());
+    QString list = value.toStringList().join(",");
+    qDebug("%s\n", list.toStdString().c_str() );
+    for(size_t i=0; i<robots.size(); i++)
+    {
+        qDebug("Parse %s\n", RCS::VectorDump<std::string>(w.rosThread.robotconfig.jointnames[robots[i]]).c_str());
+
+    }
+
+
+#include "NIST/Boost.h"
+
+
+#if 0
+    try {
+        pt::ptree root;
+        std::cout << path << "\n";
+        pt::ini_parser::read_ini(path + "/config/" + ROSPACKAGENAME + ".ini", root);
+        std::vector<std::string> robots = GetIniTypes<std::string>(root, "system.robots");
+        //std::string robotname = root.get<std::string>(robots[i] + ".longname");
+        for(size_t i=0; i< robots.size(); i++)
+        {
+            std::vector<std::string> jointnames = GetIniTypes<std::string>(root, robots[i] + ".joints");
+            std::cout<< RCS::VectorDump<std::string> (jointnames) << "\n";
+            w.rosThread.rjoints[robots[i]]  = jointnames;
+
+        }
+    }
+    catch (std::exception &e) {
+        qDebug( "%s\n", e.what());
+        throw;
+    }
+#endif
+
+    static char * robots[] = {"fanuc","motoman"};
+    for(size_t i=0; i<2; i++)
+    {
+
+        qDebug("Robot %s\n", RCS::VectorDump<std::string>(rosThread.robots.jointnames[robots[i]]).c_str());
+
+    }
+
+//    ui->tableWidget->setItem(0, 0, tableItems[0][0]);
+//    ui->tableWidget->setItem(0, 1, tableItems[0][1]);
+//    ui->tableWidget->setItem(0, 2, tableItems[0][2]);
+//    tableItems[0][0]->setText(QString("0.1"));
+ //   tableItems[0][1]->setText(QString(".11"));
+//    tableItems[
+tableItems[0][2]->setText(QString(".22!!"));0][2]->setText(QString(".22"));
+
+
+//    QTimer *timer = new QTimer(this);
+//    connect(timer, SIGNAL(timeout()), ui->tableWidget, SLOT(UpdateViews()));
+//    timer->start(5000);
+    //connect(ui->tableWidget, SIGNAL(cellChanged(int, int)), otherObject, SLOT(youSlot(int, int));

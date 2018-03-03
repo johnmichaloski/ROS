@@ -5,12 +5,17 @@
 
 p=/usr/local/michalos/nistfanuc_ws
 cmd=( gnome-terminal )
-cmd+=( --tab --title="rviz"  --working-directory="$p" 
--e 'bash -c "exec bash"')
-cmd+=( --tab --title="catkin" --working-directory="$p" 
--e 'bash -c "exec bash;source ./devel/setup.bash; print env"')
+
 cmd+=( --tab --title="roslaunch" --working-directory="$p" 
--e 'bash -c "`source ./devel/setup.bash`; exec bash"')
-cmd+=( --tab --title="github" --working-directory="$HOME/src/github/johnmichaloski/ROS" 
--e 'bash -c "exec bash"')
+-e 'bash -c "source ./devel/setup.bash; exec bash"')
+
+cmd+=( --tab --title="master" --working-directory="$p" 
+-e 'bash -c "source ./devel/setup.bash; roslaunch robotduo simple.launch"')
+
+cmd+=( --tab --title="checkers demo"  --working-directory="$p" 
+-e "bash -e $p/bin/startrviz.bash")
+
+# roslaunch robotduo checkersonly.launch
 "${cmd[@]}"
+
+

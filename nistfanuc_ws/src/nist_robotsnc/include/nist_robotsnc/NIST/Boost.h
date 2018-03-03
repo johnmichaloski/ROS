@@ -17,6 +17,8 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 #include <boost/tokenizer.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/property_tree/ini_parser.hpp>
+
 namespace pt = boost::property_tree;
 /**
    Turn string s into a vector of types T using separator

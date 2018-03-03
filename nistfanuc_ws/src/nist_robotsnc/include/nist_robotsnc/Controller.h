@@ -15,6 +15,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/signals2/signal.hpp>
 #include <boost/circular_buffer.hpp>
+#include <boost/function.hpp> 
 
 #include <list>
 
@@ -48,6 +49,44 @@ namespace RCS {
     extern boost::mutex kdlMutex; /**< mutex for stopping */
     extern boost::condition kdlCond; /**< condition for stopping */
 
+    struct KinematicRing {
+        KinematicRing();
+        /*!
+         *\brief Set gripper (or end effector) offset, i.e., pose at end of robot arm
+         */
+        void SetGripperOffset(RCS::Pose offset);
+
+        /*!
+         *\brief Set tool (possibly held by end effector) offset, i.e., pose at end of robot arm
+         */
+        void SetToolOffset(RCS::Pose offset);
+        /*!
+         *\brief Set base offset from world into robot coordinate system as pose (or homogeneous matrice)
+         */
+        void SetBaseOffset(RCS::Pose offset);
+
+        tf::Pose WorldCoord(tf::Pose robotpose);
+
+        tf::Pose RobotCoord(tf::Pose worldpose);
+
+        tf::Pose AddBaseTransform(tf::Pose pose);
+
+        tf::Pose  gripperPose();
+
+        tf::Pose  basePose();
+
+        tf::Pose  toolPose();
+    protected:
+        std::vector<tf::Pose> prerobotxform;
+        std::vector<tf::Pose>  postrobotxform;
+        // These are now part of a kinematic chain of the robot, 
+        // invisible to external world.
+        // You must call world or robot to transform 
+        tf::Pose &_gripperPose;
+        tf::Pose & _basePose;
+        tf::Pose & _toolPose;
+       
+    };
     /**
      * \brief The CController provides a collection for all the relevant controller pieces.
      *  The CController is the main controller class to collect all the references/pointers to instances in the project.
@@ -55,7 +94,9 @@ namespace RCS {
      * control objects (e.g., kinematics, joint writer, joint reader, etc.)
      *
      */
-    struct CController : public RCS::Thread {
+    struct CController : public RCS::Thread,
+    public KinematicRing
+    {
         typedef std::list<RCS::CanonCmd> archive_message_list;
         /*!
          * \brief CController constructor that requires a cycle time for RCS thread timing.
@@ -64,6 +105,11 @@ namespace RCS {
         CController(std::string name, double cycletime);
 
         ~CController(void);
+        
+        boost::function<void( int, tf::Pose) > posecallback;
+        static void dummyCallback( int, tf::Pose ) {} 
+        void ClearCallback(){posecallback=dummyCallback; }
+
         bool IsBusy();
         /*!
          *\brief Verifies that all the pointer references in the controller have been instantiated (i.e., not null).
@@ -90,20 +136,7 @@ namespace RCS {
          *\brief Creates a header line containing names of comma separated string fields that describes the current state of robot. (Can use other separator). 
          */
         std::string DumpHeader(std::string separator = ",");
-         /*!
-         *\brief Set tool (or end effector) offset, i.e., pose at end of robot arm
-         */               
-        void SetToolOffset(RCS::Pose offset) {
-            _gripperPose = offset;
-            _invGripperPose = offset.inverse();
-        }
-         /*!
-         *\brief Set base offset from world into robot coordinate system as pose (or homogeneous matrice)
-         */  
-        void SetBaseOffset(RCS::Pose offset) {
-            _basePose = offset;
-            _invBasePose = offset.inverse();
-        }
+
         
         // CRCL interface
         ros::Publisher crcl_status; /**< ros publisher information used for crcl status updates */
@@ -174,35 +207,19 @@ namespace RCS {
         VAR(bCvsPoseLogging, bool)
         VAR(CvsPoseLoggingFile, std::string)
         VAR(PoseLogging, CsvLogging)
-        VAR(gripperPose, tf::Pose);
-        VAR(invGripperPose, tf::Pose);
-        VAR(basePose, tf::Pose);
-        VAR(invBasePose, tf::Pose);
+                
         VAR(QBend, tf::Quaternion);
         VAR(bGrasping, bool);
         VAR(linearmax, std::vector<double>);
         VAR(rotationmax, std::vector<double>);
-                
-        protected: SceneObject  _GraspObj; \
+      
+        protected: SceneObject  _GraspObj; 
 	public: SceneObject & GraspObj( ) { return _GraspObj; }
-
-        //VAR(GraspObj, SceneObject *)
-                
-
+               
         ros::NodeHandle *_nh;
-
         //         static unsigned long _csvlogFlag;
 
-//        enum MotionPlannerEnum {
-//            NOPLANNER = 0, MOVEIT, DESCARTES, BASIC, WAYPOINT, GOMOTION
-//        };
-//        MotionPlannerEnum eCartesianMotionPlanner; /**< type of cartesian motion to use */
-//        MotionPlannerEnum eJointMotionPlanner; /**< type of joint motion to use */
     };
-    //extern CController Fnc; /**< global declaration of Fanuc controller */
-    // extern CController Mnc; /**< global declaration of Motoman controller */
-    //extern boost::shared_ptr<CController> Fnc;
-    //extern boost::shared_ptr<CController> Mnc;
 
     //* The RobotCommands is currently a dummy class. The CController thread 
 #ifdef ROBOTSTATUS

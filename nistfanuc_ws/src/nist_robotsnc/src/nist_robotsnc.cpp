@@ -40,17 +40,15 @@ namespace pt = boost::property_tree;
 #include "NIST/Boost.h"
 #include "Debug.h"
 #include "Scene.h"
-#include "StackTrace.h"
 #include "RCSInterpreter.h"
 #include "Demo.h"
 #include "Test.h"
 #include "Config.h"
 #include "nist_robotsnc/MotionException.h"
 #include "nist_robotsnc/Shape.h"
-
+#include "nist_robotsnc/ttt.h"
 
 using namespace Conversion;
-
 
 int main(int argc, char** argv) {
     int bPublishPoint = 0;
@@ -67,7 +65,7 @@ int main(int argc, char** argv) {
         for (size_t i = 0; i < 4; i++)
             wspath = wspath.substr(0, wspath.find_last_of('/'));
         Globals._appproperties["Workspace"] = wspath + "/";
-        //std::string wspath =  path + "/../../../../" ;
+
         std::string pkgpath = wspath + "/src/" + pkgname + "/config/" + pkgname + ".ini";
         std::string envstr = ExecuteShellCommand("export ROS_PACKAGE_PATH; cd " + wspath + "; /bin/bash -c \"source devel/setup.bash & env \"");
         std::cout << envstr << "\n";
@@ -109,7 +107,6 @@ int main(int argc, char** argv) {
             ros::console::notifyLoggerLevelsChanged();
         }
 #endif  
-
         //  Required for multithreaded ROS communication  NOT TRUE: if not ros::spinOnce
         ros::AsyncSpinner spinner(2);
         spinner.start();
@@ -119,7 +116,7 @@ int main(int argc, char** argv) {
         Globals.WriteFile(Globals.ExeDirectory + "rosconfig.txt", params);
         path = ros::package::getPath(ROSPACKAGENAME);
 
- 
+
 #ifdef GEARS
         GearDemo geardemo(nh, path, Convert<tf::Vector3, tf::Pose>(tf::Vector3(0.25, 0.5, 0.0)));
 
@@ -139,7 +136,7 @@ int main(int argc, char** argv) {
         Globals._appproperties[ROSPACKAGENAME] = path;
         MotionException::Load();
         std::vector<boost::shared_ptr<CController> > ncs;
-        std::vector<InlineRobotCommands > nccmds;
+        std::vector<CrclApi > nccmds;
         std::vector<double> ds;
         pt::ptree root;
         std::string baselink;
@@ -164,7 +161,7 @@ int main(int argc, char** argv) {
                 int bCsvLogging = root.get<int>(robots[i] + ".csvlogging", 0);
 
                 ncs.push_back(boost::shared_ptr<CController>(new RCS::CController(robotname, dCycleTime)));
-                ncs[i]->SetToolOffset(Convert<std::vector<double>, tf::Pose> (dtool));
+                ncs[i]->SetGripperOffset(Convert<std::vector<double>, tf::Pose> (dtool));
                 ncs[i]->SetBaseOffset(Convert<std::vector<double>, tf::Pose> (dbase));
                 ncs[i]->QBend() = tf::Quaternion(Deg2Rad(dbend[0]), Deg2Rad(dbend[1]), Deg2Rad(dbend[2]));
                 ncs[i]->bCvsPoseLogging() = false;
@@ -186,19 +183,19 @@ int main(int argc, char** argv) {
                     kin->Init(nh);
                     ncs[i]->Kinematics() = kin;
                     ncs[i]->Setup(nh, prefix);
-                 } catch (std::exception & ex) {
+                } catch (std::exception & ex) {
                     std::cout << "Kinematics error: " << ex.what() << "\n";
                 }
 
                 // This should be selectable
                 //ncs[i]->Interpreter() = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter(ncs[i], kin));
-                ncs[i]->Interpreter() = boost::shared_ptr<IRCSInterpreter>(new RCS::GoInterpreter(ncs[i], kin));
+                ncs[i]->Interpreter() = boost::shared_ptr<IRCSInterpreter>(new RCS::GoInterpreter(nh, ncs[i], kin));
                 for (size_t j = 0; j < jointmovenames.size(); j++) {
                     ds = GetIniTypes<double>(root, robots[i] + "." + jointmovenames[j]);
                     ncs[i]->NamedJointMove[jointmovenames[j]] = ds;
                 }
                 ncs[i]->Interpreter()->Init(ncs[i]->NamedJointMove["Home"]);
-                nccmds.push_back(InlineRobotCommands(ncs[i]));
+                nccmds.push_back(CrclApi(ncs[i]));
                 ofsRobotURDF << "NC " << ncs[i]->Name().c_str() << "\n";
                 ofsRobotURDF << "base link " << ncs[i]->Kinematics()->getRootLink().c_str() << "\n";
                 ofsRobotURDF << "ee link " << ncs[i]->Kinematics()->getTipLink().c_str() << "\n";
@@ -227,9 +224,9 @@ int main(int argc, char** argv) {
             LOG_FATAL << e.what();
             throw;
         }
-        
+        // This mustbe called first
         pScene->InitScene(nh, baselink);
-        
+
         double table_length = root.get<double>("checkers.TABLE_LENGTH", 0.4);
         double table_width = root.get<double>("checkers.TABLE_WIDTH", 0.4);
         double table_height = root.get<double>("checkers.TABLE_HEIGHT", 0.05);
@@ -247,7 +244,7 @@ int main(int argc, char** argv) {
         cColorPicker colorpicker;
         std::vector<rgba> myCols;
         colorpicker.Pick(myCols, 50);
-        for(size_t j=0; j< myCols.size(); j++){
+        for (size_t j = 0; j < myCols.size(); j++) {
             pScene->ChangeColor("table1", myCols[j].GetColorRGBA());
             ros::Duration(0.05).sleep();
         }
@@ -302,6 +299,47 @@ int main(int argc, char** argv) {
                 r.sleep();
             }
         }
+
+        //#define SCRIPTDEMO  
+#ifdef SCRIPTDEMO
+
+        pScene->ClearScene();
+        tf::Pose penloc(tf::QIdentity(), tf::Vector3(0.0, 0.0, .12));
+        ScriptingDemo scriptdemo(nh);
+        //scriptdemo.RvizMarker()->SetColor(0.,0.,1.0,1.0);
+
+        std::string penholderfile = root.get<std::string>("stl.holder", "");
+        double penholderscale = root.get<double>("stl.holder/scale", 1.0);
+
+        std::string pencilfile = root.get<std::string>("stl.pencil", "");
+        double pencilscale = root.get<double>("stl.pencil/scale", 1.0);
+        //        scriptdemo.RvizMarker()->publishMesh(
+        //                //tf::Pose(tf::AxisAngle(M_PI, tf::XAxis()), tf::Vector3(0.0, 0., 0.5)), // tf::Identity(),
+        //                tf::Pose(tf::QIdentity(), tf::Vector3(-0.0144,0.0134,0.0) ), // tf::Identity(),
+        //                pencilfile,
+        //                pencilscale);
+
+
+        scriptdemo.Init(&nccmds[0],
+                penholderfile,
+                penholderscale,
+                pencilfile,
+                pencilscale);
+
+        tf::Pose rot(tf::AxisAngle(0.5 * M_PI, tf::ZAxis()), tf::Vector3(0.0, 0., 0.0));
+
+
+        scriptdemo.Draw("NIST", 12, .25, tf::Vector3(0.25, -0.2, 0.25));
+
+#endif
+
+        //#define PAINTDEMO  
+#ifdef PAINTDEMO        
+        PaintingDemo paintdemo(nh);
+        ;
+        std::string jpgfile = Globals._appproperties["Workspace"] + "/src/" + Globals._appproperties["Package"] + "/config/american-flag-medium.jpg";
+        paintdemo.Draw(&nccmds[0], jpgfile, .25);
+#endif
 #ifdef CHECKERS
         CheckersGame checkers(nh);
         /** CHeckers board rviz dimensions */
@@ -321,10 +359,12 @@ int main(int argc, char** argv) {
 
         assert(checkers.xyz.size() > 2);
 
- 
+
         Checkers::BoardType outboard;
         std::string filename(path + "/config/" + "Checkers.txt");
         Checkers::CheckersGame & game = checkers.RvizGame()->Game();
+
+newgame:
 #if 0
         // This might be cleaner, but the \r problem from windows is disconcerting
         std::ifstream checkersIss(filename);
@@ -359,6 +399,7 @@ int main(int argc, char** argv) {
             r.sleep();
         } while (ros::ok());
 #endif
+        goto newgame;
         spinner.stop();
         LOG_DEBUG << "Cntrl C pressed \n" << std::flush;
 

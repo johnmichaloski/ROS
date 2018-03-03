@@ -41,7 +41,7 @@
 //http://docs.ros.org/jade/api/moveit_msgs/html/index-msg.html
 #include <moveit_msgs/GetPositionFK.h>
 #include <moveit_msgs/GetPositionIK.h>
-#include <moveit_msgs/GetKinematicSolverInfo.h>
+//#include <moveit_msgs/GetKinematicSolverInfo.h>
 #include <moveit_msgs/KinematicSolverInfo.h>
 #else
 
@@ -104,16 +104,16 @@ class Kinematics {
          * @param A request message. See service definition for GetKinematicSolverInfo for more information on this message.
          * @param The response message. See service definition for GetKinematicSolverInfo for more information on this message.
          */
-        bool getIKSolverInfo(moveit_msgs::GetKinematicSolverInfo::Request &request,
-                             moveit_msgs::GetKinematicSolverInfo::Response &response);
+        //bool getIKSolverInfo(moveit_msgs::GetKinematicSolverInfo::Request &request,
+        //                     moveit_msgs::GetKinematicSolverInfo::Response &response);
 
         /**
          * @brief This is the basic kinematics info service that will return information about the kinematics node.
          * @param A request message. See service definition for GetKinematicSolverInfo for more information on this message.
          * @param The response message. See service definition for GetKinematicSolverInfo for more information on this message.
          */
-        bool getFKSolverInfo(moveit_msgs::GetKinematicSolverInfo::Request &request,
-                             moveit_msgs::GetKinematicSolverInfo::Response &response);
+        //bool getFKSolverInfo(moveit_msgs::GetKinematicSolverInfo::Request &request,
+         //                    moveit_msgs::GetKinematicSolverInfo::Response &response);
 
         /**
          * @brief This is the basic forward kinematics service that will return information about the kinematics node.
@@ -181,8 +181,8 @@ bool Kinematics::init() {
 #if 1
     fk_service = nh.advertiseService(FK_SERVICE,&Kinematics::getPositionFK,this);
     ik_service = nh.advertiseService(IK_SERVICE,&Kinematics::getPositionIK,this);
-    ik_solver_info_service = nh.advertiseService(IK_INFO_SERVICE,&Kinematics::getIKSolverInfo,this);
-    fk_solver_info_service = nh.advertiseService(FK_INFO_SERVICE,&Kinematics::getFKSolverInfo,this);
+    //ik_solver_info_service = nh.advertiseService(IK_INFO_SERVICE,&Kinematics::getIKSolverInfo,this);
+    //fk_solver_info_service = nh.advertiseService(FK_INFO_SERVICE,&Kinematics::getFKSolverInfo,this);
 #endif
     return true;
 }
@@ -344,17 +344,17 @@ bool Kinematics::getPositionIK(moveit_msgs::GetPositionIK::Request &request,
     }
 }
 
-bool Kinematics::getIKSolverInfo(moveit_msgs::GetKinematicSolverInfo::Request &request,
-                                 moveit_msgs::GetKinematicSolverInfo::Response &response) {
-    response.kinematic_solver_info = info;
-    return true;
-}
+//bool Kinematics::getIKSolverInfo(moveit_msgs::GetKinematicSolverInfo::Request &request,
+ //                                moveit_msgs::GetKinematicSolverInfo::Response &response) {
+ //   response.kinematic_solver_info = info;
+ //   return true;
+//}
 
-bool Kinematics::getFKSolverInfo(moveit_msgs::GetKinematicSolverInfo::Request &request,
-                                 moveit_msgs::GetKinematicSolverInfo::Response &response) {
-    response.kinematic_solver_info = info;
-    return true;
-}
+//bool Kinematics::getFKSolverInfo(moveit_msgs::GetKinematicSolverInfo::Request &request,
+//                                 moveit_msgs::GetKinematicSolverInfo::Response &response) {
+//    response.kinematic_solver_info = info;
+//    return true;
+//}
 
 bool Kinematics::getPositionFK(moveit_msgs::GetPositionFK::Request &request,
                                moveit_msgs::GetPositionFK::Response &response) {

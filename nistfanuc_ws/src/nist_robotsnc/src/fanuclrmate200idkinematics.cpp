@@ -8,7 +8,6 @@
 
 #include "Kinematics.h"
 #include <eigen_conversions/eigen_msg.h>
-#include "RosConversions.h"
 #include <iostream>
 #include "Conversions.h"
 #include "Globals.h"

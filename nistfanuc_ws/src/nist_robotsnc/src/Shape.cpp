@@ -33,7 +33,7 @@ namespace ShapeModel {
             shape.cube.depth = root.get<double>(prefix + name + ".depth");
         }
         boost::optional<std::string> pos = root.get_optional<std::string>(prefix + name + ".position");
-        if (pos != NULL) {
+        if (pos) {
             std::vector<double> position = GetTypes<double>(root, prefix + name + ".position");
             shape.x = position[0]*convfactor;
             shape.y = position[1]*convfactor;
@@ -51,7 +51,7 @@ namespace ShapeModel {
                 Shape shape = ParseShape("parts.", v.first.data(), root);
                 parts[shape.name] = shape;
                 boost::optional<std::string> c = root.get_optional<std::string>("parts." + shape.name + ".contains");
-                if (c != NULL) {
+                if (c) {
                     BOOST_FOREACH(pt::ptree::value_type &v3,
                             root.get_child("parts." + shape.name + ".contains"))
                     {

@@ -486,6 +486,8 @@ namespace RCS {
         }
         virtual void Init(std::vector<double> jnts) {
         }
+
+
    };
 }; 
 

@@ -149,13 +149,13 @@
   <link name="${prefix}robotiq_85_adapter_link">
     <visual>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/visual/robotiq_85_gripper_adapter_plate.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_adapter_plate.dae"/>
       </geometry>
       <origin rpy="1.5707 0 1.5707" xyz="0 0 0"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/collision/robotiq_85_gripper_adapter_plate.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_adapter_plate.dae"/>
       </geometry>
       <origin rpy="0 0 1.5707" xyz="0 0 0"/>
     </collision>
@@ -173,13 +173,13 @@
   <link name="${prefix}robotiq_85_base_link">
     <visual>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/visual/robotiq_85_gripper_base.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_base.dae"/>
       </geometry>
       <origin rpy="3.1415 0 1.5707" xyz="0 0 0"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/collision/robotiq_85_gripper_base.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_base.dae"/>
       </geometry>
       <origin rpy="1.5707 0 1.5707" xyz="0 0 0"/>
     </collision>
@@ -209,13 +209,13 @@
   <link name="${prefix}robotiq_85_left_knuckle_link">
     <visual>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_0_L.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_0_L.dae"/>
       </geometry>
       <origin rpy="3.14159 -1.5707 0" xyz="0 .04191 -.0306"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_0_L.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_0_L.dae"/>
       </geometry>
       <origin rpy="1.5707 -1.5707 0" xyz="0 .04191 -.0306"/>
     </collision>
@@ -224,13 +224,13 @@
   <link name="${prefix}robotiq_85_right_knuckle_link">
     <visual>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_0_R.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_0_R.dae"/>
       </geometry>
       <origin rpy="3.14159 1.5707 0" xyz="0 .04191 -.0306"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_0_R.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_0_R.dae"/>
       </geometry>
       <origin rpy="1.5707 1.5707 0" xyz="0 .04191 -.0306"/>
     </collision>
@@ -259,13 +259,13 @@
   <link name="${prefix}robotiq_85_left_finger_link">
     <visual>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_1_L.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_1_L.dae"/>
       </geometry>
       <origin rpy="0 1.5707 0" xyz="0 -.03683 .06194"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_1_L.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_1_L.dae"/>
       </geometry>
       <origin rpy="-1.5707 1.5707 0" xyz="0 -.03683 .06194"/>
     </collision>
@@ -274,13 +274,13 @@
   <link name="${prefix}robotiq_85_right_finger_link">
     <visual>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_1_R.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_1_R.dae"/>
       </geometry>
       <origin rpy="0 -1.5707 0" xyz="0 -.03683 .06194"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_1_R.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_1_R.dae"/>
       </geometry>
       <origin rpy="-1.5707 -1.5707 0" xyz="0 -.03683 .06194"/>
     </collision>
@@ -311,13 +311,13 @@
   <link name="${prefix}robotiq_85_left_inner_knuckle_link">
     <visual>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_2_L.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_2_L.dae"/>
       </geometry>
       <origin rpy="0 1.5707 0" xyz="0 -.04843 .0127"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_2_L.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_2_L.dae"/>
       </geometry>
       <origin rpy="-1.5707 1.5707 0" xyz="0 -.04843 .0127"/>
     </collision>
@@ -326,13 +326,13 @@
   <link name="${prefix}robotiq_85_right_inner_knuckle_link">
     <visual>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_2_R.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_2_R.dae"/>
       </geometry>
       <origin rpy="0 -1.5707 0" xyz="0 -.04843 .0127"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_2_R.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_2_R.dae"/>
       </geometry>
       <origin rpy="-1.5707 -1.5707 0" xyz="0 -.04843 .0127"/>
     </collision>
@@ -363,13 +363,13 @@
   <link name="${prefix}robotiq_85_left_finger_tip_link">
     <visual>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_3_L.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_3_L.dae"/>
       </geometry>
       <origin rpy="0 1.5707 0" xyz="0 -.090381 .051505"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_3_L.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_3_L.dae"/>
       </geometry>
       <origin rpy="-1.5707 1.5707 0" xyz="0 -.090381 .051505"/>
     </collision>
@@ -378,13 +378,13 @@
   <link name="${prefix}robotiq_85_right_finger_tip_link">
     <visual>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_3_R.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/visual/robotiq_85_gripper_joint_3_R.dae"/>
       </geometry>
       <origin rpy="0 -1.5707 0" xyz="0 -.090381 .051505"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://robotiq_c2_model_visualization/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_3_R.dae"/>
+        <mesh filename="package://fanuc_lrmate200id_support/meshes/robotiq_c2/collision/robotiq_85_gripper_joint_3_R.dae"/>
       </geometry>
       <origin rpy="-1.5707 -1.5707 0" xyz="0 -.090381 .051505"/>
     </collision>

@@ -27,8 +27,9 @@ int CRvizMarker::Scale(double x, double y, double z){
     scalex = x; scaley = y; scalez = z;
     return 0;
 }
-void CRvizMarker::Init() {
-    marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker", 1);
+void CRvizMarker::Init(std::string frameid) {
+    marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker", 10000);
+    _frameid=frameid; // "world";
 }
 
 void CRvizMarker::Clear() {
@@ -132,4 +133,82 @@ void CRvizMarker::SetShape(std::string shape){
         SetShape(visualization_msgs::Marker::ARROW);
     if(shape=="cylinder")
         SetShape(visualization_msgs::Marker::CYLINDER);
+}
+#include "Conversions.h"
+using namespace Conversion;
+
+void CRvizMarker::publishLine(const tf::Vector3 &point1,
+        const tf::Vector3 &point2,
+        double radius,
+        double scale) {
+    visualization_msgs::Marker generic_marker_;
+    // Set the timestamp
+    generic_marker_.header.stamp = ros::Time::now();
+    generic_marker_.lifetime = ros::Duration(0.0);
+
+    generic_marker_.type = visualization_msgs::Marker::LINE_STRIP;
+    generic_marker_.color.r = r;
+    generic_marker_.color.g = g;
+    generic_marker_.color.b = b;
+    generic_marker_.color.a = a;
+
+    geometry_msgs::Vector3 vscale;
+    vscale.x = radius;
+    vscale.y = radius;
+    vscale.z = radius;
+
+    generic_marker_.id = _id++;
+    generic_marker_.ns = "line";
+     generic_marker_.scale = vscale;
+
+    generic_marker_.points.clear();
+    generic_marker_.points.push_back(Convert<tf::Vector3, geometry_msgs::Point>(point1));
+    generic_marker_.points.push_back(Convert<tf::Vector3, geometry_msgs::Point>(point2));
+    generic_marker_.action = visualization_msgs::Marker::ADD;
+    generic_marker_.header.frame_id = _frameid;
+    generic_marker_.pose.orientation.w=1.0;
+    // Helper for publishing rviz markers
+    marker_pub.publish(generic_marker_); // line_strip_marker_);
+    ros::spinOnce();
+    ros::spinOnce();
+}
+
+int CRvizMarker::publishMesh(const tf::Pose &pose,
+        const std::string &file_name,
+        double scale,
+        std::size_t id) {
+    visualization_msgs::Marker generic_marker_;
+    // Set the timestamp
+    generic_marker_.action = visualization_msgs::Marker::ADD;
+    generic_marker_.header.frame_id = _frameid;
+    generic_marker_.header.stamp = ros::Time::now();
+    generic_marker_.lifetime = ros::Duration(0.0);
+    generic_marker_.ns = "mesh";
+    if (id == 0)
+        generic_marker_.id = _id++;
+    else
+        generic_marker_.id = id;
+    generic_marker_.type = visualization_msgs::Marker::MESH_RESOURCE;
+
+    // Set the mesh
+    generic_marker_.mesh_resource = file_name;
+    generic_marker_.mesh_use_embedded_materials = true;
+
+    // Set the pose
+    generic_marker_.pose = Convert<tf::Pose, geometry_msgs::Pose >(pose);
+
+    // Set marker size
+    generic_marker_.scale.x = scale;
+    generic_marker_.scale.y = scale;
+    generic_marker_.scale.z = scale;
+
+    generic_marker_.color.r = r;
+    generic_marker_.color.g = g;
+    generic_marker_.color.b = b;
+    generic_marker_.color.a = a;
+
+    marker_pub.publish(generic_marker_);
+    ros::spinOnce();
+    ros::spinOnce();    
+    return generic_marker_.id;
 }

@@ -29,128 +29,7 @@ using namespace Conversion;
 
 boost::mutex RvizDemo::_flag_mutex;
 
-// Simplistic Testing code
-int InlineRobotCommands::crclcommandnum = 1;
-RCS::Pose retract = RCS::Pose(tf::QIdentity(), tf::Vector3(0, 0, 0.1));
 
-void InlineRobotCommands::SetGripper(double ee) {
-    // set gripper to 0..1
-    RCS::CanonCmd cmd;
-    cmd.crclcommand = CanonCmdType::CANON_SET_GRIPPER;
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.eepercent = ee;
-    _cnc->crclcmds.AddMsgQueue(cmd);
-}
-
-void InlineRobotCommands::CloseGripper() {
-    SetGripper(0.75);
-}
-
-void InlineRobotCommands::OpenGripper() {
-    SetGripper(0.45);
-}
-
-void InlineRobotCommands::DoDwell(double dwelltime) {
-
-    RCS::CanonCmd cmd;
-    cmd.crclcommand = CanonCmdType::CANON_DWELL;
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.dwell_seconds = dwelltime;
-    _cnc->crclcmds.AddMsgQueue(cmd);
-}
-
-void InlineRobotCommands::MoveTo(RCS::Pose pose, std::string objname) {
-    RCS::CanonCmd cmd;
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.crclcommand = CanonCmdType::CANON_MOVE_TO;
-
-    //cmd.hint = _hints.FindClosest(pose);
-    cmd.finalpose = Convert<tf::Pose, geometry_msgs::Pose> (pose);
-    if (!objname.empty()) {
-        SceneObject & obj = pScene->Find(objname);
-        cmd.partname = objname;
-        //cmd.partcolor = (int) pScene->MARKERCOLOR(obj.color);
-        cmd.partcolor = obj.rawcolor;
-        
-        // lookup gripper close amount from object
-    }
-    _cnc->crclcmds.AddMsgQueue(cmd);
-}
-
-void InlineRobotCommands::EraseObject(std::string objname) {
-    RCS::CanonCmd cmd;
-    cmd.crclcommand = CanonCmdType::CANON_ERASE_OBJECT;
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.partname = objname;
-    _cnc->crclcmds.AddMsgQueue(cmd);
-}
-void InlineRobotCommands::GraspObject(std::string objname) {
-    RCS::CanonCmd cmd;
-    cmd.crclcommand = CanonCmdType::CANON_GRASP_OBJECT;
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.partname = objname;
-    _cnc->crclcmds.AddMsgQueue(cmd);
-}
-void InlineRobotCommands::ReleaseObject(std::string objname) {
-    RCS::CanonCmd cmd;
-    cmd.crclcommand = CanonCmdType::CANON_RELEASE_OBJECT;
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.partname = objname;
-    _cnc->crclcmds.AddMsgQueue(cmd);
-}
-void InlineRobotCommands::MoveObject(std::string objname, RCS::Pose pose, std::string color) {
-    RCS::CanonCmd cmd;
-    cmd.crclcommand = CanonCmdType::CANON_DRAW_OBJECT;
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.partname = objname;
-    cmd.partcolor = Scene::GetColor(color);
-    cmd.finalpose = Convert<tf::Pose, geometry_msgs::Pose>(pose);
-    _cnc->crclcmds.AddMsgQueue(cmd);
-}
-
-void InlineRobotCommands::Pick(RCS::Pose pose, std::string objname) {
-
-    tf::Vector3 offset = pose.getOrigin();
-
-    // Retract
-    MoveTo(retract * RCS::Pose(QBend, offset));
-    DoDwell(mydwell);
-    MoveTo(RCS::Pose(QBend, offset));
-    DoDwell(mydwell);
-    CloseGripper();
-    DoDwell(mydwell);
-    GraspObject(objname);
-    MoveTo(retract * RCS::Pose(QBend, offset), objname);
-}
-
-void InlineRobotCommands::MoveJoints(std::vector<long unsigned int> jointnum,
-        std::vector<double> positions) {
-    RCS::CanonCmd cmd;
-    cmd.crclcommandnum = crclcommandnum++;
-    cmd.crclcommand = CanonCmdType::CANON_MOVE_JOINT;
-    cmd.joints = RCS::ZeroJointState(jointnum.size());
-    cmd.joints.position = positions;
-    cmd.jointnum = jointnum; // ToVector<long unsigned int>(6, 0L, 1L, 2L, 3L, 4L, 5L);
-    cmd.bCoordinated = true;
-    _cnc->crclcmds.AddMsgQueue(cmd);
-
-}
-// fixme: object has to be richer description
-
-void InlineRobotCommands::Place(RCS::Pose pose, std::string objname) {
-
-    tf::Vector3 offset = pose.getOrigin();
-    // Retract
-    MoveTo(retract * RCS::Pose(QBend, offset), objname);
-    DoDwell(mydwell);
-    MoveTo(RCS::Pose(QBend, offset), objname);
-    ReleaseObject(objname);
-    DoDwell(mydwell);
-    OpenGripper();
-    DoDwell(mydwell);
-    MoveTo(retract * RCS::Pose(QBend, offset));
-
-}
 /////////////////////////////////////////////////////////////////////////
 
 GearDemo::GearDemo(ros::NodeHandle & nh, std::string pkgpath, tf::Pose offset) :
@@ -161,7 +40,7 @@ _nh(nh), _path(pkgpath), _baseoffset(offset), rvizdemo(nh) {
 
 }
 
-bool GearDemo::IssueRobotCommands(InlineRobotCommands & r, bool bSafe) {
+bool GearDemo::IssueRobotCommands(CrclApi & r, bool bSafe) {
     // Finish queuing commands before handling them....
     boost::mutex::scoped_lock lock(cncmutex);
     static double dwelltime = 1.0;
@@ -187,18 +66,18 @@ bool GearDemo::IssueRobotCommands(InlineRobotCommands & r, bool bSafe) {
     // The object gripper offset is where on the object it is to be gripped
     tf::Pose gripperoffset = obj.gripperoffset; // Convert<Eigen::Affine3d, tf::Pose>(obj.gripperoffset);
     // THe gripperoffset is the robot gripper offset back to the 0T6 equivalent
-    pickpose = RCS::Pose(r.QBend, affpose.getOrigin())* gripperoffset; // /*Convert<Eigen::Vector3d,tf::Vector3>(affpose.translation()))*gripperoffset;
+    pickpose = RCS::Pose(r.QBend, affpose.getOrigin()) * gripperoffset; // /*Convert<Eigen::Vector3d,tf::Vector3>(affpose.translation()))*gripperoffset;
 
     tf::Vector3 offset = pickpose.getOrigin();
 
     // Retract
-    r.MoveTo(retract * RCS::Pose(r.QBend, offset));
+    r.MoveTo(CrclApi::retract * RCS::Pose(r.QBend, offset));
     r.DoDwell(r.mydwell);
-    r.MoveTo(RCS::Pose(r.QBend, offset)*gripperoffset);
+    r.MoveTo(RCS::Pose(r.QBend, offset) * gripperoffset);
     r.DoDwell(r.mydwell);
     r.CloseGripper();
     r.DoDwell(r.mydwell);
-    r.MoveTo(retract * RCS::Pose(r.QBend, offset), gearname);
+    r.MoveTo(CrclApi::retract * RCS::Pose(r.QBend, offset), gearname);
 
     tf::Pose slotpose;
 
@@ -213,7 +92,7 @@ bool GearDemo::IssueRobotCommands(InlineRobotCommands & r, bool bSafe) {
     }
 
     RCS::Pose placepose = RCS::Pose(r.QBend, slotpose.getOrigin()); // fixme: what if gear rotated
-    r.Place(placepose , gearname);
+    r.Place(placepose, gearname);
     r.DoDwell(r.mydwell);
 
     if (bSafe) {
@@ -277,7 +156,7 @@ void GearDemo::Setup() {
         ShapeModel::Shape shape = _shapes.GetInstanceShape(instances[i]);
         SceneObject &obj = pScene->CreateMesh(gearname, "gear",
                 pScene->gid++,
-               gearpose,
+                gearpose,
                 shape.meshfile,
                 Scene::GetColor(shape.color),
                 shape.scale);
@@ -322,7 +201,7 @@ void GearDemo::Reset() {
     //    pScene->DrawScene(); // draws rviz scene with markers
 }
 
-void GearDemo::Cycle(boost::shared_ptr<RCS::CController> nc, InlineRobotCommands&robot) {
+void GearDemo::Cycle(boost::shared_ptr<RCS::CController> nc, CrclApi &robot) {
     ros::Rate r(50);
     while (IssueRobotCommands(robot) != NULL) {
         while (nc->IsBusy()) {
@@ -341,19 +220,19 @@ void GearDemo::Cycle(boost::shared_ptr<RCS::CController> nc, InlineRobotCommands
 //////////////////////////////////////////////////////////////////////////
 #include "RvizMarker.h" 
 
-
 CheckersGame::CheckersGame(ros::NodeHandle & nh) : _nh(nh) {
     rvizgame = boost::shared_ptr<RvizCheckers> (new RvizCheckers(nh));
 
 }
-void CheckersGame::PhysicalMove(InlineRobotCommands &robot,
+
+void CheckersGame::PhysicalMove(CrclApi &robot,
         int player,
         int i, int j,
         Checkers::Move m,
         bool doublejump) {
-    
+
     std::string typemove("move");
-    
+
     try {
         // If blank space there can be no actual checkername2 object
         std::string checkername1 = Globals.StrFormat("Checker[%d:%d]", i, j);
@@ -361,16 +240,16 @@ void CheckersGame::PhysicalMove(InlineRobotCommands &robot,
         tf::Pose frompose = rvizgame->GetPose(i, j);
         tf::Pose topose = rvizgame->GetPose(m.row, m.col);
         SceneObject & obj = pScene->Find(checkername1);
-        if(Scene::IsNull(obj))
+        if (Scene::IsNull(obj))
             throw std::runtime_error(Globals.StrFormat("PhysicalMove null scene object Checker[%d:%d]", i, j));
 
 #ifdef DEBUG
-//        LOG_DEBUG << "Move From " << Globals.StrFormat("[%d,%d]=%f,%f", i, j, frompose(0, 3), frompose(1, 3));
-//        LOG_DEBUG << "Move To   " << Globals.StrFormat("[%d,%d]=%f,%f", m.row, m.col, topose(0, 3), topose(1, 3));
+        //        LOG_DEBUG << "Move From " << Globals.StrFormat("[%d,%d]=%f,%f", i, j, frompose(0, 3), frompose(1, 3));
+        //        LOG_DEBUG << "Move To   " << Globals.StrFormat("[%d,%d]=%f,%f", m.row, m.col, topose(0, 3), topose(1, 3));
         LOG_DEBUG << "Move From " << Globals.StrFormat("[%d,%d]=%f,%f", i, j, frompose.getOrigin().x(), frompose.getOrigin().y());
         LOG_DEBUG << "Move To   " << Globals.StrFormat("[%d,%d]=%f,%f", m.row, m.col, topose.getOrigin().x(), topose.getOrigin().y());
         LOG_DEBUG << "tf    Checkerboard1 pose" << RCS::DumpPoseSimple(obj.pose);
- #endif
+#endif
 
         robot.Pick(obj.pose, checkername1);
         robot.Place(topose, checkername1);
@@ -393,7 +272,7 @@ void CheckersGame::PhysicalMove(InlineRobotCommands &robot,
             // Only 2* level for king
             if (obj.height == rvizgame->HEIGHT) {
                 obj.height *= 2;
-                obj.pose.setOrigin(  obj.pose.getOrigin() + tf::Vector3(0, 0, 0.01));
+                obj.pose.setOrigin(obj.pose.getOrigin() + tf::Vector3(0, 0, 0.01));
                 ros::spinOnce();
                 ros::spinOnce();
                 ros::spinOnce();
@@ -428,17 +307,17 @@ void CheckersGame::Setup() {
     pScene->DrawScene(); // Debug: LOG_DEBUG << SceneObject::DumpDB();
 }
 
-void CheckersGame::Play(InlineRobotCommands * red, InlineRobotCommands * black) {
-    //InlineRobotCommands * Ncs[2]={&nccmds[0], &nccmds[1]};
-    //InlineRobotCommands * Ncs[2]={&fanucrobot, &fanucrobot};
-    //InlineRobotCommands * Ncs[2]={&motomanrobot, &motomanrobot};
+void CheckersGame::Play(CrclApi * red, CrclApi * black) {
+    //CrclApi * Ncs[2]={&nccmds[0], &nccmds[1]};
+    //CrclApi * Ncs[2]={&fanucrobot, &fanucrobot};
+    //CrclApi * Ncs[2]={&motomanrobot, &motomanrobot};
 
     // Play checkers - only move markers, no robot interaction
     Checkers::Move from, to;
     int player;
     for (size_t i = 0; i < 40; i++) {
         bool bQuit = rvizgame->CheckersMove(player, from, to);
-           
+
         rvizgame->Game().printDisplayFancy(rvizgame->Game().Board());
         if (player == Checkers::RED) {
             LOG_DEBUG << "RED Move " << red->cnc()->Name().c_str();
@@ -447,7 +326,7 @@ void CheckersGame::Play(InlineRobotCommands * red, InlineRobotCommands * black) 
             LOG_DEBUG << "BLACK Move " << black->cnc()->Name().c_str();
             PhysicalMove(*black, player, from.row, from.col, to);
         }
-        if(bQuit)
+        if (bQuit)
             break;
 
 #if 0
@@ -473,19 +352,19 @@ void CheckersGame::Play(InlineRobotCommands * red, InlineRobotCommands * black) 
 }
 
 void ExerciseDemo::MarkPose(int flag, tf::Pose pose) {
-    pose = Robot()->cnc()->basePose() * pose;
+    pose =Robot()->cnc()->AddBaseTransform(pose); // Robot()->cnc()->basePose() * pose;
     if (flag == 1)
         RvizMarker()->SetColor(GoodColor()[0], GoodColor()[1], GoodColor()[2], 1.0);
     else if (flag == 0)
         RvizMarker()->SetColor(BadColor()[0], BadColor()[1], BadColor()[2], 1.0);
     else if (flag == -1)
         RvizMarker()->SetColor(TrapColor()[0], TrapColor()[1], TrapColor()[2], 1.0);
-        //RvizMarker()->SetColor(0.597,0.0,0.597, 1.0);  // purple
+    //RvizMarker()->SetColor(0.597,0.0,0.597, 1.0);  // purple
     RvizMarker()->Send(pose);
 }
 #include <boost/bind.hpp>
 
-void ExerciseDemo::Exercise(InlineRobotCommands *robot) {
+void ExerciseDemo::Exercise(CrclApi *robot) {
     pScene->ClearScene();
     RvizMarker()->Clear();
     ros::spinOnce();
@@ -494,12 +373,210 @@ void ExerciseDemo::Exercise(InlineRobotCommands *robot) {
     ros::spinOnce();
     Globals.Sleep(1000);
     Robot() = robot;
-    Robot()->cnc()->Kinematics()->ENormalize(- M_PI,  M_PI);
-    std::vector<size_t>  scorecard = Robot()->cnc()->Kinematics()->VerifyKinematics(boost::bind(&ExerciseDemo::MarkPose, this, _1, _2));
+    Robot()->cnc()->Kinematics()->ENormalize(-M_PI, M_PI);
+    std::vector<size_t> scorecard = Robot()->cnc()->Kinematics()->VerifyKinematics(boost::bind(&ExerciseDemo::MarkPose, this, _1, _2));
     int total = std::accumulate(scorecard.begin(), scorecard.end(), 0);
     //int fail = std::accumulate(scorecard.begin()+1, scorecard.end(), 0);
-    LOG_DEBUG <<  "Tests:" << total << ": good=" << scorecard[0]
-           << ": bad="  << scorecard[1]
-           << ": singular=" << scorecard[2] <<  "\n";
+    LOG_DEBUG << "Tests:" << total << ": good=" << scorecard[0]
+            << ": bad=" << scorecard[1]
+            << ": singular=" << scorecard[2] << "\n";
 }
 
+////////////////////////////////////////////////////
+
+static double Fit(double min, double max, double v, double newmin, double newmax) {
+    double d = (v - min) / (max - min)* (newmax - newmin) + newmin;
+    return d;
+}
+
+static double Projection(double val, double min, double max, double scale, double neworigin) {
+    // normalize to (0,1) but this is in meters, so need to scale
+    double d = (val - min) / (max - min) * scale + neworigin;
+    return d;
+}
+
+static tf::Vector3 Projection(vec3 val, vec3 min, vec3 max, double scale, vec3 neworigin) {
+    // normalize to (0,1) but this is in meters, so need to scale
+    vec3 v = (val - min) / (max - min) * scale + neworigin;
+    return tf::Vector3(v.x(), v.y(), 0.0);
+}
+void ScriptingDemo::MarkPose(int flag, tf::Pose pose) {
+            RvizMarker()->Send(pose);
+            ros::spinOnce();
+            ros::spinOnce();
+            //ros::Duration(0.025).sleep();
+}
+void ScriptingDemo::Init(CrclApi *robot,
+        std::string penholderfile,
+        double penholderscale,
+        std::string penfile,
+    double pencilscale) {
+    Robot() = robot;
+    RvizMarker()->SetColor(0xCB, 0xCB, 0xAF);
+    // This is constant so we don't care about it.
+    RvizMarker()->publishMesh(tf::Identity(),
+            penholderfile,
+            penholderscale);
+    // We are moving this around during drawing, so keep
+    SceneObject & pen = pScene->CreateMesh(
+            "pen",
+            "mesh",
+            0,
+            tf::Pose(tf::QIdentity(), tf::Vector3(-0.0144, 0.0134, 0.0)),
+            penfile,
+            rgba(0xCB, 0xCB, 0xAF).GetColorRGBA(),
+            pencilscale);
+    pScene->DrawScene(); // Debug: LOG_DEBUG << SceneObject::DumpDB();
+    
+    Robot()->cnc()->QBend() = tf::Quaternion(Deg2Rad(0.), Deg2Rad(180.), Deg2Rad(0.));
+    
+     
+}
+           
+void ScriptingDemo::Draw(
+        std::string text,
+        unsigned long fontsize,
+        double scale,
+        tf::Vector3 origin,
+        tf::Pose transform) {
+    Font2WorldScale() = scale;
+    //pScene->ClearScene();
+    //RvizMarker()->Clear();
+    RvizMarker()->SetColor(FontColor()[0], FontColor()[1], FontColor()[2], 1.0);
+    ros::spinOnce();
+    ros::spinOnce();
+    double z = origin.z();
+     
+    // PIck up pen
+    SceneObject & obj = pScene->Find("pen");
+    tf::Pose penoffset(tf::QIdentity(), tf::Vector3(0.0,0.0,0.12));
+    //Robot()->cnc()->SetToolOffset(penoffset);
+    Robot()->Pick(obj.pose*penoffset, "pen");
+    Robot()->MoveTo(Convert<tf::Vector3, tf::Pose>(origin), "pen");
+    std::vector<letter> s = script.makescript("", text, fontsize);
+
+    float minx = script.extentminx;
+    float miny = script.extentminy;
+    float maxx = script.extentmaxx;
+    float maxy = script.extentmaxy;
+
+    //boost::tie(minx, miny, maxx, maxy) = s[0]. GetRange();
+    double max = (maxx > maxy) ? maxx : maxy;
+    for (size_t n = 0; n < s.size(); n++) {
+        s[n].path = s[n].letter_gap_pts(20.0);
+        // s[n].path = s[n].letter_pts(.05); // this works but in lines too much spread
+        cspline::save2D(Globals.StrFormat("%s/letter%d.txt", Globals.ExeDirectory.c_str(), n), s[n].path);
+        Robot()->cnc()->posecallback=boost::bind(&ScriptingDemo::MarkPose, this, _1, _2);
+
+        for (size_t i = 0; i < s[n].path.size(); i++) {
+
+            std::cout << " Pt:         " << s[n].path[i].x() << ":" << s[n].path[i].y() << "\n";
+
+            // Normalize font from integer pixels into meters
+            double x = Projection(s[n].path[i].x(), minx, maxx, scale,origin.x()); //  0.25);
+            double y = Projection(s[n].path[i].y(), miny, maxy, scale, origin.y()); // -0.75);
+            tf::Vector3 pt(x, y, z);
+            tf::Pose pose(tf::QIdentity(), pt);
+            std::cout << " Next       : " << DumpPoseSimple(pose) << "\n";
+            // Transform point
+            pose = transform*pose;
+            std::cout << " Transformed: " << DumpPoseSimple(pose) << "\n";
+            Robot()->MoveTo(pose, "pen");
+            ros::Duration(0.025).sleep();
+        }
+    }
+
+    std::stringstream str;
+    // Fill in all letters horizontally - for each letter
+    for (size_t n = 0; n < s.size(); n++) {
+        s[n].horizontal_fill();
+        std::string moves = s[n].dump_moves();
+        Globals.WriteFile(Globals.StrFormat("%s/fill%d.txt", Globals.ExeDirectory.c_str(), n), moves);
+
+        std::map<double, std::vector < vec3>>::iterator it = s[n].moves.begin();
+        for (; it != s[n].moves.end(); it++) {
+            std::cout << Globals.StrFormat("At %4.2f\n", (*it).first);
+            std::vector<vec3> pts = (*it).second;
+            if (pts.size() % 2 != 0) {
+                std::cout << "Unequal moves\n";
+                continue;
+            }
+            for (size_t i = 0; i < pts.size(); i = i + 2) {
+                if (i >= pts.size() || (i + 1) >= pts.size())
+                    continue;
+                pts[i].z() = z;
+                pts[i + 1].z() = z;
+                std::cout << " Pt1: " << pts[i].x() << ":" << pts[i].y() << "\n";
+                std::cout << " Pt2: " << pts[i + 1].x() << ":" << pts[i + 1].y() << "\n";
+                //need project and transformation :()
+                tf::Vector3 l1 = Projection(pts[i], vec3(minx, miny), vec3(maxx, maxy), scale, vec3(0.25, -0.75));
+                tf::Vector3 l2 = Projection(pts[i + 1], vec3(minx, miny), vec3(maxx, maxy), scale, vec3(0.25, -0.75));
+                //If you have data points that aren’t continuous you can simply tell gnuplot this by inserting one blank line between the data.
+
+                str << l1.x() << " " << l1.y() << "\n";
+                str << l2.x() << " " << l2.y() << "\n\n";
+                RvizMarker()->publishLine(l1, l2, 0.01);
+                ros::spinOnce();
+                ros::spinOnce();
+                ros::Duration(0.025).sleep();
+
+            }
+        }
+
+        std::string ss = str.str();
+        Globals.WriteFile(Globals.StrFormat("%s/fillingit.txt", Globals.ExeDirectory.c_str()), ss);
+
+    }
+    return;
+
+}
+///////////////////////////////////////////////////////////////////////
+#include <boost/gil/image.hpp>
+#include <boost/gil/typedefs.hpp>
+#include <boost/gil/extension/io/jpeg_io.hpp>
+ using namespace boost::gil;
+
+//http://stackoverflow.com/questions/8300555/using-boost-gil-to-convert-an-image-into-raw-bytes
+void PaintingDemo::Draw(CrclApi *robot,
+        std::string imagefilename,
+        double scale,
+        tf::Pose transform) {
+    rgb8_image_t img;
+    jpeg_read_image(imagefilename, img);
+    // Size = img.width()*img.height()
+
+    for (int i = 0; i < img.height(); ++i) {
+        rgb8_image_t::view_t::x_iterator it = img._view.row_begin(i);
+        for (int j = 0; j < img.width(); ++j) {
+            //boost::gil::rgb8_pixel_t & p = *img(i, j);  // error
+            //rgb8_image_t::x_iterator it = img.row_begin(i);
+            // use it[j] to access pixel[i][j]
+            boost::gil::rgb8_pixel_t & p = it[j];
+#if 0
+            double r = get_color(p, red_t());
+            double g =get_color(p, green_t());
+            double b =get_color(p, blue_t());
+            RvizMarker()->SetColor( r/255.,  g/255.,  b/255., 1.0);
+#else
+            int r = get_color(p, red_t());
+            int g = get_color(p, green_t());
+            int b = get_color(p, blue_t());
+            RvizMarker()->SetColor(r, g, b);
+#endif
+            double x = Projection(i, 0, img.width(), 1., 0.25);
+            double y = Projection(j, 0, img.height(), 1., -0.75);
+            tf::Vector3 pt(x, y, 0.0);
+            tf::Pose pose(tf::QIdentity(), pt);
+            std::cout << " Next       : " << DumpPoseSimple(pose) << "\n";
+            // Transform point
+            pose = transform*pose;
+            std::cout << " Transformed: " << DumpPoseSimple(pose) << "\n";
+            //robot->MoveTo(pose);
+            RvizMarker()->Send(pose);
+            //ros::Duration(0.025).sleep();
+                ros::spinOnce();
+                ros::spinOnce();
+        }
+    }
+        
+}

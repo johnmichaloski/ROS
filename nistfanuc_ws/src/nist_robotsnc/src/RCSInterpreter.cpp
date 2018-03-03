@@ -52,17 +52,16 @@ int BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
         } else if (cmd.crclcommand == CanonCmdType::CANON_MOVE_TO) {
             // FIXME: need to subtract off tool offset from tcp
             RCS::Pose finalpose = Conversion::Convert<geometry_msgs::Pose, tf::Pose>(cmd.finalpose);
-            RCS::Pose goalpose = finalpose * _nc->invGripperPose();
+            RCS::Pose goalpose = _nc->RobotCoord(finalpose); // _nc->invBasePose() * finalpose * _nc->invGripperPose();
 
             LOG_DEBUG << "Final Pose " << RCS::DumpPoseSimple(finalpose).c_str();
             LOG_DEBUG << "Minus Gripper Pose " << RCS::DumpPoseSimple(goalpose).c_str();
 
             // KDL can handle base offset in fanuc, doesn't even work in Motoman AND needs hints?
             // ikfast solution based on 0,0,0 origin not base offset origin
-            goalpose = _nc->invBasePose() * goalpose;
-            LOG_DEBUG << " Base Robot Pose " << RCS::DumpPoseSimple(_nc->basePose()).c_str();
-            LOG_DEBUG << "Pre Base Robot Pose " << RCS::DumpPoseSimple(goalpose).c_str();
-            //cmd.joints.position = Cnc.Kinematics()->IK(goalpose, cmd.ConfigMin(), cmd.ConfigMax());
+            //LOG_DEBUG << " Base Robot Pose " << RCS::DumpPoseSimple(_nc->basePose()).c_str();
+            //LOG_DEBUG << "Pre Base Robot Pose " << RCS::DumpPoseSimple(goalpose).c_str();
+             
             cmd.joints.position = _kinematics->IK(goalpose, Subset(_nc->status.currentjoints.position, _nc->Kinematics()->NumJoints()));
 
 
@@ -87,9 +86,9 @@ int BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
 }
 ////////////////////////////////////////////////////////////////////////
 
-GoInterpreter::GoInterpreter(boost::shared_ptr<RCS::CController> nc,
+GoInterpreter::GoInterpreter(ros::NodeHandle & nh, boost::shared_ptr<RCS::CController> nc,
         IKinematicsSharedPtr k)
-: _nc(nc), _kinematics(k), _lastcmdid(-1) {
+: _nh(nh), _nc(nc), _kinematics(k), _lastcmdid(-1) {
     _go = boost::shared_ptr<GoTraj> (new GoTraj());
 }
 
@@ -97,8 +96,19 @@ void GoInterpreter::Init(std::vector<double> initjts) {
     JointState jts = RCS::EmptyJointState(initjts.size());
     jts.position = initjts;
     _go->Init(jts, this->_nc->CycleTime());
+    world_goalpose_pub = _nh.advertise<geometry_msgs::Pose>(Globals.StrFormat("/world/%s/goalpose", _nc->Name().c_str()), 10);
+    robot_goalpose_pub = _nh.advertise<geometry_msgs::Pose>(Globals.StrFormat("/robot/%s/goalpose", _nc->Name().c_str()), 10);
+    world_gopose_pub = _nh.advertise<geometry_msgs::Pose>(Globals.StrFormat("/world/%s/gopose", _nc->Name().c_str()), 10);
+    robot_gopose_pub = _nh.advertise<geometry_msgs::Pose>(Globals.StrFormat("/robot/%s/gopose", _nc->Name().c_str()), 10);
+    world_currentpose_pub = _nh.advertise<geometry_msgs::Pose>(Globals.StrFormat("/world/%s/currentpose", _nc->Name().c_str()), 10);
+    robot_currentpose_pub = _nh.advertise<geometry_msgs::Pose>(Globals.StrFormat("/robot/%s/currentpose", _nc->Name().c_str()), 10);
+    
 }
-
+void GoInterpreter::PublishPose(tf::Pose &pose, ros::Publisher * pub){
+    geometry_msgs::Pose gpose = Convert<tf::Pose,geometry_msgs::Pose>(pose);
+//    ROS_INFO("PublishPose on %s: [%s]", pub->getTopic().c_str(), RCS::DumpPoseSimple(pose).c_str());
+    pub->publish(gpose);
+}
 void GoInterpreter::SetRange(std::vector<double> minrange, std::vector<double> maxrange) {
     this->minrange = minrange;
     this->maxrange = maxrange;
@@ -156,14 +166,8 @@ int GoInterpreter::ParseWorldCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
     try {
         tf::Pose finalpose = Conversion::Convert<geometry_msgs::Pose, tf::Pose>(cmd.finalpose);
         // Need to subtract off tool offset from robot wrist or final tcp
-        //tf::Pose goalpose = finalpose * _nc->invGripperPose();
-        // Need to translate goal pose from world coordinates into robot coordinates
-        //goalpose = _nc->invBasePose() * goalpose;
-        //tf::Pose goalpose = finalpose;
         tf::Pose lastpose=_kinematics->FK(_nc->status.currentjoints.position);
-        tf::Pose curpose=_nc->basePose() *
-                     lastpose *
-                    _nc->gripperPose();
+        tf::Pose curpose=_nc->WorldCoord(lastpose); // _nc->basePose() *  lastpose *                    _nc->gripperPose();
         if (cmd.CommandNum() != _lastcmdid) {
             _lastcmdid = cmd.CommandNum();
             _go->InitPose(curpose,
@@ -176,13 +180,10 @@ int GoInterpreter::ParseWorldCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
                     _nc->rotationmax()[2])); // 1 meter/sec
 
         }
-        //tf::Pose nextpose = _nc->invGripperPose() * _go->NextPose() * _nc->invBasePose();
-        //tf::Pose goalpose =_nc->invGripperPose() * finalpose * _nc->invBasePose();
-        //tf::Pose nextpose = _nc->invBasePose() * _go->NextPose() * _nc->invGripperPose();
-        tf::Pose goalpose =_nc->invBasePose() * finalpose * _nc->invGripperPose();
+        tf::Pose goalpose =_nc->RobotCoord(finalpose); 
         tf::Pose gopose =  _go->NextPose() ;
-        tf::Pose nextpose = _nc->invBasePose() * gopose * _nc->invGripperPose();
-        
+        tf::Pose nextpose = _nc->RobotCoord(gopose); 
+#if 0
         WORLDLOG << _nc->Name().c_str() << ": CANON_MOVE_TO" << "\n";
         WORLDLOG << "WORLD COORDINATES\n";
         WORLDLOG << "    Final Pose    = " << RCS::DumpPoseSimple(finalpose).c_str() << "\n";
@@ -192,7 +193,14 @@ int GoInterpreter::ParseWorldCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
         WORLDLOG << "    GoalRobot Pose= " << RCS::DumpPoseSimple(goalpose).c_str() << "\n";
         WORLDLOG << "    Current   Pose= " << RCS::DumpPoseSimple(lastpose).c_str() << "\n";
         WORLDLOG << "    NextRobot Pose= " << RCS::DumpPoseSimple(nextpose).c_str() << "\n";
- 
+#endif
+         PublishPose(finalpose,   &world_goalpose_pub);
+         PublishPose(goalpose,    &robot_goalpose_pub);
+         PublishPose(gopose,    &world_gopose_pub);
+         PublishPose(nextpose,    &robot_gopose_pub);
+         PublishPose(curpose,   &world_currentpose_pub);
+         PublishPose(lastpose,    &robot_currentpose_pub);
+
         // ikfast solution based on 0,0,0 origin not base offset origin
         //cmd.joints.position = Cnc.Kinematics()->IK(goalpose, cmd.ConfigMin(), cmd.ConfigMax());
         JointState goaljoints;
@@ -200,8 +208,8 @@ int GoInterpreter::ParseWorldCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
         cmd.joints.position = _kinematics->IK(nextpose, Subset(_nc->status.currentjoints.position, _nc->Kinematics()->NumJoints()));
          _kinematics->IK(lastpose, Subset(_nc->status.currentjoints.position, _nc->Kinematics()->NumJoints()));
         WORLDLOG << "    Goal Joints     =" << VectorDump<double>(goaljoints.position).c_str() << "\n";
-        WORLDLOG << "    Current Joints  =" << VectorDump<double>(_nc->status.currentjoints.position).c_str() << "\n";
         WORLDLOG << "    Commanded Joints=" << VectorDump<double>(cmd.joints.position).c_str() << "\n";
+        WORLDLOG << "    Current Joints  =" << VectorDump<double>(_nc->status.currentjoints.position).c_str() << "\n";
 
 #ifdef IKTEST
         std::vector<std::vector<double> > newjoints;
