@@ -13,11 +13,11 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 //#pragma message "Compiling " __FILE__ 
 
 
-#include "Demo.h"
-#include "Controller.h"
-#include "Globals.h"
-#include "Scene.h"
-#include "Shape.h"
+#include "nist_robotsnc/Demo.h"
+#include "nist_robotsnc/Controller.h"
+#include "nist_robotsnc/Globals.h"
+#include "nist_robotsnc/Scene.h"
+#include "nist_robotsnc/Shape.h"
 #include "nist_robotsnc/MotionException.h"
 
 using namespace RCS;
@@ -218,7 +218,9 @@ void GearDemo::Cycle(boost::shared_ptr<RCS::CController> nc, CrclApi &robot) {
     }
 }
 //////////////////////////////////////////////////////////////////////////
-#include "RvizMarker.h" 
+#include "nist_robotsnc/RvizMarker.h"
+
+#ifdef CHECKERS
 
 CheckersGame::CheckersGame(ros::NodeHandle & nh) : _nh(nh) {
     rvizgame = boost::shared_ptr<RvizCheckers> (new RvizCheckers(nh));
@@ -351,6 +353,10 @@ void CheckersGame::Play(CrclApi * red, CrclApi * black) {
     }
 }
 
+#endif
+
+#ifdef EXERCISE_DEMO
+
 void ExerciseDemo::MarkPose(int flag, tf::Pose pose) {
     pose =Robot()->cnc()->AddBaseTransform(pose); // Robot()->cnc()->basePose() * pose;
     if (flag == 1)
@@ -381,8 +387,9 @@ void ExerciseDemo::Exercise(CrclApi *robot) {
             << ": bad=" << scorecard[1]
             << ": singular=" << scorecard[2] << "\n";
 }
-
+#endif
 ////////////////////////////////////////////////////
+#ifdef SCRIPTDEMO
 
 static double Fit(double min, double max, double v, double newmin, double newmax) {
     double d = (v - min) / (max - min)* (newmax - newmin) + newmin;
@@ -400,6 +407,8 @@ static tf::Vector3 Projection(vec3 val, vec3 min, vec3 max, double scale, vec3 n
     vec3 v = (val - min) / (max - min) * scale + neworigin;
     return tf::Vector3(v.x(), v.y(), 0.0);
 }
+
+
 void ScriptingDemo::MarkPose(int flag, tf::Pose pose) {
             RvizMarker()->Send(pose);
             ros::spinOnce();
@@ -530,7 +539,11 @@ void ScriptingDemo::Draw(
     return;
 
 }
+
+#endif
 ///////////////////////////////////////////////////////////////////////
+
+#ifdef PAINTDEMO
 #include <boost/gil/image.hpp>
 #include <boost/gil/typedefs.hpp>
 #include <boost/gil/extension/io/jpeg_io.hpp>
@@ -580,3 +593,4 @@ void PaintingDemo::Draw(CrclApi *robot,
     }
         
 }
+#endif

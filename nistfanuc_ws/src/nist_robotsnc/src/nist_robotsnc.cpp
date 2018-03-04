@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
         Globals.ExeDirectory = path.substr(0, path.find_last_of('/') + 1);
         Globals._appproperties["ExeDirectory"] = Globals.ExeDirectory;
         Globals._appproperties["Package"] = ROSPACKAGENAME;
-        Globals._appproperties["PackagePath"] = ROSPACKAGEDIR;
+        Globals._appproperties["PackageSrcPath"] = ROSPACKAGEDIR;
 
         // FIXME: this totally assume ROS catkin folder layout
 
@@ -171,7 +171,7 @@ pathpath
 
         try {
             // Load the json file in this ptree
-            pt::read_ini( Globals._appproperties["PackagePath"] + "/config/" + ROSPACKAGENAME + ".ini", root);
+            pt::read_ini( Globals._appproperties["PackageSrcPath"] + "/config/" + ROSPACKAGENAME + ".ini", root);
             std::vector<std::string> robots = GetIniTypes<std::string>(root, "system.robots");
             for (size_t i = 0; i < robots.size(); i++) {
                 ofsRobotURDF << "============================================================\n";
@@ -216,8 +216,8 @@ pathpath
                 }
 
                 // This should be selectable
-                //ncs[i]->Interpreter() = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter(ncs[i], kin));
-                ncs[i]->Interpreter() = boost::shared_ptr<IRCSInterpreter>(new RCS::GoInterpreter(nh, ncs[i], kin));
+                ncs[i]->Interpreter() = boost::shared_ptr<IRCSInterpreter>(new RCS::BangBangInterpreter(ncs[i], kin));
+                //ncs[i]->Interpreter() = boost::shared_ptr<IRCSInterpreter>(new RCS::GoInterpreter(nh, ncs[i], kin));
                 for (size_t j = 0; j < jointmovenames.size(); j++) {
                     ds = GetIniTypes<double>(root, robots[i] + "." + jointmovenames[j]);
                     ncs[i]->NamedJointMove[jointmovenames[j]] = ds;
@@ -269,6 +269,8 @@ pathpath
                 table_height,
                 centertablepose);
         pScene->DrawScene();
+
+#ifdef GRADIENT_COLOR_TABLE
         cColorPicker colorpicker;
         std::vector<rgba> myCols;
         colorpicker.Pick(myCols, 50);
@@ -276,7 +278,7 @@ pathpath
             pScene->ChangeColor("table1", myCols[j].GetColorRGBA());
             ros::Duration(0.05).sleep();
         }
-
+#endif
 #ifdef EXERCISER
         ExerciseDemo exercise(nh);
         IKinematics::_testspacing = root.get<double>("testharness.spacing", 0.5);
@@ -289,12 +291,12 @@ pathpath
         exercise.Exercise(&nccmds[1]);
 #endif
 
+#if 0
         std::vector<double> testjts = ToVector<double>(7, 1.30, -0.84, 0.08, 2.26, 2.96, -0.38, -1.28);
         tf::Pose testpose = ncs[1]->Kinematics()->FK(testjts);
         std::cout << "Joint vals " << VectorDump<double>(testjts).c_str() << "\n" << std::flush;
         std::cout << "kinpose " << RCS::DumpPoseSimple(testpose).c_str() << "\n";
 
-#if 0
         ncs[1]->Kinematics()->axis.push_back(Eigen::Vector3d(0, 0, -1));
         ncs[1]->Kinematics()->xyzorigin.push_back(Eigen::Vector3d(0, 0, 0));
         ncs[1]->Kinematics()->rpyorigin.push_back(Eigen::Vector3d(0, 0, -M_PI_2));
@@ -389,7 +391,7 @@ pathpath
 
 
         Checkers::BoardType outboard;
-        std::string filename(path + "/config/" + "Checkers.txt");
+        std::string filename(Globals._appproperties["PackageSrcPath"] + "/config/" + "Checkers.txt");
         Checkers::CheckersGame & game = checkers.RvizGame()->Game();
 
 newgame:

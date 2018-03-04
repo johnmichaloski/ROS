@@ -20,7 +20,7 @@ RCC_DIR = $$DESTDIR/.qrc
 #UI_DIR = $$DESTDIR/.ui
 
 #QMAKE_CXXFLAGS +=-DQt
-
+QMAKE_CXXFLAGS +=-DCHECKERS
 
 contains(machine, woodsy){
 message("Compiling for woodsy")
@@ -97,7 +97,8 @@ SOURCES += \
     src/RvizCheckers.cpp \
     src/RvizMarker.cpp \
     src/Scene.cpp \
-    src/Shape.cpp
+    src/Shape.cpp \
+    src/Demo.cpp
 
 HEADERS += \
     include/nist_robotsnc/Bezier.h \

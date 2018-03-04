@@ -15,12 +15,12 @@
 
 #include <ros/ros.h>
 
-#include "RCS.h"
-#include "Kinematics.h"
-#include "Scene.h"
-#include "Controller.h"
-#include "Conversions.h"
-#include "CrclApi.h"
+#include "nist_robotsnc/RCS.h"
+#include "nist_robotsnc/Kinematics.h"
+#include "nist_robotsnc/Scene.h"
+#include "nist_robotsnc/Controller.h"
+#include "nist_robotsnc/Conversions.h"
+#include "nist_robotsnc/CrclApi.h"
 /**
  * \brief RvizDemo provides some synchronization primitives via rviz.
  * Uses PublishPoint to listen and set flags when pushed. 
@@ -85,8 +85,9 @@ public:
 };
 
 
-#include "RvizMarker.h"
+#include "nist_robotsnc/RvizMarker.h"
 
+#ifdef EXERCISE_DEMO
 struct ExerciseDemo {
 
     ExerciseDemo(ros::NodeHandle & nh) {
@@ -107,9 +108,9 @@ struct ExerciseDemo {
 
     
 };
-
+#endif
 // Gear Demo 
-#include "Shape.h"
+#include "nist_robotsnc/Shape.h"
 struct GearDemo {
     typedef std::pair<boost::shared_ptr< ShapeModel::Instance>, tf::Pose> OpenHolderSlot;
     GearDemo(ros::NodeHandle & nh, std::string pkgpath, tf::Pose offset);
@@ -130,9 +131,9 @@ protected:
     std::string _jsonpath;
 };
 
-
+#ifdef CHECKERS
 // Checkers game - demo defined in Demo.cpp
-#include "RvizCheckers.h"
+#include "nist_robotsnc/RvizCheckers.h"
 class CheckersGame {
     boost::shared_ptr<RvizCheckers> rvizgame;
     ros::NodeHandle & _nh;
@@ -158,7 +159,9 @@ public:
     
 };
 
+#endif
 
+#ifdef SCRIPTDEMO
 #include "nist_robotsnc/ttt.h"
 
 struct ScriptingDemo {
@@ -188,7 +191,8 @@ struct ScriptingDemo {
     letters script;
 
 };
-
+#endif
+#ifdef PAINTDEMO
 struct PaintingDemo {
 
     PaintingDemo(ros::NodeHandle & nh) {
@@ -206,3 +210,4 @@ struct PaintingDemo {
     VAR(ImageColor, std::vector<double>)
 
 };
+#endif
