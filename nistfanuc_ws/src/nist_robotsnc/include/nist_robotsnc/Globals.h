@@ -36,6 +36,8 @@
 
 #ifndef ROSPACKAGENAME
 #define ROSPACKAGENAME "nist_robotsnc"
+#define ROSPACKAGEDIR "/usr/local/michalos/nistfanuc_ws/src/nist_robotsnc"
+
 #endif
 
 #ifndef TODO

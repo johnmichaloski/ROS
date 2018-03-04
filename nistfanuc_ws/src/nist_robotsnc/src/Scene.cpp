@@ -9,8 +9,6 @@ maintenance, and subsequent redistribution.
 
 See NIST Administration Manual 4.09.07 b and Appendix I.
  */
-//#pragma message "Compiling " __FILE__ 
-#include "Scene.h"
 
 #include "boost/assign.hpp"
 #include <boost/algorithm/string.hpp>
@@ -18,10 +16,12 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 using namespace std;
 using namespace boost::assign;
 
-#include "Boost.h"
-#include "Debug.h"
-#include "Config.h"
-#include "Shape.h"
+#include "nist_robotsnc/Scene.h"
+
+#include "nist_robotsnc/NIST/Boost.h"
+#include "nist_robotsnc/Debug.h"
+#include "nist_robotsnc/NIST/Config.h"
+#include "nist_robotsnc/Shape.h"
 using namespace Conversion;
 
 #ifdef _CONFETTI_HEADER_

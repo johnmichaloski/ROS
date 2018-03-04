@@ -10,10 +10,10 @@
  *
  * See NIST Administration Manual 4.09.07 b and Appendix I.
  */
-#include "RCS.h"
-#include "Globals.h"
-#include "Controller.h"
-#include "Debug.h"
+#include "nist_robotsnc/RCS.h"
+#include "nist_robotsnc/Globals.h"
+#include "nist_robotsnc/Controller.h"
+#include "nist_robotsnc/Debug.h"
 namespace RCS {
 
     void getRPY(const RCS::Pose pose, double &roll, double &pitch, double &yaw) {

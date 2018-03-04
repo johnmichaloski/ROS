@@ -1,7 +1,5 @@
 
 
-#pragma once
-
 /*
 DISCLAIMER:
 This software was produced by the National Institute of Standards
@@ -34,7 +32,7 @@ namespace Checkers {
 		score = 0.0;
 	}
 
-	Move::Move(int row, int col, bool bJump = false) {
+    Move::Move(int row, int col, bool bJump) {
 		this->row = row;
 		this->col = col;
 		this->bJump = bJump;
@@ -238,7 +236,7 @@ namespace Checkers {
 		return true;
 	}
 
-	std::vector<Move> CheckersGame::BuildMoves(BoardType inboard, int player, Move from, bool bJumpOnly = false) {
+    std::vector<Move> CheckersGame::BuildMoves(BoardType inboard, int player, Move from, bool bJumpOnly) {
 		std::vector<Move> moves;
 		int row = from.row;
 		int col = from.col;

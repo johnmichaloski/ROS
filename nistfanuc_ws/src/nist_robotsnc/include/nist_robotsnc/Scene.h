@@ -277,7 +277,7 @@ private:
             const std_msgs::ColorRGBA &color,
             double radius,
             size_t &id);
-    void Scene::publishSphere(const tf::Pose &pose,
+    void publishSphere(const tf::Pose &pose,
             std_msgs::ColorRGBA color,
             double scale,
             std::size_t id);

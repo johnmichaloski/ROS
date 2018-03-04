@@ -18,14 +18,14 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 #include <math.h>       
 
 struct CMath {
-    static const double E = M_E; // returns Euler's number
-    static const double PI = M_PI; // returns PI
-    static const double SQRT2 = M_SQRT2; // returns the square root of 2
-    static const double SQRT1_2 = M_SQRT1_2; // returns the square root of 1/2
-    static const double LN2 = M_LN2; // returns the natural logarithm of 2
-    static const double LN10 = M_LN10; // returns the natural logarithm of 10
-    static const double LOG2E = M_LOG2E; // returns base 2 logarithm of E
-    static const double LOG10E = M_LOG10E; // returns base 10 logarithm of E 
+    const double E = M_E; // returns Euler's number
+    const double PI = M_PI; // returns PI
+    const double SQRT2 = M_SQRT2; // returns the square root of 2
+    const double SQRT1_2 = M_SQRT1_2; // returns the square root of 1/2
+    const double LN2 = M_LN2; // returns the natural logarithm of 2
+    const double LN10 = M_LN10; // returns the natural logarithm of 10
+    const double LOG2E = M_LOG2E; // returns base 2 logarithm of E
+    const double LOG10E = M_LOG10E; // returns base 10 logarithm of E
 
     CMath() {
         // More random

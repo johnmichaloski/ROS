@@ -13,6 +13,9 @@
 
 //#pragma message "Compiling " __FILE__ 
 
+#ifdef Qt
+#include <QCoreApplication>
+#endif
 #include "nist_robotsnc.h"
 
 #include <string>
@@ -29,24 +32,25 @@ namespace pt = boost::property_tree;
 #include <ros/console.h>
 
 
-#include <NIST/Boost.h>
+#include <nist_robotsnc/NIST/Boost.h>
 
-#include "MotionControl.h"
-#include "Globals.h"
-#include "Kinematics.h"
-#include "Controller.h"
-#include "RosSetup.h"
-#include "RvizMarker.h"
-#include "NIST/Boost.h"
-#include "Debug.h"
-#include "Scene.h"
-#include "RCSInterpreter.h"
-#include "Demo.h"
-#include "Test.h"
-#include "Config.h"
+#include "nist_robotsnc/MotionControl.h"
+#include "nist_robotsnc/Globals.h"
+#include "nist_robotsnc/Kinematics.h"
+#include "nist_robotsnc/Controller.h"
+#include "nist_robotsnc/RosSetup.h"
+#include "nist_robotsnc/RvizMarker.h"
+#include "nist_robotsnc/NIST/Boost.h"
+#include "nist_robotsnc/Debug.h"
+#include "nist_robotsnc/Scene.h"
+#include "nist_robotsnc/RCSInterpreter.h"
+#include "nist_robotsnc/Demo.h"
+#include "nist_robotsnc/NIST/Config.h"
 #include "nist_robotsnc/MotionException.h"
 #include "nist_robotsnc/Shape.h"
-#include "nist_robotsnc/ttt.h"
+///#include "nist_robotsnc/ttt.h"
+
+#include "Test.h"
 
 using namespace Conversion;
 
@@ -58,7 +62,13 @@ int main(int argc, char** argv) {
         std::string path(argv[0]);
         Globals.ExeDirectory = path.substr(0, path.find_last_of('/') + 1);
         Globals._appproperties["ExeDirectory"] = Globals.ExeDirectory;
+        Globals._appproperties["Package"] = ROSPACKAGENAME;
+        Globals._appproperties["PackagePath"] = ROSPACKAGEDIR;
 
+        // FIXME: this totally assume ROS catkin folder layout
+
+
+#if 0
         std::string pkgname = path.substr(path.find_last_of('/') + 1);
         Globals._appproperties["Package"] = pkgname;
         std::string wspath = path;
@@ -68,16 +78,32 @@ int main(int argc, char** argv) {
 
         std::string pkgpath = wspath + "/src/" + pkgname + "/config/" + pkgname + ".ini";
         std::string envstr = ExecuteShellCommand("export ROS_PACKAGE_PATH; cd " + wspath + "; /bin/bash -c \"source devel/setup.bash & env \"");
-        std::cout << envstr << "\n";
+ //       std::cout << envstr << "\n";
         // This sets up tother application _appproperties name/value pairs: user, hostname
-        SetupAppEnvironment();
-
+        SetupAppEnpathvironment();
+pathpath
         // This hard coding of env variables is required for debugging with netbeans ide
         // If ROS environment variables are not set it cannot find "stuff"
-        SetupRosEnvironment(); // needs to go before ROS!
+  //      SetupRosEnvironment(); // needs to go before ROS!
 
+  #endif
+        //const std::string ROSPACKAGENAME =  pkgname;
+        ros::M_string remappings;
+        remappings["__master"]="http://localhost:11311";
+        remappings["__name"]=ROSPACKAGENAME;//.c_str();
+        // Initialize ROS environment ROS_MASTER_URI MUST BE SET or seg fault
+        //ros::init(argc, &argv[0], ROSPACKAGENAME);
+        ros::init(remappings,ROSPACKAGENAME); // .c_str());
+
+        // Check if master running if not abort with dialog
+        if(! ros::master::check())
+        {
+            std::cerr << "ROS Master Not Running - Abrting\n";
+            return -1 ;
+        }
+        
         // Initialize ROS
-        ros::init(argc, argv, ROSPACKAGENAME);
+       // ros::init(argc, argv, ROSPACKAGENAME);
         ros::NodeHandle nh;
         ros::Rate r(50); // 10 times a second - 10Hz
 
@@ -111,11 +137,14 @@ int main(int argc, char** argv) {
         ros::AsyncSpinner spinner(2);
         spinner.start();
 
+#if 0
+        // DOESN"T WORK NOW
         // ROS config - parameter list - save for comparison later
         std::string params = ReadRosParams(nh);
         Globals.WriteFile(Globals.ExeDirectory + "rosconfig.txt", params);
         path = ros::package::getPath(ROSPACKAGENAME);
-
+        Globals._appproperties[ROSPACKAGENAME] = path;
+#endif
 
 #ifdef GEARS
         GearDemo geardemo(nh, path, Convert<tf::Vector3, tf::Pose>(tf::Vector3(0.25, 0.5, 0.0)));
@@ -133,8 +162,7 @@ int main(int argc, char** argv) {
         }
 #endif
 
-        Globals._appproperties[ROSPACKAGENAME] = path;
-        MotionException::Load();
+        //MotionException::Load();
         std::vector<boost::shared_ptr<CController> > ncs;
         std::vector<CrclApi > nccmds;
         std::vector<double> ds;
@@ -143,7 +171,7 @@ int main(int argc, char** argv) {
 
         try {
             // Load the json file in this ptree
-            pt::read_ini(path + "/config/" + ROSPACKAGENAME + ".ini", root);
+            pt::read_ini( Globals._appproperties["PackagePath"] + "/config/" + ROSPACKAGENAME + ".ini", root);
             std::vector<std::string> robots = GetIniTypes<std::string>(root, "system.robots");
             for (size_t i = 0; i < robots.size(); i++) {
                 ofsRobotURDF << "============================================================\n";
@@ -388,6 +416,7 @@ newgame:
         checkers.Setup();
 
         checkers.Play(&nccmds[0], &nccmds[1]);
+        goto newgame;
 #endif
 #ifdef GEARS
         do {
@@ -399,7 +428,6 @@ newgame:
             r.sleep();
         } while (ros::ok());
 #endif
-        goto newgame;
         spinner.stop();
         LOG_DEBUG << "Cntrl C pressed \n" << std::flush;
 
@@ -412,7 +440,11 @@ newgame:
         LOG_FATAL << "Abnormal exception end to  CRCL2Robot";
     }
     ros::shutdown();
-    return 0;
+#ifdef Qt
+    QCoreApplication a(argc, argv);
+
+    return a.exec();
+#endif
 }
 
 

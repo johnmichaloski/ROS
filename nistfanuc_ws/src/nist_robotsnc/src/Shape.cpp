@@ -1,9 +1,9 @@
 
 
-#include "Shape.h"
-#include "Boost.h"
+#include "nist_robotsnc/Shape.h"
+#include "nist_robotsnc/NIST/Boost.h"
 #include <boost/optional.hpp>
-#include "Conversions.h"
+#include "nist_robotsnc/Conversions.h"
 using namespace Conversion;
 
 namespace ShapeModel {
@@ -165,7 +165,7 @@ namespace ShapeModel {
         std::vector<tf::Pose> poses;
          std::map<std::string, std::vector<boost::shared_ptr<Instance> > >::iterator it = typeinstances.find(sku);
         if (it == typeinstances.end())
-            return;
+            return poses;
         std::vector<boost::shared_ptr<Instance> > v = (*it).second;
         for (size_t i = 0; i< v.size(); i++) {
            boost::shared_ptr<Instance> instance = v[i];
@@ -181,14 +181,14 @@ namespace ShapeModel {
         std::vector<tf::Pose> poses;
         std::map<std::string, std::vector<boost::shared_ptr<Instance> > >::iterator it = typeinstances.find(skuholder);
         if (it == typeinstances.end())
-            return; // fixme this is an error
+            return poses; // fixme this is an error
         std::vector<boost::shared_ptr< ShapeModel::Instance> > v = (*it).second;
  
                 
         for (size_t i = 0; i < v.size(); i++) {
             boost::shared_ptr<Instance> instance = v[i];
             if (v[i]->metatype != skuholder)
-                return;
+                return poses;
             tf::Vector3 centroid(instance->x, instance->y, instance->y);
             
 

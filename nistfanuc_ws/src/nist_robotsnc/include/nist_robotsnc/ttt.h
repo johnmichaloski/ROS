@@ -28,7 +28,7 @@ const struct ftError {
 #include "Globals.h"
 #include "Bezier.h"
 
-        using namespace bezier;
+using namespace bezier;
 
 struct letter : public std::vector<cspline> {
     std::vector<vec3> letter_pts(double inc = .1);
@@ -211,28 +211,28 @@ struct FreeType {
      */
     FT_BitmapGlyph GlyphBitmap(char c) {
         if (face == NULL)
-            return -1;
+            return (FT_BitmapGlyph) -1;
         int error;
         wchar_t wc;
         size_t l=1;
-        mbtowc(&wc, c, l);
+        mbtowc(&wc, &c, l);
         int glyph_index = FT_Get_Char_Index(face, (FT_ULong) wc);
         if (glyph_index == 0)
-            return -1;
+            return (FT_BitmapGlyph) -1;
         
         // extract glyph image
         if (error = FT_Load_Glyph(face, glyph_index, FT_LOAD_NO_BITMAP |
                 FT_LOAD_NO_HINTING))
-            return error;
+            return (FT_BitmapGlyph) error;
 
         if (error = FT_Get_Glyph(face->glyph, &glyph))
-            return error;
+            return (FT_BitmapGlyph) error;
         //FT_Pos width = glyph->;
         // convert to a bitmap (default render mode + destroying old)
         if (glyph->format != FT_GLYPH_FORMAT_BITMAP) {
             if (error = FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL,
                     0, 1))
-                return error;
+                return (FT_BitmapGlyph) error;
         }
 
         // access bitmap content by typecasting

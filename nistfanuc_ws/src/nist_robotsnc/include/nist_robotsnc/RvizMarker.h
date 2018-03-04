@@ -90,12 +90,12 @@ public:
      */   
     void Clear();
     
-    void CRvizMarker::publishLine(const tf::Vector3 &point1,
+    void publishLine(const tf::Vector3 &point1,
         const tf::Vector3 &point2,
         double radius=0.1,
         double scale=0.01);
     
-    int CRvizMarker::publishMesh(const tf::Pose &pose, 
+    int publishMesh(const tf::Pose &pose,
     const std::string &file_name, 
         double scale=1.0, 
         std::size_t id=0);

@@ -6,14 +6,16 @@
 // or intended.
 
 
-#include "Kinematics.h"
 #include <eigen_conversions/eigen_msg.h>
 #include <iostream>
-#include "Conversions.h"
-#include "Globals.h"
-#include "Debug.h"
+#include <algorithm>
 #include <boost/format.hpp>
-#include "Boost.h"
+
+#include "nist_robotsnc/Kinematics.h"
+#include "nist_robotsnc/Conversions.h"
+#include "nist_robotsnc/Globals.h"
+#include "nist_robotsnc/Debug.h"
+#include "nist_robotsnc/NIST/Boost.h"
 #include "nist_robotsnc/MotionException.h"
 #include "nist_robotsnc/Controller.h"
 
@@ -24,8 +26,7 @@ using namespace RCS;
 #define IKFAST_NO_MAIN
 #define IKFAST_NAMESPACE MotomanSia20d
 
-#include "Motoman/ikfast.h"
-#include <algorithm>
+#include "nist_robotsnc/Motoman/ikfast.h"
 using namespace  ikfast;
 using namespace MotomanSia20d;
 

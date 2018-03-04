@@ -4,17 +4,14 @@
 // their official duties and is not subject to copyright. No warranty implied 
 // or intended.
 
-//#pragma message "Compiling " __FILE__ 
-#include "Kinematics.h"
-
 #include <iostream>
 #include <boost/format.hpp>
 
-
-#include "Conversions.h"
-#include "Globals.h"
-#include "Debug.h"
-#include "Boost.h"
+#include "nist_robotsnc/Conversions.h"
+#include "nist_robotsnc/Kinematics.h"
+#include "nist_robotsnc/Globals.h"
+#include "nist_robotsnc/Debug.h"
+#include "nist_robotsnc/NIST/Boost.h"
 
 using namespace Conversion;
 double IKinematics::_testspacing;
@@ -340,7 +337,7 @@ void FanucLRmate200iD::Configure(int config) {
     }
 }
 
-std::vector<double> FanucLRmate200iD::Seed(int config = -1) {
+std::vector<double> FanucLRmate200iD::Seed(int config) {
     if (config != -1)
         Configure(config);
     if (bConfig != true)
@@ -356,7 +353,7 @@ std::vector<double> FanucLRmate200iD::Seed(int config = -1) {
 }
 
 #include <gokin/gokin.h>
-#include "Controller.h"
+#include "nist_robotsnc/Controller.h"
 MotomanSia20dGoKin::MotomanSia20dGoKin(boost::shared_ptr<RCS::CController> nc) {
     _nc = nc;
     _pGoKin = boost::shared_ptr<gomotion::GoKin>(new gomotion::GoKin());

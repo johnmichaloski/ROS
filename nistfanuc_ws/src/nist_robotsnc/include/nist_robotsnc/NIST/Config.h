@@ -30,7 +30,7 @@ namespace Nist {
         }
 
         operator char *() {
-            return this->c_str();
+            return (char *) this->c_str();
         }
 
         operator double() {
@@ -187,7 +187,7 @@ namespace Nist {
             return list;
         }
 
-        bool Config::load(const std::string filename) {
+        bool load(const std::string filename) {
             std::string section;
             std::string line;
             std::string comment = "#";
@@ -244,7 +244,7 @@ namespace Nist {
 
         // Use the [] operator to get/set values just like a map container
 
-        const StringVariant& Config::operator[](const std::string& keyName) const {
+        const StringVariant& operator[](const std::string& keyName) const {
             std::map<std::string, StringVariant>::const_iterator iter = inimap.find(keyName);
 
             if (iter != inimap.end())

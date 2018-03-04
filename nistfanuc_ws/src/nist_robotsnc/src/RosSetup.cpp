@@ -9,9 +9,6 @@ maintenance, and subsequent redistribution.
 
 See NIST Administration Manual 4.09.07 b and Appendix I.
  */
-//#pragma message "Compiling " __FILE__ 
-
-#include "RosSetup.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,8 +19,9 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 #include <boost/algorithm/string.hpp>
 #include <ros/ros.h>
 
-#include "Globals.h"
-#include "Debug.h"
+#include "nist_robotsnc/RosSetup.h"
+#include "nist_robotsnc/Globals.h"
+#include "nist_robotsnc/Debug.h"
 
 
 
@@ -391,21 +389,21 @@ SetupRos("PKG_CONFIG_PATH", "/home/michalos/catkin_ws/devel/lib/x86_64-linux-gnu
 //#include <joint_limits_interface/joint_limits_rosparam.h>
 
 
-void GetJointLimits(std::vector<std::string> names, std::vector<double> lower, std::vector<double> upper) {
-     boost::shared_ptr<robot_model_loader::RobotModelLoader>  urdf(new robot_model_loader::RobotModelLoader("robot_description"));
+//void GetJointLimits(std::vector<std::string> names, std::vector<double> lower, std::vector<double> upper) {
+//     boost::shared_ptr<robot_model_loader::RobotModelLoader>  urdf(new robot_model_loader::RobotModelLoader("robot_description"));
      
      
-     moveit::core::JointModel* jm = urdf->getModel()->getJointModel("joint_1");
-#if 0
-     // Data structures
-    joint_limits_interface::JointLimits limits;
-    joint_limits_interface::SoftJointLimits soft_limits;
+//     moveit::core::JointModel* jm = urdf->getModel()->getJointModel("joint_1");
+//#if 0
+//     // Data structures
+//    joint_limits_interface::JointLimits limits;
+//    joint_limits_interface::SoftJointLimits soft_limits;
 
-    // Populate (soft) joint limits from URDF
-    // Limits specified in URDF overwrite existing values in 'limits' and 'soft_limits'
-    // Limits not specified in URDF preserve their existing values
-    boost::shared_ptr<const RCS::Joint> urdf_joint = urdf->getJoint("joint_1");
-    //const bool urdf_limits_ok = getJointLimits(urdf_joint, limits);
-   // const bool urdf_soft_limits_ok = getSoftJointLimits(urdf_joint, soft_limits);
-#endif
-}
+//    // Populate (soft) joint limits from URDF
+//    // Limits specified in URDF overwrite existing values in 'limits' and 'soft_limits'
+//    // Limits not specified in URDF preserve their existing values
+//    boost::shared_ptr<const RCS::Joint> urdf_joint = urdf->getJoint("joint_1");
+//    //const bool urdf_limits_ok = getJointLimits(urdf_joint, limits);
+//   // const bool urdf_soft_limits_ok = getSoftJointLimits(urdf_joint, soft_limits);
+//#endif
+//}

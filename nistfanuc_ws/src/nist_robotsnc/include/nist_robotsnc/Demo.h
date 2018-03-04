@@ -138,7 +138,7 @@ class CheckersGame {
     ros::NodeHandle & _nh;
 public:
     CheckersGame(ros::NodeHandle & nh);
-    void CheckersGame::PhysicalMove(CrclApi &robot,
+    void PhysicalMove(CrclApi &robot,
             int player,
             int i, int j,
             Checkers::Move m,
@@ -159,7 +159,7 @@ public:
 };
 
 
-#include "ttt.h"
+#include "nist_robotsnc/ttt.h"
 
 struct ScriptingDemo {
 

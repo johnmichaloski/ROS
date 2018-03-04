@@ -1,9 +1,9 @@
 
 
-#include "MotionControl.h"
 //#include "urdf_model/rosmath.h"
 #include <algorithm>
-#include "Conversions.h"
+#include "nist_robotsnc/MotionControl.h"
+#include "nist_robotsnc/Conversions.h"
 
 double MotionControl::epsilon = 0.001;
 

@@ -22,11 +22,11 @@
 #include <csignal>
 
 #include "urdf_model/rosmath.h"
-#include "RvizMarker.h"
-#include "Debug.h"
-#include "Scene.h"
-#include "Boost.h"
-#include "MotionException.h"
+#include "nist_robotsnc/RvizMarker.h"
+#include "nist_robotsnc/Debug.h"
+#include "nist_robotsnc/Scene.h"
+#include "nist_robotsnc/NIST/Boost.h"
+#include "nist_robotsnc/MotionException.h"
 #include "cartesian_trajectory_msg/CartesianTrajectoryPoint.h"
 
 using namespace Conversion;

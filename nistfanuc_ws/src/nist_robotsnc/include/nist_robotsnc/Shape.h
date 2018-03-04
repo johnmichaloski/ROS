@@ -10,7 +10,7 @@
 #include <cstring>
 #include <tf/transform_datatypes.h>
 #include <boost/bind.hpp>
-#include "Boost.h"
+#include "NIST/Boost.h"
 
 
 namespace pt = boost::property_tree;
@@ -141,13 +141,13 @@ namespace ShapeModel {
         std::vector<boost::shared_ptr<Instance> > TypeInstances(std::string);
         boost::shared_ptr<Instance> NamedInstance(std::string);
         
-        std::vector<tf::Pose> Shapes::CopySkuHolderLocations(
+        std::vector<tf::Pose> CopySkuHolderLocations(
                 std::string sku = "sku_part_small_gear",
                 std::string skuholder = "sku_part_small_gear_vessel");
         tf::Pose GetInstancePose(boost::shared_ptr<Instance> instance);
         Shape & GetInstanceShape(boost::shared_ptr<Instance> instance);
         tf::Vector3 GetInstancePosition(boost::shared_ptr<Instance> instance);
-        tf::Quaternion Shapes::GetInstanceRotation(boost::shared_ptr<Instance> instance);
+        tf::Quaternion GetInstanceRotation(boost::shared_ptr<Instance> instance);
         tf::Pose GetChildPose(std::string childname);
         
         template <typename T>
@@ -218,7 +218,7 @@ namespace ShapeModel {
             root.put(childPath, child.data());
         }
         pt::ptree root;
-        Shape Shapes::ParseShape(std::string prefix, std::string name, pt::ptree & root);
+        Shape ParseShape(std::string prefix, std::string name, pt::ptree & root);
 //        std::map<Instance, std::vector<Instance> > instances;
         std::map<std::string, std::vector< boost::shared_ptr<Instance> > > metatypeinstances;
         std::map<std::string, std::vector< boost::shared_ptr<Instance> > > typeinstances;

@@ -11,8 +11,8 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
  */
 //#pragma message "Compiling " __FILE__ 
 
-#include "CsvLogging.h"
-#include "Boost.h"
+#include "nist_robotsnc/CsvLogging.h"
+#include "NIST/Boost.h"
 #include <fstream>
 
 static const char *sStateEnums[] = {

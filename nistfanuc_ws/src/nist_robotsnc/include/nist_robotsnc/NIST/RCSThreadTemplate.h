@@ -93,6 +93,8 @@ namespace RCS {
          * \brief Action override function called every cycle.
          */
         virtual int Action() {
+            assert(0);
+            return 0;
         }
 
         /*!

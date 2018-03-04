@@ -9,10 +9,9 @@
  *
  * See NIST Administration Manual 4.09.07 b and Appendix I.
  */
-//#pragma message "Compiling " __FILE__ 
 
-#include "RvizMarker.h" 
-static int CRvizMarker::_id = 1;
+#include "nist_robotsnc/RvizMarker.h"
+int CRvizMarker::_id = 1;
 
 CRvizMarker::CRvizMarker(ros::NodeHandle & nh) : n(nh) {
     scalex = scaley = scalez = 0.005;

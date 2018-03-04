@@ -18,13 +18,13 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Point.h>
 
-#include "RCS.h"
-#include "Kinematics.h"
-#include "trajectoryMaker.h"
-#include "MotionControl.h"
-#include "Controller.h"
-#include "Demo.h"
-#include "Debug.h"
+#include "nist_robotsnc/RCS.h"
+#include "nist_robotsnc/Kinematics.h"
+#include "nist_robotsnc/trajectoryMaker.h"
+#include "nist_robotsnc/MotionControl.h"
+#include "nist_robotsnc/Controller.h"
+#include "nist_robotsnc/Demo.h"
+#include "nist_robotsnc/Debug.h"
 #include "gotraj/gotraj.h"
 
 using namespace gomotion;

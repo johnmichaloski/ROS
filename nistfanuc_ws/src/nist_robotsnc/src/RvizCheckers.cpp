@@ -29,7 +29,7 @@ See NIST Administration Manual 4.09.07 b and Appendix I.
 //#include <boost/bind.hpp>
 //#include <boost/thread/mutex.hpp>
 
-#include "Debug.h"
+#include "nist_robotsnc/Debug.h"
 
 using namespace Conversion;
 
@@ -48,8 +48,8 @@ RvizCheckers::RvizCheckers(ros::NodeHandle &nh) : _nh(nh) {
 	bFlag = false;
 }
 
-void RvizCheckers::BoardSetup(double xoffset = -0.16, double yoffset = 0.20, double zoffset = 0.0, double sqoffset = 0.04,
-	double checkerradius = 0.025, double checkerheight = 0.015, int boarddirection = UPDOWN) {
+void RvizCheckers::BoardSetup(double xoffset, double yoffset, double zoffset, double sqoffset,
+    double checkerradius, double checkerheight, int boarddirection ) {
 		XOFFSET = xoffset;
 		YOFFSET = yoffset;
 		ZOFFSET = zoffset;

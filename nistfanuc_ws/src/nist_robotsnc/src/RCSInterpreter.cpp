@@ -16,12 +16,12 @@
 #include <tf/transform_datatypes.h>
 #include <boost/ref.hpp>
 
-#include "RCSInterpreter.h"
-#include "Controller.h"
-#include "Globals.h"
-//#include "trajectoryMaker.h"
-#include "Conversions.h"
-#include "Debug.h"
+#include "nist_robotsnc/RCSInterpreter.h"
+#include "nist_robotsnc/Controller.h"
+#include "nist_robotsnc/Globals.h"
+//#include "nist_robotsnc/trajectoryMaker.h"
+#include "nist_robotsnc/Conversions.h"
+#include "nist_robotsnc/Debug.h"
 #include "nist_robotsnc/MotionException.h"
 
 
