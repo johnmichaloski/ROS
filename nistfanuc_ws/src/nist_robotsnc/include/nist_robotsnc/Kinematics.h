@@ -496,7 +496,7 @@ public:
     void VerifyLimits(std::vector<double> joints);
 };
 
-
+#ifdef GOKIN
 namespace gomotion{
     struct GoKin;
 };
@@ -515,6 +515,7 @@ public:
     }
    boost::shared_ptr<gomotion::GoKin>  _pGoKin;
 };
+#endif
 #if 0
 namespace TRAC_IK{
     struct TRAC_IK;

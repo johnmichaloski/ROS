@@ -166,8 +166,11 @@ namespace RCS {
 
         status.Init(this);
         _nh = &nh;
+
         crcl_status = _nh->advertise<nistcrcl::CrclStatusMsg>(prefix + "crcl_status", 1);
         crcl_cmd = _nh->subscribe(prefix + "crcl_command", 10, &CController::CmdCallback, this);
+
+
         if (!bRvizPubSetup) {
             rviz_jntcmd = _nh->advertise<sensor_msgs::JointState>("nist_controller/robot/joint_states", 1);
             bRvizPubSetup = true;
@@ -230,6 +233,11 @@ namespace RCS {
     }
 
     void CController::PublishCrclStatus() {
+
+        // If no one listening don't publish
+       if( crcl_status.getNumSubscribers()==0)
+           return;
+
         nistcrcl::CrclStatusMsg statusmsg;
         statusmsg.header.stamp = ros::Time::now();
         statusmsg.crclcommandstatus = status.crclcommandstatus; // done
@@ -270,16 +278,23 @@ namespace RCS {
         lastpose = status.currentpose;
         status.currentpose = Kinematics()->FK(status.currentjoints.position); /**<  current robot pose */
         // compute ee cartesian vel, acc, jerk
-        cartesian_trajectory_msg::CartesianTrajectoryPoint profile;
-        // this doesn't include angular velocity calculation - assume scale is almost same as linear
+        
+        if( cartesian_status.getNumSubscribers()>0)
+        {
 
-        profile.velocity.data = (status.currentpose.getOrigin().distance(lastpose.getOrigin())) / 2.0;
-        double lastvel = (profiles.size() > 0) ? profiles[0].velocity.data : 0.0;
-        double lastacc = (profiles.size() > 0) ? profiles[0].acceleration.data : 0.0;
-        profile.acceleration.data = (fabs(profile.velocity.data) - fabs(lastvel)) / 2.0;
-        profile.jerk.data = (fabs(profile.acceleration.data) - fabs(lastacc)) / 2.0;
-        profiles.push_back(profile);
-        cartesian_status.publish(profile);
+            cartesian_trajectory_msg::CartesianTrajectoryPoint profile;
+            // this doesn't include angular velocity calculation - assume scale is almost same as linear
+
+            profile.velocity.data = (status.currentpose.getOrigin().distance(lastpose.getOrigin())) / 2.0;
+            double lastvel = (profiles.size() > 0) ? profiles[0].velocity.data : 0.0;
+            double lastacc = (profiles.size() > 0) ? profiles[0].acceleration.data : 0.0;
+            profile.acceleration.data = (fabs(profile.velocity.data) - fabs(lastvel)) / 2.0;
+            profile.jerk.data = (fabs(profile.acceleration.data) - fabs(lastacc)) / 2.0;
+            profiles.push_back(profile);
+            if( crcl_status.getNumSubscribers()==0)
+
+                cartesian_status.publish(profile);
+        }
 
         std::vector<tf::Pose> poses = Kinematics()->ComputeAllFk(status.currentjoints.position);
         if (bGrasping()) { // && GraspObj() != NULL) {
@@ -310,9 +325,10 @@ namespace RCS {
         // rostopic echo  nist_controller/robot/joint_states
 
         rviz_jntcmd.publish(status.currentjoints);
-        rviz_jntcmd.publish(status.currentjoints);
+//        rviz_jntcmd.publish(status.currentjoints);
         ros::spinOnce();
-        ros::spinOnce();
+        for(size_t k=0; k< 20; k++)
+            ros::spinOnce();
 #if 0
         if (!_newcc.partname.empty()) {
             Eigen::Affine3d pose = Eigen::Affine3d::Identity() *

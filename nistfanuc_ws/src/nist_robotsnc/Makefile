@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DQT_CORE_LIB
 CFLAGS        = -m64 -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -m64 -pipe -DCHECKERS -DXSD_CXX11 -Wno-unused-variable -Wno-sign-compare -DROS -DROS=1 -g -std=c++0x -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -Iinclude -Iinclude/nist_robotsnc -I../../devel/include -I../nistcrcl/include -I../gotraj/include -I../gokin/include -isystem /usr/include/freetype2 -isystem /usr/include -I/opt/ros/kinetic/include -isystem /usr/include -isystem /usr/include/eigen3 -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -Idebug/.moc -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64
+INCPATH       = -I. -Iinclude -Iinclude/nist_robotsnc -I../../devel/include -I../nistcrcl/include -I../gotraj/include -isystem /usr/include -I/opt/ros/kinetic/include -isystem /usr/include -isystem /usr/include/eigen3 -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -Idebug/.moc -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64
 QMAKE         = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -1684,7 +1684,6 @@ debug/.obj/Kinematics.o: src/Kinematics.cpp include/nist_robotsnc/Conversions.h 
 		include/nist_robotsnc/Kinematics.h \
 		include/nist_robotsnc/Debug.h \
 		include/nist_robotsnc/NIST/Boost.h \
-		../gokin/include/gokin/gokin.h \
 		include/nist_robotsnc/Controller.h \
 		/opt/ros/kinetic/include/ros/package.h \
 		include/nist_robotsnc/NIST/RCSThreadTemplate.h \

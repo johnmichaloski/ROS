@@ -352,6 +352,7 @@ std::vector<double> FanucLRmate200iD::Seed(int config) {
     return seed;
 }
 
+#ifdef GOKIN
 #include <gokin/gokin.h>
 #include "nist_robotsnc/Controller.h"
 MotomanSia20dGoKin::MotomanSia20dGoKin(boost::shared_ptr<RCS::CController> nc) {
@@ -398,6 +399,8 @@ void MotomanSia20dGoKin::Init(ros::NodeHandle & nh) {
     //params.push_back(d);
     _pGoKin->SetParams(params);
 }
+
+#endif
 #if 0
 
 #include <trac_ik/trac_ik.hpp>

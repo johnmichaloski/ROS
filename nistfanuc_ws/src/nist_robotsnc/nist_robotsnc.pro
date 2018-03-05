@@ -30,8 +30,8 @@ INCLUDEPATH += "/usr/local/michalos/nistfanuc_ws/src/nist_robotsnc/include/nist_
 INCLUDEPATH += "/usr/local/michalos/nistfanuc_ws/devel/include"
 INCLUDEPATH += "/usr/local/michalos/nistfanuc_ws/src/nistcrcl/include"
 INCLUDEPATH += "/usr/local/michalos/nistfanuc_ws/src/gotraj/include"
-INCLUDEPATH += "/usr/local/michalos/nistfanuc_ws/src/gokin/include"
-INCLUDEPATH += "/usr/include/freetype2"
+#INCLUDEPATH += "/usr/local/michalos/nistfanuc_ws/src/gokin/include"
+#INCLUDEPATH += "/usr/include/freetype2"
 
 INCLUDEPATH += "/usr/include"
 QMAKE_CXXFLAGS +=-DXSD_CXX11

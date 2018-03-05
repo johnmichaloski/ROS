@@ -67,6 +67,7 @@ int BangBangInterpreter::ParseCommand(RCS::CanonCmd cmd, RCS::CanonCmd &outcmd,
 
             assert(cmd.joints.position.size() > 0);
             LOG_DEBUG << "IK Joints " << VectorDump<double>(cmd.joints.position).c_str();
+            LOG_DEBUG << "FK Position from IK " << RCS::DumpPoseSimple(_kinematics->FK(cmd.joints.position)).c_str() <<"\n";
             cmd.joints.name = _kinematics->JointNames();
             cmd.crclcommand = CanonCmdType::CANON_MOVE_JOINT;
 
