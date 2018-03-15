@@ -397,7 +397,7 @@ void Scene::ChangeColor(std::string objname, std_msgs::ColorRGBA color) { //rviz
 }
 
 bool Scene::DrawObject(SceneObject &obj) {
-    bool b;
+    bool b=true;
     std::string type = SceneObject::_typemapping[obj.metatype];
     if (type == "mesh") {
         publishMesh(obj.pose,

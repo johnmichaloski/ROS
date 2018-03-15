@@ -16,7 +16,6 @@
  */
 #pragma once
 
-
 #include <string>
 #include <vector>
 #include <math.h>
@@ -31,8 +30,9 @@
 //#include <urdf/model.h>
 #include <sensor_msgs/JointState.h>
 
-#include "RCS.h"
-#include "Debug.h"
+#include "nist_robotsnc/RCS.h"
+#include "nist_robotsnc/Debug.h"
+#include "nist_robotsnc/Globals.h"
 
 /***
     // Couple code attempts at reading from robot joints names - see above
@@ -81,7 +81,7 @@ public:
                 joint_state.position.resize(joint_names.size());
             }
             if (bPublish)
-                joint_pub = nh.advertise<sensor_msgs::JointState>("nist_controller/robot/joint_states", 10);
+                joint_pub = nh.advertise<sensor_msgs::JointState>(Globals.joint_state_topic, 10);
         } catch (...) {
             ROS_ERROR("GripperInterface Failed to init");
 

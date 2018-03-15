@@ -208,11 +208,8 @@ namespace ShapeModel {
                 }
 
             }
-            return poses;
         }
-        // Search each metatype 
-        // Given the centroid of the gear vessel. From this compute 4 slots.
-
+        return poses;
     }
 
 };

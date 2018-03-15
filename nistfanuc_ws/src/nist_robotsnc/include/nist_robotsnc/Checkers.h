@@ -169,11 +169,10 @@ namespace Checkers {
 		void Dump(std::ostream &str, const std::vector<Move> &moves);
 		/*!
 		*\brief Read input file for list of moves to store.
-		* \param player (red or black piece).
 		* \param m is move or destination (if at end of opponent board, then king)
 		* \return bool true if king, false is not.
 		*/
-		bool IsKing(int player, Move m) ;
+        bool IsKing(Move m) ;
 		/*!
 		*\brief Is row a legal value?
 		* \param n for row number.

@@ -1,0 +1,47 @@
+#if 0
+        int ParseUrdf(std::string name = "robot_description")
+        {
+                std::string urdf_xml;
+
+                if (!_nh.getParam(name, urdf_xml)) {
+                        //ROS_FATAL_NAMED("JointStateUpdater", "Could not load the xml from parameter server: %s", urdf_xml.c_str());
+                        return -1;
+                }
+                return ParseUrdfJoints(urdf_xml);
+        }
+#else
+//	int ParseUrdf(std::string filename )
+//	{
+//		std::ifstream t(filename.c_str());
+//		std::stringstream buffer;
+//		buffer << t.rdbuf();
+//		return ParseUrdfJoints(buffer.str());
+//	}
+
+
+
+                  <surface>
+                        <friction>
+                            <ode>
+                                <mu>0.5</mu>
+                                <mu2>0.2</mu2>
+                                <fdir1>1.0 0 0</fdir1>
+                                <slip1>0</slip1>
+                                <slip2>0</slip2>
+                            </ode>
+                        </friction>
+                        <bounce>
+                            <restitution_coefficient>0</restitution_coefficient>
+                            <threshold>1000000.0</threshold>
+                        </bounce>
+                        <contact>
+                            <ode>
+                                <soft_cfm>0</soft_cfm>
+                                <soft_erp>0.2</soft_erp>
+                                <kp>1e15</kp>
+                                <kd>1e13</kd>
+                                <max_vel>100.0</max_vel>
+                                <min_depth>0.0001</min_depth>
+                            </ode>
+                        </contact>
+                    </surface>

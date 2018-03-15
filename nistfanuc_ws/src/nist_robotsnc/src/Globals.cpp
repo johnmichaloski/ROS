@@ -32,6 +32,8 @@ CGlobals::CGlobals()
     SocketPort = "64444";
     srand((unsigned int) time(NULL)); //activates the simple randome number generator
 
+    joint_state_topic="nist_controller/robot/joint_states";
+
 }
 
 CGlobals::~CGlobals() {
@@ -46,14 +48,19 @@ CGlobals::~CGlobals() {
 void CGlobals::DebugSetup()
 {
     ofsRobotURDF.open(this->ExeDirectory+"RobotUrdf.log", std::ofstream::out);
+
     ofsRobotMoveJoint.open(this->ExeDirectory+"MoveJoint.log", std::ofstream::out);
+
     ofsScene.open(this->ExeDirectory+"Scene.log", std::ofstream::out);
+
     ofsMotionTrace.open(this->ExeDirectory + "Trace.log", std::ofstream::out);
+
     //ofsRobotMoveTo.open(this->ExeDirectory + "Moveto.log", std::ofstream::out);
     ofsRobotMoveTo.copyfmt(ofsMotionTrace); //1
     ofsRobotMoveTo.clear(ofsMotionTrace.rdstate()); //2
     ofsRobotMoveTo.basic_ios<char>::rdbuf(ofsMotionTrace.rdbuf());           //3
     ofsRobotExercise.open(this->ExeDirectory+"Exercise.log", std::ofstream::out);
+
     ofsIkFast.copyfmt(ofsRobotExercise);
     ofsIkFast.clear(ofsRobotExercise.rdstate()); //2
     ofsIkFast.basic_ios<char>::rdbuf(ofsRobotExercise.rdbuf());           //3

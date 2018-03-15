@@ -14,7 +14,7 @@ CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_CORE_LIB
 CFLAGS        = -m64 -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-CXXFLAGS      = -m64 -pipe -DCHECKERS -DXSD_CXX11 -Wno-unused-variable -Wno-sign-compare -DROS -DROS=1 -g -std=c++0x -Wall -W -D_REENTRANT -fPIC $(DEFINES)
+CXXFLAGS      = -m64 -pipe -DCHECKERS -DXSD_CXX11 -Wno-unused-variable -Wno-sign-compare -Wno-unused-parameter -Wno-reorder -Wno-format-extra-args -Wno-deprecated-declarations -DROS -DROS=1 -g -std=c++0x -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I. -Iinclude -Iinclude/nist_robotsnc -I../../devel/include -I../nistcrcl/include -I../gotraj/include -isystem /usr/include -I/opt/ros/kinetic/include -isystem /usr/include -isystem /usr/include/eigen3 -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -Idebug/.moc -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64
 QMAKE         = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
 DEL_FILE      = rm -f
@@ -91,6 +91,7 @@ OBJECTS       = debug/.obj/BLogging.o \
 		debug/.obj/Shape.o \
 		debug/.obj/Demo.o
 DIST          = include/nist_robotsnc/NIST/RCSTimer.txt \
+		Notes.txt \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -101,23 +102,15 @@ DIST          = include/nist_robotsnc/NIST/RCSTimer.txt \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/g++-unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/qconfig.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_bootstrap_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_clucene_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_concurrent.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_concurrent_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_core.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_core_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dbus.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dbus_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_designer.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_designer_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_designercomponents_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_eglfs_device_lib_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_gui.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_gui_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_help.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_help_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_multimedia.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_multimediawidgets.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl.pri \
@@ -128,27 +121,14 @@ DIST          = include/nist_robotsnc/NIST/RCSTimer.txt \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_printsupport.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_printsupport_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qml.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qml_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qmldevtools_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qmltest.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qmltest_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quick.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quick_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quickparticles_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quickwidgets.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quickwidgets_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_script.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_script_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_scripttools.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_scripttools_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_svg.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_testlib.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_testlib_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_uiplugin.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_uitools.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_uitools_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_webkit.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_webkitwidgets.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets.pri \
@@ -271,23 +251,15 @@ Makefile: nist_robotsnc.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/q
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/g++-unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/qconfig.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_bootstrap_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_clucene_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_concurrent.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_concurrent_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_core.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_core_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dbus.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dbus_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_designer.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_designer_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_designercomponents_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_eglfs_device_lib_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_gui.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_gui_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_help.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_help_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_multimedia.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_multimediawidgets.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl.pri \
@@ -298,27 +270,14 @@ Makefile: nist_robotsnc.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/q
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_printsupport.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_printsupport_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qml.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qml_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qmldevtools_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qmltest.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qmltest_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quick.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quick_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quickparticles_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quickwidgets.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quickwidgets_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_script.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_script_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_scripttools.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_scripttools_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_svg.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_testlib.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_testlib_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_uiplugin.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_uitools.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_uitools_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_webkit.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_webkitwidgets.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets.pri \
@@ -360,23 +319,15 @@ Makefile: nist_robotsnc.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/q
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/g++-unix.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/qconfig.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_bootstrap_private.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_clucene_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_concurrent.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_concurrent_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_core.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_core_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dbus.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dbus_private.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_designer.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_designer_private.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_designercomponents_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_eglfs_device_lib_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_gui.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_gui_private.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_help.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_help_private.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_multimedia.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_multimediawidgets.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_network_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl.pri:
@@ -387,27 +338,14 @@ Makefile: nist_robotsnc.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/q
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_printsupport.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_printsupport_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qml.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qml_private.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qmldevtools_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qmltest.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qmltest_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quick.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quick_private.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quickparticles_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quickwidgets.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quickwidgets_private.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_script.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_script_private.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_scripttools.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_scripttools_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_svg.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_testlib.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_testlib_private.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_uiplugin.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_uitools.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_uitools_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_webkit.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_webkitwidgets.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets.pri:
@@ -558,100 +496,6 @@ debug/.obj/Communication.o: src/Communication.cpp include/nist_robotsnc/Communic
 		/opt/ros/kinetic/include/sensor_msgs/JointState.h \
 		/opt/ros/kinetic/include/ros/message_operations.h \
 		/opt/ros/kinetic/include/std_msgs/Header.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group_interface.h \
-		/opt/ros/kinetic/include/moveit/macros/class_forward.h \
-		/opt/ros/kinetic/include/moveit/macros/declare_ptr.h \
-		/opt/ros/kinetic/include/moveit/macros/deprecation.h \
-		/opt/ros/kinetic/include/moveit/robot_state/robot_state.h \
-		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
-		/opt/ros/kinetic/include/moveit/exceptions/exceptions.h \
-		/opt/ros/kinetic/include/urdf/model.h \
-		/opt/ros/kinetic/include/urdf/urdfdom_compatibility.h \
-		/opt/ros/kinetic/include/srdfdom/model.h \
-		/opt/ros/kinetic/include/moveit/robot_model/joint_model_group.h \
-		/opt/ros/kinetic/include/moveit/robot_model/joint_model.h \
-		/opt/ros/kinetic/include/moveit_msgs/JointLimits.h \
-		/opt/ros/kinetic/include/random_numbers/random_numbers.h \
-		/opt/ros/kinetic/include/moveit/robot_model/link_model.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_vector_container.h \
-		/opt/ros/kinetic/include/moveit/kinematics_base/kinematics_base.h \
-		/opt/ros/kinetic/include/geometry_msgs/PoseStamped.h \
-		/opt/ros/kinetic/include/geometry_msgs/Pose.h \
-		/opt/ros/kinetic/include/geometry_msgs/Point.h \
-		/opt/ros/kinetic/include/geometry_msgs/Quaternion.h \
-		/opt/ros/kinetic/include/moveit_msgs/MoveItErrorCodes.h \
-		/opt/ros/kinetic/include/moveit/robot_model/fixed_joint_model.h \
-		/opt/ros/kinetic/include/moveit/robot_model/floating_joint_model.h \
-		/opt/ros/kinetic/include/moveit/robot_model/planar_joint_model.h \
-		/opt/ros/kinetic/include/moveit/robot_model/revolute_joint_model.h \
-		/opt/ros/kinetic/include/moveit/robot_model/prismatic_joint_model.h \
-		/opt/ros/kinetic/include/moveit/robot_state/attached_body.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_containers.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_map_container.h \
-		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/visualization_msgs/MarkerArray.h \
-		/opt/ros/kinetic/include/visualization_msgs/Marker.h \
-		/opt/ros/kinetic/include/geometry_msgs/Vector3.h \
-		/opt/ros/kinetic/include/std_msgs/ColorRGBA.h \
-		/opt/ros/kinetic/include/geometry_msgs/Twist.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/geometry_msgs/Transform.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotState.h \
-		/opt/ros/kinetic/include/sensor_msgs/MultiDOFJointState.h \
-		/opt/ros/kinetic/include/geometry_msgs/Wrench.h \
-		/opt/ros/kinetic/include/moveit_msgs/AttachedCollisionObject.h \
-		/opt/ros/kinetic/include/moveit_msgs/CollisionObject.h \
-		/opt/ros/kinetic/include/object_recognition_msgs/ObjectType.h \
-		/opt/ros/kinetic/include/shape_msgs/SolidPrimitive.h \
-		/opt/ros/kinetic/include/shape_msgs/Mesh.h \
-		/opt/ros/kinetic/include/shape_msgs/MeshTriangle.h \
-		/opt/ros/kinetic/include/shape_msgs/Plane.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlannerInterfaceDescription.h \
-		/opt/ros/kinetic/include/moveit_msgs/Constraints.h \
-		/opt/ros/kinetic/include/moveit_msgs/JointConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/PositionConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/BoundingVolume.h \
-		/opt/ros/kinetic/include/moveit_msgs/OrientationConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/VisibilityConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/Grasp.h \
-		/opt/ros/kinetic/include/moveit_msgs/GripperTranslation.h \
-		/opt/ros/kinetic/include/geometry_msgs/Vector3Stamped.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlaceLocation.h \
-		/opt/ros/kinetic/include/moveit_msgs/MotionPlanRequest.h \
-		/opt/ros/kinetic/include/moveit_msgs/WorkspaceParameters.h \
-		/opt/ros/kinetic/include/moveit_msgs/TrajectoryConstraints.h \
-		/opt/ros/kinetic/include/tf/tf.h \
-		/opt/ros/kinetic/include/tf/exceptions.h \
-		/opt/ros/kinetic/include/tf2/exceptions.h \
-		/opt/ros/kinetic/include/tf/time_cache.h \
-		/opt/ros/kinetic/include/tf/transform_datatypes.h \
-		/opt/ros/kinetic/include/geometry_msgs/PointStamped.h \
-		/opt/ros/kinetic/include/geometry_msgs/QuaternionStamped.h \
-		/opt/ros/kinetic/include/geometry_msgs/TransformStamped.h \
-		/opt/ros/kinetic/include/tf/LinearMath/Transform.h \
-		/opt/ros/kinetic/include/tf/LinearMath/Matrix3x3.h \
-		/opt/ros/kinetic/include/tf/LinearMath/Vector3.h \
-		/opt/ros/kinetic/include/tf/LinearMath/Scalar.h \
-		/opt/ros/kinetic/include/tf/LinearMath/MinMax.h \
-		/opt/ros/kinetic/include/tf/LinearMath/Quaternion.h \
-		/opt/ros/kinetic/include/tf/LinearMath/QuadWord.h \
-		/opt/ros/kinetic/include/geometry_msgs/TwistStamped.h \
-		/opt/ros/kinetic/include/tf2_ros/buffer.h \
-		/opt/ros/kinetic/include/tf2_ros/buffer_interface.h \
-		/opt/ros/kinetic/include/tf2/buffer_core.h \
-		/opt/ros/kinetic/include/tf2/transform_storage.h \
-		/opt/ros/kinetic/include/tf2/LinearMath/Vector3.h \
-		/opt/ros/kinetic/include/tf2/LinearMath/Quaternion.h \
-		/opt/ros/kinetic/include/tf2/transform_datatypes.h \
-		/opt/ros/kinetic/include/tf2/convert.h \
-		/opt/ros/kinetic/include/tf2/impl/convert.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
 		/opt/ros/kinetic/include/actionlib/client/simple_action_client.h \
 		/opt/ros/kinetic/include/ros/callback_queue.h \
 		/opt/ros/kinetic/include/ros/callback_queue_interface.h \
@@ -678,6 +522,8 @@ debug/.obj/Communication.o: src/Communication.cpp include/nist_robotsnc/Communic
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryAction.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryActionGoal.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryGoal.h \
+		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectory.h \
+		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectoryPoint.h \
 		/opt/ros/kinetic/include/control_msgs/JointTolerance.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryActionResult.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryResult.h \
@@ -687,6 +533,42 @@ debug/.obj/Communication.o: src/Communication.cpp include/nist_robotsnc/Communic
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryState.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateRequest.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateResponse.h \
+		/opt/ros/kinetic/include/tf/tf.h \
+		/opt/ros/kinetic/include/tf/exceptions.h \
+		/opt/ros/kinetic/include/tf2/exceptions.h \
+		/opt/ros/kinetic/include/tf/time_cache.h \
+		/opt/ros/kinetic/include/tf/transform_datatypes.h \
+		/opt/ros/kinetic/include/geometry_msgs/PointStamped.h \
+		/opt/ros/kinetic/include/geometry_msgs/Point.h \
+		/opt/ros/kinetic/include/geometry_msgs/Vector3Stamped.h \
+		/opt/ros/kinetic/include/geometry_msgs/Vector3.h \
+		/opt/ros/kinetic/include/geometry_msgs/QuaternionStamped.h \
+		/opt/ros/kinetic/include/geometry_msgs/Quaternion.h \
+		/opt/ros/kinetic/include/geometry_msgs/TransformStamped.h \
+		/opt/ros/kinetic/include/geometry_msgs/Transform.h \
+		/opt/ros/kinetic/include/geometry_msgs/PoseStamped.h \
+		/opt/ros/kinetic/include/geometry_msgs/Pose.h \
+		/opt/ros/kinetic/include/tf/LinearMath/Transform.h \
+		/opt/ros/kinetic/include/tf/LinearMath/Matrix3x3.h \
+		/opt/ros/kinetic/include/tf/LinearMath/Vector3.h \
+		/opt/ros/kinetic/include/tf/LinearMath/Scalar.h \
+		/opt/ros/kinetic/include/tf/LinearMath/MinMax.h \
+		/opt/ros/kinetic/include/tf/LinearMath/Quaternion.h \
+		/opt/ros/kinetic/include/tf/LinearMath/QuadWord.h \
+		/opt/ros/kinetic/include/geometry_msgs/TwistStamped.h \
+		/opt/ros/kinetic/include/geometry_msgs/Twist.h \
+		/opt/ros/kinetic/include/tf2_ros/buffer.h \
+		/opt/ros/kinetic/include/tf2_ros/buffer_interface.h \
+		/opt/ros/kinetic/include/tf2/buffer_core.h \
+		/opt/ros/kinetic/include/tf2/transform_storage.h \
+		/opt/ros/kinetic/include/tf2/LinearMath/Vector3.h \
+		/opt/ros/kinetic/include/tf2/LinearMath/Quaternion.h \
+		/opt/ros/kinetic/include/tf2/transform_datatypes.h \
+		/opt/ros/kinetic/include/tf2/convert.h \
+		/opt/ros/kinetic/include/tf2/impl/convert.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
 		/opt/ros/kinetic/include/tf/transform_broadcaster.h \
 		/opt/ros/kinetic/include/tf/tfMessage.h \
 		/opt/ros/kinetic/include/tf2_ros/transform_broadcaster.h \
@@ -701,15 +583,34 @@ debug/.obj/Communication.o: src/Communication.cpp include/nist_robotsnc/Communic
 		/opt/ros/kinetic/include/tf2_ros/transform_listener.h \
 		/opt/ros/kinetic/include/tf2_msgs/TFMessage.h \
 		include/nist_robotsnc/RCS.h \
-		/opt/ros/kinetic/include/moveit/robot_model_loader/robot_model_loader.h \
-		/opt/ros/kinetic/include/moveit/rdf_loader/rdf_loader.h \
-		/opt/ros/kinetic/include/moveit/kinematics_plugin_loader/kinematics_plugin_loader.h \
+		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
+		/opt/ros/kinetic/include/moveit/macros/class_forward.h \
+		/opt/ros/kinetic/include/moveit/macros/declare_ptr.h \
+		/opt/ros/kinetic/include/moveit/exceptions/exceptions.h \
+		/opt/ros/kinetic/include/urdf/model.h \
+		/opt/ros/kinetic/include/urdf/urdfdom_compatibility.h \
+		/opt/ros/kinetic/include/srdfdom/model.h \
+		/opt/ros/kinetic/include/moveit/robot_model/joint_model_group.h \
+		/opt/ros/kinetic/include/moveit/robot_model/joint_model.h \
+		/opt/ros/kinetic/include/moveit_msgs/JointLimits.h \
+		/opt/ros/kinetic/include/random_numbers/random_numbers.h \
+		/opt/ros/kinetic/include/moveit/robot_model/link_model.h \
+		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_vector_container.h \
+		/opt/ros/kinetic/include/moveit/kinematics_base/kinematics_base.h \
+		/opt/ros/kinetic/include/moveit_msgs/MoveItErrorCodes.h \
+		/opt/ros/kinetic/include/moveit/robot_model/fixed_joint_model.h \
+		/opt/ros/kinetic/include/moveit/robot_model/floating_joint_model.h \
+		/opt/ros/kinetic/include/moveit/robot_model/planar_joint_model.h \
+		/opt/ros/kinetic/include/moveit/robot_model/revolute_joint_model.h \
+		/opt/ros/kinetic/include/moveit/robot_model/prismatic_joint_model.h \
 		../../devel/include/nistcrcl/CrclCommandMsg.h \
+		/opt/ros/kinetic/include/std_msgs/ColorRGBA.h \
 		../../devel/include/nistcrcl/CrclMaxProfileMsg.h \
 		../../devel/include/nistcrcl/CrclStatusMsg.h \
 		include/nist_robotsnc/Globals.h \
 		include/nist_robotsnc/Debug.h \
 		include/nist_robotsnc/Conversions.h \
+		/opt/ros/kinetic/include/geometry_msgs/Wrench.h \
 		/opt/ros/kinetic/include/kdl/frames_io.hpp \
 		/opt/ros/kinetic/include/kdl/utilities/utility_io.h \
 		/opt/ros/kinetic/include/kdl/frames.hpp \
@@ -779,15 +680,17 @@ debug/.obj/Controller.o: src/Controller.cpp include/nist_robotsnc/Controller.h \
 		/opt/ros/kinetic/include/ros/param.h \
 		/opt/ros/kinetic/include/ros/topic.h \
 		/opt/ros/kinetic/include/ros/package.h \
+		/opt/ros/kinetic/include/sensor_msgs/JointState.h \
+		/opt/ros/kinetic/include/ros/message_operations.h \
+		/opt/ros/kinetic/include/std_msgs/Header.h \
 		include/nist_robotsnc/NIST/RCSThreadTemplate.h \
 		include/nist_robotsnc/NIST/RCSTimer.h \
 		include/nist_robotsnc/NIST/RCSMsgQueue.h \
 		include/nist_robotsnc/NIST/Boost.h \
 		include/nist_robotsnc/RCS.h \
-		/opt/ros/kinetic/include/moveit/robot_model_loader/robot_model_loader.h \
+		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/macros/class_forward.h \
 		/opt/ros/kinetic/include/moveit/macros/declare_ptr.h \
-		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/exceptions/exceptions.h \
 		/opt/ros/kinetic/include/urdf/model.h \
 		/opt/ros/kinetic/include/urdf/urdfdom_compatibility.h \
@@ -795,13 +698,11 @@ debug/.obj/Controller.o: src/Controller.cpp include/nist_robotsnc/Controller.h \
 		/opt/ros/kinetic/include/moveit/robot_model/joint_model_group.h \
 		/opt/ros/kinetic/include/moveit/robot_model/joint_model.h \
 		/opt/ros/kinetic/include/moveit_msgs/JointLimits.h \
-		/opt/ros/kinetic/include/ros/message_operations.h \
 		/opt/ros/kinetic/include/random_numbers/random_numbers.h \
 		/opt/ros/kinetic/include/moveit/robot_model/link_model.h \
 		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_vector_container.h \
 		/opt/ros/kinetic/include/moveit/kinematics_base/kinematics_base.h \
 		/opt/ros/kinetic/include/geometry_msgs/PoseStamped.h \
-		/opt/ros/kinetic/include/std_msgs/Header.h \
 		/opt/ros/kinetic/include/geometry_msgs/Pose.h \
 		/opt/ros/kinetic/include/geometry_msgs/Point.h \
 		/opt/ros/kinetic/include/geometry_msgs/Quaternion.h \
@@ -811,8 +712,6 @@ debug/.obj/Controller.o: src/Controller.cpp include/nist_robotsnc/Controller.h \
 		/opt/ros/kinetic/include/moveit/robot_model/planar_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/revolute_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/prismatic_joint_model.h \
-		/opt/ros/kinetic/include/moveit/rdf_loader/rdf_loader.h \
-		/opt/ros/kinetic/include/moveit/kinematics_plugin_loader/kinematics_plugin_loader.h \
 		/opt/ros/kinetic/include/tf/transform_datatypes.h \
 		/opt/ros/kinetic/include/geometry_msgs/PointStamped.h \
 		/opt/ros/kinetic/include/geometry_msgs/Vector3Stamped.h \
@@ -827,7 +726,6 @@ debug/.obj/Controller.o: src/Controller.cpp include/nist_robotsnc/Controller.h \
 		/opt/ros/kinetic/include/tf/LinearMath/MinMax.h \
 		/opt/ros/kinetic/include/tf/LinearMath/Quaternion.h \
 		/opt/ros/kinetic/include/tf/LinearMath/QuadWord.h \
-		/opt/ros/kinetic/include/sensor_msgs/JointState.h \
 		../../devel/include/nistcrcl/CrclCommandMsg.h \
 		/opt/ros/kinetic/include/std_msgs/ColorRGBA.h \
 		../../devel/include/nistcrcl/CrclMaxProfileMsg.h \
@@ -847,59 +745,6 @@ debug/.obj/Controller.o: src/Controller.cpp include/nist_robotsnc/Controller.h \
 		/opt/ros/kinetic/include/kdl/jntarray.hpp \
 		/opt/ros/kinetic/include/kdl/jacobian.hpp \
 		include/nist_robotsnc/Communication.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group_interface.h \
-		/opt/ros/kinetic/include/moveit/macros/deprecation.h \
-		/opt/ros/kinetic/include/moveit/robot_state/robot_state.h \
-		/opt/ros/kinetic/include/moveit/robot_state/attached_body.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_containers.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_map_container.h \
-		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/visualization_msgs/MarkerArray.h \
-		/opt/ros/kinetic/include/visualization_msgs/Marker.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotState.h \
-		/opt/ros/kinetic/include/sensor_msgs/MultiDOFJointState.h \
-		/opt/ros/kinetic/include/moveit_msgs/AttachedCollisionObject.h \
-		/opt/ros/kinetic/include/moveit_msgs/CollisionObject.h \
-		/opt/ros/kinetic/include/object_recognition_msgs/ObjectType.h \
-		/opt/ros/kinetic/include/shape_msgs/SolidPrimitive.h \
-		/opt/ros/kinetic/include/shape_msgs/Mesh.h \
-		/opt/ros/kinetic/include/shape_msgs/MeshTriangle.h \
-		/opt/ros/kinetic/include/shape_msgs/Plane.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlannerInterfaceDescription.h \
-		/opt/ros/kinetic/include/moveit_msgs/Constraints.h \
-		/opt/ros/kinetic/include/moveit_msgs/JointConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/PositionConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/BoundingVolume.h \
-		/opt/ros/kinetic/include/moveit_msgs/OrientationConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/VisibilityConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/Grasp.h \
-		/opt/ros/kinetic/include/moveit_msgs/GripperTranslation.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlaceLocation.h \
-		/opt/ros/kinetic/include/moveit_msgs/MotionPlanRequest.h \
-		/opt/ros/kinetic/include/moveit_msgs/WorkspaceParameters.h \
-		/opt/ros/kinetic/include/moveit_msgs/TrajectoryConstraints.h \
-		/opt/ros/kinetic/include/tf/tf.h \
-		/opt/ros/kinetic/include/tf/exceptions.h \
-		/opt/ros/kinetic/include/tf2/exceptions.h \
-		/opt/ros/kinetic/include/tf/time_cache.h \
-		/opt/ros/kinetic/include/geometry_msgs/TwistStamped.h \
-		/opt/ros/kinetic/include/tf2_ros/buffer.h \
-		/opt/ros/kinetic/include/tf2_ros/buffer_interface.h \
-		/opt/ros/kinetic/include/tf2/buffer_core.h \
-		/opt/ros/kinetic/include/tf2/transform_storage.h \
-		/opt/ros/kinetic/include/tf2/LinearMath/Vector3.h \
-		/opt/ros/kinetic/include/tf2/LinearMath/Quaternion.h \
-		/opt/ros/kinetic/include/tf2/transform_datatypes.h \
-		/opt/ros/kinetic/include/tf2/convert.h \
-		/opt/ros/kinetic/include/tf2/impl/convert.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
 		/opt/ros/kinetic/include/actionlib/client/simple_action_client.h \
 		/opt/ros/kinetic/include/ros/callback_queue.h \
 		/opt/ros/kinetic/include/ros/callback_queue_interface.h \
@@ -926,6 +771,8 @@ debug/.obj/Controller.o: src/Controller.cpp include/nist_robotsnc/Controller.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryAction.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryActionGoal.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryGoal.h \
+		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectory.h \
+		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectoryPoint.h \
 		/opt/ros/kinetic/include/control_msgs/JointTolerance.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryActionResult.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryResult.h \
@@ -935,6 +782,23 @@ debug/.obj/Controller.o: src/Controller.cpp include/nist_robotsnc/Controller.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryState.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateRequest.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateResponse.h \
+		/opt/ros/kinetic/include/tf/tf.h \
+		/opt/ros/kinetic/include/tf/exceptions.h \
+		/opt/ros/kinetic/include/tf2/exceptions.h \
+		/opt/ros/kinetic/include/tf/time_cache.h \
+		/opt/ros/kinetic/include/geometry_msgs/TwistStamped.h \
+		/opt/ros/kinetic/include/tf2_ros/buffer.h \
+		/opt/ros/kinetic/include/tf2_ros/buffer_interface.h \
+		/opt/ros/kinetic/include/tf2/buffer_core.h \
+		/opt/ros/kinetic/include/tf2/transform_storage.h \
+		/opt/ros/kinetic/include/tf2/LinearMath/Vector3.h \
+		/opt/ros/kinetic/include/tf2/LinearMath/Quaternion.h \
+		/opt/ros/kinetic/include/tf2/transform_datatypes.h \
+		/opt/ros/kinetic/include/tf2/convert.h \
+		/opt/ros/kinetic/include/tf2/impl/convert.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
 		/opt/ros/kinetic/include/tf/transform_broadcaster.h \
 		/opt/ros/kinetic/include/tf/tfMessage.h \
 		/opt/ros/kinetic/include/tf2_ros/transform_broadcaster.h \
@@ -949,6 +813,7 @@ debug/.obj/Controller.o: src/Controller.cpp include/nist_robotsnc/Controller.h \
 		/opt/ros/kinetic/include/tf2_ros/transform_listener.h \
 		/opt/ros/kinetic/include/tf2_msgs/TFMessage.h \
 		include/nist_robotsnc/RvizMarker.h \
+		/opt/ros/kinetic/include/visualization_msgs/Marker.h \
 		include/nist_robotsnc/Kinematics.h \
 		include/nist_robotsnc/CsvLogging.h \
 		include/nist_robotsnc/Scene.h \
@@ -1021,10 +886,9 @@ debug/.obj/CrclApi.o: src/CrclApi.cpp include/nist_robotsnc/CrclApi.h \
 		/opt/ros/kinetic/include/ros/param.h \
 		/opt/ros/kinetic/include/ros/topic.h \
 		include/nist_robotsnc/RCS.h \
-		/opt/ros/kinetic/include/moveit/robot_model_loader/robot_model_loader.h \
+		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/macros/class_forward.h \
 		/opt/ros/kinetic/include/moveit/macros/declare_ptr.h \
-		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/exceptions/exceptions.h \
 		/opt/ros/kinetic/include/urdf/model.h \
 		/opt/ros/kinetic/include/urdf/urdfdom_compatibility.h \
@@ -1048,8 +912,6 @@ debug/.obj/CrclApi.o: src/CrclApi.cpp include/nist_robotsnc/CrclApi.h \
 		/opt/ros/kinetic/include/moveit/robot_model/planar_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/revolute_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/prismatic_joint_model.h \
-		/opt/ros/kinetic/include/moveit/rdf_loader/rdf_loader.h \
-		/opt/ros/kinetic/include/moveit/kinematics_plugin_loader/kinematics_plugin_loader.h \
 		/opt/ros/kinetic/include/tf/transform_datatypes.h \
 		/opt/ros/kinetic/include/geometry_msgs/PointStamped.h \
 		/opt/ros/kinetic/include/geometry_msgs/Vector3Stamped.h \
@@ -1096,58 +958,6 @@ debug/.obj/CrclApi.o: src/CrclApi.cpp include/nist_robotsnc/CrclApi.h \
 		include/nist_robotsnc/NIST/RCSMsgQueue.h \
 		include/nist_robotsnc/Gripper.h \
 		include/nist_robotsnc/Communication.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group_interface.h \
-		/opt/ros/kinetic/include/moveit/macros/deprecation.h \
-		/opt/ros/kinetic/include/moveit/robot_state/robot_state.h \
-		/opt/ros/kinetic/include/moveit/robot_state/attached_body.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_containers.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_map_container.h \
-		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/visualization_msgs/MarkerArray.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotState.h \
-		/opt/ros/kinetic/include/sensor_msgs/MultiDOFJointState.h \
-		/opt/ros/kinetic/include/moveit_msgs/AttachedCollisionObject.h \
-		/opt/ros/kinetic/include/moveit_msgs/CollisionObject.h \
-		/opt/ros/kinetic/include/object_recognition_msgs/ObjectType.h \
-		/opt/ros/kinetic/include/shape_msgs/SolidPrimitive.h \
-		/opt/ros/kinetic/include/shape_msgs/Mesh.h \
-		/opt/ros/kinetic/include/shape_msgs/MeshTriangle.h \
-		/opt/ros/kinetic/include/shape_msgs/Plane.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlannerInterfaceDescription.h \
-		/opt/ros/kinetic/include/moveit_msgs/Constraints.h \
-		/opt/ros/kinetic/include/moveit_msgs/JointConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/PositionConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/BoundingVolume.h \
-		/opt/ros/kinetic/include/moveit_msgs/OrientationConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/VisibilityConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/Grasp.h \
-		/opt/ros/kinetic/include/moveit_msgs/GripperTranslation.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlaceLocation.h \
-		/opt/ros/kinetic/include/moveit_msgs/MotionPlanRequest.h \
-		/opt/ros/kinetic/include/moveit_msgs/WorkspaceParameters.h \
-		/opt/ros/kinetic/include/moveit_msgs/TrajectoryConstraints.h \
-		/opt/ros/kinetic/include/tf/tf.h \
-		/opt/ros/kinetic/include/tf/exceptions.h \
-		/opt/ros/kinetic/include/tf2/exceptions.h \
-		/opt/ros/kinetic/include/tf/time_cache.h \
-		/opt/ros/kinetic/include/geometry_msgs/TwistStamped.h \
-		/opt/ros/kinetic/include/tf2_ros/buffer.h \
-		/opt/ros/kinetic/include/tf2_ros/buffer_interface.h \
-		/opt/ros/kinetic/include/tf2/buffer_core.h \
-		/opt/ros/kinetic/include/tf2/transform_storage.h \
-		/opt/ros/kinetic/include/tf2/LinearMath/Vector3.h \
-		/opt/ros/kinetic/include/tf2/LinearMath/Quaternion.h \
-		/opt/ros/kinetic/include/tf2/transform_datatypes.h \
-		/opt/ros/kinetic/include/tf2/convert.h \
-		/opt/ros/kinetic/include/tf2/impl/convert.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
 		/opt/ros/kinetic/include/actionlib/client/simple_action_client.h \
 		/opt/ros/kinetic/include/ros/callback_queue.h \
 		/opt/ros/kinetic/include/ros/callback_queue_interface.h \
@@ -1174,6 +984,8 @@ debug/.obj/CrclApi.o: src/CrclApi.cpp include/nist_robotsnc/CrclApi.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryAction.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryActionGoal.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryGoal.h \
+		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectory.h \
+		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectoryPoint.h \
 		/opt/ros/kinetic/include/control_msgs/JointTolerance.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryActionResult.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryResult.h \
@@ -1183,6 +995,23 @@ debug/.obj/CrclApi.o: src/CrclApi.cpp include/nist_robotsnc/CrclApi.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryState.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateRequest.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateResponse.h \
+		/opt/ros/kinetic/include/tf/tf.h \
+		/opt/ros/kinetic/include/tf/exceptions.h \
+		/opt/ros/kinetic/include/tf2/exceptions.h \
+		/opt/ros/kinetic/include/tf/time_cache.h \
+		/opt/ros/kinetic/include/geometry_msgs/TwistStamped.h \
+		/opt/ros/kinetic/include/tf2_ros/buffer.h \
+		/opt/ros/kinetic/include/tf2_ros/buffer_interface.h \
+		/opt/ros/kinetic/include/tf2/buffer_core.h \
+		/opt/ros/kinetic/include/tf2/transform_storage.h \
+		/opt/ros/kinetic/include/tf2/LinearMath/Vector3.h \
+		/opt/ros/kinetic/include/tf2/LinearMath/Quaternion.h \
+		/opt/ros/kinetic/include/tf2/transform_datatypes.h \
+		/opt/ros/kinetic/include/tf2/convert.h \
+		/opt/ros/kinetic/include/tf2/impl/convert.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
 		/opt/ros/kinetic/include/tf/transform_broadcaster.h \
 		/opt/ros/kinetic/include/tf/tfMessage.h \
 		/opt/ros/kinetic/include/tf2_ros/transform_broadcaster.h \
@@ -1262,10 +1091,9 @@ debug/.obj/CsvLogging.o: src/CsvLogging.cpp include/nist_robotsnc/CsvLogging.h \
 		/opt/ros/kinetic/include/ros/this_node.h \
 		/opt/ros/kinetic/include/ros/param.h \
 		/opt/ros/kinetic/include/ros/topic.h \
-		/opt/ros/kinetic/include/moveit/robot_model_loader/robot_model_loader.h \
+		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/macros/class_forward.h \
 		/opt/ros/kinetic/include/moveit/macros/declare_ptr.h \
-		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/exceptions/exceptions.h \
 		/opt/ros/kinetic/include/urdf/model.h \
 		/opt/ros/kinetic/include/urdf/urdfdom_compatibility.h \
@@ -1289,8 +1117,6 @@ debug/.obj/CsvLogging.o: src/CsvLogging.cpp include/nist_robotsnc/CsvLogging.h \
 		/opt/ros/kinetic/include/moveit/robot_model/planar_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/revolute_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/prismatic_joint_model.h \
-		/opt/ros/kinetic/include/moveit/rdf_loader/rdf_loader.h \
-		/opt/ros/kinetic/include/moveit/kinematics_plugin_loader/kinematics_plugin_loader.h \
 		/opt/ros/kinetic/include/tf/transform_datatypes.h \
 		/opt/ros/kinetic/include/geometry_msgs/PointStamped.h \
 		/opt/ros/kinetic/include/geometry_msgs/Vector3Stamped.h \
@@ -1387,10 +1213,9 @@ debug/.obj/fanuclrmate200idkinematics.o: src/fanuclrmate200idkinematics.cpp /opt
 		/opt/ros/kinetic/include/ros/param.h \
 		/opt/ros/kinetic/include/ros/topic.h \
 		include/nist_robotsnc/RCS.h \
-		/opt/ros/kinetic/include/moveit/robot_model_loader/robot_model_loader.h \
+		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/macros/class_forward.h \
 		/opt/ros/kinetic/include/moveit/macros/declare_ptr.h \
-		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/exceptions/exceptions.h \
 		/opt/ros/kinetic/include/srdfdom/model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/joint_model_group.h \
@@ -1408,8 +1233,6 @@ debug/.obj/fanuclrmate200idkinematics.o: src/fanuclrmate200idkinematics.cpp /opt
 		/opt/ros/kinetic/include/moveit/robot_model/planar_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/revolute_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/prismatic_joint_model.h \
-		/opt/ros/kinetic/include/moveit/rdf_loader/rdf_loader.h \
-		/opt/ros/kinetic/include/moveit/kinematics_plugin_loader/kinematics_plugin_loader.h \
 		/opt/ros/kinetic/include/tf/transform_datatypes.h \
 		/opt/ros/kinetic/include/geometry_msgs/PointStamped.h \
 		/opt/ros/kinetic/include/geometry_msgs/Vector3Stamped.h \
@@ -1447,59 +1270,6 @@ debug/.obj/fanuclrmate200idkinematics.o: src/fanuclrmate200idkinematics.cpp /opt
 		include/nist_robotsnc/NIST/RCSMsgQueue.h \
 		include/nist_robotsnc/Gripper.h \
 		include/nist_robotsnc/Communication.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group_interface.h \
-		/opt/ros/kinetic/include/moveit/macros/deprecation.h \
-		/opt/ros/kinetic/include/moveit/robot_state/robot_state.h \
-		/opt/ros/kinetic/include/moveit/robot_state/attached_body.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_containers.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_map_container.h \
-		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/visualization_msgs/MarkerArray.h \
-		/opt/ros/kinetic/include/visualization_msgs/Marker.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotState.h \
-		/opt/ros/kinetic/include/sensor_msgs/MultiDOFJointState.h \
-		/opt/ros/kinetic/include/moveit_msgs/AttachedCollisionObject.h \
-		/opt/ros/kinetic/include/moveit_msgs/CollisionObject.h \
-		/opt/ros/kinetic/include/object_recognition_msgs/ObjectType.h \
-		/opt/ros/kinetic/include/shape_msgs/SolidPrimitive.h \
-		/opt/ros/kinetic/include/shape_msgs/Mesh.h \
-		/opt/ros/kinetic/include/shape_msgs/MeshTriangle.h \
-		/opt/ros/kinetic/include/shape_msgs/Plane.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlannerInterfaceDescription.h \
-		/opt/ros/kinetic/include/moveit_msgs/Constraints.h \
-		/opt/ros/kinetic/include/moveit_msgs/JointConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/PositionConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/BoundingVolume.h \
-		/opt/ros/kinetic/include/moveit_msgs/OrientationConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/VisibilityConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/Grasp.h \
-		/opt/ros/kinetic/include/moveit_msgs/GripperTranslation.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlaceLocation.h \
-		/opt/ros/kinetic/include/moveit_msgs/MotionPlanRequest.h \
-		/opt/ros/kinetic/include/moveit_msgs/WorkspaceParameters.h \
-		/opt/ros/kinetic/include/moveit_msgs/TrajectoryConstraints.h \
-		/opt/ros/kinetic/include/tf/tf.h \
-		/opt/ros/kinetic/include/tf/exceptions.h \
-		/opt/ros/kinetic/include/tf2/exceptions.h \
-		/opt/ros/kinetic/include/tf/time_cache.h \
-		/opt/ros/kinetic/include/geometry_msgs/TwistStamped.h \
-		/opt/ros/kinetic/include/tf2_ros/buffer.h \
-		/opt/ros/kinetic/include/tf2_ros/buffer_interface.h \
-		/opt/ros/kinetic/include/tf2/buffer_core.h \
-		/opt/ros/kinetic/include/tf2/transform_storage.h \
-		/opt/ros/kinetic/include/tf2/LinearMath/Vector3.h \
-		/opt/ros/kinetic/include/tf2/LinearMath/Quaternion.h \
-		/opt/ros/kinetic/include/tf2/transform_datatypes.h \
-		/opt/ros/kinetic/include/tf2/convert.h \
-		/opt/ros/kinetic/include/tf2/impl/convert.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
 		/opt/ros/kinetic/include/actionlib/client/simple_action_client.h \
 		/opt/ros/kinetic/include/ros/callback_queue.h \
 		/opt/ros/kinetic/include/ros/callback_queue_interface.h \
@@ -1526,6 +1296,8 @@ debug/.obj/fanuclrmate200idkinematics.o: src/fanuclrmate200idkinematics.cpp /opt
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryAction.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryActionGoal.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryGoal.h \
+		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectory.h \
+		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectoryPoint.h \
 		/opt/ros/kinetic/include/control_msgs/JointTolerance.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryActionResult.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryResult.h \
@@ -1535,6 +1307,23 @@ debug/.obj/fanuclrmate200idkinematics.o: src/fanuclrmate200idkinematics.cpp /opt
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryState.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateRequest.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateResponse.h \
+		/opt/ros/kinetic/include/tf/tf.h \
+		/opt/ros/kinetic/include/tf/exceptions.h \
+		/opt/ros/kinetic/include/tf2/exceptions.h \
+		/opt/ros/kinetic/include/tf/time_cache.h \
+		/opt/ros/kinetic/include/geometry_msgs/TwistStamped.h \
+		/opt/ros/kinetic/include/tf2_ros/buffer.h \
+		/opt/ros/kinetic/include/tf2_ros/buffer_interface.h \
+		/opt/ros/kinetic/include/tf2/buffer_core.h \
+		/opt/ros/kinetic/include/tf2/transform_storage.h \
+		/opt/ros/kinetic/include/tf2/LinearMath/Vector3.h \
+		/opt/ros/kinetic/include/tf2/LinearMath/Quaternion.h \
+		/opt/ros/kinetic/include/tf2/transform_datatypes.h \
+		/opt/ros/kinetic/include/tf2/convert.h \
+		/opt/ros/kinetic/include/tf2/impl/convert.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
 		/opt/ros/kinetic/include/tf/transform_broadcaster.h \
 		/opt/ros/kinetic/include/tf/tfMessage.h \
 		/opt/ros/kinetic/include/tf2_ros/transform_broadcaster.h \
@@ -1549,6 +1338,7 @@ debug/.obj/fanuclrmate200idkinematics.o: src/fanuclrmate200idkinematics.cpp /opt
 		/opt/ros/kinetic/include/tf2_ros/transform_listener.h \
 		/opt/ros/kinetic/include/tf2_msgs/TFMessage.h \
 		include/nist_robotsnc/RvizMarker.h \
+		/opt/ros/kinetic/include/visualization_msgs/Marker.h \
 		include/nist_robotsnc/CsvLogging.h \
 		include/nist_robotsnc/Scene.h \
 		include/nist_robotsnc/Shape.h \
@@ -1646,10 +1436,9 @@ debug/.obj/Kinematics.o: src/Kinematics.cpp include/nist_robotsnc/Conversions.h 
 		/opt/ros/kinetic/include/ros/param.h \
 		/opt/ros/kinetic/include/ros/topic.h \
 		include/nist_robotsnc/RCS.h \
-		/opt/ros/kinetic/include/moveit/robot_model_loader/robot_model_loader.h \
+		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/macros/class_forward.h \
 		/opt/ros/kinetic/include/moveit/macros/declare_ptr.h \
-		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/exceptions/exceptions.h \
 		/opt/ros/kinetic/include/srdfdom/model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/joint_model_group.h \
@@ -1665,8 +1454,6 @@ debug/.obj/Kinematics.o: src/Kinematics.cpp include/nist_robotsnc/Conversions.h 
 		/opt/ros/kinetic/include/moveit/robot_model/planar_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/revolute_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/prismatic_joint_model.h \
-		/opt/ros/kinetic/include/moveit/rdf_loader/rdf_loader.h \
-		/opt/ros/kinetic/include/moveit/kinematics_plugin_loader/kinematics_plugin_loader.h \
 		/opt/ros/kinetic/include/sensor_msgs/JointState.h \
 		../../devel/include/nistcrcl/CrclCommandMsg.h \
 		/opt/ros/kinetic/include/std_msgs/ColorRGBA.h \
@@ -1691,59 +1478,6 @@ debug/.obj/Kinematics.o: src/Kinematics.cpp include/nist_robotsnc/Conversions.h 
 		include/nist_robotsnc/NIST/RCSMsgQueue.h \
 		include/nist_robotsnc/Gripper.h \
 		include/nist_robotsnc/Communication.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group_interface.h \
-		/opt/ros/kinetic/include/moveit/macros/deprecation.h \
-		/opt/ros/kinetic/include/moveit/robot_state/robot_state.h \
-		/opt/ros/kinetic/include/moveit/robot_state/attached_body.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_containers.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_map_container.h \
-		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/visualization_msgs/MarkerArray.h \
-		/opt/ros/kinetic/include/visualization_msgs/Marker.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotState.h \
-		/opt/ros/kinetic/include/sensor_msgs/MultiDOFJointState.h \
-		/opt/ros/kinetic/include/moveit_msgs/AttachedCollisionObject.h \
-		/opt/ros/kinetic/include/moveit_msgs/CollisionObject.h \
-		/opt/ros/kinetic/include/object_recognition_msgs/ObjectType.h \
-		/opt/ros/kinetic/include/shape_msgs/SolidPrimitive.h \
-		/opt/ros/kinetic/include/shape_msgs/Mesh.h \
-		/opt/ros/kinetic/include/shape_msgs/MeshTriangle.h \
-		/opt/ros/kinetic/include/shape_msgs/Plane.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlannerInterfaceDescription.h \
-		/opt/ros/kinetic/include/moveit_msgs/Constraints.h \
-		/opt/ros/kinetic/include/moveit_msgs/JointConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/PositionConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/BoundingVolume.h \
-		/opt/ros/kinetic/include/moveit_msgs/OrientationConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/VisibilityConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/Grasp.h \
-		/opt/ros/kinetic/include/moveit_msgs/GripperTranslation.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlaceLocation.h \
-		/opt/ros/kinetic/include/moveit_msgs/MotionPlanRequest.h \
-		/opt/ros/kinetic/include/moveit_msgs/WorkspaceParameters.h \
-		/opt/ros/kinetic/include/moveit_msgs/TrajectoryConstraints.h \
-		/opt/ros/kinetic/include/tf/tf.h \
-		/opt/ros/kinetic/include/tf/exceptions.h \
-		/opt/ros/kinetic/include/tf2/exceptions.h \
-		/opt/ros/kinetic/include/tf/time_cache.h \
-		/opt/ros/kinetic/include/geometry_msgs/TwistStamped.h \
-		/opt/ros/kinetic/include/tf2_ros/buffer.h \
-		/opt/ros/kinetic/include/tf2_ros/buffer_interface.h \
-		/opt/ros/kinetic/include/tf2/buffer_core.h \
-		/opt/ros/kinetic/include/tf2/transform_storage.h \
-		/opt/ros/kinetic/include/tf2/LinearMath/Vector3.h \
-		/opt/ros/kinetic/include/tf2/LinearMath/Quaternion.h \
-		/opt/ros/kinetic/include/tf2/transform_datatypes.h \
-		/opt/ros/kinetic/include/tf2/convert.h \
-		/opt/ros/kinetic/include/tf2/impl/convert.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
 		/opt/ros/kinetic/include/actionlib/client/simple_action_client.h \
 		/opt/ros/kinetic/include/ros/callback_queue.h \
 		/opt/ros/kinetic/include/ros/callback_queue_interface.h \
@@ -1770,6 +1504,8 @@ debug/.obj/Kinematics.o: src/Kinematics.cpp include/nist_robotsnc/Conversions.h 
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryAction.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryActionGoal.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryGoal.h \
+		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectory.h \
+		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectoryPoint.h \
 		/opt/ros/kinetic/include/control_msgs/JointTolerance.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryActionResult.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryResult.h \
@@ -1779,6 +1515,23 @@ debug/.obj/Kinematics.o: src/Kinematics.cpp include/nist_robotsnc/Conversions.h 
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryState.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateRequest.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateResponse.h \
+		/opt/ros/kinetic/include/tf/tf.h \
+		/opt/ros/kinetic/include/tf/exceptions.h \
+		/opt/ros/kinetic/include/tf2/exceptions.h \
+		/opt/ros/kinetic/include/tf/time_cache.h \
+		/opt/ros/kinetic/include/geometry_msgs/TwistStamped.h \
+		/opt/ros/kinetic/include/tf2_ros/buffer.h \
+		/opt/ros/kinetic/include/tf2_ros/buffer_interface.h \
+		/opt/ros/kinetic/include/tf2/buffer_core.h \
+		/opt/ros/kinetic/include/tf2/transform_storage.h \
+		/opt/ros/kinetic/include/tf2/LinearMath/Vector3.h \
+		/opt/ros/kinetic/include/tf2/LinearMath/Quaternion.h \
+		/opt/ros/kinetic/include/tf2/transform_datatypes.h \
+		/opt/ros/kinetic/include/tf2/convert.h \
+		/opt/ros/kinetic/include/tf2/impl/convert.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
 		/opt/ros/kinetic/include/tf/transform_broadcaster.h \
 		/opt/ros/kinetic/include/tf/tfMessage.h \
 		/opt/ros/kinetic/include/tf2_ros/transform_broadcaster.h \
@@ -1793,6 +1546,7 @@ debug/.obj/Kinematics.o: src/Kinematics.cpp include/nist_robotsnc/Conversions.h 
 		/opt/ros/kinetic/include/tf2_ros/transform_listener.h \
 		/opt/ros/kinetic/include/tf2_msgs/TFMessage.h \
 		include/nist_robotsnc/RvizMarker.h \
+		/opt/ros/kinetic/include/visualization_msgs/Marker.h \
 		include/nist_robotsnc/CsvLogging.h \
 		include/nist_robotsnc/Scene.h \
 		include/nist_robotsnc/Shape.h \
@@ -1922,10 +1676,9 @@ debug/.obj/MotionControl.o: src/MotionControl.cpp include/nist_robotsnc/MotionCo
 		/opt/ros/kinetic/include/actionlib/client/simple_goal_state.h \
 		/opt/ros/kinetic/include/actionlib/client/simple_client_goal_state.h \
 		include/nist_robotsnc/RCS.h \
-		/opt/ros/kinetic/include/moveit/robot_model_loader/robot_model_loader.h \
+		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/macros/class_forward.h \
 		/opt/ros/kinetic/include/moveit/macros/declare_ptr.h \
-		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/exceptions/exceptions.h \
 		/opt/ros/kinetic/include/urdf/model.h \
 		/opt/ros/kinetic/include/urdf/urdfdom_compatibility.h \
@@ -1947,8 +1700,6 @@ debug/.obj/MotionControl.o: src/MotionControl.cpp include/nist_robotsnc/MotionCo
 		/opt/ros/kinetic/include/moveit/robot_model/planar_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/revolute_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/prismatic_joint_model.h \
-		/opt/ros/kinetic/include/moveit/rdf_loader/rdf_loader.h \
-		/opt/ros/kinetic/include/moveit/kinematics_plugin_loader/kinematics_plugin_loader.h \
 		/opt/ros/kinetic/include/tf/transform_datatypes.h \
 		/opt/ros/kinetic/include/geometry_msgs/PointStamped.h \
 		/opt/ros/kinetic/include/geometry_msgs/Vector3Stamped.h \
@@ -2060,10 +1811,9 @@ debug/.obj/motomansia20dkinematics.o: src/motomansia20dkinematics.cpp /opt/ros/k
 		/opt/ros/kinetic/include/ros/param.h \
 		/opt/ros/kinetic/include/ros/topic.h \
 		include/nist_robotsnc/RCS.h \
-		/opt/ros/kinetic/include/moveit/robot_model_loader/robot_model_loader.h \
+		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/macros/class_forward.h \
 		/opt/ros/kinetic/include/moveit/macros/declare_ptr.h \
-		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/exceptions/exceptions.h \
 		/opt/ros/kinetic/include/srdfdom/model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/joint_model_group.h \
@@ -2081,8 +1831,6 @@ debug/.obj/motomansia20dkinematics.o: src/motomansia20dkinematics.cpp /opt/ros/k
 		/opt/ros/kinetic/include/moveit/robot_model/planar_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/revolute_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/prismatic_joint_model.h \
-		/opt/ros/kinetic/include/moveit/rdf_loader/rdf_loader.h \
-		/opt/ros/kinetic/include/moveit/kinematics_plugin_loader/kinematics_plugin_loader.h \
 		/opt/ros/kinetic/include/tf/transform_datatypes.h \
 		/opt/ros/kinetic/include/geometry_msgs/PointStamped.h \
 		/opt/ros/kinetic/include/geometry_msgs/Vector3Stamped.h \
@@ -2120,59 +1868,6 @@ debug/.obj/motomansia20dkinematics.o: src/motomansia20dkinematics.cpp /opt/ros/k
 		include/nist_robotsnc/NIST/RCSMsgQueue.h \
 		include/nist_robotsnc/Gripper.h \
 		include/nist_robotsnc/Communication.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group_interface.h \
-		/opt/ros/kinetic/include/moveit/macros/deprecation.h \
-		/opt/ros/kinetic/include/moveit/robot_state/robot_state.h \
-		/opt/ros/kinetic/include/moveit/robot_state/attached_body.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_containers.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_map_container.h \
-		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/visualization_msgs/MarkerArray.h \
-		/opt/ros/kinetic/include/visualization_msgs/Marker.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotState.h \
-		/opt/ros/kinetic/include/sensor_msgs/MultiDOFJointState.h \
-		/opt/ros/kinetic/include/moveit_msgs/AttachedCollisionObject.h \
-		/opt/ros/kinetic/include/moveit_msgs/CollisionObject.h \
-		/opt/ros/kinetic/include/object_recognition_msgs/ObjectType.h \
-		/opt/ros/kinetic/include/shape_msgs/SolidPrimitive.h \
-		/opt/ros/kinetic/include/shape_msgs/Mesh.h \
-		/opt/ros/kinetic/include/shape_msgs/MeshTriangle.h \
-		/opt/ros/kinetic/include/shape_msgs/Plane.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlannerInterfaceDescription.h \
-		/opt/ros/kinetic/include/moveit_msgs/Constraints.h \
-		/opt/ros/kinetic/include/moveit_msgs/JointConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/PositionConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/BoundingVolume.h \
-		/opt/ros/kinetic/include/moveit_msgs/OrientationConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/VisibilityConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/Grasp.h \
-		/opt/ros/kinetic/include/moveit_msgs/GripperTranslation.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlaceLocation.h \
-		/opt/ros/kinetic/include/moveit_msgs/MotionPlanRequest.h \
-		/opt/ros/kinetic/include/moveit_msgs/WorkspaceParameters.h \
-		/opt/ros/kinetic/include/moveit_msgs/TrajectoryConstraints.h \
-		/opt/ros/kinetic/include/tf/tf.h \
-		/opt/ros/kinetic/include/tf/exceptions.h \
-		/opt/ros/kinetic/include/tf2/exceptions.h \
-		/opt/ros/kinetic/include/tf/time_cache.h \
-		/opt/ros/kinetic/include/geometry_msgs/TwistStamped.h \
-		/opt/ros/kinetic/include/tf2_ros/buffer.h \
-		/opt/ros/kinetic/include/tf2_ros/buffer_interface.h \
-		/opt/ros/kinetic/include/tf2/buffer_core.h \
-		/opt/ros/kinetic/include/tf2/transform_storage.h \
-		/opt/ros/kinetic/include/tf2/LinearMath/Vector3.h \
-		/opt/ros/kinetic/include/tf2/LinearMath/Quaternion.h \
-		/opt/ros/kinetic/include/tf2/transform_datatypes.h \
-		/opt/ros/kinetic/include/tf2/convert.h \
-		/opt/ros/kinetic/include/tf2/impl/convert.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
 		/opt/ros/kinetic/include/actionlib/client/simple_action_client.h \
 		/opt/ros/kinetic/include/ros/callback_queue.h \
 		/opt/ros/kinetic/include/ros/callback_queue_interface.h \
@@ -2199,6 +1894,8 @@ debug/.obj/motomansia20dkinematics.o: src/motomansia20dkinematics.cpp /opt/ros/k
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryAction.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryActionGoal.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryGoal.h \
+		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectory.h \
+		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectoryPoint.h \
 		/opt/ros/kinetic/include/control_msgs/JointTolerance.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryActionResult.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryResult.h \
@@ -2208,6 +1905,23 @@ debug/.obj/motomansia20dkinematics.o: src/motomansia20dkinematics.cpp /opt/ros/k
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryState.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateRequest.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateResponse.h \
+		/opt/ros/kinetic/include/tf/tf.h \
+		/opt/ros/kinetic/include/tf/exceptions.h \
+		/opt/ros/kinetic/include/tf2/exceptions.h \
+		/opt/ros/kinetic/include/tf/time_cache.h \
+		/opt/ros/kinetic/include/geometry_msgs/TwistStamped.h \
+		/opt/ros/kinetic/include/tf2_ros/buffer.h \
+		/opt/ros/kinetic/include/tf2_ros/buffer_interface.h \
+		/opt/ros/kinetic/include/tf2/buffer_core.h \
+		/opt/ros/kinetic/include/tf2/transform_storage.h \
+		/opt/ros/kinetic/include/tf2/LinearMath/Vector3.h \
+		/opt/ros/kinetic/include/tf2/LinearMath/Quaternion.h \
+		/opt/ros/kinetic/include/tf2/transform_datatypes.h \
+		/opt/ros/kinetic/include/tf2/convert.h \
+		/opt/ros/kinetic/include/tf2/impl/convert.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
 		/opt/ros/kinetic/include/tf/transform_broadcaster.h \
 		/opt/ros/kinetic/include/tf/tfMessage.h \
 		/opt/ros/kinetic/include/tf2_ros/transform_broadcaster.h \
@@ -2222,6 +1936,7 @@ debug/.obj/motomansia20dkinematics.o: src/motomansia20dkinematics.cpp /opt/ros/k
 		/opt/ros/kinetic/include/tf2_ros/transform_listener.h \
 		/opt/ros/kinetic/include/tf2_msgs/TFMessage.h \
 		include/nist_robotsnc/RvizMarker.h \
+		/opt/ros/kinetic/include/visualization_msgs/Marker.h \
 		include/nist_robotsnc/CsvLogging.h \
 		include/nist_robotsnc/Scene.h \
 		include/nist_robotsnc/Shape.h \
@@ -2329,10 +2044,9 @@ debug/.obj/nist_robotsnc.o: src/nist_robotsnc.cpp include/nist_robotsnc/nist_rob
 		include/nist_robotsnc/NIST/Boost.h \
 		include/nist_robotsnc/MotionControl.h \
 		include/nist_robotsnc/RCS.h \
-		/opt/ros/kinetic/include/moveit/robot_model_loader/robot_model_loader.h \
+		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/macros/class_forward.h \
 		/opt/ros/kinetic/include/moveit/macros/declare_ptr.h \
-		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/exceptions/exceptions.h \
 		/opt/ros/kinetic/include/urdf/model.h \
 		/opt/ros/kinetic/include/urdf/urdfdom_compatibility.h \
@@ -2354,8 +2068,6 @@ debug/.obj/nist_robotsnc.o: src/nist_robotsnc.cpp include/nist_robotsnc/nist_rob
 		/opt/ros/kinetic/include/moveit/robot_model/planar_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/revolute_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/prismatic_joint_model.h \
-		/opt/ros/kinetic/include/moveit/rdf_loader/rdf_loader.h \
-		/opt/ros/kinetic/include/moveit/kinematics_plugin_loader/kinematics_plugin_loader.h \
 		/opt/ros/kinetic/include/tf/transform_datatypes.h \
 		/opt/ros/kinetic/include/geometry_msgs/PointStamped.h \
 		/opt/ros/kinetic/include/geometry_msgs/Vector3Stamped.h \
@@ -2395,40 +2107,11 @@ debug/.obj/nist_robotsnc.o: src/nist_robotsnc.cpp include/nist_robotsnc/nist_rob
 		include/nist_robotsnc/NIST/RCSMsgQueue.h \
 		include/nist_robotsnc/Gripper.h \
 		include/nist_robotsnc/Communication.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group_interface.h \
-		/opt/ros/kinetic/include/moveit/macros/deprecation.h \
-		/opt/ros/kinetic/include/moveit/robot_state/robot_state.h \
-		/opt/ros/kinetic/include/moveit/robot_state/attached_body.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_containers.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_map_container.h \
-		/opt/ros/kinetic/include/visualization_msgs/MarkerArray.h \
-		/opt/ros/kinetic/include/visualization_msgs/Marker.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotState.h \
-		/opt/ros/kinetic/include/sensor_msgs/MultiDOFJointState.h \
-		/opt/ros/kinetic/include/moveit_msgs/AttachedCollisionObject.h \
-		/opt/ros/kinetic/include/moveit_msgs/CollisionObject.h \
-		/opt/ros/kinetic/include/object_recognition_msgs/ObjectType.h \
-		/opt/ros/kinetic/include/shape_msgs/SolidPrimitive.h \
-		/opt/ros/kinetic/include/shape_msgs/Mesh.h \
-		/opt/ros/kinetic/include/shape_msgs/MeshTriangle.h \
-		/opt/ros/kinetic/include/shape_msgs/Plane.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlannerInterfaceDescription.h \
-		/opt/ros/kinetic/include/moveit_msgs/Constraints.h \
-		/opt/ros/kinetic/include/moveit_msgs/JointConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/PositionConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/BoundingVolume.h \
-		/opt/ros/kinetic/include/moveit_msgs/OrientationConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/VisibilityConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/Grasp.h \
-		/opt/ros/kinetic/include/moveit_msgs/GripperTranslation.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlaceLocation.h \
-		/opt/ros/kinetic/include/moveit_msgs/MotionPlanRequest.h \
-		/opt/ros/kinetic/include/moveit_msgs/WorkspaceParameters.h \
-		/opt/ros/kinetic/include/moveit_msgs/TrajectoryConstraints.h \
+		/opt/ros/kinetic/include/std_msgs/Float64.h \
+		/opt/ros/kinetic/include/control_msgs/JointTrajectoryControllerState.h \
+		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryState.h \
+		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateRequest.h \
+		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateResponse.h \
 		/opt/ros/kinetic/include/tf/tf.h \
 		/opt/ros/kinetic/include/tf/exceptions.h \
 		/opt/ros/kinetic/include/tf2/exceptions.h \
@@ -2446,11 +2129,6 @@ debug/.obj/nist_robotsnc.o: src/nist_robotsnc.cpp include/nist_robotsnc/nist_rob
 		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
 		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
 		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
-		/opt/ros/kinetic/include/std_msgs/Float64.h \
-		/opt/ros/kinetic/include/control_msgs/JointTrajectoryControllerState.h \
-		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryState.h \
-		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateRequest.h \
-		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateResponse.h \
 		/opt/ros/kinetic/include/tf/transform_broadcaster.h \
 		/opt/ros/kinetic/include/tf/tfMessage.h \
 		/opt/ros/kinetic/include/tf2_ros/transform_broadcaster.h \
@@ -2465,6 +2143,7 @@ debug/.obj/nist_robotsnc.o: src/nist_robotsnc.cpp include/nist_robotsnc/nist_rob
 		/opt/ros/kinetic/include/tf2_ros/transform_listener.h \
 		/opt/ros/kinetic/include/tf2_msgs/TFMessage.h \
 		include/nist_robotsnc/RvizMarker.h \
+		/opt/ros/kinetic/include/visualization_msgs/Marker.h \
 		include/nist_robotsnc/CsvLogging.h \
 		include/nist_robotsnc/Scene.h \
 		include/nist_robotsnc/Shape.h \
@@ -2545,10 +2224,9 @@ debug/.obj/RCS.o: src/RCS.cpp include/nist_robotsnc/RCS.h \
 		/opt/ros/kinetic/include/ros/this_node.h \
 		/opt/ros/kinetic/include/ros/param.h \
 		/opt/ros/kinetic/include/ros/topic.h \
-		/opt/ros/kinetic/include/moveit/robot_model_loader/robot_model_loader.h \
+		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/macros/class_forward.h \
 		/opt/ros/kinetic/include/moveit/macros/declare_ptr.h \
-		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/exceptions/exceptions.h \
 		/opt/ros/kinetic/include/urdf/model.h \
 		/opt/ros/kinetic/include/urdf/urdfdom_compatibility.h \
@@ -2572,8 +2250,6 @@ debug/.obj/RCS.o: src/RCS.cpp include/nist_robotsnc/RCS.h \
 		/opt/ros/kinetic/include/moveit/robot_model/planar_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/revolute_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/prismatic_joint_model.h \
-		/opt/ros/kinetic/include/moveit/rdf_loader/rdf_loader.h \
-		/opt/ros/kinetic/include/moveit/kinematics_plugin_loader/kinematics_plugin_loader.h \
 		/opt/ros/kinetic/include/tf/transform_datatypes.h \
 		/opt/ros/kinetic/include/geometry_msgs/PointStamped.h \
 		/opt/ros/kinetic/include/geometry_msgs/Vector3Stamped.h \
@@ -2614,59 +2290,6 @@ debug/.obj/RCS.o: src/RCS.cpp include/nist_robotsnc/RCS.h \
 		/opt/ros/kinetic/include/kdl/jntarray.hpp \
 		/opt/ros/kinetic/include/kdl/jacobian.hpp \
 		include/nist_robotsnc/Communication.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group_interface.h \
-		/opt/ros/kinetic/include/moveit/macros/deprecation.h \
-		/opt/ros/kinetic/include/moveit/robot_state/robot_state.h \
-		/opt/ros/kinetic/include/moveit/robot_state/attached_body.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_containers.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_map_container.h \
-		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/visualization_msgs/MarkerArray.h \
-		/opt/ros/kinetic/include/visualization_msgs/Marker.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotState.h \
-		/opt/ros/kinetic/include/sensor_msgs/MultiDOFJointState.h \
-		/opt/ros/kinetic/include/moveit_msgs/AttachedCollisionObject.h \
-		/opt/ros/kinetic/include/moveit_msgs/CollisionObject.h \
-		/opt/ros/kinetic/include/object_recognition_msgs/ObjectType.h \
-		/opt/ros/kinetic/include/shape_msgs/SolidPrimitive.h \
-		/opt/ros/kinetic/include/shape_msgs/Mesh.h \
-		/opt/ros/kinetic/include/shape_msgs/MeshTriangle.h \
-		/opt/ros/kinetic/include/shape_msgs/Plane.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlannerInterfaceDescription.h \
-		/opt/ros/kinetic/include/moveit_msgs/Constraints.h \
-		/opt/ros/kinetic/include/moveit_msgs/JointConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/PositionConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/BoundingVolume.h \
-		/opt/ros/kinetic/include/moveit_msgs/OrientationConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/VisibilityConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/Grasp.h \
-		/opt/ros/kinetic/include/moveit_msgs/GripperTranslation.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlaceLocation.h \
-		/opt/ros/kinetic/include/moveit_msgs/MotionPlanRequest.h \
-		/opt/ros/kinetic/include/moveit_msgs/WorkspaceParameters.h \
-		/opt/ros/kinetic/include/moveit_msgs/TrajectoryConstraints.h \
-		/opt/ros/kinetic/include/tf/tf.h \
-		/opt/ros/kinetic/include/tf/exceptions.h \
-		/opt/ros/kinetic/include/tf2/exceptions.h \
-		/opt/ros/kinetic/include/tf/time_cache.h \
-		/opt/ros/kinetic/include/geometry_msgs/TwistStamped.h \
-		/opt/ros/kinetic/include/tf2_ros/buffer.h \
-		/opt/ros/kinetic/include/tf2_ros/buffer_interface.h \
-		/opt/ros/kinetic/include/tf2/buffer_core.h \
-		/opt/ros/kinetic/include/tf2/transform_storage.h \
-		/opt/ros/kinetic/include/tf2/LinearMath/Vector3.h \
-		/opt/ros/kinetic/include/tf2/LinearMath/Quaternion.h \
-		/opt/ros/kinetic/include/tf2/transform_datatypes.h \
-		/opt/ros/kinetic/include/tf2/convert.h \
-		/opt/ros/kinetic/include/tf2/impl/convert.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
 		/opt/ros/kinetic/include/actionlib/client/simple_action_client.h \
 		/opt/ros/kinetic/include/ros/callback_queue.h \
 		/opt/ros/kinetic/include/ros/callback_queue_interface.h \
@@ -2693,6 +2316,8 @@ debug/.obj/RCS.o: src/RCS.cpp include/nist_robotsnc/RCS.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryAction.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryActionGoal.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryGoal.h \
+		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectory.h \
+		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectoryPoint.h \
 		/opt/ros/kinetic/include/control_msgs/JointTolerance.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryActionResult.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryResult.h \
@@ -2702,6 +2327,23 @@ debug/.obj/RCS.o: src/RCS.cpp include/nist_robotsnc/RCS.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryState.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateRequest.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateResponse.h \
+		/opt/ros/kinetic/include/tf/tf.h \
+		/opt/ros/kinetic/include/tf/exceptions.h \
+		/opt/ros/kinetic/include/tf2/exceptions.h \
+		/opt/ros/kinetic/include/tf/time_cache.h \
+		/opt/ros/kinetic/include/geometry_msgs/TwistStamped.h \
+		/opt/ros/kinetic/include/tf2_ros/buffer.h \
+		/opt/ros/kinetic/include/tf2_ros/buffer_interface.h \
+		/opt/ros/kinetic/include/tf2/buffer_core.h \
+		/opt/ros/kinetic/include/tf2/transform_storage.h \
+		/opt/ros/kinetic/include/tf2/LinearMath/Vector3.h \
+		/opt/ros/kinetic/include/tf2/LinearMath/Quaternion.h \
+		/opt/ros/kinetic/include/tf2/transform_datatypes.h \
+		/opt/ros/kinetic/include/tf2/convert.h \
+		/opt/ros/kinetic/include/tf2/impl/convert.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
 		/opt/ros/kinetic/include/tf/transform_broadcaster.h \
 		/opt/ros/kinetic/include/tf/tfMessage.h \
 		/opt/ros/kinetic/include/tf2_ros/transform_broadcaster.h \
@@ -2716,6 +2358,7 @@ debug/.obj/RCS.o: src/RCS.cpp include/nist_robotsnc/RCS.h \
 		/opt/ros/kinetic/include/tf2_ros/transform_listener.h \
 		/opt/ros/kinetic/include/tf2_msgs/TFMessage.h \
 		include/nist_robotsnc/RvizMarker.h \
+		/opt/ros/kinetic/include/visualization_msgs/Marker.h \
 		include/nist_robotsnc/Kinematics.h \
 		include/nist_robotsnc/CsvLogging.h \
 		include/nist_robotsnc/Scene.h \
@@ -2805,10 +2448,9 @@ debug/.obj/RCSInterpreter.o: src/RCSInterpreter.cpp /opt/ros/kinetic/include/tf/
 		/opt/ros/kinetic/include/ros/param.h \
 		/opt/ros/kinetic/include/ros/topic.h \
 		include/nist_robotsnc/RCS.h \
-		/opt/ros/kinetic/include/moveit/robot_model_loader/robot_model_loader.h \
+		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/macros/class_forward.h \
 		/opt/ros/kinetic/include/moveit/macros/declare_ptr.h \
-		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/exceptions/exceptions.h \
 		/opt/ros/kinetic/include/urdf/model.h \
 		/opt/ros/kinetic/include/urdf/urdfdom_compatibility.h \
@@ -2826,8 +2468,6 @@ debug/.obj/RCSInterpreter.o: src/RCSInterpreter.cpp /opt/ros/kinetic/include/tf/
 		/opt/ros/kinetic/include/moveit/robot_model/planar_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/revolute_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/prismatic_joint_model.h \
-		/opt/ros/kinetic/include/moveit/rdf_loader/rdf_loader.h \
-		/opt/ros/kinetic/include/moveit/kinematics_plugin_loader/kinematics_plugin_loader.h \
 		/opt/ros/kinetic/include/sensor_msgs/JointState.h \
 		../../devel/include/nistcrcl/CrclCommandMsg.h \
 		/opt/ros/kinetic/include/std_msgs/ColorRGBA.h \
@@ -2889,40 +2529,11 @@ debug/.obj/RCSInterpreter.o: src/RCSInterpreter.cpp /opt/ros/kinetic/include/tf/
 		include/nist_robotsnc/NIST/Boost.h \
 		include/nist_robotsnc/Gripper.h \
 		include/nist_robotsnc/Communication.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group_interface.h \
-		/opt/ros/kinetic/include/moveit/macros/deprecation.h \
-		/opt/ros/kinetic/include/moveit/robot_state/robot_state.h \
-		/opt/ros/kinetic/include/moveit/robot_state/attached_body.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_containers.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_map_container.h \
-		/opt/ros/kinetic/include/visualization_msgs/MarkerArray.h \
-		/opt/ros/kinetic/include/visualization_msgs/Marker.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotState.h \
-		/opt/ros/kinetic/include/sensor_msgs/MultiDOFJointState.h \
-		/opt/ros/kinetic/include/moveit_msgs/AttachedCollisionObject.h \
-		/opt/ros/kinetic/include/moveit_msgs/CollisionObject.h \
-		/opt/ros/kinetic/include/object_recognition_msgs/ObjectType.h \
-		/opt/ros/kinetic/include/shape_msgs/SolidPrimitive.h \
-		/opt/ros/kinetic/include/shape_msgs/Mesh.h \
-		/opt/ros/kinetic/include/shape_msgs/MeshTriangle.h \
-		/opt/ros/kinetic/include/shape_msgs/Plane.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlannerInterfaceDescription.h \
-		/opt/ros/kinetic/include/moveit_msgs/Constraints.h \
-		/opt/ros/kinetic/include/moveit_msgs/JointConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/PositionConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/BoundingVolume.h \
-		/opt/ros/kinetic/include/moveit_msgs/OrientationConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/VisibilityConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/Grasp.h \
-		/opt/ros/kinetic/include/moveit_msgs/GripperTranslation.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlaceLocation.h \
-		/opt/ros/kinetic/include/moveit_msgs/MotionPlanRequest.h \
-		/opt/ros/kinetic/include/moveit_msgs/WorkspaceParameters.h \
-		/opt/ros/kinetic/include/moveit_msgs/TrajectoryConstraints.h \
+		/opt/ros/kinetic/include/std_msgs/Float64.h \
+		/opt/ros/kinetic/include/control_msgs/JointTrajectoryControllerState.h \
+		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryState.h \
+		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateRequest.h \
+		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateResponse.h \
 		/opt/ros/kinetic/include/tf/tf.h \
 		/opt/ros/kinetic/include/tf/exceptions.h \
 		/opt/ros/kinetic/include/tf2/exceptions.h \
@@ -2940,11 +2551,6 @@ debug/.obj/RCSInterpreter.o: src/RCSInterpreter.cpp /opt/ros/kinetic/include/tf/
 		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
 		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
 		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
-		/opt/ros/kinetic/include/std_msgs/Float64.h \
-		/opt/ros/kinetic/include/control_msgs/JointTrajectoryControllerState.h \
-		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryState.h \
-		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateRequest.h \
-		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateResponse.h \
 		/opt/ros/kinetic/include/tf/transform_broadcaster.h \
 		/opt/ros/kinetic/include/tf/tfMessage.h \
 		/opt/ros/kinetic/include/tf2_ros/transform_broadcaster.h \
@@ -2959,6 +2565,7 @@ debug/.obj/RCSInterpreter.o: src/RCSInterpreter.cpp /opt/ros/kinetic/include/tf/
 		/opt/ros/kinetic/include/tf2_ros/transform_listener.h \
 		/opt/ros/kinetic/include/tf2_msgs/TFMessage.h \
 		include/nist_robotsnc/RvizMarker.h \
+		/opt/ros/kinetic/include/visualization_msgs/Marker.h \
 		include/nist_robotsnc/CsvLogging.h \
 		include/nist_robotsnc/Scene.h \
 		include/nist_robotsnc/Shape.h \
@@ -3037,10 +2644,9 @@ debug/.obj/RosSetup.o: src/RosSetup.cpp /opt/ros/kinetic/include/ros/ros.h \
 		include/nist_robotsnc/Globals.h \
 		include/nist_robotsnc/Debug.h \
 		include/nist_robotsnc/RCS.h \
-		/opt/ros/kinetic/include/moveit/robot_model_loader/robot_model_loader.h \
+		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/macros/class_forward.h \
 		/opt/ros/kinetic/include/moveit/macros/declare_ptr.h \
-		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/exceptions/exceptions.h \
 		/opt/ros/kinetic/include/urdf/model.h \
 		/opt/ros/kinetic/include/urdf/urdfdom_compatibility.h \
@@ -3064,8 +2670,6 @@ debug/.obj/RosSetup.o: src/RosSetup.cpp /opt/ros/kinetic/include/ros/ros.h \
 		/opt/ros/kinetic/include/moveit/robot_model/planar_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/revolute_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/prismatic_joint_model.h \
-		/opt/ros/kinetic/include/moveit/rdf_loader/rdf_loader.h \
-		/opt/ros/kinetic/include/moveit/kinematics_plugin_loader/kinematics_plugin_loader.h \
 		/opt/ros/kinetic/include/tf/transform_datatypes.h \
 		/opt/ros/kinetic/include/geometry_msgs/PointStamped.h \
 		/opt/ros/kinetic/include/geometry_msgs/Vector3Stamped.h \
@@ -3181,10 +2785,9 @@ debug/.obj/RvizCheckers.o: src/RvizCheckers.cpp include/nist_robotsnc/RvizChecke
 		/opt/ros/kinetic/include/tf/LinearMath/QuadWord.h \
 		include/nist_robotsnc/Globals.h \
 		include/nist_robotsnc/RCS.h \
-		/opt/ros/kinetic/include/moveit/robot_model_loader/robot_model_loader.h \
+		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/macros/class_forward.h \
 		/opt/ros/kinetic/include/moveit/macros/declare_ptr.h \
-		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/exceptions/exceptions.h \
 		/opt/ros/kinetic/include/urdf/model.h \
 		/opt/ros/kinetic/include/urdf/urdfdom_compatibility.h \
@@ -3202,8 +2805,6 @@ debug/.obj/RvizCheckers.o: src/RvizCheckers.cpp include/nist_robotsnc/RvizChecke
 		/opt/ros/kinetic/include/moveit/robot_model/planar_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/revolute_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/prismatic_joint_model.h \
-		/opt/ros/kinetic/include/moveit/rdf_loader/rdf_loader.h \
-		/opt/ros/kinetic/include/moveit/kinematics_plugin_loader/kinematics_plugin_loader.h \
 		/opt/ros/kinetic/include/sensor_msgs/JointState.h \
 		../../devel/include/nistcrcl/CrclCommandMsg.h \
 		../../devel/include/nistcrcl/CrclMaxProfileMsg.h \
@@ -3232,58 +2833,6 @@ debug/.obj/RvizCheckers.o: src/RvizCheckers.cpp include/nist_robotsnc/RvizChecke
 		include/nist_robotsnc/Gripper.h \
 		include/nist_robotsnc/Debug.h \
 		include/nist_robotsnc/Communication.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group_interface.h \
-		/opt/ros/kinetic/include/moveit/macros/deprecation.h \
-		/opt/ros/kinetic/include/moveit/robot_state/robot_state.h \
-		/opt/ros/kinetic/include/moveit/robot_state/attached_body.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_containers.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_map_container.h \
-		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/visualization_msgs/MarkerArray.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotState.h \
-		/opt/ros/kinetic/include/sensor_msgs/MultiDOFJointState.h \
-		/opt/ros/kinetic/include/moveit_msgs/AttachedCollisionObject.h \
-		/opt/ros/kinetic/include/moveit_msgs/CollisionObject.h \
-		/opt/ros/kinetic/include/object_recognition_msgs/ObjectType.h \
-		/opt/ros/kinetic/include/shape_msgs/SolidPrimitive.h \
-		/opt/ros/kinetic/include/shape_msgs/Mesh.h \
-		/opt/ros/kinetic/include/shape_msgs/MeshTriangle.h \
-		/opt/ros/kinetic/include/shape_msgs/Plane.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlannerInterfaceDescription.h \
-		/opt/ros/kinetic/include/moveit_msgs/Constraints.h \
-		/opt/ros/kinetic/include/moveit_msgs/JointConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/PositionConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/BoundingVolume.h \
-		/opt/ros/kinetic/include/moveit_msgs/OrientationConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/VisibilityConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/Grasp.h \
-		/opt/ros/kinetic/include/moveit_msgs/GripperTranslation.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlaceLocation.h \
-		/opt/ros/kinetic/include/moveit_msgs/MotionPlanRequest.h \
-		/opt/ros/kinetic/include/moveit_msgs/WorkspaceParameters.h \
-		/opt/ros/kinetic/include/moveit_msgs/TrajectoryConstraints.h \
-		/opt/ros/kinetic/include/tf/tf.h \
-		/opt/ros/kinetic/include/tf/exceptions.h \
-		/opt/ros/kinetic/include/tf2/exceptions.h \
-		/opt/ros/kinetic/include/tf/time_cache.h \
-		/opt/ros/kinetic/include/geometry_msgs/TwistStamped.h \
-		/opt/ros/kinetic/include/tf2_ros/buffer.h \
-		/opt/ros/kinetic/include/tf2_ros/buffer_interface.h \
-		/opt/ros/kinetic/include/tf2/buffer_core.h \
-		/opt/ros/kinetic/include/tf2/transform_storage.h \
-		/opt/ros/kinetic/include/tf2/LinearMath/Vector3.h \
-		/opt/ros/kinetic/include/tf2/LinearMath/Quaternion.h \
-		/opt/ros/kinetic/include/tf2/transform_datatypes.h \
-		/opt/ros/kinetic/include/tf2/convert.h \
-		/opt/ros/kinetic/include/tf2/impl/convert.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
 		/opt/ros/kinetic/include/actionlib/client/simple_action_client.h \
 		/opt/ros/kinetic/include/ros/callback_queue.h \
 		/opt/ros/kinetic/include/ros/callback_queue_interface.h \
@@ -3310,6 +2859,8 @@ debug/.obj/RvizCheckers.o: src/RvizCheckers.cpp include/nist_robotsnc/RvizChecke
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryAction.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryActionGoal.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryGoal.h \
+		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectory.h \
+		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectoryPoint.h \
 		/opt/ros/kinetic/include/control_msgs/JointTolerance.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryActionResult.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryResult.h \
@@ -3319,6 +2870,23 @@ debug/.obj/RvizCheckers.o: src/RvizCheckers.cpp include/nist_robotsnc/RvizChecke
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryState.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateRequest.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateResponse.h \
+		/opt/ros/kinetic/include/tf/tf.h \
+		/opt/ros/kinetic/include/tf/exceptions.h \
+		/opt/ros/kinetic/include/tf2/exceptions.h \
+		/opt/ros/kinetic/include/tf/time_cache.h \
+		/opt/ros/kinetic/include/geometry_msgs/TwistStamped.h \
+		/opt/ros/kinetic/include/tf2_ros/buffer.h \
+		/opt/ros/kinetic/include/tf2_ros/buffer_interface.h \
+		/opt/ros/kinetic/include/tf2/buffer_core.h \
+		/opt/ros/kinetic/include/tf2/transform_storage.h \
+		/opt/ros/kinetic/include/tf2/LinearMath/Vector3.h \
+		/opt/ros/kinetic/include/tf2/LinearMath/Quaternion.h \
+		/opt/ros/kinetic/include/tf2/transform_datatypes.h \
+		/opt/ros/kinetic/include/tf2/convert.h \
+		/opt/ros/kinetic/include/tf2/impl/convert.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
 		/opt/ros/kinetic/include/tf/transform_broadcaster.h \
 		/opt/ros/kinetic/include/tf/tfMessage.h \
 		/opt/ros/kinetic/include/tf2_ros/transform_broadcaster.h \
@@ -3425,10 +2993,9 @@ debug/.obj/RvizMarker.o: src/RvizMarker.cpp include/nist_robotsnc/RvizMarker.h \
 		/opt/ros/kinetic/include/urdf/model.h \
 		/opt/ros/kinetic/include/urdf/urdfdom_compatibility.h \
 		include/nist_robotsnc/RCS.h \
-		/opt/ros/kinetic/include/moveit/robot_model_loader/robot_model_loader.h \
+		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/macros/class_forward.h \
 		/opt/ros/kinetic/include/moveit/macros/declare_ptr.h \
-		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/exceptions/exceptions.h \
 		/opt/ros/kinetic/include/srdfdom/model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/joint_model_group.h \
@@ -3444,8 +3011,6 @@ debug/.obj/RvizMarker.o: src/RvizMarker.cpp include/nist_robotsnc/RvizMarker.h \
 		/opt/ros/kinetic/include/moveit/robot_model/planar_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/revolute_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/prismatic_joint_model.h \
-		/opt/ros/kinetic/include/moveit/rdf_loader/rdf_loader.h \
-		/opt/ros/kinetic/include/moveit/kinematics_plugin_loader/kinematics_plugin_loader.h \
 		/opt/ros/kinetic/include/sensor_msgs/JointState.h \
 		../../devel/include/nistcrcl/CrclCommandMsg.h \
 		../../devel/include/nistcrcl/CrclMaxProfileMsg.h \
@@ -3543,10 +3108,9 @@ debug/.obj/Scene.o: src/Scene.cpp include/nist_robotsnc/Scene.h \
 		/opt/ros/kinetic/include/tf/LinearMath/QuadWord.h \
 		include/nist_robotsnc/Globals.h \
 		include/nist_robotsnc/RCS.h \
-		/opt/ros/kinetic/include/moveit/robot_model_loader/robot_model_loader.h \
+		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/macros/class_forward.h \
 		/opt/ros/kinetic/include/moveit/macros/declare_ptr.h \
-		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/exceptions/exceptions.h \
 		/opt/ros/kinetic/include/urdf/model.h \
 		/opt/ros/kinetic/include/urdf/urdfdom_compatibility.h \
@@ -3564,8 +3128,6 @@ debug/.obj/Scene.o: src/Scene.cpp include/nist_robotsnc/Scene.h \
 		/opt/ros/kinetic/include/moveit/robot_model/planar_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/revolute_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/prismatic_joint_model.h \
-		/opt/ros/kinetic/include/moveit/rdf_loader/rdf_loader.h \
-		/opt/ros/kinetic/include/moveit/kinematics_plugin_loader/kinematics_plugin_loader.h \
 		/opt/ros/kinetic/include/sensor_msgs/JointState.h \
 		../../devel/include/nistcrcl/CrclCommandMsg.h \
 		../../devel/include/nistcrcl/CrclMaxProfileMsg.h \
@@ -3674,10 +3236,9 @@ debug/.obj/Shape.o: src/Shape.cpp include/nist_robotsnc/Shape.h \
 		/opt/ros/kinetic/include/ros/param.h \
 		/opt/ros/kinetic/include/ros/topic.h \
 		include/nist_robotsnc/RCS.h \
-		/opt/ros/kinetic/include/moveit/robot_model_loader/robot_model_loader.h \
+		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/macros/class_forward.h \
 		/opt/ros/kinetic/include/moveit/macros/declare_ptr.h \
-		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/exceptions/exceptions.h \
 		/opt/ros/kinetic/include/srdfdom/model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/joint_model_group.h \
@@ -3693,8 +3254,6 @@ debug/.obj/Shape.o: src/Shape.cpp include/nist_robotsnc/Shape.h \
 		/opt/ros/kinetic/include/moveit/robot_model/planar_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/revolute_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/prismatic_joint_model.h \
-		/opt/ros/kinetic/include/moveit/rdf_loader/rdf_loader.h \
-		/opt/ros/kinetic/include/moveit/kinematics_plugin_loader/kinematics_plugin_loader.h \
 		/opt/ros/kinetic/include/sensor_msgs/JointState.h \
 		../../devel/include/nistcrcl/CrclCommandMsg.h \
 		/opt/ros/kinetic/include/std_msgs/ColorRGBA.h \
@@ -3770,10 +3329,9 @@ debug/.obj/Demo.o: src/Demo.cpp include/nist_robotsnc/Demo.h \
 		/opt/ros/kinetic/include/ros/param.h \
 		/opt/ros/kinetic/include/ros/topic.h \
 		include/nist_robotsnc/RCS.h \
-		/opt/ros/kinetic/include/moveit/robot_model_loader/robot_model_loader.h \
+		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/macros/class_forward.h \
 		/opt/ros/kinetic/include/moveit/macros/declare_ptr.h \
-		/opt/ros/kinetic/include/moveit/robot_model/robot_model.h \
 		/opt/ros/kinetic/include/moveit/exceptions/exceptions.h \
 		/opt/ros/kinetic/include/urdf/model.h \
 		/opt/ros/kinetic/include/urdf/urdfdom_compatibility.h \
@@ -3797,8 +3355,6 @@ debug/.obj/Demo.o: src/Demo.cpp include/nist_robotsnc/Demo.h \
 		/opt/ros/kinetic/include/moveit/robot_model/planar_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/revolute_joint_model.h \
 		/opt/ros/kinetic/include/moveit/robot_model/prismatic_joint_model.h \
-		/opt/ros/kinetic/include/moveit/rdf_loader/rdf_loader.h \
-		/opt/ros/kinetic/include/moveit/kinematics_plugin_loader/kinematics_plugin_loader.h \
 		/opt/ros/kinetic/include/tf/transform_datatypes.h \
 		/opt/ros/kinetic/include/geometry_msgs/PointStamped.h \
 		/opt/ros/kinetic/include/geometry_msgs/Vector3Stamped.h \
@@ -3845,58 +3401,6 @@ debug/.obj/Demo.o: src/Demo.cpp include/nist_robotsnc/Demo.h \
 		include/nist_robotsnc/NIST/RCSMsgQueue.h \
 		include/nist_robotsnc/Gripper.h \
 		include/nist_robotsnc/Communication.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group.h \
-		/opt/ros/kinetic/include/moveit/move_group_interface/move_group_interface.h \
-		/opt/ros/kinetic/include/moveit/macros/deprecation.h \
-		/opt/ros/kinetic/include/moveit/robot_state/robot_state.h \
-		/opt/ros/kinetic/include/moveit/robot_state/attached_body.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_containers.h \
-		/opt/ros/kinetic/include/eigen_stl_containers/eigen_stl_map_container.h \
-		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/visualization_msgs/MarkerArray.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectory.h \
-		/opt/ros/kinetic/include/trajectory_msgs/MultiDOFJointTrajectoryPoint.h \
-		/opt/ros/kinetic/include/moveit_msgs/RobotState.h \
-		/opt/ros/kinetic/include/sensor_msgs/MultiDOFJointState.h \
-		/opt/ros/kinetic/include/moveit_msgs/AttachedCollisionObject.h \
-		/opt/ros/kinetic/include/moveit_msgs/CollisionObject.h \
-		/opt/ros/kinetic/include/object_recognition_msgs/ObjectType.h \
-		/opt/ros/kinetic/include/shape_msgs/SolidPrimitive.h \
-		/opt/ros/kinetic/include/shape_msgs/Mesh.h \
-		/opt/ros/kinetic/include/shape_msgs/MeshTriangle.h \
-		/opt/ros/kinetic/include/shape_msgs/Plane.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlannerInterfaceDescription.h \
-		/opt/ros/kinetic/include/moveit_msgs/Constraints.h \
-		/opt/ros/kinetic/include/moveit_msgs/JointConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/PositionConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/BoundingVolume.h \
-		/opt/ros/kinetic/include/moveit_msgs/OrientationConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/VisibilityConstraint.h \
-		/opt/ros/kinetic/include/moveit_msgs/Grasp.h \
-		/opt/ros/kinetic/include/moveit_msgs/GripperTranslation.h \
-		/opt/ros/kinetic/include/moveit_msgs/PlaceLocation.h \
-		/opt/ros/kinetic/include/moveit_msgs/MotionPlanRequest.h \
-		/opt/ros/kinetic/include/moveit_msgs/WorkspaceParameters.h \
-		/opt/ros/kinetic/include/moveit_msgs/TrajectoryConstraints.h \
-		/opt/ros/kinetic/include/tf/tf.h \
-		/opt/ros/kinetic/include/tf/exceptions.h \
-		/opt/ros/kinetic/include/tf2/exceptions.h \
-		/opt/ros/kinetic/include/tf/time_cache.h \
-		/opt/ros/kinetic/include/geometry_msgs/TwistStamped.h \
-		/opt/ros/kinetic/include/tf2_ros/buffer.h \
-		/opt/ros/kinetic/include/tf2_ros/buffer_interface.h \
-		/opt/ros/kinetic/include/tf2/buffer_core.h \
-		/opt/ros/kinetic/include/tf2/transform_storage.h \
-		/opt/ros/kinetic/include/tf2/LinearMath/Vector3.h \
-		/opt/ros/kinetic/include/tf2/LinearMath/Quaternion.h \
-		/opt/ros/kinetic/include/tf2/transform_datatypes.h \
-		/opt/ros/kinetic/include/tf2/convert.h \
-		/opt/ros/kinetic/include/tf2/impl/convert.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
-		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
 		/opt/ros/kinetic/include/actionlib/client/simple_action_client.h \
 		/opt/ros/kinetic/include/ros/callback_queue.h \
 		/opt/ros/kinetic/include/ros/callback_queue_interface.h \
@@ -3923,6 +3427,8 @@ debug/.obj/Demo.o: src/Demo.cpp include/nist_robotsnc/Demo.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryAction.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryActionGoal.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryGoal.h \
+		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectory.h \
+		/opt/ros/kinetic/include/trajectory_msgs/JointTrajectoryPoint.h \
 		/opt/ros/kinetic/include/control_msgs/JointTolerance.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryActionResult.h \
 		/opt/ros/kinetic/include/control_msgs/FollowJointTrajectoryResult.h \
@@ -3932,6 +3438,23 @@ debug/.obj/Demo.o: src/Demo.cpp include/nist_robotsnc/Demo.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryState.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateRequest.h \
 		/opt/ros/kinetic/include/control_msgs/QueryTrajectoryStateResponse.h \
+		/opt/ros/kinetic/include/tf/tf.h \
+		/opt/ros/kinetic/include/tf/exceptions.h \
+		/opt/ros/kinetic/include/tf2/exceptions.h \
+		/opt/ros/kinetic/include/tf/time_cache.h \
+		/opt/ros/kinetic/include/geometry_msgs/TwistStamped.h \
+		/opt/ros/kinetic/include/tf2_ros/buffer.h \
+		/opt/ros/kinetic/include/tf2_ros/buffer_interface.h \
+		/opt/ros/kinetic/include/tf2/buffer_core.h \
+		/opt/ros/kinetic/include/tf2/transform_storage.h \
+		/opt/ros/kinetic/include/tf2/LinearMath/Vector3.h \
+		/opt/ros/kinetic/include/tf2/LinearMath/Quaternion.h \
+		/opt/ros/kinetic/include/tf2/transform_datatypes.h \
+		/opt/ros/kinetic/include/tf2/convert.h \
+		/opt/ros/kinetic/include/tf2/impl/convert.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraph.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraphRequest.h \
+		/opt/ros/kinetic/include/tf2_msgs/FrameGraphResponse.h \
 		/opt/ros/kinetic/include/tf/transform_broadcaster.h \
 		/opt/ros/kinetic/include/tf/tfMessage.h \
 		/opt/ros/kinetic/include/tf2_ros/transform_broadcaster.h \

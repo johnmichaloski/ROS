@@ -53,46 +53,35 @@ namespace pt = boost::property_tree;
 #include "Test.h"
 
 using namespace Conversion;
+using namespace RCS;
 
 int main(int argc, char** argv) {
-    int bPublishPoint = 0;
+    int bPublishPoint;
     //signal(SIGSEGV, handler);   // install our handler
     try {
         // Find path of executable
         std::string path(argv[0]);
         Globals.ExeDirectory = path.substr(0, path.find_last_of('/') + 1);
         Globals._appproperties["ExeDirectory"] = Globals.ExeDirectory;
+
+        //MotionException::Load();
+        std::vector<CrclApi > nccmds;
+        std::vector<double> ds;
+        pt::ptree root;
+        std::string baselink;
+
+        // We can assume what about file system?
         Globals._appproperties["Package"] = ROSPACKAGENAME;
         Globals._appproperties["PackageSrcPath"] = ROSPACKAGEDIR;
+        Globals.joint_state_topic="joint_states";
+        Globals.DebugSetup();
 
-        // FIXME: this totally assume ROS catkin folder layout
 
-
-#if 0
-        std::string pkgname = path.substr(path.find_last_of('/') + 1);
-        Globals._appproperties["Package"] = pkgname;
-        std::string wspath = path;
-        for (size_t i = 0; i < 4; i++)
-            wspath = wspath.substr(0, wspath.find_last_of('/'));
-        Globals._appproperties["Workspace"] = wspath + "/";
-
-        std::string pkgpath = wspath + "/src/" + pkgname + "/config/" + pkgname + ".ini";
-        std::string envstr = ExecuteShellCommand("export ROS_PACKAGE_PATH; cd " + wspath + "; /bin/bash -c \"source devel/setup.bash & env \"");
- //       std::cout << envstr << "\n";
-        // This sets up tother application _appproperties name/value pairs: user, hostname
-        SetupAppEnpathvironment();
-pathpath
-        // This hard coding of env variables is required for debugging with netbeans ide
-        // If ROS environment variables are not set it cannot find "stuff"
-  //      SetupRosEnvironment(); // needs to go before ROS!
-
-  #endif
-        //const std::string ROSPACKAGENAME =  pkgname;
         ros::M_string remappings;
         remappings["__master"]="http://localhost:11311";
         remappings["__name"]=ROSPACKAGENAME;//.c_str();
+
         // Initialize ROS environment ROS_MASTER_URI MUST BE SET or seg fault
-        //ros::init(argc, &argv[0], ROSPACKAGENAME);
         ros::init(remappings,ROSPACKAGENAME); // .c_str());
 
         // Check if master running if not abort with dialog
@@ -101,9 +90,8 @@ pathpath
             std::cerr << "ROS Master Not Running - Abrting\n";
             return -1 ;
         }
-        
+
         // Initialize ROS
-       // ros::init(argc, argv, ROSPACKAGENAME);
         ros::NodeHandle nh;
         ros::Rate r(50); // 10 times a second - 10Hz
 
@@ -117,62 +105,20 @@ pathpath
          */
         if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info)) {
             ros::console::notifyLoggerLevelsChanged();
-        }
+        }Sleep
 #endif
         boostlogfile = nh.param<std::string>("logfile", "/home/isd/michalos/Documents/example.log");
         boostloglevel = (boost::log::v2_mt_posix::trivial::severity_level) nh.param<int>("loglevel", 0); // 0 = debug
 
         bPublishPoint = nh.param<int>("PublishPoint", 0);
 
-        Globals.DebugSetup();
-        // THIS DOESN'T WORK
-#if 0
-        int rosloglevel = nh.param<int>("~rosloglevel", 0); // 0 = debug
-
-        if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, (ros::console::levels::Level) rosloglevel)) {
-            ros::console::notifyLoggerLevelsChanged();
-        }
-#endif  
-        //  Required for multithreaded ROS communication  NOT TRUE: if not ros::spinOnce
-        ros::AsyncSpinner spinner(2);
-        spinner.start();
-
-#if 0
-        // DOESN"T WORK NOW
-        // ROS config - parameter list - save for comparison later
-        std::string params = ReadRosParams(nh);
-        Globals.WriteFile(Globals.ExeDirectory + "rosconfig.txt", params);
-        path = ros::package::getPath(ROSPACKAGENAME);
-        Globals._appproperties[ROSPACKAGENAME] = path;
-#endif
-
-#ifdef GEARS
-        GearDemo geardemo(nh, path, Convert<tf::Vector3, tf::Pose>(tf::Vector3(0.25, 0.5, 0.0)));
-
-        geardemo.Setup(); // this does draw scene
-        pScene->DrawScene();
-#endif
-        // Confetti
-#if 0
-        for (size_t i = 0; i < 20; i++) {
-            double x = ((double) i)*.01;
-            Piece * p = new Piece(pScene);
-            p->launch(x, 0.0, 1.0);
-
-        }
-#endif
-
-        //MotionException::Load();
-        std::vector<boost::shared_ptr<CController> > ncs;
-        std::vector<CrclApi > nccmds;
-        std::vector<double> ds;
-        pt::ptree root;
-        std::string baselink;
 
         try {
             // Load the json file in this ptree
             pt::read_ini( Globals._appproperties["PackageSrcPath"] + "/config/" + ROSPACKAGENAME + ".ini", root);
+
             std::vector<std::string> robots = GetIniTypes<std::string>(root, "system.robots");
+
             for (size_t i = 0; i < robots.size(); i++) {
                 ofsRobotURDF << "============================================================\n";
                 std::string robotname = root.get<std::string>(robots[i] + ".longname");
@@ -236,7 +182,6 @@ pathpath
 
                 for (std::map<std::string, std::vector<double>>::iterator it = ncs[i]->NamedJointMove.begin(); it != ncs[i]->NamedJointMove.end(); it++)
                     ofsRobotURDF << (*it).first << "=" << VectorDump<double>(ncs[i]->NamedJointMove[(*it).first]).c_str() << "\n";
-                //ofsRobotURDF << "cycletime " << ncs[i]->Name();
                 ofsRobotURDF << "Cycletime   " << ncs[i]->CycleTime() << "\n";
                 ofsRobotURDF << "Markers     " << ncs[i]->bMarker() << "\n";
                 ofsRobotURDF << std::flush;
@@ -252,58 +197,33 @@ pathpath
             LOG_FATAL << e.what();
             throw;
         }
-        // This mustbe called first
-        pScene->InitScene(nh, baselink);
 
-        double table_length = root.get<double>("checkers.TABLE_LENGTH", 0.4);
-        double table_width = root.get<double>("checkers.TABLE_WIDTH", 0.4);
-        double table_height = root.get<double>("checkers.TABLE_HEIGHT", 0.05);
-        std::vector<double> xyz = GetIniTypes<double>(root, "checkers.TABLE_CENTER");
-        tf::Pose centertablepose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(xyz[0], xyz[1], xyz[2]));
 
-        pScene->CreateTable("table1",
-                rgba(1.0, 0.0, 0.0, 1.0).GetColorRGBA(),
-                "world",
-                table_length,
-                table_width,
-                table_height,
-                centertablepose);
-        pScene->DrawScene();
+        //  Required for multithreaded ROS communication  NOT TRUE: if not ros::spinOnce
+        ros::AsyncSpinner spinner(2);
+        spinner.start();
 
-#ifdef GRADIENT_COLOR_TABLE
-        cColorPicker colorpicker;
-        std::vector<rgba> myCols;
-        colorpicker.Pick(myCols, 50);
-        for (size_t j = 0; j < myCols.size(); j++) {
-            pScene->ChangeColor("table1", myCols[j].GetColorRGBA());
-            ros::Duration(0.05).sleep();
-        }
-#endif
-#ifdef EXERCISER
-        ExerciseDemo exercise(nh);
-        IKinematics::_testspacing = root.get<double>("testharness.spacing", 0.5);
-        IKinematics::_testoffset = root.get<double>("testharness.offset", 0.1);
-        IKinematics::_testepsilon = root.get<double>("testharness.epsilon", 0.1);
-        exercise.GoodColor() = GetIniTypes<double>(root, "testharness.GoodColor");
-        exercise.BadColor() = GetIniTypes<double>(root, "testharness.BadColor");
-        exercise.TrapColor() = GetIniTypes<double>(root, "testharness.TrapColor");
-        exercise.Exercise(&nccmds[0]);
-        exercise.Exercise(&nccmds[1]);
-#endif
 
 #if 0
-        std::vector<double> testjts = ToVector<double>(7, 1.30, -0.84, 0.08, 2.26, 2.96, -0.38, -1.28);
-        tf::Pose testpose = ncs[1]->Kinematics()->FK(testjts);
-        std::cout << "Joint vals " << VectorDump<double>(testjts).c_str() << "\n" << std::flush;
-        std::cout << "kinpose " << RCS::DumpPoseSimple(testpose).c_str() << "\n";
+        /**
+         * The five different ROS verbosity levels are, in order:
+         * DEBUG ROS_DEBUG
+         * INFO ROS_INFO
+         * WARN
+         * ERROR
+         */
+        if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info)) {
+            ros::console::notifyLoggerLevelsChanged();
+        }Sleep
+#endif
+        // ROS params
+        boostlogfile = nh.param<std::string>("logfile", "/home/isd/michalos/Documents/example.log");
+        boostloglevel = (boost::log::v2_mt_posix::trivial::severity_level) nh.param<int>("loglevel", 0); // 0 = debug
+        bPublishPoint = nh.param<int>("PublishPoint", 0);
 
-        ncs[1]->Kinematics()->axis.push_back(Eigen::Vector3d(0, 0, -1));
-        ncs[1]->Kinematics()->xyzorigin.push_back(Eigen::Vector3d(0, 0, 0));
-        ncs[1]->Kinematics()->rpyorigin.push_back(Eigen::Vector3d(0, 0, -M_PI_2));
-        testjts.push_back(0.0);
-        std::vector<tf::Pose> poses = ncs[1]->Kinematics()->ComputeAllFk(testjts);
-        std::cout << "genericpose " << RCS::DumpPoseSimple(poses.back()).c_str() << "\n";
-#endif      
+        // start thread to update joint state of all robots and grippers
+        boost::thread jntupdaterthread(boost::bind(&CController::PublishJointStates, nh, Globals.joint_state_topic));
+
 
         // start the Controller Session thread
         for (size_t j = 0; j < ncs.size(); j++) {
@@ -330,6 +250,21 @@ pathpath
             }
         }
 
+        // Wait until listeners to joint updates but joint move above
+        uint32_t  n=0;
+        while (n==0)
+        {
+            n=ncs[0]->rviz_jntcmd.getNumSubscribers();
+            ros::spinOnce();
+            Globals.Sleep(10);
+        }
+
+#ifdef GEARS
+        GearDemo geardemo(nh, path, Convert<tf::Vector3, tf::Pose>(tf::Vector3(0.25, 0.5, 0.0)));
+
+        geardemo.Setup(); // this does draw scene
+        pScene->DrawScene();
+#endif
         //#define SCRIPTDEMO  
 #ifdef SCRIPTDEMO
 
@@ -371,6 +306,34 @@ pathpath
         paintdemo.Draw(&nccmds[0], jpgfile, .25);
 #endif
 #ifdef CHECKERS
+
+        // This mustbe called first
+        pScene->InitScene(nh, baselink);
+
+        double table_length = root.get<double>("checkers.TABLE_LENGTH", 0.4);
+        double table_width = root.get<double>("checkers.TABLE_WIDTH", 0.4);
+        double table_height = root.get<double>("checkers.TABLE_HEIGHT", 0.05);
+        std::vector<double> xyz = GetIniTypes<double>(root, "checkers.TABLE_CENTER");
+        tf::Pose centertablepose(tf::Quaternion(0, 0, 0, 1), tf::Vector3(xyz[0], xyz[1], xyz[2]));
+
+        pScene->CreateTable("table1",
+                rgba(1.0, 0.0, 0.0, 1.0).GetColorRGBA(),
+                "world",
+                table_length,
+                table_width,
+                table_height,
+                centertablepose);
+        pScene->DrawScene();
+
+#ifdef GRADIENT_COLOR_TABLE
+        cColorPicker colorpicker;
+        std::vector<rgba> myCols;
+        colorpicker.Pick(myCols, 50);
+        for (size_t j = 0; j < myCols.size(); j++) {
+            pScene->ChangeColor("table1", myCols[j].GetColorRGBA());
+            ros::Duration(0.05).sleep();
+        }
+#endif
         CheckersGame checkers(nh);
         /** CHeckers board rviz dimensions */
         checkers.RvizGame()->HEIGHT = root.get<double>("checkers.HEIGHT", 0.015);
@@ -395,16 +358,7 @@ pathpath
         Checkers::CheckersGame & game = checkers.RvizGame()->Game();
 
 newgame:
-#if 0
-        // This might be cleaner, but the \r problem from windows is disconcerting
-        std::ifstream checkersIss(filename);
-        LOG_DEBUG << iss.str().c_str();
-        if (!checkersIss.fail()) {
-            game.Deserialize(iss, outboard);
-            LOG_DEBUG << checkers.RvizGame()->Game().printDisplayFancy(outboard).c_str();
-            game.Board() = outboard;
-        }
-#else
+
         std::string contents;
         Globals.ReadFile(filename, contents);
         boost::replace_all(contents, "\r", "");
@@ -413,7 +367,6 @@ newgame:
         iss << contents;
         game.Deserialize(iss, outboard);
         game.Board() = outboard;
-#endif
 
         checkers.Setup();
 
@@ -435,6 +388,8 @@ newgame:
 
         // ^C pressed - stop all threads or will hang
         RCS::Thread::StopAll(); // includes thread for Controller, robotstatus
+        jntupdaterthread.interrupt();
+        jntupdaterthread.join();
 
     } catch (std::exception e) {
         LOG_FATAL << Globals.StrFormat("%s%s", "Abnormal exception end to  CRCL2Robot", e.what());

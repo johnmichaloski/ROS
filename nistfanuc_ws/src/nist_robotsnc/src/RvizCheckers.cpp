@@ -1,7 +1,5 @@
 
 
-#pragma once
-
 /*
 DISCLAIMER:
 This software was produced by the National Institute of Standards
@@ -97,25 +95,25 @@ tf::Pose RvizCheckers::GetPose(int row, int col) {
 double RvizCheckers::RowOffset(int row) {
 	if (BOARD_DIRECTION == LEFTRIGHT) {
 		return XOFFSET + (SQOFFSET * row);
-	} else if (BOARD_DIRECTION == UPDOWN) {
+    } //else if (BOARD_DIRECTION == UPDOWN) {
 		return YOFFSET + (SQOFFSET * row);
-	}
+    //}
 }
 
 double RvizCheckers::ColOffset(int col) {
 	if (BOARD_DIRECTION == LEFTRIGHT) {
 		return YOFFSET + (SQOFFSET * col);
-	} else if (BOARD_DIRECTION == UPDOWN) {
+    } //else if (BOARD_DIRECTION == UPDOWN) {
 		return XOFFSET + (SQOFFSET * col);
-	}
+    //}
 }
 
 tf::Vector3 RvizCheckers::GetCentroid(double rowoffset, double coloffset) {
 	if (BOARD_DIRECTION == LEFTRIGHT) {
 		return tf::Vector3(rowoffset + SQOFFSET / 2.0, coloffset + SQOFFSET / 2.0, ZOFFSET+HEIGHT);
-	} else if (BOARD_DIRECTION == UPDOWN) {
+    } //else if (BOARD_DIRECTION == UPDOWN) {
 		return tf::Vector3(coloffset + SQOFFSET / 2.0, rowoffset + SQOFFSET / 2.0, ZOFFSET+HEIGHT);
-	}
+    //}
 }
 
 /** \brief computes upper limit of board (top = HEIGHT)*/

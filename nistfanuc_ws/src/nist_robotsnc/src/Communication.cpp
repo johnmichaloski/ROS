@@ -9,45 +9,47 @@ maintenance, and subsequent redistribution.
 
 See NIST Administration Manual 4.09.07 b and Appendix I.
 */
-#pragma message "Compiling " __FILE__ 
 
 #include "Communication.h"
 #include "Debug.h"
 using namespace std;
-boost::mutex CJointReader::_reader_mutex;
 
-void CJointReader::callback(const sensor_msgs::JointState::ConstPtr& msg) {
-     boost::unique_lock<boost::mutex> scoped_lock (_reader_mutex);
-     _lastreading=_latestreading;
-    _latestreading.position.clear();
-    _latestreading.position.insert(_latestreading.position.begin(), msg->position.begin(),
-            msg->position.end());
-    _latestreading.velocity = msg->velocity;
-    _latestreading.effort = msg->effort;
-}
+//boost::mutex CJointReader::_reader_mutex;
 
-CJointReader::CJointReader(ros::NodeHandle &nh): _nh(nh) {
-}
+//void CJointReader::callback(const sensor_msgs::JointState::ConstPtr& msg) {
+//     boost::unique_lock<boost::mutex> scoped_lock (_reader_mutex);
+//     _lastreading=_latestreading;
+//    _latestreading.position.clear();
+//    _latestreading.position.insert(_latestreading.position.begin(), msg->position.begin(),
+//            msg->position.end());
+//    _latestreading.velocity = msg->velocity;
+//    _latestreading.effort = msg->effort;
+//}
 
-void CJointReader::Stop() {
-    sub.shutdown();
-}
-sensor_msgs::JointState CJointReader::GetCurrentReadings() {
-    boost::unique_lock<boost::mutex> scoped_lock(_reader_mutex);
-    return _latestreading;
-}
+//CJointReader::CJointReader(ros::NodeHandle &nh): _nh(nh) {
+//}
 
-void CJointReader::Start() {
-    sub = _nh.subscribe("joint_states", 10, &CJointReader::callback, this);
-}
+//void CJointReader::Stop() {
+//    sub.shutdown();
+//}
+//sensor_msgs::JointState CJointReader::GetCurrentReadings() {
+//    boost::unique_lock<boost::mutex> scoped_lock(_reader_mutex);
+//    return _latestreading;
+//}
 
-std::vector<double> CJointReader::GetJointValues() {
-    return _latestreading.position;
-}
+//void CJointReader::Start() {
+//    sub = _nh.subscribe("joint_states", 10, &CJointReader::callback, this);
+//}
+
+//std::vector<double> CJointReader::GetJointValues() {
+//    return _latestreading.position;
+//}
 
 //bool CJointReader::IsNewPosition() {
 //    return std::equal(_latestreading.position.begin(), _latestreading.position.end(), _lastreading.position.begin());
 //}
+
+
 //-------------------------------------
 boost::mutex CJointWriter::_writer_mutex;
 
@@ -113,7 +115,7 @@ RCS::Pose CLinkReader::GetLinkValue(std::string linkname )
                                  ros::Time(0), transform);
         pose.setOrigin(transform.getOrigin());
         pose.setRotation(transform.getRotation());
-#ifdef DEBUGGetLinkValue(
+#ifdef DEBUG
         std::string str= RCS::DumpPose(pose);
         std::cout << str.c_str();
 #endif

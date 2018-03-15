@@ -16,7 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   tf_conversions
   eigen_conversions
-  rviz_visual_tools
+  #rviz_visual_tools
   moveit_core
  # moveit_ros_planning_interface
   moveit_ros_move_group
@@ -57,7 +57,7 @@ catkin_package(
   tf
   tf_conversions
   eigen_conversions
-  rviz_visual_tools
+ #rviz_visual_tools
   gotraj
   gokin
   trac_ik_lib

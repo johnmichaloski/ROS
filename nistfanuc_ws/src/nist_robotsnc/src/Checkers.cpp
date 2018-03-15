@@ -11,7 +11,7 @@ maintenance, and subsequent redistribution.
 See NIST Administration Manual 4.09.07 b and Appendix I.
 */
 
-#include "Checkers.h"
+#include "nist_robotsnc/Checkers.h"
 #include <algorithm>
 #include <iostream>
 #include <math.h>
@@ -120,7 +120,7 @@ namespace Checkers {
 		}
 	}
 
-	bool CheckersGame::IsKing(int player, Move m) {
+    bool CheckersGame::IsKing(Move m) {
 		return ISKING(Board()[m.row][m.col]);
 	}
 
@@ -284,13 +284,16 @@ namespace Checkers {
 	}
 
 	std::map<Move, std::vector<Move>> CheckersGame::GenerateMoveList(BoardType inboard, int player) {
-		int nDir = 1;
-
+        std::map<Move, std::vector < Move>> sqmoves;
 		int nJump = 1;
-		std::map<Move, std::vector < Move>> sqmoves;
-		if (ISBLACK(player)) {
+
+#if 0
+        // direction forward or backward - UNUSED?
+        int nDir = 1;
+        if (ISBLACK(player)) {
 			nDir = -1;
 		}
+#endif
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {
 				// current board position have the player piece?
@@ -502,9 +505,9 @@ namespace Checkers {
 			}
 		}
 
-                if(bestScore = -LDBL_MAX)
-                    return false;
-		return true;
+        if(bestScore == -LDBL_MAX)
+            return false;
+        return true;
 	}
 
 	std::string CheckersGame::TestBoard() {

@@ -49,7 +49,7 @@
    <build_depend>tf</build_depend>
    <build_depend>tf_conversions</build_depend>
    <build_depend>eigen_conversions</build_depend>
-   <build_depend>rviz_visual_tools</build_depend>
+   <!--<build_depend>rviz_visual_tools</build_depend> -->
    <build_depend>gotraj</build_depend>
    <build_depend>gokin</build_depend>
    <build_depend>trac_ik_lib</build_depend>
@@ -64,7 +64,7 @@
    <run_depend>tf</run_depend>
    <run_depend>tf_conversions</run_depend>
    <run_depend>eigen_conversions</run_depend>
-   <run_depend>rviz_visual_tools</run_depend>
+   <!--<run_depend>rviz_visual_tools</run_depend>-->
    <run_depend>moveit_ros_planning_interface</run_depend>
    <run_depend>moveit_ros_move_group</run_depend>
    <run_depend>moveit_ros_planning</run_depend> 

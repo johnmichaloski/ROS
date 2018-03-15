@@ -380,7 +380,7 @@ SetupRos("PKG_CONFIG_PATH", "/home/michalos/catkin_ws/devel/lib/x86_64-linux-gnu
 
 
 
-#include <moveit/robot_model_loader/robot_model_loader.h>
+//#include <moveit/robot_model_loader/robot_model_loader.h>
 #include <moveit/robot_model/robot_model.h>
 // namespace joint_limits_interface
 // /opt/ros/indigo/include/joint_limits_interface/joint_limits_urdf.h

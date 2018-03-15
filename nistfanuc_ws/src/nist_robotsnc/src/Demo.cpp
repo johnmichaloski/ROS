@@ -203,7 +203,7 @@ void GearDemo::Reset() {
 
 void GearDemo::Cycle(boost::shared_ptr<RCS::CController> nc, CrclApi &robot) {
     ros::Rate r(50);
-    while (IssueRobotCommands(robot) != NULL) {
+    while (IssueRobotCommands(robot)) {
         while (nc->IsBusy()) {
             if (rvizdemo.Clicked()) {
                 RCS::Thread::SuspendAll();

@@ -297,6 +297,7 @@ public:
     std::string ExeDirectory; /**< the path to directory where exe is located  */
     std::string inifile; /**< inifile path name  */
     std::string SocketPort; /**< socket port to listen for Crcl clients  */
+    std::string joint_state_topic;
 };
 extern CGlobals Globals; /**< global definition of globals  */
 extern void DebugBreak(); /**< global definition of windows DebugBreak equivalent.  */

@@ -10,7 +10,7 @@
 #include <boost/thread/mutex.hpp>
 #include <ros/ros.h>
 #include <sensor_msgs/JointState.h>
-#include <moveit/move_group_interface/move_group.h>
+//#include <moveit/move_group_interface/move_group.h>
 #include <actionlib/client/simple_action_client.h>
 
 #include <std_msgs/Float64.h>
@@ -29,45 +29,45 @@
  * Then, when joint updates occur, the callback routine is invoked and the latest joint values saved.
  */
 
-class CJointReader {
-public:
-    /*!
-     * \brief CJointReader constructor that requires a ROS node handle.
-     * \param nh  ros node handle so joint reader can tell roscore we are subscribing to joint_state topic.
-     */
-    CJointReader(ros::NodeHandle &nh);
+//class CJointReader {
+//public:
+//    /*!
+//     * \brief CJointReader constructor that requires a ROS node handle.
+//     * \param nh  ros node handle so joint reader can tell roscore we are subscribing to joint_state topic.
+//     */
+//    CJointReader(ros::NodeHandle &nh);
 
-    /*!
-     * \brief GetCurrentReadings returns the latest joint readings for position, velocity, and effort. It is thread safe.
-     */
-    sensor_msgs::JointState GetCurrentReadings();
+//    /*!
+//     * \brief GetCurrentReadings returns the latest joint readings for position, velocity, and effort. It is thread safe.
+//     */
+//    sensor_msgs::JointState GetCurrentReadings();
 
-    /*!
-     * \brief Start sets up subscriber to joint_state topic messages.
-     */
-    void Start();
+//    /*!
+//     * \brief Start sets up subscriber to joint_state topic messages.
+//     */
+//    void Start();
 
-    /*!
-     * \brief Stop unsubscribes to joint_state topic.
-     */
-    void Stop();
+//    /*!
+//     * \brief Stop unsubscribes to joint_state topic.
+//     */
+//    void Stop();
 
-    /*!
-     * \brief GetJointValues sets up subscriber to joint_state topic messages.
-     * \returns a std vector of double containing joint positions 
-     */
-    std::vector<double> GetJointValues();
+//    /*!
+//     * \brief GetJointValues sets up subscriber to joint_state topic messages.
+//     * \returns a std vector of double containing joint positions
+//     */
+//    std::vector<double> GetJointValues();
 
-    ////////////////////////////////////////////////////////////////////
-    void callback(const sensor_msgs::JointState::ConstPtr& msg); /**< type of joint motion to use */
-    ros::NodeHandle &_nh; /**< reference pointer to ROS node handle */
-    sensor_msgs::JointState _latestreading; /**< latest joint readings */
-    sensor_msgs::JointState _lastreading; /**< previous joint readings */
-    ros::Subscriber sub; /**< ros subscriber information  */
-    // Not sure why you'd want to keep ring of last n readings ...
-    //std::vector<sensor_msgs::JointState> _readings; /**< ring of last readings  */
-    static boost::mutex _reader_mutex; /**< for mutexed reading access  */
-};
+//    ////////////////////////////////////////////////////////////////////
+//    void callback(const sensor_msgs::JointState::ConstPtr& msg); /**< type of joint motion to use */
+//    ros::NodeHandle &_nh; /**< reference pointer to ROS node handle */
+//    sensor_msgs::JointState _latestreading; /**< latest joint readings */
+//    sensor_msgs::JointState _lastreading; /**< previous joint readings */
+//    ros::Subscriber sub; /**< ros subscriber information  */
+//    // Not sure why you'd want to keep ring of last n readings ...
+//    //std::vector<sensor_msgs::JointState> _readings; /**< ring of last readings  */
+//    static boost::mutex _reader_mutex; /**< for mutexed reading access  */
+//};
 
 /**
  * \brief  The CJointWriter is a thread to  publish new joint values to ROS.

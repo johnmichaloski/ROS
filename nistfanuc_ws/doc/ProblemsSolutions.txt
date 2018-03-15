@@ -1,0 +1,19 @@
+
+
+Thu 15 Mar 2018 04:24:01 PM EDT 
+cmake_modules Config.cmake missing
+
+Try setting CMake variable called CMAKE_PREFIX_PATH, not environment one. Use -D flag during cmake invocation:
+
+cmake -D CMAKE_PREFIX_PATH=/usr/local/lib <path to source or build dir>
+
+sudo apt-get install ros-kinetic-cmake-modules
+
+FIXED!!!!!!!!!!!!!!!!!
+
+
+Thu 15 Mar 2018 04:26:36 PM EDT 
+ERROR: cannot launch node of type [robot_state_publisher/state_publisher]: robot_state_publisher
+sudo apt-get install ros-kinetic-robot-state-publisher
+FIXED!!!!!!!!!!!!!!!!!
+

@@ -32,9 +32,9 @@ using namespace FanucLRMate200d;
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static     void getClosestSolution(const IkSolutionList<double> &solutions, 
-    const std::vector<double> &ik_seed_state, 
-    std::vector<double> &solution)  ;
+//static     void getClosestSolution(const IkSolutionList<double> &solutions,
+//    const std::vector<double> &ik_seed_state,
+//    std::vector<double> &solution)  ;
     
 RCS::Pose FanucLRMate200idFastKinematics::FK(std::vector<double> joints) {
     // DO NOT Handle gearing of joints

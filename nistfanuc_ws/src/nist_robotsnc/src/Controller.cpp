@@ -12,12 +12,11 @@
  */
 
 #define BOOST_ALL_NO_LIB
-//#pragma message "Compiling " __FILE__ 
 
 #include "Controller.h"
 #include <boost/exception/all.hpp>
 #include <boost/thread.hpp>
-#include <strstream>
+#include <sstream>
 #include <iostream>
 #include <csignal>
 
@@ -30,11 +29,15 @@
 #include "cartesian_trajectory_msg/CartesianTrajectoryPoint.h"
 
 using namespace Conversion;
+
+
 // RCS namespace declarations
-//////////////////////////////////
 namespace RCS {
+    std::vector<boost::shared_ptr<CController> > ncs;
+
     boost::mutex cncmutex;
     static tf::Pose Ipose = tf::Identity();
+
     // ----------------------------------------------------
     // Extern definitions
     // boost::shared_ptr<CController> Fnc = boost::shared_ptr<CController>(new RCS::CController("Fanuc CNC", DEFAULT_LOOP_CYCLE));
@@ -151,6 +154,7 @@ namespace RCS {
     bool CController::Verify() {
         IfDebug(LOG_DEBUG << "CController::Verify");
         NC_ASSERT(Kinematics() != NULL);
+        return true;
     }
 
     void CController::CmdCallback(const nistcrcl::CrclCommandMsg::ConstPtr& cmdmsg) {
@@ -171,19 +175,26 @@ namespace RCS {
         crcl_cmd = _nh->subscribe(prefix + "crcl_command", 10, &CController::CmdCallback, this);
 
 
-        if (!bRvizPubSetup) {
-            rviz_jntcmd = _nh->advertise<sensor_msgs::JointState>("nist_controller/robot/joint_states", 1);
-            bRvizPubSetup = true;
-        }
+//        if (!bRvizPubSetup) {
+//            rviz_jntcmd = _nh->advertise<sensor_msgs::JointState>(Globals.joint_state_topic, 1);
+//            //rviz_jntcmd = _nh->advertise<sensor_msgs::JointState>("nist_controller/robot/joint_states", 1);
+//            bRvizPubSetup = true;
+//        }
 
         RvizMarker() = boost::shared_ptr<CRvizMarker>(new CRvizMarker(nh));
         RvizMarker()->Init();
 
+        // Initialize robot and robot joint values - simulation
         status.currentjoints = RCS::ZeroJointState(Kinematics()->JointNames().size());
         status.currentjoints.name = Kinematics()->JointNames();
         // assume zero for now. Fixme: read joint state and set this value
         status.currentjoints.position.resize(status.currentjoints.name.size(), 0.0);
+
+        // Initialize gripper and gripper joint values
         gripper.init(nh, prefix);
+        status.eepercent=1.0;
+        gripperjoints = gripper.setPosition(status.eepercent);
+
 
         // fixme: read arm and gripper joint positions
         if (bCvsPoseLogging()) {
@@ -254,6 +265,55 @@ namespace RCS {
         return (crclcmds.SizeMsgQueue() > 0 || robotcmds.SizeMsgQueue() > 0);
     }
 
+    bool CController::PublishJointStates(ros::NodeHandle & nh, std::string joint_state_topic)
+    {
+        double hz=100;
+        ros::Rate r(hz);
+
+        try{
+            // Only have one publisher and centralize output
+            if (!bRvizPubSetup) {
+                rviz_jntcmd = nh.advertise<sensor_msgs::JointState>(joint_state_topic, 1);
+                bRvizPubSetup = true;
+            }
+            while(ros::ok())
+            {
+                sensor_msgs::JointState joints;
+                joints.header.stamp = ros::Time::now();
+
+                // append contents of robot name position to end of message
+                for (size_t j = 0; j < ncs.size(); j++)
+                {
+                    cncmutex.lock();
+                    joints.name.insert(  joints.name.end(),
+                                         ncs[j]->status.currentjoints.name.begin(),
+                                         ncs[j]->status.currentjoints.name.end());
+
+                    joints.position.insert(joints.position.end(),
+                                           ncs[j]->status.currentjoints.position.begin(),
+                                           ncs[j]->status.currentjoints.position.end());
+
+                    joints.name.insert(  joints.name.end(),
+                                         ncs[j]->gripperjoints.name.begin(),
+                                         ncs[j]->gripperjoints.name.end());
+
+                    joints.position.insert(joints.position.end(),
+                                           ncs[j]->gripperjoints.position.begin(),
+                                           ncs[j]->gripperjoints.position.end());
+                    cncmutex.unlock();
+                }
+                rviz_jntcmd.publish(joints);
+                ros::spinOnce();
+                ros::spinOnce();
+                ros::spinOnce();
+                r.sleep();
+            }
+        } catch (boost::thread_interrupted&) {}
+
+        return false;
+    }
+
+
     bool CController::UpdateRobot() {
         JointState & lastjoints(laststatus.currentjoints);
         lastjoints = status.currentjoints;
@@ -319,16 +379,16 @@ namespace RCS {
             throw MotionException(1000, msg.c_str());
         }
 #endif
-        status.currentjoints.header.stamp = ros::Time(0);
-        // Debugging rviz communication via joint publisher 
-        // rostopic echo joint_states 
-        // rostopic echo  nist_controller/robot/joint_states
+//        status.currentjoints.header.stamp = ros::Time(0);
+//        // Debugging rviz communication via joint publisher
+//        // rostopic echo joint_states
+//        // rostopic echo  nist_controller/robot/joint_states
 
-        rviz_jntcmd.publish(status.currentjoints);
 //        rviz_jntcmd.publish(status.currentjoints);
-        ros::spinOnce();
-        for(size_t k=0; k< 20; k++)
-            ros::spinOnce();
+////        rviz_jntcmd.publish(status.currentjoints);
+//        ros::spinOnce();
+//        for(size_t k=0; k< 20; k++)
+//            ros::spinOnce();
 #if 0
         if (!_newcc.partname.empty()) {
             Eigen::Affine3d pose = Eigen::Affine3d::Identity() *
@@ -345,6 +405,7 @@ namespace RCS {
         ofsMotionTrace << "  Robot Pose    =" << RCS::DumpPoseSimple(status.currentpose).c_str() << "\n";
         ofsMotionTrace << "  Goal Joints   =" << VectorDump<double>(_newcc.joints.position).c_str() << "\n" << std::flush;
         posecallback(0, this->WorldCoord(status.currentpose));
+        return true;
     }
 
     /**
@@ -434,6 +495,7 @@ nextposition:
                 status.crclcommandstatus = CanonStatusType::CANON_DONE;
                 // should do a "fake" move to same spot
                 UpdateRobot();
+                gripperjoints = gripper.setPosition(status.eepercent);
 
             } else {
                 _lastcc = _newcc;
@@ -456,16 +518,15 @@ nextposition:
                         crclcmds.InsertFrontMsgQueue(_newcc);
                     }
                 } else if (_newcc.crclcommand == CanonCmdType::CANON_SET_GRIPPER) {
-                    sensor_msgs::JointState gripperjoints;
-                    if (_newcc.eepercent == 0.0) {
+                     if (_newcc.eepercent == 0.0) {
                         gripperjoints = gripper.closeSetup();
                     } else if (_newcc.eepercent == 1.0)
                         gripperjoints = gripper.openSetup();
                     else
                         gripperjoints = gripper.setPosition(_newcc.eepercent);
                     status.eepercent = _newcc.eepercent;
-                    rviz_jntcmd.publish(gripperjoints);
-                    rviz_jntcmd.publish(gripperjoints);
+                    //rviz_jntcmd.publish(gripperjoints);
+                    //rviz_jntcmd.publish(gripperjoints);
                     // No speed control for now.
 
                 } else if (_newcc.crclcommand == CanonCmdType::CANON_ERASE_OBJECT) {
@@ -494,6 +555,7 @@ nextposition:
                 } else {
                     UpdateRobot();
                     // Only want to mark once
+                    //              boost::mutex::scoped_lock lock(cncmutex);
                     if (bMarker()) {
                         RCS::Pose goalpose = Kinematics()->FK(_newcc.joints.position);
                         goalpose = basePose() * goalpose;

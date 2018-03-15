@@ -1,0 +1,101 @@
+
+Test the source interface and update to cpp_joint_state_publisher
+qDebug("updateJointVal %s %s = %f", jointname.c_str(), measure.c_str(), val);
+
+"Deep copy"
+copy.clear();
+for(jiterator jit=free_joints.begin(); jit!=free_joints.end();jit++)
+{
+    std::map<std::string, double> m ;
+    m.insert((*jit).second.begin(), (*jit).second.end());
+    copy.insert(std::pair<std::string,std::map<std::string, double>> ((*jit).first, m));
+}
+//   std::map<std::string, std::map<std::string, double> > copy;
+//   copy.insert(free_joints.begin(), free_joints.end());
+//    return copy;
+}
+
+#ifdef VAL_DEBUG
+    if(fabs(free_joints[jointname]["position"]) > 0.01)
+    {
+        qDebug( Dump(free_joints).c_str());
+        Q_ASSERT(0);
+    }
+#endif
+#ifdef VAL_DEBUG
+
+        if(fabs(joint["position"]) > 0.01)
+        {
+            qDebug( Dump(free_joints).c_str());
+            qDebug("==================================");
+            qDebug( Dump(free).c_str());
+            Q_ASSERT(0);
+        }
+#endif
+UrdfJointParser::subscribeSources()
+Character [[] is not valid as the first character in Graph Resource Name [[nist_controller/robot/joint_states]].  Valid characters are a-z, A-Z, / and in some cases ~.
+
+
+michalos@woodsy:nistfanuc_ws> rosparam list
+/controller_joint_names
+/csvlogfile
+/csvlogging
+/fanuc_base
+/fanuc_bend
+/fanuc_tool
+/logfile
+/loglevel
+/motman_base
+/motman_tool
+/motoman_bend
+/name
+/robot
+/robot_description
+/robot_description_semantic
+/root_name
+/rosdistro
+/roslaunch/uris/host_woodsy__46697
+/rosversion
+/run_id
+/source_list
+/tip_name
+michalos@woodsy:nistfanuc_ws> rosparam get source_list
+'[nist_controller/robot/joint_states]'
+
+
+
+Fri 09 Mar 2018 12:01:54 PM EST
+Added install qmake as well as clean up qmake
+# xerces code synthesis dependency
+LIBS += "/usr/lib/x86_64-linux-gnu/libxerces-c.a"
+# Local ROS libs
+LIBS += -L/usr/local/michalos/nistfanuc_ws/devel/lib
+LIBS += -lgokin -lgotraj
+# Libxml2
+LIBS += -L/usr/lib -lxml2
+QMAKE_CXXFLAGS +=-DXSD_CXX11
+
+
+Fri 09 Mar 2018 11:29:11 AM EST
+Simple Test
+
+This program works with
+"rostopic echo joint_states"
+to dump the correct joint_state updates from the GUI. If you
+stop and then start the program, the updates read by rostopic
+appear incorrect. Unclear what is the problem at this point.
+
+
+
+//namespace sensor_msgs
+//{
+
+//	struct JointState
+//	{
+//		std::vector<std::string> name;
+//		std::vector<double> position;
+//		std::vector<double> velocity;
+//		std::vector<double> effort;
+
+//	};
+//}

@@ -37,6 +37,11 @@ INCLUDEPATH += "/usr/include"
 QMAKE_CXXFLAGS +=-DXSD_CXX11
 QMAKE_CXXFLAGS +=-Wno-unused-variable
 QMAKE_CXXFLAGS +=-Wno-sign-compare
+QMAKE_CXXFLAGS +=-Wno-unused-parameter
+QMAKE_CXXFLAGS +=-Wno-reorder
+QMAKE_CXXFLAGS +=-Wno-format-extra-args
+# Quaternion rpy constructor :(
+QMAKE_CXXFLAGS +=-Wno-deprecated-declarations
 
 #ROS
 INCLUDEPATH += "/opt/ros/kinetic/include"
@@ -136,5 +141,6 @@ HEADERS += \
     include/nist_robotsnc/NIST/RCSTimer.h
 
 DISTFILES += \
-    include/nist_robotsnc/NIST/RCSTimer.txt
+    include/nist_robotsnc/NIST/RCSTimer.txt \
+    Notes.txt
 
